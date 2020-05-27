@@ -1,8 +1,10 @@
 from OwnershipP import *
+
 humanLayers = 9
 edgeTypes = 17
-colorSet = ['brown', 'firebrick1', 'coral', 'goldenrod1',  'greenyellow', 'darkolivegreen3', 'lightblue', 'darkturquoise', 'midnightblue', 'hotpink4', 'mediumpurple', 'gray3', 'chocolate', 'yellow1', 'c1', 'c2', 'c3']
-
+colorSet = ['brown', 'firebrick1', 'coral', 'goldenrod1', 'greenyellow', 'darkolivegreen3', 'lightblue',
+            'darkturquoise', 'midnightblue', 'hotpink4', 'mediumpurple', 'gray3', 'chocolate', 'yellow1', 'c1', 'c2',
+            'c3']
 
 NameSymbols = {}
 Label = {}
@@ -12,7 +14,7 @@ humanNodes = []
 issueNodes = []
 commitNodes = []
 fileNodes = []
-#humanNodes, issueNodes, commitNodes, fileNodes are arrays that represent indexes of nodes within each type
+# humanNodes, issueNodes, commitNodes, fileNodes are arrays that represent indexes of nodes within each type
 for i in range(humanLayers):
     humanNodes.append([])
 nrEdgesofCol = {}
@@ -23,7 +25,6 @@ nrIssues = 0
 issueDict = {}
 commitDict = {}
 fileDict = {}
-onlyIssueRep = {}
 Edges = {}
 nrEdges = {}
 
@@ -64,10 +65,14 @@ class myEdge:
 
     def __hash__(self):
         return hash((self.nod1, self.layer1, self.nod2, self.layer2, self.color))
+
     def __eq__(self, other):
-        return ((self.nod1, self.layer1, self.nod2, self.layer2, self.color) == (other.nod1, other.layer1, other.nod2, other.layer2, other.color))
+        return ((self.nod1, self.layer1, self.nod2, self.layer2, self.color) == (
+        other.nod1, other.layer1, other.nod2, other.layer2, other.color))
+
     def __ne__(self, other):
         return not (self == other)
+
 
 def addEdge(nod1, l1, nod2, l2, col):
     crtEdge = myEdge(nod1, l1, nod2, l2, col)
@@ -78,11 +83,13 @@ def addEdge(nod1, l1, nod2, l2, col):
         nrEdgesofCol[col] += 1
         Edges[crtEdge] = 1
         return 1
-#Output files
+
+
+# Output files
 edgeFile = open("D:\\Ak_work2019-2020\\muxViz-master\\data\\fullGraphV1\\edgeFile.txt", "w")
 externalEdgeFile = open("D:\\Ak_work2019-2020\\muxViz-master\\data\\fullGraphV1\\externalEdgeFile.txt", "w")
 layoutFile = open("D:\\Ak_work2019-2020\\muxViz-master\\data\\fullGraphV1\\layoutFile.txt", "w")
-#Human Names files
+# Human Names files
 files = []
 files.append(open("D:\\Ak_work2019-2020\\HigherDimensions\\TxtDataInUse\\CommitterAuthorFiles.txt", "r"))
 files.append(open("D:\\Ak_work2019-2020\\HigherDimensions\\TxtDataInUse\\OwnerNames2020.txt", "r"))
@@ -93,14 +100,15 @@ files.append(open("D:\\Ak_work2019-2020\\HigherDimensions\\TxtDataInUse\\AuthorN
 files.append(open("D:\\Ak_work2019-2020\\HigherDimensions\\TxtDataInUse\\ReporterNames2020B.txt", "rb"))
 files.append(open("D:\\Ak_work2019-2020\\HigherDimensions\\TxtDataInUse\\AssigneeNames2020B.txt", "rb"))
 files.append(open("D:\\Ak_work2019-2020\\HigherDimensions\\TxtDataInUse\\CCedNames2020B.txt", "rb"))
-#File dependencies files
+# File dependencies files
 depFile = []
 depFile.append(open("D:\\Ak_work2019-2020\\HigherDimensions\\FileDep.txt", "r"))
 depFile.append(open("D:\\Ak_work2019-2020\\HigherDimensions\\ClassDep.txt", "r"))
-#Event/Edge files
+# Event/Edge files
 reviewFile = open("D:\\Ak_work2019-2020\\HigherDimensions\\TxtDataInUse\\ReviewEdges2020.txt", "r")
 issueFile = open("D:\\Ak_work2019-2020\\HigherDimensions\\TxtDataInUse\\IssueEdges2020B.txt", "rb")
 rc2BugEdge = open("D:\\Ak_work2019-2020\\HigherDimensions\\TxtDataInUse\\RevMsg2BugEdge.txt", "r")
+
 
 def addDepEdge(f):
     while True:
@@ -109,7 +117,8 @@ def addDepEdge(f):
             break
         lst = crtL.split()
         if lst[1] in fileDict and lst[2] in fileDict:
-            nrEdges['file2file'] += addEdge(fileDict[lst[1]], 10,  fileDict[lst[2]], 10, 0)
+            nrEdges['file2file'] += addEdge(fileDict[lst[1]], 10, fileDict[lst[2]], 10, 0)
+
 
 def readIssue2Change():
     while (True):
@@ -134,6 +143,8 @@ def Site(layer):
     if layer <= 4 and layer >= 1:
         return 1
     return 2
+
+
 class MyHuman:
     def __init__(self, name_, index_, human_index):
         self.name = name_
@@ -156,24 +167,34 @@ class MyHuman:
 
     def setUserName(self, username_):
         self.username = username_
+
     def setCommitter(self, TF):
         self.isCommitter = TF
+
     def setReviewOwner(self, TF):
         self.isReviewOwner = TF
+
     def setUploader(self, TF):
         self.isUploader = TF
+
     def setReviewer(self, TF):
         self.isReviewer = TF
+
     def setApprover(self, TF):
         self.isApprover = TF
+
     def setPatchAuthor(self, TF):
         self.isPatchAuthor = TF
+
     def setReporter(self, TF):
         self.isReporter = TF
+
     def setAssignee(self, TF):
         self.isAssignee = TF
+
     def setCCed(self, TF):
         self.isCCed = TF
+
     def setRole(self, nr):
         if nr == 8:
             self.setCCed(True)
@@ -193,11 +214,15 @@ class MyHuman:
             self.setReviewOwner(True)
         elif nr == 0:
             self.setCommitter(True)
+
     def setSite(self, fNr):
         self.site = Site(fNr)
 
+
 def isLetter(a):
     return (ord(a) <= ord('z') and ord(a) >= ord('a'))
+
+
 def purifyName(name):
     nameLen = len(name)
     newName = ''
@@ -208,6 +233,8 @@ def purifyName(name):
         else:
             newName += crtSymbol
     return newName
+
+
 def readNameUsername():
     f = open("D:\\Ak_work2019-2020\\HigherDimensions\\TxtDataInUse\\emailName2020B.txt", "rb")
     while (True):
@@ -224,6 +251,7 @@ def readNameUsername():
             print(name, lst[-1][:-1])
     f.close()
 
+
 def addHuman(name, nrHumans, fNr):
     global nrNodes
     if not (name in dict):
@@ -237,9 +265,10 @@ def addHuman(name, nrHumans, fNr):
     dict[name].setSite(fNr)
     return nrHumans
 
+
 def addCommit(hash_id, nrCommits, fNr):
     global nrNodes
-    if not(hash_id in commitDict):
+    if not (hash_id in commitDict):
         nrCommits += 1
         nrNodes += 1
         Label[nrNodes] = hash_id
@@ -247,6 +276,7 @@ def addCommit(hash_id, nrCommits, fNr):
         commitDict[hash_id] = nrNodes
 
     return nrCommits
+
 
 def readCommits(nrHumans, nrCommits, nrFiles):
     fileList = []
@@ -259,7 +289,7 @@ def readCommits(nrHumans, nrCommits, nrFiles):
             continue
         # committer/\\author/\\commitHash
         Lst = crtL.split('/\\')
-        if not(('.' in Lst[0]) or ('/' in Lst[0]) or ('\\' in Lst[0])):
+        if not (('.' in Lst[0]) or ('/' in Lst[0]) or ('\\' in Lst[0])):
             Lst = crtL.split('/\\')
             committerName = purifyName(Lst[0].replace(' ', ''))
             authorName = purifyName(Lst[1].replace(' ', ''))
@@ -268,12 +298,12 @@ def readCommits(nrHumans, nrCommits, nrFiles):
             commitId = Lst[2][:-1]
             nrCommits = addCommit(commitId, nrCommits, 0)
             if authorName != committerName:
-                #add edge author->committer
+                # add edge author->committer
                 nrEdges['Author2Commit'] += addEdge(dict[committerName].index, 1, dict[authorName].index, 5, 9)
             fileList = []
         else:
             crtFile = crtL.rsplit('.', 1)[0].replace("/", '.')
-            if not(crtFile in fileDict):
+            if not (crtFile in fileDict):
                 nrFiles += 1
                 nrNodes += 1
                 Label[nrNodes] = crtFile
@@ -281,20 +311,23 @@ def readCommits(nrHumans, nrCommits, nrFiles):
                 fileDict[crtFile] = nrNodes
             if len(fileList) > 0:
                 addEdge(fileDict[crtFile], 10, fileDict[fileList[len(fileList) - 1]], 10, 10)
-            #for fileName in fileList:
-                #nrEdges['file2fileCommit'] += addEdge(fileDict[crtFile], 10, fileDict[fileName], 10)
-                #add undirected edge between co-committed files
-                #addEdge(fileDict[crtFile], 12, fileDict[fileName], 12)
-                #addEdge(fileDict[fileName], 12, fileDict[crtFile], 12)
-                #edgeFile.write(str(fileDict[crtFile]) + ' 12 ' + str(fileDict[fileName]) + ' 12\n')
+            # for fileName in fileList:
+            # nrEdges['file2fileCommit'] += addEdge(fileDict[crtFile], 10, fileDict[fileName], 10)
+            # add undirected edge between co-committed files
+            # addEdge(fileDict[crtFile], 12, fileDict[fileName], 12)
+            # addEdge(fileDict[fileName], 12, fileDict[crtFile], 12)
+            # edgeFile.write(str(fileDict[crtFile]) + ' 12 ' + str(fileDict[fileName]) + ' 12\n')
             if authorName in dict:
                 nrEdges['Author2file'] += addEdge(dict[authorName].index, 5, fileDict[crtFile], 10, 11)
 
             fileList.append(crtFile)
+    files[0].close()
     return nrHumans, nrCommits, nrFiles
+
+
 def readF(fNr, nrHumans):
     while (True):
-        #names in Bugzilla are read from binary files
+        # names in Bugzilla are read from binary files
         if fNr >= 6 and fNr <= 8:
             crtL = files[fNr].readline().decode('utf-8')
         else:
@@ -302,10 +335,10 @@ def readF(fNr, nrHumans):
 
         if not crtL:
             break
-        if '/\\' in crtL: #name/\index
+        if '/\\' in crtL:  # name/\index
             name = purifyName(crtL.split('/\\')[0].replace(' ', ''))
             nrHumans = addHuman(name, nrHumans, fNr)
-        else: #name index
+        else:  # name index
             lst = crtL.split()
             Len = len(lst)
             name = ''
@@ -315,6 +348,8 @@ def readF(fNr, nrHumans):
             nrHumans = addHuman(name, nrHumans, fNr)
 
     return nrHumans
+
+
 def readIssues(nrIssues):
     global nrNodes
     while True:
@@ -325,19 +360,16 @@ def readIssues(nrIssues):
             continue
         lst = crtL.split('/\\')
         Len = len(lst)
-        #there is an Assignee/Reporter edge
+        # there is an Assignee/Reporter edge
         if (lst[0][0] != 'C'):
             name = purifyName(lst[1].replace(' ', ''))
-            if not(name in dict) and not(name in onlyIssueRep):
-                print('tf')
-                exit()
-            if not(lst[-1] in issueDict):
+            if not (lst[-1] in issueDict):
                 nrIssues += 1
                 nrNodes += 1
                 Label[nrNodes] = lst[-1]
                 issueNodes.append(nrNodes)
                 issueDict[lst[-1]] = nrNodes
-            if not(name in dict):
+            if not (name in dict):
                 continue
             layer = 6
             col = 1
@@ -361,6 +393,7 @@ def readIssues(nrIssues):
     issueFile.close()
     return nrIssues
 
+
 def readReviews():
     while True:
         crtL = reviewFile.readline()
@@ -378,7 +411,7 @@ def readReviews():
             commitId = lst[1]
             if commitId in commitDict:
                 name = purifyName(lst[2][:-1].replace(' ', ''))
-                #Committer
+                # Committer
                 layer = 0
                 col = 5
                 if lst[0] == 'OwnerEdge':
@@ -426,25 +459,6 @@ def readReviewComments(nrHumans):
             nrEdges['Owner2File'] += addEdge(nod1, 2, fileDict[fileName], 10, 12)
 
     return nrHumans
-
-edgesForNode = {}
-nrHumans, nrCommits, nrFiles = readCommits(0, 0, 0)
-for i in range(edgeTypes):
-    edgesForNode[i] = 0
-for fileId in range(1, humanLayers):
-    nrHumans = readF(fileId, nrHumans)
-readReviews()
-readNameUsername()
-nrIssues = readIssues(0)
-nrHumans = readReviewComments(nrHumans)
-for file in depFile:
-    addDepEdge(file)
-
-print(nrHumans, nrCommits, nrIssues, nrFiles)
-print(nrNodes, nrHumans + nrCommits + nrIssues + nrFiles)
-
-weightedEdges = 0
-
 def readOwnershipFile():
     ownershipFile = open("D:\\Ak_work2019-2020\\HigherDimensions\\OwnershipFile.txt")
     while (True):
@@ -454,7 +468,7 @@ def readOwnershipFile():
         lst = crtL.split('/\\')
         compName = lst[0].replace('/', '.')
         compName = compName.rsplit('.', 1)[0]
-        if not(compName in fileDict):
+        if not (compName in fileDict):
             for i in range(int(lst[1])):
                 nxtL = ownershipFile.readline()
             continue
@@ -470,24 +484,41 @@ def readOwnershipFile():
         ownershipTuple = obj.sumAROwner(0)
         if ownershipTuple[0] in dict:
             nrEdges['SumAROwner2File'] += addEdge(dict[ownershipTuple[0]], 1, fileDict[obj.name], 10, 13)
-            #print(compName, ' ', ownershipTuple)
+            # print(compName, ' ', ownershipTuple)
 
     ownershipFile.close()
 
 
+edgesForNode = {}
+nrHumans, nrCommits, nrFiles = readCommits(0, 0, 0)
+for i in range(edgeTypes):
+    edgesForNode[i] = 0
+for fileId in range(1, humanLayers):
+    nrHumans = readF(fileId, nrHumans)
+    files[fileId].close()
+nrHumans = readReviewComments(nrHumans)
+readNameUsername()
+readReviews()
+nrIssues = readIssues(0)
+for fileId in range(len(depFile)):
+    addDepEdge(depFile[fileId])
+    depFile[fileId].close()
 readOwnershipFile()
-externalEdgeFile.write("nodeID.from layerID.from nodeID.to layerID.to color size\n")
 
+externalEdgeFile.write("nodeID.from layerID.from nodeID.to layerID.to color size\n")
+weightedEdges = 0
 for key in Edges:
     nrEdgesofCol[key.color] += 1
     weightedEdges += 1
     externalEdgeFile.write(str(key.nod1) + " " + str(key.layer1) + " "
-                       + str(key.nod2) + " " + str(key.layer2) + " " + str(colorSet[key.color]) + " " + "2\n")
+                           + str(key.nod2) + " " + str(key.layer2) + " " + str(colorSet[key.color]) + " " + "2\n")
     edgeFile.write(str(key.nod1) + " " + str(key.layer1) + " "
-                       + str(key.nod2) + " " + str(key.layer2) + " " + str(Edges[key]) + "\n")
+                   + str(key.nod2) + " " + str(key.layer2) + " " + str(Edges[key]) + "\n")
 
-
+print(nrHumans, nrCommits, nrIssues, nrFiles)
+print(nrNodes, nrHumans + nrCommits + nrIssues + nrFiles)
 print(weightedEdges)
+
 
 class Tuple:
     def __init__(self, name1_, name2_, d1_, d2_):
@@ -495,6 +526,7 @@ class Tuple:
         self.name2 = name2_
         self.d1 = d1_
         self.d2 = d2_
+
     def __lt__(self, other):
         if self.d1 == 0 and other.d1 == 0:
             return self.d2 < other.d2
@@ -505,20 +537,27 @@ class Tuple:
         if self.d2 / self.d1 == other.d2 / other.d1:
             return self.d1 > other.d1
         return self.d2 / self.d1 < other.d2 / other.d1
+
     def __eq__(self, other):
         return (self.name1 == other.name1 and self.name2 == other.name2)
+
 
 names = open("D:\\Ak_work2019-2020\\HigherDimensions\\TxtDataInUse\\NameSim.txt", "w")
 allNames = open("D:\\Ak_work2019-2020\\HigherDimensions\\TxtDataInUse\\AllName.txt", "wb")
 
 from pyjarowinkler.distance import get_jaro_distance
 import editdistance
+
+
 def getSimilarity1(name1, name2):
     jaro_score = get_jaro_distance(name1, name2)
     return jaro_score
+
+
 def getSimilarity2(name1, name2):
     return editdistance.eval(name1, name2)
-    
+
+
 def checkIdentities():
     lst = []
     for name in dict:
@@ -538,17 +577,13 @@ def checkIdentities():
     names.close()
     allNames.close()
 
+
 layoutFile.write("nodeID nodeLabel\n")
 for i in range(1, nrNodes + 1):
     layoutFile.write(str(i) + ' ' + str(Label[i]) + '\n')
 
 layoutFile.close()
 edgeFile.close()
-for file in files:
-    file.close()
-for file in depFile:
-    file.close()
-
 externalEdgeFile.close()
 
 for key in nrEdges:
