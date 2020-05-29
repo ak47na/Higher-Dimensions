@@ -1,7 +1,7 @@
-filer = open("D:\\Ak_work2019-2020\\HigherDimensions\\TxtDataInUse\\ReviewData.txt", "r")
-filec = open("D:\\Ak_work2019-2020\\HigherDimensions\\TxtDataInUse\\CommitEditedData.txt", "r")
-testFile = open("D:\\Ak_work2019-2020\\HigherDimensions\\GraphSetting\\test.txt", "w")
-bugRCEdge = open("D:\\Ak_work2019-2020\\HigherDimensions\\TxtDataInUse\\RevMsg2BugEdge.txt", "w")
+filer = open("\\ReviewData.txt", "r")
+filec = open("\\CommitEditedData.txt", "r")
+testFile = open("\\test.txt", "w")
+bugRCEdge = open("\\RevMsg2BugEdge.txt", "w")
 nrRev = 0
 nrRevWithBugs = 0
 
