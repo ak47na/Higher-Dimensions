@@ -1,3 +1,4 @@
+# Edge-coloured multigraph with L = {C, r_O, R, A, i_R, i_A, F, I, O}
 from Ownership import *
 import datetime
 
@@ -85,23 +86,23 @@ def addEdge(nod1, l1, nod2, l2, col):
 
 # Human Names files
 files = []
-files.append(open("D:\\Ak_work2019-2020\\HigherDimensions\\TxtDataInUse\\CommitterAuthorFiles.txt", "r"))
-files.append(open("D:\\Ak_work2019-2020\\HigherDimensions\\TxtDataInUse\\OwnerNames2020.txt", "r"))
-files.append(open("D:\\Ak_work2019-2020\\HigherDimensions\\TxtDataInUse\\UploaderNames2020.txt", "r"))
-files.append(open("D:\\Ak_work2019-2020\\HigherDimensions\\TxtDataInUse\\CommentRevNames2020.txt", "r"))
-files.append(open("D:\\Ak_work2019-2020\\HigherDimensions\\TxtDataInUse\\ApproverNames2020.txt", "r"))
-files.append(open("D:\\Ak_work2019-2020\\HigherDimensions\\TxtDataInUse\\AuthorNames2020.txt", "r"))
-files.append(open("D:\\Ak_work2019-2020\\HigherDimensions\\TxtDataInUse\\ReporterNames2020B.txt", "rb"))
-files.append(open("D:\\Ak_work2019-2020\\HigherDimensions\\TxtDataInUse\\AssigneeNames2020B.txt", "rb"))
-files.append(open("D:\\Ak_work2019-2020\\HigherDimensions\\TxtDataInUse\\CCedNames2020B.txt", "rb"))
+files.append(open("\\CommitterAuthorFiles.txt", "r"))
+files.append(open("\\OwnerNames2020.txt", "r"))
+files.append(open("\\UploaderNames2020.txt", "r"))
+files.append(open("\\CommentRevNames2020.txt", "r"))
+files.append(open("\\ApproverNames2020.txt", "r"))
+files.append(open("\\AuthorNames2020.txt", "r"))
+files.append(open("\\ReporterNames2020B.txt", "rb"))
+files.append(open("\\AssigneeNames2020B.txt", "rb"))
+files.append(open("\\CCedNames2020B.txt", "rb"))
 # File dependencies files
 depFile = []
-depFile.append(open("D:\\Ak_work2019-2020\\HigherDimensions\\FileDep.txt", "r"))
-depFile.append(open("D:\\Ak_work2019-2020\\HigherDimensions\\ClassDep.txt", "r"))
+depFile.append(open("\\FileDep.txt", "r"))
+depFile.append(open("\\ClassDep.txt", "r"))
 # Event/Edge files
-reviewFile = open("D:\\Ak_work2019-2020\\HigherDimensions\\TxtDataInUse\\ReviewEdges2020.txt", "r")
-issueFile = open("D:\\Ak_work2019-2020\\HigherDimensions\\TxtDataInUse\\IssueEdges2020B.txt", "rb")
-rc2BugEdge = open("D:\\Ak_work2019-2020\\HigherDimensions\\TxtDataInUse\\RevMsg2BugEdge.txt", "r")
+reviewFile = open("\\ReviewEdges2020.txt", "r")
+issueFile = open("\\IssueEdges2020B.txt", "rb")
+rc2BugEdge = open("\\RevMsg2BugEdge.txt", "r")
 
 def Site(layer):
     if layer == 0 or layer == 5:
@@ -146,7 +147,7 @@ def purifyName(name):
     return newName
 
 def readNameUsername():
-    f = open("D:\\Ak_work2019-2020\\HigherDimensions\\TxtDataInUse\\emailName2020B.txt", "rb")
+    f = open("\\emailName2020B.txt", "rb")
     while (True):
         crtL = f.readline().decode('utf-8')
         if not crtL:
@@ -349,7 +350,7 @@ def readReviews():
 
     reviewFile.close()
 def readReviewComments(nrHumans):
-    revFileComm = open("D:\\Ak_work2019-2020\\HigherDimensions\\TxtDataInUse\\ReviewFilesFromComments.txt", "r")
+    revFileComm = open("\\ReviewFilesFromComments.txt", "r")
     while (True):
         crtL = revFileComm.readline()
         if not crtL:
@@ -394,7 +395,7 @@ def readIssue2Change():
                     fileIssues[fileNode] += 1
 
 def readOwnershipFile():
-    ownershipFile = open("D:\\Ak_work2019-2020\\HigherDimensions\\OwnershipFile.txt")
+    ownershipFile = open("\\OwnershipFile.txt")
     while (True):
         crtL = ownershipFile.readline()
         if not crtL:
@@ -437,7 +438,7 @@ for fileId in range(len(depFile)):
     depFile[fileId].close()
 readOwnershipFile()
 
-edgeFile = open("D:\\Ak_work2019-2020\\HigherDimensions\\TxtDataInUse\\EdgeFile.txt", "w")
+edgeFile = open("\\EdgeFile.txt", "w")
 weightedEdges = 0
 for key in Edges:
     weightedEdges += 1
@@ -460,5 +461,3 @@ for key in fileDict:
     else:
         nonBuggy += 1
 print(buggy, nonBuggy)
-
-
