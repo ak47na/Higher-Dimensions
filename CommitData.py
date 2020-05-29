@@ -1,5 +1,3 @@
-# code to print modified file in a given time frame
-
 from pydriller import RepositoryMining
 
 import datetime as dt
