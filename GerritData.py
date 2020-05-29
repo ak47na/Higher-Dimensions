@@ -6,14 +6,14 @@ hostname = 'git.eclipse.org'
 # user for sshing to the Gerrit instance
 user = 'akapros'
 
-file1 = open("D:\\Ak_work2019-2020\\HigherDimensions\\TxtDataInUse\\ReviewEdges2020.txt", "w")
-file2 = open("D:\\Ak_work2019-2020\\HigherDimensions\\TxtDataInUse\\UploaderNames2020.txt", "w")
-file3 = open("D:\\Ak_work2019-2020\\HigherDimensions\\TxtDataInUse\\OwnerNames2020.txt", "w")
-file4 = open("D:\\Ak_work2019-2020\\HigherDimensions\\TxtDataInUse\\CommentRevNames2020.txt", "w")
-file5 = open("D:\\Ak_work2019-2020\\HigherDimensions\\TxtDataInUse\\ApproverNames2020.txt", "w")
-file6 = open("D:\\Ak_work2019-2020\\HigherDimensions\\TxtDataInUse\\AuthorNames2020.txt", "w")
-file8 = open("D:\\Ak_work2019-2020\\HigherDimensions\\TxtDataInUse\\ReviewFilesFromComments.txt", "w")
-reviewData = open("D:\\Ak_work2019-2020\\HigherDimensions\\TxtDataInUse\\ReviewData.txt", "w")
+file1 = open("\\ReviewEdges2020.txt", "w")
+file2 = open("\UploaderNames2020.txt", "w")
+file3 = open("\\OwnerNames2020.txt", "w")
+file4 = open("\\CommentRevNames2020.txt", "w")
+file5 = open("\\ApproverNames2020.txt", "w")
+file6 = open("\\AuthorNames2020.txt", "w")
+file8 = open("\\ReviewFilesFromComments.txt", "w")
+reviewData = open("\\ReviewData.txt", "w")
 
 repo = Gerrit(hostname=hostname, user=user)
 uploaderNames = {}
@@ -91,7 +91,7 @@ for name in uploaderNames:
     file2.write(name + "/\\" + str(uploaderNames[name]) + "\n")
 for name in ownerNames:
     file3.write(name + "/\\" + str(ownerNames[name]) + "\n")
-#commentRevNames represent the names of reviewers
+#commentRevNames represents the names of reviewers
 for name in commentRevNames:
     file4.write(name + "/\\" + str(commentRevNames[name]) + "\n")
 for name in approverNames:
