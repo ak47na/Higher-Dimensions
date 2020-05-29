@@ -91,6 +91,7 @@ for name in uploaderNames:
     file2.write(name + "/\\" + str(uploaderNames[name]) + "\n")
 for name in ownerNames:
     file3.write(name + "/\\" + str(ownerNames[name]) + "\n")
+#commentRevNames represent the names of reviewers
 for name in commentRevNames:
     file4.write(name + "/\\" + str(commentRevNames[name]) + "\n")
 for name in approverNames:
