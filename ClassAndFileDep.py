@@ -3,10 +3,10 @@ import pandas as pd
 
 #Jar[file_Name('.java/.class' without extension)] = jar name
 Jar = {}
-file1 = open("D:\\Ak_work2019-2020\\hopee\\extractedJars.txt","r")
+file1 = open("\\extractedJars.txt","r")
 fileW = []
-fileW.append(open("D:\\Ak_work2019-2020\\HigherDimensions\\ClassDep.txt", "w"))
-fileW.append(open("D:\\Ak_work2019-2020\\HigherDimensions\\FileDep.txt", "w"))
+fileW.append(open("\\ClassDep.txt", "w"))
+fileW.append(open("\\FileDep.txt", "w"))
 
 def addEdge(sA, sB, isFile):
     msg = 'ClassEdge '
@@ -38,13 +38,13 @@ while True:
     s2 = dep[1].replace('/', '.').replace('\\', '.').replace('\n', '')
     Jar[s1[0]] = s2.rsplit('.', 1)[0]
 
-with open('D:\\Ak_work2019-2020\\HigherDimensions\\eclipseRepo_FileDependenciesNS.csv', 'r') as file:
+with open('\\eclipseRepo_FileDependenciesNS.csv', 'r') as file:
     reader = csv.reader(file)
     col_names = []
     for row in reader:
        col_names = row
        break
-    df = pd.read_csv("D:\\Ak_work2019-2020\\HigherDimensions\\eclipseRepo_FileDependenciesNS.csv", usecols=col_names)
+    df = pd.read_csv("\\eclipseRepo_FileDependenciesNS.csv", usecols=col_names)
     for ind in df.index:
         A = df[col_names[0]][ind].replace('\\', '.').split('.')
         B = df[col_names[1]][ind].replace('\\', '.').split('.')
@@ -52,13 +52,13 @@ with open('D:\\Ak_work2019-2020\\HigherDimensions\\eclipseRepo_FileDependenciesN
         sB = Str(B).replace('\n', '')
         addEdge(sA, sB, 1)
 
-with open('D:\\Ak_work2019-2020\\HigherDimensions\\eclipseRepo_ClassDependenciesNS.csv', 'r') as file:
+with open('\\eclipseRepo_ClassDependenciesNS.csv', 'r') as file:
     reader = csv.reader(file)
     col_names = []
     for row in reader:
        col_names = row
        break
-    df = pd.read_csv("D:\\Ak_work2019-2020\\HigherDimensions\\eclipseRepo_ClassDependenciesNS.csv", usecols=col_names)
+    df = pd.read_csv("\\eclipseRepo_ClassDependenciesNS.csv", usecols=col_names)
     for ind in df.index:
         sA = df[col_names[0]][ind].replace('\\', '.').replace('\n', '')
         sB = df[col_names[1]][ind].replace('\\', '.').replace('\n', '')
