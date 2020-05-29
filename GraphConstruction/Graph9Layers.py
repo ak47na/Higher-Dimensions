@@ -1,4 +1,4 @@
-from OwnershipP import *
+from Ownership import *
 import datetime
 
 colorSet = ['brown', 'firebrick1', 'coral', 'goldenrod1', 'greenyellow', 'darkolivegreen3', 'lightblue',
