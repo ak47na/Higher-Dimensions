@@ -1,5 +1,5 @@
-f = open("D:\\Ak_work2019-2020\\HigherDimensions\\Bug2Gerrit.txt", "r")
-bugEdgeFile = open("D:\\Ak_work2019-2020\\HigherDimensions\\BugEdges.txt", "w")
+f = open("\\Bug2Gerrit.txt", "r")
+bugEdgeFile = open("\\BugEdges.txt", "w")
 issueLabel = {}
 
 nrBugs = 0
