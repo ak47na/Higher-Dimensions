@@ -98,8 +98,8 @@ files.append(open("\\AssigneeNames2020B.txt", "rb"))
 files.append(open("\\CCedNames2020B.txt", "rb"))
 # File dependencies files
 depFile = []
-depFile.append(open("\\FileDep.txt", "r"))
-depFile.append(open("\\ClassDep.txt", "r"))
+depFile.append(open("FileDep.txt", "r"))
+depFile.append(open("ClassDep.txt", "r"))
 # Event/Edge files
 reviewFile = open("\\ReviewEdges2020.txt", "r")
 issueFile = open("\\IssueEdges2020B.txt", "rb")
@@ -384,7 +384,7 @@ def readReviews():
                         addEdge(dict[name].index, layer, fileNode, getLayer('file'), -1)
 
     reviewFile.close()
-def readReviewComments(nrHumans, nrReviews):
+def readReviewComments(nrReviews):
     revFileComm = open("\\ReviewFilesFromComments.txt", "r")
     while (True):
         crtL = revFileComm.readline()
@@ -410,7 +410,7 @@ def readReviewComments(nrHumans, nrReviews):
         if fileName in fileDict:
             reviewDict[reviewId].addFile(fileDict[fileName])
             addEdge(nod1, getLayer('reviewOwner'), fileDict[fileName], getLayer('file'), 12)
-    return nrHumans, nrReviews
+    return nrReviews
 
 def processReview(crtL):
     reviewID = crtL[1]
@@ -457,7 +457,7 @@ def readIssue2Change():
         #     processCommit(crtL)
 
 def readOwnershipFile():
-    ownershipFile = open("\\OwnershipFile.txt")
+    ownershipFile = open("OwnershipFile.txt")
     while (True):
         crtL = ownershipFile.readline()
         if not crtL:
@@ -478,6 +478,14 @@ def readOwnershipFile():
                 continue
             obj.addModif(getModifFromLine(nxtL, lineLen))
 
+        allCommitters = obj.authorDex[0]
+        for c1 in allCommitters:
+            for c2 in allCommitters:
+                if c1 != c2:
+                    if dict[c1].isRole[0] and dict[c2].isRole[0]:
+                        addEdge(dict[c1].index, getLayer('committer'), dict[c2].index, getLayer('committer'), 0)
+                    addEdge(dict[c1].index, getLayer('author'), dict[c2].index, getLayer('author'), 0)
+
         ownershipTuple = obj.sumAROwner(0)
         if ownershipTuple[0] in dict:
             addEdge(dict[ownershipTuple[0]].index, getLayer('ownership'), fileDict[obj.name], getLayer('ownership'), 13)
@@ -491,24 +499,27 @@ for fileId in range(1, humanRoles):
     nrHumans = readF(fileId, nrHumans)
     files[fileId].close()
 
-nrHumans, nrReviews = readReviewComments(nrHumans, 0)
+
+nrReviews = readReviewComments(0)
+
 readNameUsername()
 readReviews()
 nrIssues = readIssues(0)
 readIssue2Change()
 readI2CSeeAlso()
-readIssueComments()
 for fileId in range(len(depFile)):
     addDepEdge(depFile[fileId])
     depFile[fileId].close()
+
+readIssueComments()
 readOwnershipFile()
 
 edgeFile = open("\\EdgeFile.txt", "w")
 weightedEdges = 0
 for key in Edges:
-    weightedEdges += 1
     if key.layer2 != key.layer1:
         continue
+    weightedEdges += 1
     edgeFile.write(str(key.nod1) + " " + str(key.layer1) + " "
                     + str(key.nod2) + " " + str(key.layer2) + " " + str(Edges[key]) + "\n")
 
