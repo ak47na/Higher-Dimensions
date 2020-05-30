@@ -1,7 +1,7 @@
 # Higher Dimensions
 Graph Definition:
-L = 
-committer= C, 
+L = /
+committer= C, /
 issueAssignee = I_A
 issueReporter = I_R, 
 patchApprover = A, 
