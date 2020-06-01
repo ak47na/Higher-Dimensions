@@ -1,5 +1,5 @@
 # Edge-coloured multigraph with L = {C, R, A, i_R, i_A, F, I, O}, O = {F + I + C}
-from OwnershipP import *
+from Ownership import *
 from Edge import *
 from Sample import *
 import datetime
@@ -146,6 +146,7 @@ def readNameUsername():
         if name in dict:
             usernames[lst[-1][:-1]] = name
             dict[name].setUserName(lst[-1][:-1])
+        #i_CC that are not i_A nor i_R
         # else:
         #     print(name, lst[-1][:-1])
     f.close()
@@ -438,6 +439,7 @@ def readIssue2Change():
         if crtL == '\n':
             continue
         crtL = crtL.split(' ')
+        #only link files from reviews that are mentioned in review Subject, skip commits that mention bugIDs
         if crtL[0] == 'Review2Bug':
             processReview(crtL)
         # else:
