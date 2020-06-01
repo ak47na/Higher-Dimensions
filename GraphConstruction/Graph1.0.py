@@ -1,10 +1,16 @@
-# Edge-coloured multigraph with L = {C, R, A, i_R, i_A, F, I, O}
+# Edge-coloured multigraph with L = {C, R, A, i_R, i_A, F, I, O}, O = {F + I + C}
 from OwnershipP import *
+from Edge import *
+from Sample import *
 import datetime
+
+from scipy.stats import wilcoxon
 
 colorSet = ['brown', 'firebrick1', 'coral', 'goldenrod1', 'greenyellow', 'darkolivegreen3', 'lightblue',
             'darkturquoise', 'midnightblue', 'hotpink4', 'mediumpurple', 'gray3', 'chocolate', 'yellow1', 'c1', 'c2',
             'c3']
+
+Adj = {}
 def getLayer(type):
     if type == 'committer':
         return 1
@@ -47,32 +53,6 @@ commitDict = {}
 fileDict = {}
 Edges = {}
 
-class myEdge:
-    def __init__(self, nod1_, layer1_, nod2_, layer2_, color_):
-        self.nod1 = nod1_
-        self.layer1 = layer1_
-        self.nod2 = nod2_
-        self.layer2 = layer2_
-        self.color = color_
-
-    def __lt__(self, other):
-        if self.layer1 == other.layer1 and self.layer2 == other.layer2:
-            if self.nod1 == other.nod1:
-                return self.nod2 < other.nod2
-            return self.nod1 < other.nod1
-        if self.layer1 == other.layer1:
-            return self.layer2 < other.layer2
-        return self.layer1 < other.layer1
-
-    def __hash__(self):
-        return hash((self.nod1, self.layer1, self.nod2, self.layer2, self.color))
-
-    def __eq__(self, other):
-        return ((self.nod1, self.layer1, self.nod2, self.layer2, self.color) == (
-        other.nod1, other.layer1, other.nod2, other.layer2, other.color))
-
-    def __ne__(self, other):
-        return not (self == other)
 
 
 def addEdge(nod1, l1, nod2, l2, col):
@@ -81,6 +61,12 @@ def addEdge(nod1, l1, nod2, l2, col):
         Edges[crtEdge] += 1
         return 0
     else:
+        if not(nod1 in Adj):
+            Adj[nod1] = []
+        if not(nod2 in Adj):
+            Adj[nod2] = []
+        Adj[nod1].append((nod2, l2))
+        Adj[nod2].append((nod1, l1))
         Edges[crtEdge] = 1
         return 1
 
@@ -98,8 +84,8 @@ files.append(open("\\AssigneeNames2020B.txt", "rb"))
 files.append(open("\\CCedNames2020B.txt", "rb"))
 # File dependencies files
 depFile = []
-depFile.append(open("FileDep.txt", "r"))
-depFile.append(open("ClassDep.txt", "r"))
+depFile.append(open("\\\\FileDep.txt", "r"))
+depFile.append(open("\\\\ClassDep.txt", "r"))
 # Event/Edge files
 reviewFile = open("\\ReviewEdges2020.txt", "r")
 issueFile = open("\\IssueEdges2020B.txt", "rb")
@@ -420,6 +406,7 @@ def processReview(crtL):
         for fileNode in fileNodes:
             fileIssues[fileNode][issueDict[issueID]] = True
             nrFileIssues[fileNode] += addEdge(fileNode, getLayer('file'), issueDict[issueID], getLayer('issue'), -1)
+
 def processCommit(crtL):
     commitID = crtL[1]
     issueID = crtL[2][:-1]
@@ -457,7 +444,7 @@ def readIssue2Change():
         #     processCommit(crtL)
 
 def readOwnershipFile():
-    ownershipFile = open("OwnershipFile.txt")
+    ownershipFile = open("\\\\OwnershipFile.txt")
     while (True):
         crtL = ownershipFile.readline()
         if not crtL:
@@ -493,6 +480,43 @@ def readOwnershipFile():
 
     ownershipFile.close()
 
+def checkFilesIssues():
+    buggy = 0
+    nonBuggy = 0
+    buggyList = []
+    filePair = []
+    unBuggyFile = []
+    for key in fileDict:
+        if nrFileIssues[fileDict[key]] != 0:
+            buggy += 1
+            # buggyList.append((fileDict[key], Adj[fileDict[key]]))
+            buggyList.append(fileDict[key])
+        else:
+            nonBuggy += 1
+            # filePair.append((fileDict[key], Adj[fileDict[key]]))
+            unBuggyFile.append(fileDict[key])
+
+    from scipy.stats import randint as sp_randint
+    unfBuggy = sorted(sp_randint.rvs(0, len(buggyList), size=8, random_state=0))
+    # buggyFilePairs = []
+    buggyFiles = []
+    for i in unfBuggy:
+        buggyFiles.append(buggyList[i])
+    print(buggy, nonBuggy)
+    sampleEfile = open("\\muxViz-master\\data\\graph1\\edgeFile.txt", 'w')
+    crtSample = Sample(8, sampleNetFromNodes(buggyFiles, Adj), Edges)
+    crtSample.addAliasEdges()
+    sampleEfile.write(crtSample.getEdgesString())
+    sampleEfile.close()
+    return crtSample.getNrNodes()
+
+def createLayoutFile(N):
+    Layoutfile = open("\\muxViz-master\\data\\graph1\\layoutFile.txt", 'w')
+    Layoutfile.write("NodeID NodeLabel\n")
+    for i in range(N):
+        Layoutfile.write(str(i + 1) + ' ' + str(i + 1) + '\n')
+    Layoutfile.close()
+
 
 nrHumans, nrCommits, nrFiles = readCommits(0, 0, 0)
 for fileId in range(1, humanRoles):
@@ -514,8 +538,10 @@ for fileId in range(len(depFile)):
 readIssueComments()
 readOwnershipFile()
 
+createLayoutFile(checkFilesIssues())
 edgeFile = open("\\EdgeFile.txt", "w")
 weightedEdges = 0
+
 for key in Edges:
     if key.layer2 != key.layer1:
         continue
@@ -527,16 +553,3 @@ print(nrHumans, nrCommits, nrIssues, nrFiles)
 print(nrNodes, nrHumans + nrIssues + nrFiles)
 print(weightedEdges)
 edgeFile.close()
-
-buggy = 0
-nonBuggy = 0
-for key in fileDict:
-    if nrFileIssues[fileDict[key]] != 0:
-        buggy += 1
-    else:
-        nonBuggy += 1
-    bugs = []
-    for bug in fileIssues[fileDict[key]]:
-        bugs.append(bug)
-
-print(buggy, nonBuggy)
