@@ -1,5 +1,5 @@
 # Edge-coloured multigraph with L = {C, R, A, i_R, i_A, F, I, O}, O = {F + I + C}
-from Ownership import *
+from OwnershipP import *
 from Edge import *
 from Sample import *
 import datetime
@@ -84,8 +84,8 @@ files.append(open("\\AssigneeNames2020B.txt", "rb"))
 files.append(open("\\CCedNames2020B.txt", "rb"))
 # File dependencies files
 depFile = []
-depFile.append(open("\\\\FileDep.txt", "r"))
-depFile.append(open("\\\\ClassDep.txt", "r"))
+depFile.append(open("\\FileDep.txt", "r"))
+depFile.append(open("\\ClassDep.txt", "r"))
 # Event/Edge files
 reviewFile = open("\\ReviewEdges2020.txt", "r")
 issueFile = open("\\IssueEdges2020B.txt", "rb")
@@ -146,7 +146,6 @@ def readNameUsername():
         if name in dict:
             usernames[lst[-1][:-1]] = name
             dict[name].setUserName(lst[-1][:-1])
-        #i_CC that are not i_A nor i_R
         # else:
         #     print(name, lst[-1][:-1])
     f.close()
@@ -439,14 +438,13 @@ def readIssue2Change():
         if crtL == '\n':
             continue
         crtL = crtL.split(' ')
-        #only link files from reviews that are mentioned in review Subject, skip commits that mention bugIDs
         if crtL[0] == 'Review2Bug':
             processReview(crtL)
         # else:
         #     processCommit(crtL)
 
-def readOwnershipFile():
-    ownershipFile = open("\\\\OwnershipFile.txt")
+def readOwnershipFile(ownershipDict):
+    ownershipFile = open("\\OwnershipFile.txt")
     while (True):
         crtL = ownershipFile.readline()
         if not crtL:
@@ -475,12 +473,15 @@ def readOwnershipFile():
                         addEdge(dict[c1].index, getLayer('committer'), dict[c2].index, getLayer('committer'), 0)
                     addEdge(dict[c1].index, getLayer('author'), dict[c2].index, getLayer('author'), 0)
 
-        ownershipTuple = obj.sumAROwner(0)
+        ownershipTuple = obj.nrCommitsOwner(0)
+        ownershipDict[fileDict[obj.name]] = (ownershipTuple[0], obj.nrCommitsPercentage(0))
+        #print(obj.nrCommitsPercentage(0))
         if ownershipTuple[0] in dict:
             addEdge(dict[ownershipTuple[0]].index, getLayer('ownership'), fileDict[obj.name], getLayer('ownership'), 13)
             # print(compName, ' ', ownershipTuple)
 
     ownershipFile.close()
+    return ownershipDict
 
 def checkFilesIssues():
     buggy = 0
@@ -492,19 +493,22 @@ def checkFilesIssues():
         if nrFileIssues[fileDict[key]] != 0:
             buggy += 1
             # buggyList.append((fileDict[key], Adj[fileDict[key]]))
-            buggyList.append(fileDict[key])
+            if fileDict[key] in ownershipDict:
+                buggyList.append(fileDict[key])
         else:
             nonBuggy += 1
             # filePair.append((fileDict[key], Adj[fileDict[key]]))
             unBuggyFile.append(fileDict[key])
 
     from scipy.stats import randint as sp_randint
-    unfBuggy = sorted(sp_randint.rvs(0, len(buggyList), size=8, random_state=0))
+    unfBuggy = sorted(sp_randint.rvs(0, len(buggyList), size=8, random_state=1))
     # buggyFilePairs = []
     buggyFiles = []
     for i in unfBuggy:
         buggyFiles.append(buggyList[i])
-    print(buggy, nonBuggy)
+        # if buggyList[i] in ownershipDict:
+        #     print(ownershipDict[buggyList[i]], nrFileIssues[buggyList[i]])
+    # print(buggy, nonBuggy)
     sampleEfile = open("\\muxViz-master\\data\\graph1\\edgeFile.txt", 'w')
     crtSample = Sample(8, sampleNetFromNodes(buggyFiles, Adj), Edges)
     crtSample.addAliasEdges()
@@ -518,7 +522,6 @@ def createLayoutFile(N):
     for i in range(N):
         Layoutfile.write(str(i + 1) + ' ' + str(i + 1) + '\n')
     Layoutfile.close()
-
 
 nrHumans, nrCommits, nrFiles = readCommits(0, 0, 0)
 for fileId in range(1, humanRoles):
@@ -538,7 +541,8 @@ for fileId in range(len(depFile)):
     depFile[fileId].close()
 
 readIssueComments()
-readOwnershipFile()
+ownershipDict = {}
+ownershipDict = readOwnershipFile(ownershipDict)
 
 createLayoutFile(checkFilesIssues())
 edgeFile = open("\\EdgeFile.txt", "w")
