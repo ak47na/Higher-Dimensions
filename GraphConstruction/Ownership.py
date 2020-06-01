@@ -136,6 +136,9 @@ class Ownership:
                 sum = self.authorDex[idx][author].sumAdd + self.authorDex[idx][author].sumRem
                 name = author
         return name, sum
+    def nrCommitsPercentage(self, idx):
+        owner = self.nrCommitsOwner(idx)
+        return (self.authorDex[idx][owner[0]].nrCommits / self.nrCommits[idx]) * 100
     def lastModifierOwner(self, idx):
         return self.lastModifier[idx]
     def nrCommitsOwner(self, idx):
@@ -147,6 +150,7 @@ class Ownership:
                 name = author
         return (name, nrCommits)
 
+#file = open("D:\\Ak_work2019-2020\\HigherDimensions\\OwnershipMethods.txt")
 def getTime(str1, str2):
     lst = re.split('\+|\-', str2)
     if not (':' in lst[1]):
