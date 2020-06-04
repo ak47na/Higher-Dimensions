@@ -3,7 +3,6 @@ import requests
 pref = 'https://www.eclipse.org/lists/jdt-dev/msg'
 pageLinks = ['https://www.eclipse.org/lists/jdt-dev/threads.html']
 defaultLink = 'https://www.eclipse.org/lists/jdt-dev/thrd'
-FF = False
 detailsFile = open("details.txt", "wb")
 errorFile = open("errors.txt", "wb")
 edgeFile = open("msgEdges.txt", "w")
