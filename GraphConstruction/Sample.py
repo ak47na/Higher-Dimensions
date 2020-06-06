@@ -1,5 +1,16 @@
 from Edge import myEdge
 from queue import Queue
+
+def createLayoutFile(fileName, nr, isLayer):
+    f = open(fileName, "w")
+    if isLayer:
+        f.write("layerID layerLabel\n")
+    else:
+        f.write("nodeID nodeLabel\n")
+    for i in range(nr):
+        f.write(str(i + 1) + ' ' + str(i + 1) + '\n')
+    f.close()
+
 #returns the list of all nodes that are adjacent to at least one node in nodes_
 def sampleFromLayer(nodes_):
     allNodes = {}
@@ -79,6 +90,3 @@ class Sample:
         for edge in self.edges:
             edgeStr += str(edge.ToString() + ' ' + str(self.edges[edge]) + '\n')
         return edgeStr
-
-
-
