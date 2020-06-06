@@ -113,59 +113,79 @@ def joinRoots(rx, ry):
         par[ry] = rx
 
 pairs = []
-
-while True:
-    crtL = nameEmails.readline()
-    if not crtL:
-        break
-    lst = crtL.split('/\\')
-    if lst[0] == '':
-        continue
-    if len(lst) != 2:
-        print(lst)
-        exit()
-
-    email_i = lst[1].replace(' ', '')
-    email_i = removeStrings(email_i.replace('\n', '')).replace(' ', '')
-    first_i, last_i, full_i = purifyName(lst[0])
-    name_i = {'first' : first_i, 'last': last_i, 'full': full_i}
-    pairs.append((name_i, email_i))
-
-N = len(pairs)
-
 par = []
-for i in range(N):
-    par.append(i)
-for i in range(N):
-    for j in range(i + 1, N):
-        if similarPairs(pairs[i], pairs[j]):
-            joinRoots(root(i), root(j))
-            p1 = pairs[i]
-            p2 = pairs[j]
-
+N = 0
 nrC = 0
-print(N)
-# change for different data sets
 fakeList = [58, 121, 191]
 nrHumans = 0
 humanID = {}
 fullNames = {}
-for i in range(N):
-    if root(i) == i:
-        nrC += 1
-        cluster = [i]
+email = {}
+
+def readNames():
+    global N
+    while True:
+        crtL = nameEmails.readline()
+        if not crtL:
+            break
+        lst = crtL.split('/\\')
+        if lst[0] == '':
+            continue
+        if len(lst) != 2:
+            print(lst)
+            exit()
+
+        email_i = lst[1].replace(' ', '')
+        email_i = removeStrings(email_i.replace('\n', '')).replace(' ', '')
+        first_i, last_i, full_i = purifyName(lst[0])
+        name_i = {'first': first_i, 'last': last_i, 'full': full_i}
+        pairs.append((name_i, email_i))
+        N = len(pairs)
+
+def joinNames():
+    for i in range(N):
+        par.append(i)
+    for i in range(N):
         for j in range(i + 1, N):
-            if root(j) == i:
-                cluster.append(j)
-        clusterSize = len(cluster)
-        if clusterSize > 1 and (not(nrC in fakeList)):
-            nrHumans += 1
-            fullNames[nrHumans] = []
-            for j in cluster:
-                humanID[pairs[j][1]] = nrHumans
-                fullNames[nrHumans].append(pairs[j][0]['full'])
-        else:
-            for j in cluster:
+            if similarPairs(pairs[i], pairs[j]):
+                joinRoots(root(i), root(j))
+                p1 = pairs[i]
+                p2 = pairs[j]
+
+def createClusters():
+    global nrC
+    global nrHumans
+    for i in range(N):
+        if root(i) == i:
+            nrC += 1
+            cluster = [i]
+            for j in range(i + 1, N):
+                if root(j) == i:
+                    cluster.append(j)
+            clusterSize = len(cluster)
+            if clusterSize > 1 and (not (nrC in fakeList)):
                 nrHumans += 1
-                humanID[pairs[j][1]] = nrHumans
-                fullNames[nrHumans] = [pairs[j][0]['full']]
+                fullNames[nrHumans] = []
+                for j in cluster:
+                    humanID[pairs[j][1]] = nrHumans
+                    fullNames[nrHumans].append(pairs[j][0]['full'])
+                    email[pairs[j][0]['full']] = pairs[j][1]
+            else:
+                for j in cluster:
+                    nrHumans += 1
+                    humanID[pairs[j][1]] = nrHumans
+                    fullNames[nrHumans] = [pairs[j][0]['full']]
+                    email[pairs[j][0]['full']] = pairs[j][1]
+
+
+def getEmailDict():
+    return email
+def getHumanIDs():
+    return humanID
+def getFullNames():
+    return fullNames
+
+def init():
+    readNames()
+    joinNames()
+    createClusters()
