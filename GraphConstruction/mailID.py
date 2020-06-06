@@ -5,7 +5,7 @@ nameLim = [[-4, 0.60], [-3, 0.80], [-1, 0.95]]
 emailLim = [[-4, 0.60], [-3, 0.80], [-1, 0.95]]
 lim = 10
 
-nameEmails = open("D:\\Ak_work2019-2020\\HigherDimensions\\TxtDataInUse\\emailNames.txt")
+nameEmails = open("\\emailNames.txt")
 removeStr = ['eclipse', 'jdt', 'admin', 'support', '.']
 def isLetter(a):
   return (ord(a) <= ord('z') and ord(a) >= ord('a')) or (ord(a) <= ord('Z') and ord(a) >= ord('A'))
@@ -145,6 +145,7 @@ for i in range(N):
 
 nrC = 0
 print(N)
+# change for different data sets
 fakeList = [58, 121, 191]
 nrHumans = 0
 humanID = {}
