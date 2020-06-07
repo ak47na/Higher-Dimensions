@@ -1,5 +1,11 @@
 from Edge import myEdge
 from queue import Queue
+import random
+
+
+def sampleOfNodes(nrNodes, nrNodesSample):
+    nodeIds = random.sample(range(1, nrNodes + 1), nrNodesSample)
+    return nodeIds
 
 def createLayoutFile(fileName, nr, isLayer):
     f = open(fileName, "w")
@@ -12,7 +18,7 @@ def createLayoutFile(fileName, nr, isLayer):
     f.close()
 
 #returns the list of all nodes that are adjacent to at least one node in nodes_
-def sampleFromLayer(nodes_):
+def sampleFromNodes(nodes_):
     allNodes = {}
     nodeList = []
     for nod in nodes_:
@@ -25,7 +31,7 @@ def sampleFromLayer(nodes_):
                 nodeList.append(adj[0])
 
     return nodeList
-# return the network of nodes_ using BFS
+# return network of nodes_ using BFS
 def sampleNetFromNodes(nodes_, Adj):
     allNodes = {}
     nodeList = []
@@ -46,13 +52,13 @@ def sampleNetFromNodes(nodes_, Adj):
 
 class Sample:
     def __init__(self, nrLayers_, nodes_, edges_):
-        self.nrLayers = nrLayers_
         self.nrNodes = 0
         self.nrEdges = 0
         self.usedNodes = {}
         self.realNodes = [0]
         self.NLtuples = {}
         self.normNodes(nodes_)
+        self.normLayers(edges_)
         self.normEdges(edges_)
 
     def normNodes(self, nodes):
@@ -64,6 +70,10 @@ class Sample:
                 self.realNodes.append(node)
     def getNrNodes(self):
         return self.nrNodes
+    def getNrEdges(self):
+        return self.nrEdges
+    def getNrLayers(self):
+        return self.nrLayers
 
     def addEdge(self, e):
         if e in self.edges:
@@ -73,11 +83,41 @@ class Sample:
             self.NLtuples[e.nod1][e.layer1] = True
             self.NLtuples[e.nod2][e.layer2] = True
             self.nrEdges += 1
+    def addLayer(self, layer):
+        if layer in self.layersDict:
+            return
+        self.nrLayers += 1
+        self.layersDict[layer] = True
+        self.layers.append(layer)
+    def normLayers(self, edges_):
+        self.layersDict = {}
+        self.layers = []
+        self.nrLayers = 0
+        for edge in edges_:
+            if (edge.nod1 in self.usedNodes) and (edge.nod2 in self.usedNodes):
+                self.addLayer(edge.layer1)
+                self.addLayer(edge.layer2)
+        self.layers = sorted(self.layers)
+        for i in range(self.nrLayers):
+            self.layersDict[self.layers[i]] = i + 1
     def normEdges(self, edges_):
         self.edges = {}
         for edge in edges_:
             if (edge.nod1 in self.usedNodes) and (edge.nod2 in self.usedNodes):
-                self.addEdge(myEdge(self.usedNodes[edge.nod1], edge.layer1, self.usedNodes[edge.nod2], edge.layer2, 0))
+                self.addEdge(myEdge(self.usedNodes[edge.nod1], self.layersDict[edge.layer1],
+                                    self.usedNodes[edge.nod2], self.layersDict[edge.layer2], 0))
+
+    def addOrdinalAliasEdges(self):
+        for nod in self.usedNodes:
+            x = self.usedNodes[nod]
+            layers_x = []
+            for l1 in self.NLtuples[x]:
+                layers_x.append(l1)
+            layers_x = sorted(layers_x)
+            nrL = len(layers_x)
+            for i in range(nrL - 1):
+                self.addEdge(myEdge(x, layers_x[i], x, layers_x[i + 1], 0))
+
     def addAliasEdges(self):
         for nod in self.usedNodes:
             x = self.usedNodes[nod]
@@ -90,3 +130,8 @@ class Sample:
         for edge in self.edges:
             edgeStr += str(edge.ToString() + ' ' + str(self.edges[edge]) + '\n')
         return edgeStr
+
+    def createEdgesFile(self, fileName1):
+        f = open(fileName1, "w")
+        f.write(self.getEdgesString())
+        f.close()
