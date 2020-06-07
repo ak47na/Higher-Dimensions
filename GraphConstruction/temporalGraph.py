@@ -3,11 +3,15 @@ from datetime import datetime
 import Sample
 # from datetime import timedelta
 
+
+Adj = {}
 msgDict = {}
 nrNodes = 0
 nrLayers = 0
 humanDict = {}
 timeDict = {}
+nodeLayers = []
+Edges = []
 
 edges = []
 def addHuman(name):
@@ -15,6 +19,8 @@ def addHuman(name):
     if not (name in humanDict):
         nrNodes += 1
         humanDict[name] = nrNodes
+        Adj[nrNodes] = []
+
 # u is a reply to v, a is the sender of u, b is the sender of v
 def addEdge(u, v):
     a = msgDict[u][0]
@@ -27,7 +33,7 @@ def addEdge(u, v):
 
 def readMsgDetails():
     nrM = 0
-    detailsFile = open("\\msgDetails.txt", "r")
+    detailsFile = open("\\TxtDataInUse\\msgDetails.txt", "r")
     while True:
         crtL = detailsFile.readline()
         if not crtL:
@@ -49,7 +55,7 @@ def readMsgDetails():
 def readMsgEdges():
     errors = 0
     invalidMsg = {}
-    edgeFile = open("\\msgEdges.txt", "r")
+    edgeFile = open("\\TxtDataInUse\\msgEdges.txt", "r")
     while True:
         crtL = edgeFile.readline()
         if not crtL:
@@ -66,7 +72,7 @@ def readMsgEdges():
             invalidMsg[lst[1]] = True
             errors += 1
         if lst[0] in msgDict and lst[1] in msgDict:
-            addEdge(lst[0], lst[1])
+            addEdge(lst[1], lst[0])
     edgeFile.close()
     print(errors)
 
@@ -81,17 +87,25 @@ def normTime():
     for i in range(nrLayers):
         timeDict[timeList[i]] = i + 1
 
-def printEdges():
-    edgeOut = open("\\temporalEdges.txt", "w")
+def getEdges():
+    from Edge import myEdge
     for edge in edges:
-        edgeOut.write(str(edge[0]) + ' ' + str(timeDict[edge[2]]) + ' ' + str(edge[1]) + ' ' + str(timeDict[edge[2]]) + '\n')
-    edgeOut.close()
-
+        Edges.append(myEdge(edge[0], timeDict[edge[2]], edge[1], timeDict[edge[2]], 0))
+        Adj[edge[0]].append((edge[1], timeDict[edge[2]]))
 
 mailID.init()
 readMsgDetails()
 readMsgEdges()
 normTime()
-printEdges()
-Sample.createLayoutFile("\\muxViz-master\\data\\temporalGraph\\B.txt", nrNodes, False)
-Sample.createLayoutFile("\\muxViz-master\\data\\temporalGraph\\C.txt", nrLayers, True)
+getEdges()
+nodes = []
+nodeSample = Sample.sampleOfNodes(nrNodes, 40)
+for node in nodeSample:
+    nodes.append((node, Adj[node]))
+s = Sample.Sample(nrLayers, Sample.sampleFromNodes(nodes), Edges)
+print(s.getNrNodes(), s.getNrEdges(), s.getNrLayers())
+s.addOrdinalAliasEdges()
+print(s.getNrNodes(), s.getNrEdges(), s.getNrLayers())
+s.createEdgesFile("\\temporalEdges.txt")
+Sample.createLayoutFile("\\muxViz-master\\data\\temporalGraph\\B.txt", s.getNrNodes(), False)
+Sample.createLayoutFile("\\muxViz-master\\data\\temporalGraph\\C.txt", s.getNrLayers(), True)
