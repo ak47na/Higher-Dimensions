@@ -16,25 +16,29 @@ file4 = open("AuthorNames.txt", "w")
 File4 = open("AuthorTimes.txt", "w")
 commitData = open("commitData.txt", "w")
 
-committerNames = {}
+committerDates = {}
+committerEmails = {}
 committerIdx = 0
 authorIdx = 0
 fileIdx = 0
-authorNames = {}
+authorDates = {}
+authorEmails = {}
 fileNames = {}
 
 
 for commit in RepositoryMining('https://github.com/eclipse/eclipse.jdt.core', since=dt1, to=dt2).traverse_commits():
     commitData.write(str(commit.hash) + '/\\' + str(commit.msg) + '/\\\n')
     file2.write(str(commit.committer.name) + "/\\" + str(commit.author.name) + "/\\" + str(commit.hash) + "\n")
-    if not(commit.committer.name in committerNames):
+    if not(commit.committer.name in committerDates):
       committerIdx += 1
-      committerNames[commit.committer.name] = []
-    committerNames[commit.committer.name].append(commit.committer_date)
-    if not(commit.author.name in authorNames):
+      committerDates[commit.committer.name] = []
+      committerEmails[commit.committer.name] = commit.committer.email
+    committerDates[commit.committer.name].append(commit.committer_date)
+    if not(commit.author.name in authorDates):
       authorIdx += 1
-      authorNames[commit.author.name] = []
-    authorNames[commit.author.name].append(commit.author_date)
+      authorDates[commit.author.name] = []
+      authorEmails[commit.author.name] = commit.author.email
+    authorDates[commit.author.name].append(commit.author_date)
     for modifFile in commit.modifications:
       fileList = modifFile.filename.split('.')
       if (fileList[-1] == 'jar' or fileList[-1] == 'java' or fileList[-1] == 'class'):
@@ -49,18 +53,18 @@ for commit in RepositoryMining('https://github.com/eclipse/eclipse.jdt.core', si
       file2.write("\n")
 
 idx = 0
-for Key in committerNames:
+for Key in committerDates:
   idx += 1
-  file1.write(str(Key) + "/\\" + str(idx) + "\n")
-  File1.write(str(Key) + "/\\" + str(len(committerNames[Key])) + "\n")
-  for el in committerNames[Key]:
+  file1.write(str(Key) + "/\\" + str(committerEmails[Key]) + '/\\' + str(idx) + "\n")
+  File1.write(str(Key) + "/\\" + str(len(committerDates[Key])) + "\n")
+  for el in committerDates[Key]:
     File1.write(str(el) + '\n')
 File1.close()
 idx = 0
-for Key in authorNames:
-  file4.write(str(Key) + "/\\" + str(idx) + "\n")
-  File4.write(str(Key) + "/\\" + str(len(authorNames[Key])) + "\n")
-  for el in authorNames[Key]:
+for Key in authorDates:
+  file4.write(str(Key) + "/\\" + str(authorEmails[Key]) + '/\\' + str(idx) + "\n")
+  File4.write(str(Key) + "/\\" + str(len(authorDates[Key])) + "\n")
+  for el in authorDates[Key]:
     File4.write(str(el) + '\n')
 File4.close()
 for Key in fileNames:
@@ -70,4 +74,3 @@ file2.close()
 file3.close()
 file4.close()
 commitData.close()
-        
