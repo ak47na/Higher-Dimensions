@@ -43,16 +43,9 @@ def CheckPage(pageBody):
                     msgDex[msg] = (lst.find('em'), msgDex[msg][1])
 
     print(len(pageBody.find_all('em')), nrNodes)
-
-
-def addEdge(u, v):
-    if u[0] != -1 and v[0] != -1:
-        edgeFile.write(str(u[0]) + '/\\' + str(v[0]))
-
-
+    
 def AddEdge(u, v):
     edgeFile.write(str(u) + ' ' + str(v) + '\n')
-
 
 def getDateFromList(s):
     idx = 0
