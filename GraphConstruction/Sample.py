@@ -2,19 +2,37 @@ from Edge import myEdge
 from queue import Queue
 import random
 
+colorSet = ['', 'brown', 'firebrick1', 'coral', 'goldenrod1', 'greenyellow', 'darkolivegreen3', 'lightblue',
+            'darkturquoise', 'midnightblue', 'hotpink4', 'mediumpurple', 'gray3', 'chocolate', 'yellow1']
 
-def sampleOfNodes(nrNodes, nrNodesSample):
-    nodeIds = random.sample(range(1, nrNodes + 1), nrNodesSample)
+
+def sampleOfNodes(x, y, nrNodesSample):
+    nodeIds = random.sample(range(x, y), nrNodesSample)
     return nodeIds
+def sampleNodesFromEdges(edgeList, divBy):
+    nrEdges = len(edgeList)
+    edgeSample = sampleOfNodes(0, nrEdges, nrEdges // divBy)
+    nodeDict = {}
+    nodes = []
+    for i in edgeSample:
+        if not(edgeList[i].nod1 in nodeDict):
+            nodeDict[edgeList[i].nod1] = True
+            nodes.append(edgeList[i].nod1)
+        if not(edgeList[i].nod2 in nodeDict):
+            nodeDict[edgeList[i].nod2] = True
+            nodes.append(edgeList[i].nod2)
+    return nodes
 
 def createLayoutFile(fileName, nr, isLayer):
     f = open(fileName, "w")
+    add = 0
     if isLayer:
         f.write("layerID layerLabel\n")
+        add = 2001
     else:
         f.write("nodeID nodeLabel\n")
     for i in range(nr):
-        f.write(str(i + 1) + ' ' + str(i + 1) + '\n')
+        f.write(str(i + 1) + ' ' + str(i + 1 + add) + '\n')
     f.close()
 
 #returns the list of all nodes that are adjacent to at least one node in nodes_
@@ -74,6 +92,11 @@ class Sample:
         return self.nrEdges
     def getNrLayers(self):
         return self.nrLayers
+    def getLayers(self):
+        realLayers = []
+        for x in self.layers:
+            realLayers.append(x)
+        return realLayers
 
     def addEdge(self, e):
         if e in self.edges:
@@ -105,7 +128,7 @@ class Sample:
         for edge in edges_:
             if (edge.nod1 in self.usedNodes) and (edge.nod2 in self.usedNodes):
                 self.addEdge(myEdge(self.usedNodes[edge.nod1], self.layersDict[edge.layer1],
-                                    self.usedNodes[edge.nod2], self.layersDict[edge.layer2], 0))
+                                    self.usedNodes[edge.nod2], self.layersDict[edge.layer2], edge.color))
 
     def addOrdinalAliasEdges(self):
         for nod in self.usedNodes:
@@ -116,7 +139,7 @@ class Sample:
             layers_x = sorted(layers_x)
             nrL = len(layers_x)
             for i in range(nrL - 1):
-                self.addEdge(myEdge(x, layers_x[i], x, layers_x[i + 1], 0))
+                self.addEdge(myEdge(x, layers_x[i], x, layers_x[i + 1], 9))
 
     def addAliasEdges(self):
         for nod in self.usedNodes:
@@ -124,7 +147,7 @@ class Sample:
             for l1 in self.NLtuples[x]:
                 for l2 in self.NLtuples[x]:
                     if l1 != l2:
-                        self.addEdge(myEdge(x, l1, x, l2, 0))
+                        self.addEdge(myEdge(x, l1, x, l2, 9))
     def getEdgesString(self):
         edgeStr = ''
         for edge in self.edges:
@@ -134,4 +157,10 @@ class Sample:
     def createEdgesFile(self, fileName1):
         f = open(fileName1, "w")
         f.write(self.getEdgesString())
+        f.close()
+    def createColoredEdges(self, fileName):
+        f = open(fileName, "w")
+        f.write("nodeID.from layerID.from nodeID.to layerID.to color size\n")
+        for edge in self.edges:
+            f.write(edge.ToString() + ' ' + colorSet[edge.color] + ' 2\n')
         f.close()
