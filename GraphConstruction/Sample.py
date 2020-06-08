@@ -6,14 +6,32 @@ colorSet = ['', 'brown', 'firebrick1', 'coral', 'goldenrod1', 'greenyellow', 'da
             'darkturquoise', 'midnightblue', 'hotpink4', 'mediumpurple', 'gray3', 'chocolate', 'yellow1']
 
 
-def sampleOfNodes(x, y, nrNodesSample):
+def getSample(x, y, nrNodesSample):
     nodeIds = random.sample(range(x, y), nrNodesSample)
     return nodeIds
+def sampleEdgesPerLayer(nrLayers, edgeList, divBy):
+    edgeIdx = []
+    for i in range(nrLayers):
+        edgeIdx.append([])
+    nrEdges = len(edgeList)
+    for i in range(nrEdges):
+        if edgeList[i].layer1 == edgeList[i].layer2:
+            edgeIdx[edgeList[i].layer1 - 1].append(i)
+    edges = []
+    for i in range(nrLayers):
+        nrEdges_i = len(edgeIdx[i])
+        # print(nrEdges_i // divBy)
+        sample = getSample(0, nrEdges_i, nrEdges_i // divBy)
+        for j in sample:
+            edges.append(edgeList[j])
+    return edges
+
 def sampleNodesFromEdges(edgeList, divBy):
     nrEdges = len(edgeList)
-    edgeSample = sampleOfNodes(0, nrEdges, nrEdges // divBy)
+    edgeSample = getSample(0, nrEdges, nrEdges // divBy)
     nodeDict = {}
     nodes = []
+    edges = []
     for i in edgeSample:
         if not(edgeList[i].nod1 in nodeDict):
             nodeDict[edgeList[i].nod1] = True
@@ -21,6 +39,19 @@ def sampleNodesFromEdges(edgeList, divBy):
         if not(edgeList[i].nod2 in nodeDict):
             nodeDict[edgeList[i].nod2] = True
             nodes.append(edgeList[i].nod2)
+        edges.append(edgeList[i])
+    return nodes, edges
+
+def getNodesFromEdgeSample(edges):
+    nodeDict = {}
+    nodes = []
+    for e in edges:
+        if not (e.nod1 in nodeDict):
+            nodeDict[e.nod1] = True
+            nodes.append(e.nod1)
+        if not (e.nod2 in nodeDict):
+            nodeDict[e.nod2] = True
+            nodes.append(e.nod2)
     return nodes
 
 def createLayoutFile(fileName, nr, isLayer):
