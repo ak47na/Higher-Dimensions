@@ -5,10 +5,11 @@ import random
 colorSet = ['', 'brown', 'firebrick1', 'coral', 'goldenrod1', 'greenyellow', 'darkolivegreen3', 'lightblue',
             'darkturquoise', 'midnightblue', 'hotpink4', 'mediumpurple', 'gray3', 'chocolate', 'yellow1']
 
-
+# returns a uniform sample of nrNodesSample values in range [x, y]
 def getSample(x, y, nrNodesSample):
     nodeIds = random.sample(range(x, y), nrNodesSample)
     return nodeIds
+# returns edges sampled uniformly from each layer in proportion to that layer’s %
 def sampleEdgesPerLayer(nrLayers, edgeList, divBy):
     edgeIdx = []
     for i in range(nrLayers):
@@ -20,12 +21,12 @@ def sampleEdgesPerLayer(nrLayers, edgeList, divBy):
     edges = []
     for i in range(nrLayers):
         nrEdges_i = len(edgeIdx[i])
-        # print(nrEdges_i // divBy)
-        sample = getSample(0, nrEdges_i, nrEdges_i // divBy)
+        print(i + 1, nrEdges_i, nrEdges_i // divBy)
+        sample = getSample(0, nrEdges_i - 1, nrEdges_i // divBy)
         for j in sample:
-            edges.append(edgeList[j])
+            edges.append(edgeList[edgeIdx[i][j]])
     return edges
-
+# sample edges and return the subset of nodes and edges 
 def sampleNodesFromEdges(edgeList, divBy):
     nrEdges = len(edgeList)
     edgeSample = getSample(0, nrEdges, nrEdges // divBy)
@@ -41,7 +42,7 @@ def sampleNodesFromEdges(edgeList, divBy):
             nodes.append(edgeList[i].nod2)
         edges.append(edgeList[i])
     return nodes, edges
-
+# return the subset of nodes used in edges
 def getNodesFromEdgeSample(edges):
     nodeDict = {}
     nodes = []
@@ -59,11 +60,10 @@ def createLayoutFile(fileName, nr, isLayer):
     add = 0
     if isLayer:
         f.write("layerID layerLabel\n")
-        add = 2001
     else:
         f.write("nodeID nodeLabel\n")
     for i in range(nr):
-        f.write(str(i + 1) + ' ' + str(i + 1 + add) + '\n')
+        f.write(str(i + 1) + ' ' + str(i + 1) + '\n')
     f.close()
 
 #returns the list of all nodes that are adjacent to at least one node in nodes_
@@ -193,5 +193,5 @@ class Sample:
         f = open(fileName, "w")
         f.write("nodeID.from layerID.from nodeID.to layerID.to color size\n")
         for edge in self.edges:
-            f.write(edge.ToString() + ' ' + colorSet[edge.color] + ' 2\n')
+            f.write(edge.ToString() + ' ' + colorSet[edge.color] + ' 3\n')
         f.close()
