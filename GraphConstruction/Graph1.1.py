@@ -6,11 +6,10 @@ import datetime
 
 from scipy.stats import wilcoxon
 nrLayers = 4
-
 Adj = {}
 nrEdges = 0
 edgeList = []
-
+#C, F, R, I
 def getLayer2(t1, t2):
     if t1 == 'committer' and t2 == 'author':
         return 3
@@ -30,7 +29,9 @@ def getLayer2(t1, t2):
         return 4
     if t1 == 'file' and t2 == 'issue':
         return 4
-    
+    print(t1, t2)
+    exit()
+
 def getLayer(type):
     if type == 'committer':
         return 1
@@ -480,7 +481,9 @@ def readIssue2Change():
         crtL = crtL.split(' ')
         if crtL[0] == 'Review2Bug':
             processReview(crtL)
-            
+        # else:
+        #     processCommit(crtL)
+
 def readOwnershipFile(ownershipDict):
     ownershipFile = open("\\OwnershipFile.txt")
     minP = 100.0
@@ -521,9 +524,11 @@ def readOwnershipFile(ownershipDict):
         minP = min(minP, obj.nrCommitsPercentage(0))
         avg += obj.nrCommitsPercentage(0)
         cnt += 1
+        #print(obj.nrCommitsPercentage(0))
         if ownershipTuple[0] in dict:
             addEdge(dict[ownershipTuple[0]].index, 1, fileDict[obj.name], 1, 14)
-        
+            # print(compName, ' ', ownershipTuple)
+
     ownershipFile.close()
     #print(minP, avg / cnt)
     return ownershipDict
@@ -584,9 +589,9 @@ ownershipDict = readOwnershipFile(ownershipDict)
 
 def sampleNodes():
     sampleNodes = []
-    humanSample = sampleOfNodes(0, len(humansNodes), 5)
-    fileSample = sampleOfNodes(0, len(fileNodes), 11)
-    issueSample = sampleOfNodes(0, len(issueNodes), 46)
+    humanSample = getSample(0, len(humansNodes), 5)
+    fileSample = getSample(0, len(fileNodes), 11)
+    issueSample = getSample(0, len(issueNodes), 46)
     for i in humanSample:
         sampleNodes.append(humansNodes[i])
     for i in fileSample:
@@ -602,9 +607,14 @@ def sampleNodes():
 
 
 checkFilesIssues()
-s = Sample(nrLayers, sampleNodesFromEdges(edgeList, 4000), Edges)
+#nodes, sampledEdges = sampleNodesFromEdges(edgeList, 40)
+sampledEdges = sampleEdgesPerLayer(nrLayers, edgeList, 370)
+print(len(sampledEdges), nrLayers)
+nodes = getNodesFromEdgeSample(sampledEdges)
+s = Sample(nrLayers, nodes, sampledEdges)
 s.addAliasEdges()
 createLayoutFile("\\muxViz-master\\data\\graph1\\layoutFile.txt", s.getNrNodes(), False)
+#createLayoutFile
 s.createEdgesFile("\\muxViz-master\\data\\graph1\\EdgeFile.txt")
 s.createColoredEdges("\\muxViz-master\\data\\graph1\\ExternalEdgeFile.txt")
 print(s.getLayers())
