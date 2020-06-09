@@ -6,10 +6,15 @@ import datetime
 
 from scipy.stats import wilcoxon
 nrLayers = 4
+# colorSet = ['', 'brown', 'firebrick1', 'coral', 'goldenrod1', 'greenyellow', 'darkolivegreen3', 'lightblue',
+#             'darkturquoise', 'midnightblue', 'hotpink4', 'mediumpurple', 'gray3', 'chocolate', 'yellow1', 'c1', 'c2',
+#             'c3']
+
 Adj = {}
 nrEdges = 0
 edgeList = []
-#C, F, R, I
+#C, R, I, F
+LayerPerm = [0, 2, 4, 3, 1]
 def getLayer2(t1, t2):
     if t1 == 'committer' and t2 == 'author':
         return 3
@@ -79,6 +84,8 @@ Edges = {}
 
 def addEdge(nod1, l1, nod2, l2, col):
     global nrEdges
+    l1 = LayerPerm[l1]
+    l2 = LayerPerm[l2]
     crtEdge = myEdge(nod1, l1, nod2, l2, col)
     if crtEdge in Edges:
         Edges[crtEdge] += 1
@@ -108,8 +115,8 @@ files.append(open("\\AssigneeNames2020B.txt", "rb"))
 files.append(open("\\CCedNames2020B.txt", "rb"))
 # File dependencies files
 depFile = []
-depFile.append(open("\\FileDep.txt", "r"))
-depFile.append(open("\\ClassDep.txt", "r"))
+depFile.append(open("\\\\FileDep.txt", "r"))
+depFile.append(open("\\\\ClassDep.txt", "r"))
 # Event/Edge files
 reviewFile = open("\\ReviewEdges2020.txt", "r")
 issueFile = open("\\IssueEdges2020B.txt", "rb")
@@ -175,11 +182,13 @@ def readNameUsername():
     f.close()
 
 def Role(x):
-    if x < 3:
+    if x < 2:
         return x
-    if x == 5:
+    if (x == 3) or (x == 5):
         return 2
-    return x - 1
+    if x == 4:
+        return 3
+    return x - 2
 
 def addHuman(name, nrHumans, fNr):
     global nrNodes
@@ -241,7 +250,7 @@ def readCommits(nrHumans, nrCommits, nrFiles):
             commit_hash = commitId
             nrCommits = addCommit(commitId, nrCommits)
             if authorName != committerName:
-                # add edge author->committer
+                # add edge committer->author
                 L = getLayer2('committer', 'author')
                 addEdge(dict[committerName].index, 1, dict[authorName].index, L, 2)
             fileList = []
@@ -266,8 +275,7 @@ def readCommits(nrHumans, nrCommits, nrFiles):
             # addEdge(fileDict[fileName], 12, fileDict[crtFile], 12)
             # change to L, L?
             if authorName in dict:
-                L = getLayer2('author', 'file')
-                addEdge(dict[authorName].index, L, fileDict[crtFile], 1, 4)
+                addEdge(dict[authorName].index, 1, fileDict[crtFile], 1, 4)
             if committerName in dict:
                 L = getLayer2('committer', 'file')
                 addEdge(dict[committerName].index, L, fileDict[crtFile], L, 5)
@@ -485,7 +493,7 @@ def readIssue2Change():
         #     processCommit(crtL)
 
 def readOwnershipFile(ownershipDict):
-    ownershipFile = open("\\OwnershipFile.txt")
+    ownershipFile = open("\\\\OwnershipFile.txt")
     minP = 100.0
     avg = 0.0
     cnt = 0
@@ -517,7 +525,9 @@ def readOwnershipFile(ownershipDict):
                 if c1 != c2:
                     if dict[c1].isRole[0] and dict[c2].isRole[0]:
                         addEdge(dict[c1].index, L, dict[c2].index, L, 13)
-                    addEdge(dict[c1].index, A, dict[c2].index, L, 2)
+                    elif dict[c2].isRole[0] or dict[c1].isRole[0]:
+                        addEdge(dict[c1].index, L, dict[c2].index, A, 2)
+
 
         ownershipTuple = obj.nrCommitsOwner(0)
         ownershipDict[fileDict[obj.name]] = (ownershipTuple[0], obj.nrCommitsPercentage(0))
@@ -570,6 +580,15 @@ nrHumans, nrCommits, nrFiles = readCommits(0, 0, 0)
 for fileId in range(1, humanRoles):
     nrHumans = readF(fileId, nrHumans)
     files[fileId].close()
+# cnt = list(range(10))
+# for i in range(10):
+#     cnt[i] = 0
+# for hum in dict:
+#     for x in range(len(dict[hum].isRole)):
+#         if dict[hum].isRole[x]:
+#             cnt[x] += 1
+# print(cnt)
+# exit()
 
 
 nrReviews = readReviewComments(0)
@@ -607,18 +626,17 @@ def sampleNodes():
 
 
 checkFilesIssues()
-#nodes, sampledEdges = sampleNodesFromEdges(edgeList, 40)
-sampledEdges = sampleEdgesPerLayer(nrLayers, edgeList, 370)
+nodes, sampledEdges = sampleNodesFromEdges(edgeList, 400)
+#sampledEdges = sampleEdgesPerLayer(nrLayers, edgeList, 370)
 print(len(sampledEdges), nrLayers)
-nodes = getNodesFromEdgeSample(sampledEdges)
+#nodes, sampledEdges = sampleNodesFromEdges(edgeList, 400)
+
 s = Sample(nrLayers, nodes, sampledEdges)
 s.addAliasEdges()
 createLayoutFile("\\muxViz-master\\data\\graph1\\layoutFile.txt", s.getNrNodes(), False)
 #createLayoutFile
 s.createEdgesFile("\\muxViz-master\\data\\graph1\\EdgeFile.txt")
 s.createColoredEdges("\\muxViz-master\\data\\graph1\\ExternalEdgeFile.txt")
-print(s.getLayers())
 
 print(nrHumans, nrCommits, nrIssues, nrFiles)
-print(nrNodes, nrHumans + nrIssues + nrFiles)
 print(s.getNrNodes(), s.getNrEdges(), s.getNrLayers())
