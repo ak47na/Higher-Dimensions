@@ -1,4 +1,3 @@
-# Edge-coloured multigraph with L = {C, R, A, i_R, i_A, F, I, O}, O = {F + I + C}
 from OwnershipP import *
 from Edge import *
 from Sample import *
@@ -6,15 +5,12 @@ import datetime
 
 from scipy.stats import wilcoxon
 nrLayers = 4
-# colorSet = ['', 'brown', 'firebrick1', 'coral', 'goldenrod1', 'greenyellow', 'darkolivegreen3', 'lightblue',
-#             'darkturquoise', 'midnightblue', 'hotpink4', 'mediumpurple', 'gray3', 'chocolate', 'yellow1', 'c1', 'c2',
-#             'c3']
 
 Adj = {}
 nrEdges = 0
 edgeList = []
-#C, R, I, F
 LayerPerm = [0, 2, 4, 3, 1]
+#C, F, R, I
 def getLayer2(t1, t2):
     if t1 == 'committer' and t2 == 'author':
         return 3
@@ -34,6 +30,7 @@ def getLayer2(t1, t2):
         return 4
     if t1 == 'file' and t2 == 'issue':
         return 4
+    # In case a pair is omitted
     print(t1, t2)
     exit()
 
@@ -55,8 +52,6 @@ def getLayer(type):
     if type == 'ownership':
         return 8
 
-Roles = ['committer', 'reviewOwner', 'patchUploader', 'reviewer', 'patchApprover', 'patchAuthor', 'issueReporter', 'issueAssignee', 'issueCC']
-
 humanNodes = []
 humansNodes = []
 issueNodes = []
@@ -76,8 +71,10 @@ issueDict = {}
 fileIssues = {}
 nrFileIssues = {}
 reviewDict = {}
+reviewID = {} # dict with commits as keys and their value represent the review they belong to
 commitDict = {}
 fileDict = {}
+files = []
 Edges = {}
 
 
@@ -115,8 +112,8 @@ files.append(open("\\AssigneeNames2020B.txt", "rb"))
 files.append(open("\\CCedNames2020B.txt", "rb"))
 # File dependencies files
 depFile = []
-depFile.append(open("\\\\FileDep.txt", "r"))
-depFile.append(open("\\\\ClassDep.txt", "r"))
+depFile.append(open("\\FileDep.txt", "r"))
+depFile.append(open("\\ClassDep.txt", "r"))
 # Event/Edge files
 reviewFile = open("\\ReviewEdges2020.txt", "r")
 issueFile = open("\\IssueEdges2020B.txt", "rb")
@@ -129,8 +126,31 @@ def Site(layer):
     if layer <= 4 and layer >= 1:
         return 1
     return 2
+
+class MyFile:
+    def __init__(self, index_, name_, complexity_, churn_, size_):
+        self.index = index_
+        self.name = name_
+        self.updateMeasures(complexity_, churn_, size_)
+    def updateMeasures(self, complexity_, churn_, size_):
+        self.complexity = complexity_
+        self.churn = churn_
+        self.size = size_
+
+def addMyFile(crtFile, nrFiles):
+    global nrNodes
+    nrFiles += 1
+    nrNodes += 1
+    Label[nrNodes] = crtFile
+    fileNodes.append(nrNodes)
+    fileDict[crtFile] = nrNodes
+    fileIssues[nrNodes] = {}
+    nrFileIssues[nrNodes] = 0
+    files.append(MyFile(nrFiles, crtFile, 0, 0, 0))
+    return nrFiles
 class MyChange:
-    def __init__(self, index_, hash_id_):
+    def __init__(self, nodeVal_, index_, hash_id_):
+        self.nodeVal = nodeVal_
         self.index = index_
         self.hash_id = hash_id_
         self.fileNodes = []
@@ -177,8 +197,7 @@ def readNameUsername():
         if name in dict:
             usernames[lst[-1][:-1]] = name
             dict[name].setUserName(lst[-1][:-1])
-        # else:
-        #     print(name, lst[-1][:-1])
+
     f.close()
 
 def Role(x):
@@ -205,15 +224,18 @@ def addHuman(name, nrHumans, fNr):
     return nrHumans
 
 def addReview(review_id, nrReviews):
+    global nrNodes
     if not review_id in reviewDict:
         nrReviews += 1
-        reviewDict[review_id] = MyChange(nrReviews, review_id)
+        nrNodes += 1
+        Label[nrNodes] = 'R' + str(review_id)
+        reviewDict[review_id] = MyChange(nrNodes, nrReviews, review_id)
     return nrReviews
 
 def addCommit(hash_id, nrCommits):
     if not (hash_id in commitDict):
         nrCommits += 1
-        commitDict[hash_id] = MyChange(nrCommits, hash_id)
+        commitDict[hash_id] = MyChange(-1, nrCommits, hash_id)
     return nrCommits
 
 def addDepEdge(f):
@@ -257,13 +279,7 @@ def readCommits(nrHumans, nrCommits, nrFiles):
         else:
             crtFile = crtL.rsplit('.', 1)[0].replace("/", '.')
             if not (crtFile in fileDict):
-                nrFiles += 1
-                nrNodes += 1
-                Label[nrNodes] = crtFile
-                fileNodes.append(nrNodes)
-                fileDict[crtFile] = nrNodes
-                fileIssues[nrNodes] = {}
-                nrFileIssues[nrNodes] = 0
+                nrFiles = addMyFile(crtFile, nrFiles)
             commitDict[commit_hash].addFile(fileDict[crtFile])
             if len(fileList) > 0:
                 L = getLayer2('file', 'fileC')
@@ -284,7 +300,7 @@ def readCommits(nrHumans, nrCommits, nrFiles):
     return nrHumans, nrCommits, nrFiles
 
 
-def readF(fNr, nrHumans):
+def readHumanF(fNr, nrHumans):
     while (True):
         # names in Bugzilla are read from binary files
         if fNr >= 6 and fNr <= 8:
@@ -294,10 +310,10 @@ def readF(fNr, nrHumans):
 
         if not crtL:
             break
-        if '/\\' in crtL:  # name/\index
+        if '/\\' in crtL:  # name/\email/\index
             name = purifyName(crtL.split('/\\')[0].replace(' ', ''))
             nrHumans = addHuman(name, nrHumans, fNr)
-        else:  # name index
+        else:  # name email index
             lst = crtL.split()
             Len = len(lst)
             name = ''
@@ -308,6 +324,14 @@ def readF(fNr, nrHumans):
 
     return nrHumans
 
+def addIssue(issue, nrIssues):
+    global nrNodes
+    nrIssues += 1
+    nrNodes += 1
+    Label[nrNodes] = issue
+    issueNodes.append(nrNodes)
+    issueDict[issue] = nrNodes
+    return nrIssues
 def readIssues(nrIssues):
     global nrNodes
     while True:
@@ -321,12 +345,9 @@ def readIssues(nrIssues):
         # there is an Assignee/Reporter edge
         if (lst[0][0] != 'C'):
             name = purifyName(lst[1].replace(' ', ''))
-            if not (lst[-1] in issueDict):
-                nrIssues += 1
-                nrNodes += 1
-                Label[nrNodes] = lst[-1]
-                issueNodes.append(nrNodes)
-                issueDict[lst[-1][:-1]] = nrNodes
+
+            if not (lst[-1][:-1] in issueDict):
+                nrIssues = addIssue(lst[-1][:-1], nrIssues)
                 i_R[nrNodes] = {}
             if not (name in dict):
                 continue
@@ -369,6 +390,25 @@ def readIssueComments():
             crtL = issueFile.readline()
     addIrEdges()
     issueFile.close()
+def addIssueDependency(fName):
+    f = open(fName, "r")
+    while True:
+        crtL = f.readline()[:-1]
+        if not crtL:
+            break
+        lst = crtL.split(' ')
+        if len(lst) != 2:
+            print(lst)
+            exit()
+        crtL = f.readline()[1:-1].split(', ')
+        L = getLayer2('issue', 'issue')
+        if (lst[0] in issueDict):
+            i1 = issueDict[lst[0]]
+            for elem in crtL:
+                if elem in issueDict:
+                    i2 = issueDict[elem]
+                    addEdge(i1, L, i2, L, 15)
+
 def addIrEdges():
     layer = getLayer2('issueReporter', 'issueReporter')
     for key in i_R:
@@ -379,7 +419,20 @@ def addIrEdges():
                 if i_r1 != i_r2:
                     addEdge(nod1, layer, dict[i_r2].index, layer, 7)
 
+def processReviewEdges(reviewEdges, L):
+    edge4Review = {}
+    for key in reviewEdges:
+        revId = reviewID[key]
+        humanEdges = reviewEdges[key]
+        if not(revId in edge4Review):
+            edge4Review[revId] = {}
+        for edge in humanEdges:
+            edge4Review[revId][edge[1]] = True
+        for edge in edge4Review[revId]:
+            addEdge(dict[edge].index, L, reviewDict[revId].nodeVal, L, 16)
 def readReviews():
+    global nrReviews
+    reviewEdges = {}
     while True:
         crtL = reviewFile.readline()
         if not crtL:
@@ -393,10 +446,23 @@ def readReviews():
                 addEdge(dict[name2].index, L, dict[name1].index, L, 8)
             else:
                 addEdge(dict[name2].index, L, dict[name1].index, L, 8)
+        elif lst[0] == 'Review2Commit':
+            reviewId = lst[1]
+            if not (reviewId in reviewDict):
+                addReview(reviewId, nrReviews)
+                nrReviews += 1
+            commitId = lst[2].replace('\n', '')
+            if (commitId in reviewID) and (reviewID[commitId] != reviewId):
+                print('Yolo')
+                exit()
+            reviewID[commitId] = reviewId
         else:
             commitId = lst[1]
+            name = purifyName(lst[2][:-1].replace(' ', ''))
+            if not (commitId in reviewEdges):
+                reviewEdges[commitId] = []
+            reviewEdges[commitId].append((lst[0], name))
             if commitId in commitDict:
-                name = purifyName(lst[2][:-1].replace(' ', ''))
                 layer = 'patchUploader'
                 col = 5
                 if lst[0] == 'OwnerEdge':
@@ -408,12 +474,15 @@ def readReviews():
                 elif lst[0] == 'ApprovalEdge':
                     layer = 'approver'
                     col = 8
+                elif lst[0] != 'UploaderEdge':
+                    print(lst)
+                    exit()
                 L = getLayer2(layer, 'file')
                 if name in dict:
                     fileNodes = commitDict[commitId].fileNodes
                     for fileNode in fileNodes:
                         addEdge(dict[name].index, L, fileNode, L, 10)
-
+    processReviewEdges(reviewEdges, 3)
     reviewFile.close()
 def readReviewComments(nrReviews):
     revFileComm = open("\\ReviewFilesFromComments.txt", "r")
@@ -493,7 +562,7 @@ def readIssue2Change():
         #     processCommit(crtL)
 
 def readOwnershipFile(ownershipDict):
-    ownershipFile = open("\\\\OwnershipFile.txt")
+    ownershipFile = open("\\OwnershipFile.txt")
     minP = 100.0
     avg = 0.0
     cnt = 0
@@ -570,7 +639,7 @@ def checkFilesIssues():
         #     print(ownershipDict[buggyList[i]], nrFileIssues[buggyList[i]])
     #print(buggy, nonBuggy)
     sampleEfile = open("\\muxViz-master\\data\\graph1\\edgeFile.txt", 'w')
-    crtSample = Sample(8, sampleNetFromNodes(buggyFiles, Adj), Edges)
+    crtSample = Sample(8, sampleNetFromNodes(buggyFiles, Adj), Edges, Label)
     crtSample.addAliasEdges()
     sampleEfile.write(crtSample.getEdgesString())
     sampleEfile.close()
@@ -578,7 +647,7 @@ def checkFilesIssues():
 
 nrHumans, nrCommits, nrFiles = readCommits(0, 0, 0)
 for fileId in range(1, humanRoles):
-    nrHumans = readF(fileId, nrHumans)
+    nrHumans = readHumanF(fileId, nrHumans)
     files[fileId].close()
 # cnt = list(range(10))
 # for i in range(10):
@@ -596,6 +665,7 @@ nrReviews = readReviewComments(0)
 readNameUsername()
 readReviews()
 nrIssues = readIssues(0)
+print(nrIssues)
 readIssue2Change()
 readI2CSeeAlso()
 for fileId in range(len(depFile)):
@@ -625,13 +695,13 @@ def sampleNodes():
     return Sample(nrLayers, sampleNodes, Edges)
 
 
-checkFilesIssues()
+#checkFilesIssues()
 nodes, sampledEdges = sampleNodesFromEdges(edgeList, 400)
 #sampledEdges = sampleEdgesPerLayer(nrLayers, edgeList, 370)
 print(len(sampledEdges), nrLayers)
 #nodes, sampledEdges = sampleNodesFromEdges(edgeList, 400)
 
-s = Sample(nrLayers, nodes, sampledEdges)
+s = Sample(nrLayers, nodes, sampledEdges, Label)
 s.addAliasEdges()
 createLayoutFile("\\muxViz-master\\data\\graph1\\layoutFile.txt", s.getNrNodes(), False)
 #createLayoutFile
