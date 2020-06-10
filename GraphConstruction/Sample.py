@@ -5,11 +5,11 @@ import random
 colorSet = ['', 'brown', 'firebrick1', 'coral', 'goldenrod1', 'greenyellow', 'darkolivegreen3', 'lightblue',
             'darkturquoise', 'midnightblue', 'hotpink4', 'mediumpurple', 'gray3', 'chocolate', 'yellow1']
 
-# returns a uniform sample of nrNodesSample values in range [x, y]
+
 def getSample(x, y, nrNodesSample):
     nodeIds = random.sample(range(x, y), nrNodesSample)
     return nodeIds
-# returns edges sampled uniformly from each layer in proportion to that layer’s %
+
 def sampleEdgesPerLayer(nrLayers, edgeList, divBy):
     edgeIdx = []
     for i in range(nrLayers):
@@ -21,12 +21,11 @@ def sampleEdgesPerLayer(nrLayers, edgeList, divBy):
     edges = []
     for i in range(nrLayers):
         nrEdges_i = len(edgeIdx[i])
-        print(i + 1, nrEdges_i, nrEdges_i // divBy)
         sample = getSample(0, nrEdges_i - 1, nrEdges_i // divBy)
         for j in sample:
             edges.append(edgeList[edgeIdx[i][j]])
     return edges
-# sample edges and return the subset of nodes and edges 
+
 def sampleNodesFromEdges(edgeList, divBy):
     nrEdges = len(edgeList)
     edgeSample = getSample(0, nrEdges, nrEdges // divBy)
@@ -42,7 +41,7 @@ def sampleNodesFromEdges(edgeList, divBy):
             nodes.append(edgeList[i].nod2)
         edges.append(edgeList[i])
     return nodes, edges
-# return the subset of nodes used in edges
+
 def getNodesFromEdgeSample(edges):
     nodeDict = {}
     nodes = []
@@ -100,12 +99,13 @@ def sampleNetFromNodes(nodes_, Adj):
     return nodeList
 
 class Sample:
-    def __init__(self, nrLayers_, nodes_, edges_):
+    def __init__(self, nrLayers_, nodes_, edges_, labels_):
         self.nrNodes = 0
         self.nrEdges = 0
         self.usedNodes = {}
         self.realNodes = [0]
         self.NLtuples = {}
+        self.labels = labels_
         self.normNodes(nodes_)
         self.normLayers(edges_)
         self.normEdges(edges_)
@@ -117,6 +117,7 @@ class Sample:
                 self.usedNodes[node] = self.nrNodes
                 self.NLtuples[self.nrNodes] = {}
                 self.realNodes.append(node)
+            
     def getNrNodes(self):
         return self.nrNodes
     def getNrEdges(self):
@@ -172,6 +173,7 @@ class Sample:
             for i in range(nrL - 1):
                 self.addEdge(myEdge(x, layers_x[i], x, layers_x[i + 1], 9))
 
+
     def addAliasEdges(self):
         for nod in self.usedNodes:
             x = self.usedNodes[nod]
@@ -179,6 +181,7 @@ class Sample:
                 for l2 in self.NLtuples[x]:
                     if l1 != l2:
                         self.addEdge(myEdge(x, l1, x, l2, 9))
+
     def getEdgesString(self):
         edgeStr = ''
         for edge in self.edges:
@@ -195,3 +198,16 @@ class Sample:
         for edge in self.edges:
             f.write(edge.ToString() + ' ' + colorSet[edge.color] + ' 3\n')
         f.close()
+    def printCountOfEdgeTypes(self, Layer):
+        edgeTypes = {}
+        for e in self.edges:
+            if not ((e.layer1, e.layer2) in edgeTypes):
+                edgeTypes[(e.layer1, e.layer2)] = 1
+            else:
+                edgeTypes[(e.layer1, e.layer2)] += 1
+        edgeTypesList = []
+        for key in edgeTypes:
+            edgeTypesList.append(key)
+        edgeTypesList = sorted(edgeTypesList)
+        for key in edgeTypesList:
+            print(Layer[key[0]], 'x', Layer[key[1]], '=', edgeTypes[key])
