@@ -1,9 +1,11 @@
 import statistics
 
-from pydriller import ModificationType
+from pydriller import *
+from pydriller.metrics.process.code_churn import CodeChurn
+from pydriller.metrics.process.lines_count import LinesCount
 from pydriller.metrics.process.process_metric import ProcessMetric
 
-# ProcessMetric is implemented in https://github.com/ishepard/pydriller
+
 class Complexity(ProcessMetric):
     """
     This class is responsible to implement the Complexity metric for a
@@ -39,14 +41,12 @@ class Complexity(ProcessMetric):
                 fileExt = modified_file.new_path.rsplit('.', 1)[-1].lower()
                 if fileExt != 'java':
                     continue
-
                 if modified_file.change_type == ModificationType.RENAME:
                     renamed_files[modified_file.old_path] = filepath
-
+                
                 complexity = modified_file.complexity
-                print(complexity)
-                if complexity != None:
-                    exit()
+                if complexity == None:
+                  print(modified_file.new_path, modified_file.old_path)
                 self.files.setdefault(filepath, []).append(complexity)
 
     def count(self):
@@ -56,7 +56,7 @@ class Complexity(ProcessMetric):
         """
         count = dict()
         for path, complexity in self.files.items():
-            count[path] = complexity[:-1]
+            count[path] = complexity[-1]
 
         return count
 
