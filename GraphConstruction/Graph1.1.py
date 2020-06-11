@@ -108,23 +108,22 @@ def addEdge(nod1, l1, nod2, l2, col):
 
 # Human Names files
 files = []
-files.append(open("D:\\Ak_work2019-2020\\HigherDimensions\\TxtData\\CommitterAuthorFiles.txt", "r"))
-files.append(open("D:\\Ak_work2019-2020\\HigherDimensions\\TxtData\\OwnerNames2020.txt", "r"))
-files.append(open("D:\\Ak_work2019-2020\\HigherDimensions\\TxtData\\UploaderNames2020.txt", "r"))
-files.append(open("D:\\Ak_work2019-2020\\HigherDimensions\\TxtData\\CommentRevNames2020.txt", "r"))
-files.append(open("D:\\Ak_work2019-2020\\HigherDimensions\\TxtData\\ApproverNames2020.txt", "r"))
-files.append(open("D:\\Ak_work2019-2020\\HigherDimensions\\TxtData\\AuthorNames2020.txt", "r"))
-files.append(open("D:\\Ak_work2019-2020\\HigherDimensions\\TxtData\\ReporterNames2020B.txt", "rb"))
-files.append(open("D:\\Ak_work2019-2020\\HigherDimensions\\TxtData\\AssigneeNames2020B.txt", "rb"))
-files.append(open("D:\\Ak_work2019-2020\\HigherDimensions\\TxtData\\CCedNames2020B.txt", "rb"))
+files.append(open("\\CommitterAuthorFiles.txt", "r"))
+files.append(open("\\OwnerNames2020.txt", "r"))
+files.append(open("\\UploaderNames2020.txt", "r"))
+files.append(open("\\CommentRevNames2020.txt", "r"))
+files.append(open("\\ApproverNames2020.txt", "r"))
+files.append(open("\\AuthorNames2020.txt", "r"))
+files.append(open("\\ReporterNames2020B.txt", "rb"))
+files.append(open("\\AssigneeNames2020B.txt", "rb"))
+files.append(open("\\CCedNames2020B.txt", "rb"))
 # File dependencies files
 depFile = []
-depFile.append(open("D:\\Ak_work2019-2020\\HigherDimensions\\FileDep.txt", "r"))
-depFile.append(open("D:\\Ak_work2019-2020\\HigherDimensions\\ClassDep.txt", "r"))
+depFile.append(open("\\FileDep.txt", "r"))
+depFile.append(open("\\ClassDep.txt", "r"))
 # Event/Edge files
-reviewFile = open("D:\\Ak_work2019-2020\\HigherDimensions\\TxtData\\ReviewEdges2020.txt", "r")
-issueFile = open("D:\\Ak_work2019-2020\\HigherDimensions\\TxtData\\IssueEdges2020B.txt", "rb")
-rc2BugEdge = open("D:\\Ak_work2019-2020\\HigherDimensions\\TxtData\\RevMsg2BugEdge.txt", "r")
+reviewFile = open("\\ReviewEdges2020.txt", "r")
+rc2BugEdge = open("\\RevMsg2BugEdge.txt", "r")
 
 
 def addMyFile(crtFile, nrFiles):
@@ -150,7 +149,7 @@ class MyChange:
 
 
 def readNameUsername():
-    f = open("D:\\Ak_work2019-2020\\HigherDimensions\\TxtData\\emailName2020B.txt", "rb")
+    f = open("\\emailName2020B.txt", "rb")
     while (True):
         crtL = f.readline().decode('utf-8')
         if not crtL:
@@ -296,7 +295,6 @@ def readReviews():
                 nrReviews += 1
             commitId = lst[2].replace('\n', '')
             if (commitId in reviewID) and (reviewID[commitId] != reviewId):
-                print('Yolo')
                 exit()
             reviewID[commitId] = reviewId
         else:
@@ -328,7 +326,7 @@ def readReviews():
     processReviewEdges(reviewEdges, 3)
     reviewFile.close()
 def readReviewComments(nrReviews):
-    revFileComm = open("D:\\Ak_work2019-2020\\HigherDimensions\\TxtData\\ReviewFilesFromComments.txt", "r")
+    revFileComm = open("\\ReviewFilesFromComments.txt", "r")
     while (True):
         crtL = revFileComm.readline()
         if not crtL:
@@ -357,6 +355,12 @@ def readReviewComments(nrReviews):
             addEdge(nod1, 3, fileDict[fileName], 3, 11)
     return nrReviews
 
+def getIssues():
+    g = open("BugDex2020.txt", "w")
+    for key in issueDict:
+        g.write(str(key) + '/\\')
+    g.close()
+
 def addIssue(issue, nrIssues):
     global nrNodes
     nrIssues += 1
@@ -365,24 +369,24 @@ def addIssue(issue, nrIssues):
     issueNodes.append(nrNodes)
     issueDict[issue] = nrNodes
     return nrIssues
-def readIssues(nrIssues):
+def readIssueEdges(nrIssues):
     global nrNodes
+    yolo = 0
+    issueEdgesFile = open("\\IssueEdges2020B.txt", "rb")
     while True:
-        crtL = issueFile.readline().decode('utf-8')
+        crtL = issueEdgesFile.readline().decode('utf-8')
         if not crtL:
             break
         if crtL == '':
             continue
         lst = crtL.split('/\\')
-        Len = len(lst)
-        # there is an Assignee/Reporter edge
         if (lst[0][0] != 'C'):
             name = purifyName(lst[1])
 
-            if not (lst[-1][:-1] in issueDict):
-                nrIssues = addIssue(lst[-1][:-1], nrIssues)
-                i_R[nrNodes] = {}
+            if not (lst[-1][:-1] in issueDict): #issue was not fixed
+                continue
             if not (name in dict):
+                print(name, lst[1])
                 continue
             layer = 'issueReporter'
             col = 1
@@ -398,10 +402,30 @@ def readIssues(nrIssues):
             if uname in usernames:
                 name = usernames[uname]
                 # ToDo add CCassignee edges
-    issueFile.close()
+    print(yolo, nrIssues)
+    issueEdgesFile.close()
     return nrIssues
+def readIssues(nrIssues):
+    global nrNodes
+    issueFile = open("\\BugStatus2020.txt")
+
+    while True:
+        crtL = issueFile.readline()
+        if not crtL:
+            break
+        lst = crtL.split('/\\')
+        status_i = lst[1][:-1]
+        # in case only fixed issues must be added =>
+        # if ("CLOSED" in status_i) or ("RESOLVED" in status_i) or ("VERIFIED" in status_i) or ("FIXED" in status_i):
+        if not (lst[0] in issueDict):
+            nrIssues = addIssue(lst[0], nrIssues)
+            i_R[nrNodes] = {}
+    issueFile.close()
+    nrIssues = readIssueEdges(nrIssues)
+    return nrIssues
+
 def readIssueComments():
-    issueFile = open("D:\\Ak_work2019-2020\\HigherDimensions\\TxtData\\comments2020.txt")
+    issueFile = open("\\comments2020.txt")
     while True:
         crtL = issueFile.readline()
         if not crtL:
@@ -460,7 +484,7 @@ def processCommit(crtL):
             fileIssues[fileNode][issueDict[issueID]] = True
             nrFileIssues[fileNode] += addEdge(fileNode, L, issueDict[issueID], L, 12)
 def readI2CSeeAlso():
-    bugEdgeFile = open("D:\\Ak_work2019-2020\\HigherDimensions\\TxtData\\BugEdges.txt", "r")
+    bugEdgeFile = open("\\BugEdges.txt", "r")
     while (True):
         crtL = bugEdgeFile.readline()
         if not crtL:
@@ -507,13 +531,15 @@ def addDepEdge(f):
             L = getLayer2('file', 'file')
             addEdge(fileDict[lst[1]], L, fileDict[lst[2]], L, 1)
 def readOwnershipFile(ownershipDict):
-    ownershipFile = open("D:\\Ak_work2019-2020\\HigherDimensions\\OwnershipFile.txt")
+    ownershipFile = open("\\OwnershipFile.txt")
     minP = 100.0
     avg = 0.0
     nrFiles = 0
     nrCommitters = 0
     X = 0
     Y = 0
+    values = []
+    Values = []
     while (True):
         crtL = ownershipFile.readline()
         if not crtL:
@@ -541,6 +567,9 @@ def readOwnershipFile(ownershipDict):
         for c1 in allCommitters:
             nrCommitters += 1
             cp = (100 * obj.authorDex[0][c1].nrCommits / obj.nrCommits[0])
+
+            if cp < 100:
+                values.append(cp)
             avg += cp
             minP = min(minP, cp)
             for c2 in allCommitters:
@@ -555,11 +584,13 @@ def readOwnershipFile(ownershipDict):
         m3 = m1 + m2
         X += m1
         Y += m2
+        if obj.nrCommitsPercentage(0) < 100:
+            Values.append(obj.nrCommitsPercentage(0))
         if ownershipTuple[0] in dict:
             addEdge(dict[ownershipTuple[0]].index, 1, fileDict[obj.name], 1, 14)
 
+
     ownershipFile.close()
-    # print(X, Y, nrCommitters, nrFiles, minP, avg / nrCommitters)
     return ownershipDict
 
 
@@ -592,8 +623,8 @@ nrIssues = readIssues(0)
 readIssue2Change()
 readI2CSeeAlso()
 readIssueComments()
-
-files = readFileMeasures(fileDict, "D:\\Ak_work2019-2020\\HigherDimensions\\TxtData\\codeMeasures2020.txt")
+getIssues()
+files = readFileMeasures(fileDict, "\\codeMeasures2020.txt")
 for fileId in range(len(depFile)):
     addDepEdge(depFile[fileId])
     depFile[fileId].close()
@@ -606,7 +637,7 @@ nodes, sampledEdges = sampleNodesFromEdges(edgeList, 400)
 # sampledEdges = sampleEdgesPerLayer(nrLayers, edgeList, 370)
 s = Sample(nrLayers, nodes, sampledEdges, Label)
 s.addAliasEdges()
-createLayoutFile("D:\\Ak_work2019-2020\\muxViz-master\\data\\graph1\\layoutFile.txt", s.getNrNodes(), False)
-s.createEdgesFile("D:\\Ak_work2019-2020\\muxViz-master\\data\\graph1\\EdgeFile.txt")
-s.createColoredEdges("D:\\Ak_work2019-2020\\muxViz-master\\data\\graph1\\ExternalEdgeFile.txt")
+createLayoutFile("\\muxViz-master\\data\\graph1\\layoutFile.txt", s.getNrNodes(), False)
+s.createEdgesFile("\\muxViz-master\\data\\graph1\\EdgeFile.txt")
+s.createColoredEdges("\\muxViz-master\\data\\graph1\\ExternalEdgeFile.txt")
 print(s.getNrNodes(), s.getNrEdges(), s.getNrLayers())
