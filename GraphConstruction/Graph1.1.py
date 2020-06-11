@@ -2,6 +2,7 @@ from OwnershipP import *
 from Edge import *
 from Sample import *
 import datetime
+from MyFile import *
 
 from scipy.stats import wilcoxon
 nrLayers = 4
@@ -166,7 +167,6 @@ class MyHuman:
         self.isRole = [False] * 7
         self.index = index_
         self.site = 0
-        # self.commits.append(commit)
     def setUserName(self, username_):
         self.username = username_
     def setRole(self, nr):
@@ -565,7 +565,10 @@ def readOwnershipFile(ownershipDict):
     ownershipFile = open("\\OwnershipFile.txt")
     minP = 100.0
     avg = 0.0
-    cnt = 0
+    nrFiles = 0
+    nrCommitters = 0
+    X = 0
+    Y = 0
     while (True):
         crtL = ownershipFile.readline()
         if not crtL:
@@ -578,7 +581,7 @@ def readOwnershipFile(ownershipDict):
                 nxtL = ownershipFile.readline()
             continue
         obj = Ownership(compName)
-
+        nrFiles += 1
         for i in range(int(lst[1])):
             nxtL = ownershipFile.readline().split('/\\')
             lineLen = len(nxtL)
@@ -587,87 +590,62 @@ def readOwnershipFile(ownershipDict):
             obj.addModif(getModifFromLine(nxtL, lineLen))
 
         allCommitters = obj.authorDex[0]
+
         L = getLayer2('committer', 'committer')
         A = getLayer2('committer', 'author')
         for c1 in allCommitters:
+            nrCommitters += 1
+            cp = (100 * obj.authorDex[0][c1].nrCommits / obj.nrCommits[0])
+            avg += cp
+            minP = min(minP, cp)
             for c2 in allCommitters:
                 if c1 != c2:
                     if dict[c1].isRole[0] and dict[c2].isRole[0]:
                         addEdge(dict[c1].index, L, dict[c2].index, L, 13)
                     elif dict[c2].isRole[0] or dict[c1].isRole[0]:
                         addEdge(dict[c1].index, L, dict[c2].index, A, 2)
-
-
         ownershipTuple = obj.nrCommitsOwner(0)
         ownershipDict[fileDict[obj.name]] = (ownershipTuple[0], obj.nrCommitsPercentage(0))
-        minP = min(minP, obj.nrCommitsPercentage(0))
-        avg += obj.nrCommitsPercentage(0)
-        cnt += 1
-        #print(obj.nrCommitsPercentage(0))
+        m1, m2 = obj.getMeasures(0)
+        m3 = m1 + m2
+        X += m1
+        Y += m2
         if ownershipTuple[0] in dict:
             addEdge(dict[ownershipTuple[0]].index, 1, fileDict[obj.name], 1, 14)
-            # print(compName, ' ', ownershipTuple)
 
     ownershipFile.close()
-    #print(minP, avg / cnt)
+    # print(X, Y, nrCommitters, nrFiles, minP, avg / nrCommitters)
     return ownershipDict
 
 def checkFilesIssues():
     buggy = 0
     nonBuggy = 0
     buggyList = []
-    filePair = []
     unBuggyFile = []
     for key in fileDict:
         if nrFileIssues[fileDict[key]] != 0:
             buggy += 1
-            # buggyList.append((fileDict[key], Adj[fileDict[key]]))
             if fileDict[key] in ownershipDict:
                 buggyList.append(fileDict[key])
         else:
             nonBuggy += 1
-            # filePair.append((fileDict[key], Adj[fileDict[key]]))
             unBuggyFile.append(fileDict[key])
-
-    from scipy.stats import randint as sp_randint
-    unfBuggy = sorted(sp_randint.rvs(0, len(buggyList), size=8, random_state=1))
-    # buggyFilePairs = []
-    buggyFiles = []
-    for i in unfBuggy:
-        buggyFiles.append(buggyList[i])
-        # if buggyList[i] in ownershipDict:
-        #     print(ownershipDict[buggyList[i]], nrFileIssues[buggyList[i]])
-    #print(buggy, nonBuggy)
-    sampleEfile = open("\\muxViz-master\\data\\graph1\\edgeFile.txt", 'w')
-    crtSample = Sample(8, sampleNetFromNodes(buggyFiles, Adj), Edges, Label)
-    crtSample.addAliasEdges()
-    sampleEfile.write(crtSample.getEdgesString())
-    sampleEfile.close()
-    return crtSample.getNrNodes()
 
 nrHumans, nrCommits, nrFiles = readCommits(0, 0, 0)
 for fileId in range(1, humanRoles):
     nrHumans = readHumanF(fileId, nrHumans)
     files[fileId].close()
-# cnt = list(range(10))
-# for i in range(10):
-#     cnt[i] = 0
-# for hum in dict:
-#     for x in range(len(dict[hum].isRole)):
-#         if dict[hum].isRole[x]:
-#             cnt[x] += 1
-# print(cnt)
-# exit()
-
 
 nrReviews = readReviewComments(0)
 
 readNameUsername()
 readReviews()
 nrIssues = readIssues(0)
-print(nrIssues)
+
 readIssue2Change()
 readI2CSeeAlso()
+files = readFileMeasures(fileDict, "\\codeMeasures2020.txt")
+
 for fileId in range(len(depFile)):
     addDepEdge(depFile[fileId])
     depFile[fileId].close()
@@ -675,36 +653,15 @@ for fileId in range(len(depFile)):
 readIssueComments()
 ownershipDict = {}
 ownershipDict = readOwnershipFile(ownershipDict)
-
-def sampleNodes():
-    sampleNodes = []
-    humanSample = getSample(0, len(humansNodes), 5)
-    fileSample = getSample(0, len(fileNodes), 11)
-    issueSample = getSample(0, len(issueNodes), 46)
-    for i in humanSample:
-        sampleNodes.append(humansNodes[i])
-    for i in fileSample:
-        sampleNodes.append(fileNodes[i])
-    for i in issueSample:
-        sampleNodes.append(issueNodes[i])
-    samplePair = []
-    for x in sampleNodes:
-        if not (x in Adj):
-            Adj[x] = []
-        samplePair.append((x, Adj[x]))
-    return Sample(nrLayers, sampleNodes, Edges)
+print(nrNodes, nrReviews + nrIssues + nrHumans + nrFiles)
 
 
 #checkFilesIssues()
 nodes, sampledEdges = sampleNodesFromEdges(edgeList, 400)
 #sampledEdges = sampleEdgesPerLayer(nrLayers, edgeList, 370)
-print(len(sampledEdges), nrLayers)
-#nodes, sampledEdges = sampleNodesFromEdges(edgeList, 400)
-
 s = Sample(nrLayers, nodes, sampledEdges, Label)
 s.addAliasEdges()
 createLayoutFile("\\muxViz-master\\data\\graph1\\layoutFile.txt", s.getNrNodes(), False)
-#createLayoutFile
 s.createEdgesFile("\\muxViz-master\\data\\graph1\\EdgeFile.txt")
 s.createColoredEdges("\\muxViz-master\\data\\graph1\\ExternalEdgeFile.txt")
 
