@@ -1,9 +1,11 @@
 from datetime import datetime
 from datetime import timedelta
 import datetime as dt
+import matplotlib.pyplot as plt
+import numpy as np
 import re
 
-
+minPercentage = 5
 class TimePair:
     def __init__(self, start_t_, end_t_):
         self.start_t = start_t_
@@ -149,6 +151,17 @@ class Ownership:
                 nrCommits = self.authorDex[idx][author].nrCommits
                 name = author
         return (name, nrCommits)
+    #retruns minor, major
+    def getMeasures(self, idx):
+        nrMinor = 0
+        nrMajor = 0
+        for author in self.authorDex[idx]:
+            p = (self.authorDex[idx][author].nrCommits / self.nrCommits[idx]) * 100
+            if p <= minPercentage:
+                nrMinor += 1
+            else:
+                nrMajor += 1
+        return nrMinor, nrMajor
 
 #file = open("D:\\Ak_work2019-2020\\HigherDimensions\\OwnershipMethods.txt")
 def getTime(str1, str2):
@@ -165,7 +178,6 @@ def getTime(str1, str2):
     return dateTime
 
 OwnershipDex = {}
-
 def getModifFromLine(nxtL, lineLen):
     AuthorName = purifyName(nxtL[0])
     dateLn = nxtL[1].split(' ')
@@ -176,3 +188,36 @@ def getModifFromLine(nxtL, lineLen):
         compl = int(nxtL[5])
     return Modif(AuthorName, Time, int(nxtL[3]), int(nxtL[4]), compl)
 
+def plotOwnershipHistogram(x, Name):
+    yTicks = []
+    cnt = 0
+    for i in x:
+        if i == 50:
+            cnt += 1
+    print(cnt)
+    for i in range(0, 600, 20):
+        yTicks.append(i)
+
+    x = sorted(x)
+    print(x[len(x) - 1])
+    fig, ax = plt.subplots()
+    ax.hist(x, bins=100)
+    ax.set_ylim([0, 600])
+    plt.yticks(yTicks)
+    ax.set_xlabel('Ownership percentage')
+    ax.set_ylabel('Number of compoonents')
+    plt.savefig(Name)
+    plt.show()
+def plotOwnershipPercent(x, Name):
+    xTicks = []  
+    for i in range(0, 20):
+        xTicks.append(i)
+        print(i)
+    x = sorted(x)
+    fig, ax = plt.subplots()
+    ax.set_ylim([0, 100])
+    ax.hist(x, bins=100)
+    ax.set_ylabel('Ownership percentage')
+    ax.set_xlabel('Number of compoonent')
+    plt.savefig(Name)
+    plt.show()
