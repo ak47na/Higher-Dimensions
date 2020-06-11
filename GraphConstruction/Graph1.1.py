@@ -3,6 +3,7 @@ from Edge import *
 from Sample import *
 import datetime
 from MyFile import *
+from MyHuman import *
 
 from scipy.stats import wilcoxon
 
@@ -12,6 +13,7 @@ Adj = {}
 nrEdges = 0
 edgeList = []
 LayerPerm = [0, 2, 4, 3, 1]
+
 
 # C, F, R, I
 def getLayer2(t1, t2):
@@ -125,26 +127,6 @@ issueFile = open("D:\\Ak_work2019-2020\\HigherDimensions\\TxtData\\IssueEdges202
 rc2BugEdge = open("D:\\Ak_work2019-2020\\HigherDimensions\\TxtData\\RevMsg2BugEdge.txt", "r")
 
 
-def Site(layer):
-    if layer == 0 or layer == 5:
-        return 0
-    if layer <= 4 and layer >= 1:
-        return 1
-    return 2
-
-
-class MyFile:
-    def __init__(self, index_, name_, complexity_, churn_, size_):
-        self.index = index_
-        self.name = name_
-        self.updateMeasures(complexity_, churn_, size_)
-
-    def updateMeasures(self, complexity_, churn_, size_):
-        self.complexity = complexity_
-        self.churn = churn_
-        self.size = size_
-
-
 def addMyFile(crtFile, nrFiles):
     global nrNodes
     nrFiles += 1
@@ -157,51 +139,14 @@ def addMyFile(crtFile, nrFiles):
     files.append(MyFile(nrFiles, crtFile, 0, 0, 0))
     return nrFiles
 
-
 class MyChange:
     def __init__(self, nodeVal_, index_, hash_id_):
         self.nodeVal = nodeVal_
         self.index = index_
         self.hash_id = hash_id_
         self.fileNodes = []
-
     def addFile(self, fileNode):
         self.fileNodes.append(fileNode)
-
-
-class MyHuman:
-    def __init__(self, name_, index_, human_index):
-        self.name = name_
-        self.humanId = human_index
-        self.email = None
-        self.username = None
-        self.isRole = [False] * 7
-        self.index = index_
-        self.site = 0
-        # self.commits.append(commit)
-
-    def setUserName(self, username_):
-        self.username = username_
-
-    def setRole(self, nr):
-        self.isRole[nr] = True
-
-    def setSite(self, fNr):
-        self.site = Site(fNr)
-
-
-def isLetter(a):
-    return (ord(a) <= ord('z') and ord(a) >= ord('a'))
-
-
-def purifyName(name):
-    nameLen = len(name)
-    newName = ''
-    for i in range(nameLen):
-        crtSymbol = name[i].lower()
-        if isLetter(crtSymbol):
-            newName += crtSymbol
-    return newName
 
 
 def readNameUsername():
@@ -216,19 +161,7 @@ def readNameUsername():
         if name in dict:
             usernames[lst[-1][:-1]] = name
             dict[name].setUserName(lst[-1][:-1])
-
     f.close()
-
-
-def Role(x):
-    if x < 2:
-        return x
-    if (x == 3) or (x == 5):
-        return 2
-    if x == 4:
-        return 3
-    return x - 2
-
 
 def addHuman(name, nrHumans, fNr):
     global nrNodes
@@ -253,27 +186,11 @@ def addReview(review_id, nrReviews):
         Label[nrNodes] = 'R' + str(review_id)
         reviewDict[review_id] = MyChange(nrNodes, nrReviews, review_id)
     return nrReviews
-
-
 def addCommit(hash_id, nrCommits):
     if not (hash_id in commitDict):
         nrCommits += 1
         commitDict[hash_id] = MyChange(-1, nrCommits, hash_id)
     return nrCommits
-
-
-def addDepEdge(f):
-    while True:
-        crtL = f.readline()
-        if not crtL:
-            break
-        lst = crtL.split()
-        if lst[1] in fileDict and lst[2] in fileDict:
-            # addEdge(fileDict[lst[1]], getLayer('file'), fileDict[lst[2]], getLayer('file'), 0)
-            L = getLayer2('file', 'file')
-            addEdge(fileDict[lst[1]], L, fileDict[lst[2]], L, 1)
-
-
 def readCommits(nrHumans, nrCommits, nrFiles):
     fileList = []
     global nrNodes
@@ -322,8 +239,6 @@ def readCommits(nrHumans, nrCommits, nrFiles):
             fileList.append(crtFile)
     files[0].close()
     return nrHumans, nrCommits, nrFiles
-
-
 def readHumanF(fNr, nrHumans):
     while (True):
         # names in Bugzilla are read from binary files
@@ -347,111 +262,6 @@ def readHumanF(fNr, nrHumans):
             nrHumans = addHuman(name, nrHumans, fNr)
 
     return nrHumans
-
-
-def addIssue(issue, nrIssues):
-    global nrNodes
-    nrIssues += 1
-    nrNodes += 1
-    Label[nrNodes] = issue
-    issueNodes.append(nrNodes)
-    issueDict[issue] = nrNodes
-    return nrIssues
-
-
-def readIssues(nrIssues):
-    global nrNodes
-    while True:
-        crtL = issueFile.readline().decode('utf-8')
-        if not crtL:
-            break
-        if crtL == '':
-            continue
-        lst = crtL.split('/\\')
-        Len = len(lst)
-        # there is an Assignee/Reporter edge
-        if (lst[0][0] != 'C'):
-            name = purifyName(lst[1])
-
-            if not (lst[-1][:-1] in issueDict):
-                nrIssues = addIssue(lst[-1][:-1], nrIssues)
-                i_R[nrNodes] = {}
-            if not (name in dict):
-                continue
-            layer = 'issueReporter'
-            col = 1
-            if lst[0][0] == 'A':
-                layer = 'issueAssignee'
-                col = 2
-            else:
-                dict[name].isReporter = True
-            L = getLayer2(layer, 'issue')
-            addEdge(dict[name].index, L, issueDict[lst[-1][:-1]], L, 6)
-        else:
-            uname = lst[1]
-            if uname in usernames:
-                name = usernames[uname]
-                # ToDo add CCassignee edges
-    issueFile.close()
-    return nrIssues
-
-
-def readIssueComments():
-    issueFile = open("D:\\Ak_work2019-2020\\HigherDimensions\\TxtData\\comments2020.txt")
-    while True:
-        crtL = issueFile.readline()
-        if not crtL:
-            break
-        bug = crtL[:-1]
-        crtL = issueFile.readline()
-        while crtL and crtL != 'EOB1':
-            lst = crtL.split('/\\')
-            if bug in issueDict and lst[0] in usernames:
-                i_R[issueDict[bug]][usernames[lst[0]]] = True
-                # all commenters are issueReporters
-            crtL = issueFile.readline()
-        crtL = issueFile.readline()
-        while crtL and crtL != 'EOB2':
-            lst = crtL.split('/\\')
-            if bug in issueDict and lst[0] in usernames:
-                # all commenters are issueReporters
-                i_R[issueDict[bug]][usernames[lst[0]]] = True
-            crtL = issueFile.readline()
-    addIrEdges()
-    issueFile.close()
-
-
-def addIssueDependency(fName):
-    f = open(fName, "r")
-    while True:
-        crtL = f.readline()[:-1]
-        if not crtL:
-            break
-        lst = crtL.split(' ')
-        if len(lst) != 2:
-            print(lst)
-            exit()
-        crtL = f.readline()[1:-1].split(', ')
-        L = getLayer2('issue', 'issue')
-        if (lst[0] in issueDict):
-            i1 = issueDict[lst[0]]
-            for elem in crtL:
-                if elem in issueDict:
-                    i2 = issueDict[elem]
-                    addEdge(i1, L, i2, L, 15)
-
-
-def addIrEdges():
-    layer = getLayer2('issueReporter', 'issueReporter')
-    for key in i_R:
-        crtDict = i_R[key]
-        for i_r1 in crtDict:
-            nod1 = dict[i_r1].index
-            for i_r2 in crtDict:
-                if i_r1 != i_r2:
-                    addEdge(nod1, layer, dict[i_r2].index, layer, 7)
-
-
 def processReviewEdges(reviewEdges, L):
     edge4Review = {}
     for key in reviewEdges:
@@ -463,8 +273,6 @@ def processReviewEdges(reviewEdges, L):
             edge4Review[revId][edge[1]] = True
         for edge in edge4Review[revId]:
             addEdge(dict[edge].index, L, reviewDict[revId].nodeVal, L, 16)
-
-
 def readReviews():
     global nrReviews
     reviewEdges = {}
@@ -519,8 +327,6 @@ def readReviews():
                         addEdge(dict[name].index, L, fileNode, L, 10)
     processReviewEdges(reviewEdges, 3)
     reviewFile.close()
-
-
 def readReviewComments(nrReviews):
     revFileComm = open("D:\\Ak_work2019-2020\\HigherDimensions\\TxtData\\ReviewFilesFromComments.txt", "r")
     while (True):
@@ -551,7 +357,90 @@ def readReviewComments(nrReviews):
             addEdge(nod1, 3, fileDict[fileName], 3, 11)
     return nrReviews
 
+def addIssue(issue, nrIssues):
+    global nrNodes
+    nrIssues += 1
+    nrNodes += 1
+    Label[nrNodes] = issue
+    issueNodes.append(nrNodes)
+    issueDict[issue] = nrNodes
+    return nrIssues
+def readIssues(nrIssues):
+    global nrNodes
+    while True:
+        crtL = issueFile.readline().decode('utf-8')
+        if not crtL:
+            break
+        if crtL == '':
+            continue
+        lst = crtL.split('/\\')
+        Len = len(lst)
+        # there is an Assignee/Reporter edge
+        if (lst[0][0] != 'C'):
+            name = purifyName(lst[1])
 
+            if not (lst[-1][:-1] in issueDict):
+                nrIssues = addIssue(lst[-1][:-1], nrIssues)
+                i_R[nrNodes] = {}
+            if not (name in dict):
+                continue
+            layer = 'issueReporter'
+            col = 1
+            if lst[0][0] == 'A':
+                layer = 'issueAssignee'
+                col = 2
+            else:
+                dict[name].isReporter = True
+            L = getLayer2(layer, 'issue')
+            addEdge(dict[name].index, L, issueDict[lst[-1][:-1]], L, 6)
+        else:
+            uname = lst[1]
+            if uname in usernames:
+                name = usernames[uname]
+                # ToDo add CCassignee edges
+    issueFile.close()
+    return nrIssues
+def readIssueComments():
+    issueFile = open("D:\\Ak_work2019-2020\\HigherDimensions\\TxtData\\comments2020.txt")
+    while True:
+        crtL = issueFile.readline()
+        if not crtL:
+            break
+        bug = crtL[:-1]
+        crtL = issueFile.readline()
+        while crtL and crtL != 'EOB1':
+            lst = crtL.split('/\\')
+            if bug in issueDict and lst[0] in usernames:
+                i_R[issueDict[bug]][usernames[lst[0]]] = True
+                # all commenters are issueReporters
+            crtL = issueFile.readline()
+        crtL = issueFile.readline()
+        while crtL and crtL != 'EOB2':
+            lst = crtL.split('/\\')
+            if bug in issueDict and lst[0] in usernames:
+                # all commenters are issueReporters
+                i_R[issueDict[bug]][usernames[lst[0]]] = True
+            crtL = issueFile.readline()
+    addIrEdges()
+    issueFile.close()
+def addIssueDependency(fName):
+    f = open(fName, "r")
+    while True:
+        crtL = f.readline()[:-1]
+        if not crtL:
+            break
+        lst = crtL.split(' ')
+        if len(lst) != 2:
+            print(lst)
+            exit()
+        crtL = f.readline()[1:-1].split(', ')
+        L = getLayer2('issue', 'issue')
+        if (lst[0] in issueDict):
+            i1 = issueDict[lst[0]]
+            for elem in crtL:
+                if elem in issueDict:
+                    i2 = issueDict[elem]
+                    addEdge(i1, L, i2, L, 15)
 def processReview(crtL):
     reviewID = crtL[1]
     issueID = crtL[2][:-1]
@@ -561,8 +450,6 @@ def processReview(crtL):
         for fileNode in fileNodes:
             fileIssues[fileNode][issueDict[issueID]] = True
             nrFileIssues[fileNode] += addEdge(fileNode, L, issueDict[issueID], L, 12)
-
-
 def processCommit(crtL):
     commitID = crtL[1]
     issueID = crtL[2][:-1]
@@ -572,8 +459,6 @@ def processCommit(crtL):
         for fileNode in fileNodes:
             fileIssues[fileNode][issueDict[issueID]] = True
             nrFileIssues[fileNode] += addEdge(fileNode, L, issueDict[issueID], L, 12)
-
-
 def readI2CSeeAlso():
     bugEdgeFile = open("D:\\Ak_work2019-2020\\HigherDimensions\\TxtData\\BugEdges.txt", "r")
     while (True):
@@ -588,8 +473,6 @@ def readI2CSeeAlso():
         else:
             processCommit(crtL)
     bugEdgeFile.close()
-
-
 def readIssue2Change():
     while (True):
         crtL = rc2BugEdge.readline()
@@ -602,8 +485,27 @@ def readIssue2Change():
             processReview(crtL)
         # else:
         #     processCommit(crtL)
+def addIrEdges():
+    layer = getLayer2('issueReporter', 'issueReporter')
+    for key in i_R:
+        crtDict = i_R[key]
+        for i_r1 in crtDict:
+            nod1 = dict[i_r1].index
+            for i_r2 in crtDict:
+                if i_r1 != i_r2:
+                    addEdge(nod1, layer, dict[i_r2].index, layer, 7)
 
 
+def addDepEdge(f):
+    while True:
+        crtL = f.readline()
+        if not crtL:
+            break
+        lst = crtL.split()
+        if lst[1] in fileDict and lst[2] in fileDict:
+            # addEdge(fileDict[lst[1]], getLayer('file'), fileDict[lst[2]], getLayer('file'), 0)
+            L = getLayer2('file', 'file')
+            addEdge(fileDict[lst[1]], L, fileDict[lst[2]], L, 1)
 def readOwnershipFile(ownershipDict):
     ownershipFile = open("D:\\Ak_work2019-2020\\HigherDimensions\\OwnershipFile.txt")
     minP = 100.0
