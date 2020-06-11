@@ -35,6 +35,8 @@ def getLayer2(t1, t2):
         return 4
     if t1 == 'file' and t2 == 'issue':
         return 4
+    if t1 == 'issue' and t2 == 'issue':
+        return 4
     # In case a pair is omitted
     print(t1, t2)
     exit()
@@ -371,7 +373,6 @@ def addIssue(issue, nrIssues):
     return nrIssues
 def readIssueEdges(nrIssues):
     global nrNodes
-    yolo = 0
     issueEdgesFile = open("\\IssueEdges2020B.txt", "rb")
     while True:
         crtL = issueEdgesFile.readline().decode('utf-8')
@@ -402,7 +403,6 @@ def readIssueEdges(nrIssues):
             if uname in usernames:
                 name = usernames[uname]
                 # ToDo add CCassignee edges
-    print(yolo, nrIssues)
     issueEdgesFile.close()
     return nrIssues
 def readIssues(nrIssues):
@@ -453,7 +453,7 @@ def addIssueDependency(fName):
         crtL = f.readline()[:-1]
         if not crtL:
             break
-        lst = crtL.split(' ')
+        lst = crtL.split('/\\')
         if len(lst) != 2:
             print(lst)
             exit()
@@ -624,6 +624,7 @@ readIssue2Change()
 readI2CSeeAlso()
 readIssueComments()
 getIssues()
+addIssueDependency("\\BugDep.txt")
 files = readFileMeasures(fileDict, "\\codeMeasures2020.txt")
 for fileId in range(len(depFile)):
     addDepEdge(depFile[fileId])
