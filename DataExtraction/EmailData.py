@@ -7,6 +7,7 @@ pageLinks = ['https://www.eclipse.org/lists/jdt-dev/threads.html']
 defaultLink = 'https://www.eclipse.org/lists/jdt-dev/thrd'
 
 errorFile = open("errors.txt", "wb")
+warningFile = open("warnings.txt", "wb")
 edgeFile = open("emailMsgEdges.txt", "w")
 detailsFile = open("emailDetails.txt", "wb")
 namesFile = open("emailNames.txt", "wb")
@@ -33,6 +34,8 @@ def CheckPage(pageBody):
     allLists = pageBody.find_all('li')
     for lst in allLists:
         Link = lst.find('a')
+        if Link and not('href' in Link.attrs):
+          continue
         if Link and ('msg' in Link['href']):
             msg = Link['name']
             if not (msg in msgDex):
@@ -41,11 +44,18 @@ def CheckPage(pageBody):
             else:
                 if (msgDex[msg][0] != lst.find('em')):
                     msgDex[msg] = (lst.find('em'), msgDex[msg][1])
-
+                    print(Link)
     print(len(pageBody.find_all('em')), nrNodes)
-    
+
+
+def addEdge(u, v):
+    if u[0] != -1 and v[0] != -1:
+        edgeFile.write(str(u[0]) + '/\\' + str(v[0]))
+
+
 def AddEdge(u, v):
     edgeFile.write(str(u) + ' ' + str(v) + '\n')
+
 
 def getDateFromList(s):
     idx = 0
@@ -115,7 +125,7 @@ def getIDFromEmail(s):
 for pageLink in pageLinks:
     nrNodes = 0
     BS = BeautifulSoup(getPageContent(pageLink), 'html.parser')
-    CheckPage(BS.body)
+    CheckPage(BS)
 
 for key in msgDex:
     # print(pref + key + '.html')
@@ -151,9 +161,15 @@ for key in msgDex:
         if Em:
             Em = str(Em)
             if ('Date' in Em):
-                msgDetails[key]['date'] = getDateFromList(str(lst))
+                if ('date' in msgDetails[key]) and (msgDetails[key]['date'] != None):
+                  warningFile.write((str(lst) + '\n').encode())
+                else:
+                  msgDetails[key]['date'] = getDateFromList(str(lst))
             elif ('From' in Em):
                 strList = str(lst)
+                if ('email' in msgDetails[key]) and (msgDetails[key]['email'] != None):
+                  warningFile.write((strList + '\n').encode())
+                  continue
                 msgDetails[key]['name'] = ''
                 if (' &lt;' in strList):
                     msgDetails[key]['name'] = getNameFromList(str(strList))
@@ -170,5 +186,6 @@ for key in msgDex:
 
 namesFile.close()
 detailsFile.close()
+warningFile.close()
 errorFile.close()
 edgeFile.close()
