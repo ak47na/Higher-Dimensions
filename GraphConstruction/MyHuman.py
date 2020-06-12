@@ -30,7 +30,7 @@ def purifyName(name):
             newName += crtSymbol
     return newName
 def Role(x):
-    if x < 2:
+    if x <= 2:
         return x
     if (x == 3) or (x == 5):
         return 2
