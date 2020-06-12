@@ -232,11 +232,7 @@ def readCommits(nrHumans, nrCommits, nrFiles):
             # addEdge(fileDict[crtFile], 12, fileDict[fileName], 12)
             # addEdge(fileDict[fileName], 12, fileDict[crtFile], 12)
             # change to L, L?
-            if authorName in dict:
-                addEdge(dict[authorName].index, 1, fileDict[crtFile], 1, 4)
-            if committerName in dict:
-                L = getLayer2('committer', 'file')
-                addEdge(dict[committerName].index, L, fileDict[crtFile], L, 5)
+
             fileList.append(crtFile)
     files[0].close()
     return nrHumans, nrCommits, nrFiles
@@ -565,6 +561,7 @@ def readOwnershipFile(ownershipDict):
         L = getLayer2('committer', 'committer')
         A = getLayer2('committer', 'author')
         for c1 in allCommitters:
+            addEdge(dict[c1].index, 1, fileDict[obj.name], 1, 4)
             nrCommitters += 1
             cp = (100 * obj.authorDex[0][c1].nrCommits / obj.nrCommits[0])
 
