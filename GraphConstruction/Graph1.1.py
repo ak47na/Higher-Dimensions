@@ -4,6 +4,8 @@ from Sample import *
 import datetime
 from MyFile import *
 from MyHuman import *
+from readSNA_measure import *
+from scipy.stats import spearmanr
 
 from scipy.stats import wilcoxon
 
@@ -78,6 +80,7 @@ i_R = {}
 usernames = {}
 issueDict = {}
 fileIssues = {}
+#dict with nrFileIssues[x] = the number of issues of nod x; fileIssues contains the nodes of the issues
 nrFileIssues = {}
 reviewDict = {}
 reviewID = {}  # dict with commits as keys and their value represent the review they belong to
@@ -87,25 +90,27 @@ files = []
 Edges = {}
 
 
-def addEdge(nod1, l1, nod2, l2, col):
+def addEdge_util(crtEdge):
     global nrEdges
-    l1 = LayerPerm[l1]
-    l2 = LayerPerm[l2]
-    crtEdge = myEdge(nod1, l1, nod2, l2, col)
     if crtEdge in Edges:
         Edges[crtEdge] += 1
         return 0
     else:
         nrEdges += 1
         edgeList.append(crtEdge)
-        if not (nod1 in Adj):
-            Adj[nod1] = []
-        if not (nod2 in Adj):
-            Adj[nod2] = []
-        Adj[nod1].append((nod2, l2))
-        Adj[nod2].append((nod1, l1))
+        if not (crtEdge.nod1 in Adj):
+            Adj[crtEdge.nod1] = []
+        Adj[crtEdge.nod1].append((crtEdge.nod2, crtEdge.layer2))
         Edges[crtEdge] = 1
         return 1
+def addEdge(nod1, l1, nod2, l2, col):
+    l1 = LayerPerm[l1]
+    l2 = LayerPerm[l2]
+    if col == 1 or col == 15:
+        return addEdge_util(myEdge(nod1, l1, nod2, l2, col))
+
+    return max(addEdge_util(myEdge(nod1, l1, nod2, l2, col)),
+               addEdge_util(myEdge(nod2, l2, nod1, l1, col)))
 
 
 # Human Names files
@@ -121,8 +126,8 @@ files.append(open("\\AssigneeNames2020B.txt", "rb"))
 files.append(open("\\CCedNames2020B.txt", "rb"))
 # File dependencies files
 depFile = []
-depFile.append(open("\\FileDep.txt", "r"))
-depFile.append(open("\\ClassDep.txt", "r"))
+depFile.append(open("\\\\FileDep.txt", "r"))
+depFile.append(open("\\\\ClassDep.txt", "r"))
 # Event/Edge files
 reviewFile = open("\\ReviewEdges2020.txt", "r")
 rc2BugEdge = open("\\RevMsg2BugEdge.txt", "r")
@@ -412,7 +417,7 @@ def readIssues(nrIssues):
         lst = crtL.split('/\\')
         status_i = lst[1][:-1]
         # in case only fixed issues must be added =>
-        # if ("CLOSED" in status_i) or ("RESOLVED" in status_i) or ("VERIFIED" in status_i) or ("FIXED" in status_i):
+        #if ("CLOSED" in status_i) or ("RESOLVED" in status_i) or ("VERIFIED" in status_i) or ("FIXED" in status_i):
         if not (lst[0] in issueDict):
             nrIssues = addIssue(lst[0], nrIssues)
             i_R[nrNodes] = {}
@@ -503,8 +508,8 @@ def readIssue2Change():
         crtL = crtL.split(' ')
         if crtL[0] == 'Review2Bug':
             processReview(crtL)
-        # else:
-        #     processCommit(crtL)
+        else:
+            processCommit(crtL)
 def addIrEdges():
     layer = getLayer2('issueReporter', 'issueReporter')
     for key in i_R:
@@ -527,7 +532,7 @@ def addDepEdge(f):
             L = getLayer2('file', 'file')
             addEdge(fileDict[lst[1]], L, fileDict[lst[2]], L, 1)
 def readOwnershipFile(ownershipDict):
-    ownershipFile = open("\\OwnershipFile.txt")
+    ownershipFile = open("\\\\OwnershipFile.txt")
     minP = 100.0
     avg = 0.0
     nrFiles = 0
@@ -561,10 +566,10 @@ def readOwnershipFile(ownershipDict):
         L = getLayer2('committer', 'committer')
         A = getLayer2('committer', 'author')
         for c1 in allCommitters:
-            addEdge(dict[c1].index, 1, fileDict[obj.name], 1, 4)
             nrCommitters += 1
             cp = (100 * obj.authorDex[0][c1].nrCommits / obj.nrCommits[0])
-
+            if cp <= 5:
+                addEdge(dict[c1].index, 1, fileDict[obj.name], 1, 4)
             if cp < 100:
                 values.append(cp)
             avg += cp
@@ -586,7 +591,7 @@ def readOwnershipFile(ownershipDict):
         if ownershipTuple[0] in dict:
             addEdge(dict[ownershipTuple[0]].index, 1, fileDict[obj.name], 1, 14)
 
-
+    print(avg / (X + Y))
     ownershipFile.close()
     return ownershipDict
 
@@ -622,20 +627,40 @@ readI2CSeeAlso()
 readIssueComments()
 getIssues()
 addIssueDependency("\\BugDep.txt")
-files = readFileMeasures(fileDict, "\\codeMeasures2020.txt")
+
 for fileId in range(len(depFile)):
     addDepEdge(depFile[fileId])
     depFile[fileId].close()
 ownershipDict = {}
 ownershipDict = readOwnershipFile(ownershipDict)
+files = readFileMeasures(fileDict, "\\codeMeasures2020.txt")
+checkFilesIssues()
 
-print(nrNodes, nrReviews + nrIssues + nrHumans + nrFiles)
-# checkFilesIssues()
-nodes, sampledEdges = sampleNodesFromEdges(edgeList, 400)
-# sampledEdges = sampleEdgesPerLayer(nrLayers, edgeList, 370)
-s = Sample(nrLayers, nodes, sampledEdges, Label)
-s.addAliasEdges()
-createLayoutFile("\\muxViz-master\\data\\graph1\\layoutFile.txt", s.getNrNodes(), False)
-s.createEdgesFile("\\muxViz-master\\data\\graph1\\EdgeFile.txt")
-s.createColoredEdges("\\muxViz-master\\data\\graph1\\ExternalEdgeFile.txt")
-print(s.getNrNodes(), s.getNrEdges(), s.getNrLayers())
+def createSample():
+    nodes = getNodesFromEdgeSample(Edges)
+    # sampledEdges = sampleEdgesPerLayer(nrLayers, edgeList, 370)
+    s = Sample(nrLayers, nodes, Edges, Label)
+    s.addAliasEdges()
+    createLayoutFile("\\muxViz-master\\data\\graph1\\layoutFile.txt", s.getNrNodes(), False)
+    s.createEdgesFile("\\muxViz-master\\data\\graph1\\EdgeFile.txt")
+    s.createColoredEdges("\\muxViz-master\\data\\graph1\\ExternalEdgeFile.txt")
+    print(s.getNrNodes(), s.getNrEdges(), s.getNrLayers())
+    return s
+
+def getSNAMeasures(s):
+    values = readCsv("C:\\Users\\Maria\\Downloads\\muxViz_13-06-2020_140817_centrality_table(1).csv")
+    DegreeCentrality = []
+    nrIssuesList = []
+    #d = []
+    for fileN in fileDict:
+        nod = fileDict[fileN]
+        sampleNod = s.usedNodes[nod]
+        DegreeCentrality.append(int(values[sampleNod]))
+        nrIssuesList.append(nrFileIssues[nod])
+        # d.append(int(values[file]) - nrFileIssues[file])
+
+    w, p = spearmanr(DegreeCentrality, nrIssuesList)
+    print(w, p)
+
+s = createSample()
+getSNAMeasures(s)
