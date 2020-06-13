@@ -3,7 +3,7 @@ from queue import Queue
 import random
 
 colorSet = ['', 'brown', 'firebrick1', 'coral', 'goldenrod1', 'greenyellow', 'darkolivegreen3', 'lightblue',
-            'darkturquoise', 'midnightblue', 'hotpink4', 'mediumpurple', 'gray3', 'chocolate', 'yellow1']
+            'darkturquoise', 'midnightblue', 'hotpink4', 'mediumpurple', 'gray3', 'chocolate', 'yellow1', 'c14', 'c15', 'c16']
 
 
 def getSample(x, y, nrNodesSample):
@@ -98,10 +98,12 @@ def sampleNetFromNodes(nodes_, Adj):
                 Q.put(adj[0])
     return nodeList
 
+#node indexes in Sample are different from nodes in the graph if there are isolated nodes
 class Sample:
     def __init__(self, nrLayers_, nodes_, edges_, labels_):
         self.nrNodes = 0
         self.nrEdges = 0
+        self.deg = {}
         self.usedNodes = {}
         self.realNodes = [0]
         self.NLtuples = {}
@@ -114,10 +116,11 @@ class Sample:
         for node in nodes:
             if not (node in self.usedNodes):
                 self.nrNodes += 1
+                self.deg = {}
                 self.usedNodes[node] = self.nrNodes
                 self.NLtuples[self.nrNodes] = {}
                 self.realNodes.append(node)
-            
+
     def getNrNodes(self):
         return self.nrNodes
     def getNrEdges(self):
@@ -159,6 +162,12 @@ class Sample:
         self.edges = {}
         for edge in edges_:
             if (edge.nod1 in self.usedNodes) and (edge.nod2 in self.usedNodes):
+                if not(edge.nod1 in self.deg):
+                    self.deg[edge.nod1] = 0
+                if not(edge.nod2 in self.deg):
+                    self.deg[edge.nod2] = 0
+                self.deg[edge.nod1] += 1
+                self.deg[edge.nod2] += 1
                 self.addEdge(myEdge(self.usedNodes[edge.nod1], self.layersDict[edge.layer1],
                                     self.usedNodes[edge.nod2], self.layersDict[edge.layer2], edge.color))
 
@@ -180,6 +189,7 @@ class Sample:
             for l1 in self.NLtuples[x]:
                 for l2 in self.NLtuples[x]:
                     if l1 != l2:
+                        self.deg[self.realNodes[x]] += 2
                         self.addEdge(myEdge(x, l1, x, l2, 9))
 
     def getEdgesString(self):
