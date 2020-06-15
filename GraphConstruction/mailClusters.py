@@ -1,3 +1,4 @@
+#program to get the clusters of email addresses
 import editdistance
 # import pylcs
 from pyjarowinkler.distance import get_jaro_distance
