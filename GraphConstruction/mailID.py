@@ -4,12 +4,15 @@ from pyjarowinkler.distance import get_jaro_distance
 nameLim = [[-4, 0.60], [-3, 0.80], [-1, 0.95]]
 emailLim = [[-4, 0.60], [-3, 0.80], [-1, 0.95]]
 lim = 10
+Identity = {}
 
-nameEmails = open("\\emailNames.txt")
+nameEmails = open("\\emailNames.txt", "r")
 removeStr = ['eclipse', 'jdt', 'admin', 'support', '.']
 def isLetter(a):
   return (ord(a) <= ord('z') and ord(a) >= ord('a')) or (ord(a) <= ord('Z') and ord(a) >= ord('A'))
 
+def getIdentity(name):
+    return Identity[name]
 def removeStrings(name):
     for removeS in removeStr:
         name = name.replace(removeS, '')
@@ -23,6 +26,8 @@ def removeStrings(name):
         if isLetter(name[i]) or name[i] == ' ':
             newName += name[i]
     return newName
+def purifyEmail(name):
+    return name.lower()
 def purifyName(name):
     if name[0] == ' ':
         name = name[1:]
@@ -116,7 +121,7 @@ pairs = []
 par = []
 N = 0
 nrC = 0
-fakeList = [58, 121, 191]
+fakeList = [132]# [58, 121, 191]
 nrHumans = 0
 humanID = {}
 fullNames = {}
@@ -136,7 +141,7 @@ def readNames():
             exit()
 
         email_i = lst[1].replace(' ', '')
-        email_i = removeStrings(email_i.replace('\n', '')).replace(' ', '')
+        email_i = purifyEmail(removeStrings(email_i.replace('\n', '')).replace(' ', ''))
         first_i, last_i, full_i = purifyName(lst[0])
         name_i = {'first': first_i, 'last': last_i, 'full': full_i}
         pairs.append((name_i, email_i))
@@ -166,13 +171,16 @@ def createClusters():
             if clusterSize > 1 and (not (nrC in fakeList)):
                 nrHumans += 1
                 fullNames[nrHumans] = []
+
                 for j in cluster:
+                    Identity[pairs[j][1]] = pairs[i][1]
                     humanID[pairs[j][1]] = nrHumans
                     fullNames[nrHumans].append(pairs[j][0]['full'])
                     email[pairs[j][0]['full']] = pairs[j][1]
             else:
                 for j in cluster:
                     nrHumans += 1
+                    Identity[pairs[j][1]] = pairs[j][1]
                     humanID[pairs[j][1]] = nrHumans
                     fullNames[nrHumans] = [pairs[j][0]['full']]
                     email[pairs[j][0]['full']] = pairs[j][1]
