@@ -1,6 +1,8 @@
 from Edge import myEdge
 from queue import Queue
 import random
+from EdgeTypeDetails import *
+from createTable import *
 
 colorSet = ['', 'brown', 'firebrick1', 'coral', 'goldenrod1', 'greenyellow', 'darkolivegreen3', 'lightblue',
             'darkturquoise', 'midnightblue', 'hotpink4', 'mediumpurple', 'gray3', 'chocolate', 'yellow1', 'c14', 'c15', 'c16']
@@ -98,7 +100,6 @@ def sampleNetFromNodes(nodes_, Adj):
                 Q.put(adj[0])
     return nodeList
 
-#node indexes in Sample are different from nodes in the graph if there are isolated nodes
 class Sample:
     def __init__(self, nrLayers_, nodes_, edges_, labels_):
         self.nrNodes = 0
@@ -116,7 +117,7 @@ class Sample:
         for node in nodes:
             if not (node in self.usedNodes):
                 self.nrNodes += 1
-                self.deg = {}
+                self.deg[node] = 0
                 self.usedNodes[node] = self.nrNodes
                 self.NLtuples[self.nrNodes] = {}
                 self.realNodes.append(node)
@@ -180,6 +181,7 @@ class Sample:
             layers_x = sorted(layers_x)
             nrL = len(layers_x)
             for i in range(nrL - 1):
+                self.deg[self.realNodes[x]] += 2
                 self.addEdge(myEdge(x, layers_x[i], x, layers_x[i + 1], 9))
 
 
@@ -208,7 +210,18 @@ class Sample:
         for edge in self.edges:
             f.write(edge.ToString() + ' ' + colorSet[edge.color] + ' 3\n')
         f.close()
-    def printCountOfEdgeTypes(self, Layer):
+    def getCountOfNodesPerLayer(self):
+        count = {}
+        for node in self.usedNodes:
+            nodeType = self.labels[node][1]
+            if not (nodeType in count):
+                count[nodeType] = [0] * self.nrLayers
+            for layer in self.NLtuples[self.usedNodes[node]]:
+                count[nodeType][layer - 1] += 1
+        return count
+
+    def printCountOfEdgeTypes(self):
+        Layer = getLayerName()
         edgeTypes = {}
         for e in self.edges:
             if not ((e.layer1, e.layer2) in edgeTypes):
@@ -221,3 +234,21 @@ class Sample:
         edgeTypesList = sorted(edgeTypesList)
         for key in edgeTypesList:
             print(Layer[key[0]], 'x', Layer[key[1]], '=', edgeTypes[key])
+    def getEdgeTypeData(self):
+        edgeTypeDetails = getEdgeTypeDetails()
+        edgeData = []
+        for i in range(self.nrLayers + 1):
+            edgeData.append([])
+        crossLayer = {}
+        for e in self.edges:
+            type = e.color
+            if type == 9:
+                continue
+            if isinstance(edgeTypeDetails[type][0], int):
+                edgeData[edgeTypeDetails[type][0]].append((edgeTypeDetails[type][1], edgeTypeDetails[type][2]))
+            # else:
+            #     crossLayer[edgeTypeDetails[type][0]][edgeTypeDetails[type][1]] += 1
+        layerName = getLayerName()
+        for i in range(1, 5):
+            print(i, len(edgeData[i]))
+            createLayerTable(layerName[i], edgeData[i])
