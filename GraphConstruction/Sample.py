@@ -4,14 +4,17 @@ import random
 from EdgeTypeDetails import *
 from createTable import *
 
+from networkx import *
+
 colorSet = ['', 'brown', 'firebrick1', 'coral', 'goldenrod1', 'greenyellow', 'darkolivegreen3', 'lightblue',
             'darkturquoise', 'midnightblue', 'hotpink4', 'mediumpurple', 'gray3', 'chocolate', 'yellow1', 'c14', 'c15', 'c16']
 
-
+# returns a uniform list of length nrNodesSample with values in range [x, y]
 def getSample(x, y, nrNodesSample):
     nodeIds = random.sample(range(x, y), nrNodesSample)
     return nodeIds
 
+# returns a list of edges uniformly selected from each layer
 def sampleEdgesPerLayer(nrLayers, edgeList, divBy):
     edgeIdx = []
     for i in range(nrLayers):
@@ -28,6 +31,8 @@ def sampleEdgesPerLayer(nrLayers, edgeList, divBy):
             edges.append(edgeList[edgeIdx[i][j]])
     return edges
 
+# returns 2 lists: nodes = set of used nodes within edges,
+# edges = set of edges sampled uniformly
 def sampleNodesFromEdges(edgeList, divBy):
     nrEdges = len(edgeList)
     edgeSample = getSample(0, nrEdges, nrEdges // divBy)
@@ -44,6 +49,7 @@ def sampleNodesFromEdges(edgeList, divBy):
         edges.append(edgeList[i])
     return nodes, edges
 
+# returns a list with nodes with degree > 0 given a list of edges
 def getNodesFromEdgeSample(edges):
     nodeDict = {}
     nodes = []
@@ -101,25 +107,40 @@ def sampleNetFromNodes(nodes_, Adj):
     return nodeList
 
 class Sample:
-    def __init__(self, nrLayers_, nodes_, edges_, labels_):
+    def __init__(self, nrLayers_, nodes_, edges_, labels_, normalize_):
         self.nrNodes = 0
         self.nrEdges = 0
+        self.nrLayers = nrLayers_
         self.deg = {}
+        self.normalize = normalize_
         self.usedNodes = {}
         self.realNodes = [0]
         self.NLtuples = {}
         self.labels = labels_
         self.normNodes(nodes_)
         self.normLayers(edges_)
+        self.Graph = self.createNXGraph()
         self.normEdges(edges_)
-
+    ''' if normalize is True, 
+        then usedNodes will be a dictionary with keys = values = nodes in input graph
+        else usedNodes will be a dictionary with keys = nodes in input graph,
+                                                        values = normalized nodes
+        realNodes = dictionary where
+        realNodes[x] = y <=> x is a node in Sample graph and y is a node in value graph
+    '''
     def normNodes(self, nodes):
+        nodes = sorted(nodes)
+        if not (self.normalize):
+            self.nrNodes = len(nodes)
         for node in nodes:
             if not (node in self.usedNodes):
-                self.nrNodes += 1
                 self.deg[node] = 0
-                self.usedNodes[node] = self.nrNodes
-                self.NLtuples[self.nrNodes] = {}
+                if not(self.normalize):
+                    self.usedNodes[node] = node
+                else:
+                    self.nrNodes += 1
+                    self.usedNodes[node] = self.nrNodes
+                self.NLtuples[self.usedNodes[node]] = {}
                 self.realNodes.append(node)
 
     def getNrNodes(self):
@@ -134,21 +155,32 @@ class Sample:
             realLayers.append(x)
         return realLayers
 
-    def addEdge(self, e):
+    def addEdge(self, e, weight):
         if e in self.edges:
-            self.edges[e] += 1
+            self.edges[e] += weight
         else:
-            self.edges[e] = 1
+            self.edges[e] = weight
             self.NLtuples[e.nod1][e.layer1] = True
             self.NLtuples[e.nod2][e.layer2] = True
             self.nrEdges += 1
+        self.Graph.add_edge((e.nod1, e.layer1), (e.nod2, e.layer2), weight=self.edges[e])
     def addLayer(self, layer):
         if layer in self.layersDict:
             return
         self.nrLayers += 1
         self.layersDict[layer] = True
         self.layers.append(layer)
+
+    ''' creates the list of layers = self.layers with nonempty layers and
+        self.layersDict, the dictionary with keys = actual value of the layer 
+                                           values = the value of layer in Sample graph
+    '''
     def normLayers(self, edges_):
+        if not(self.normalize):
+            self.layers = list(range(1, self.nrLayers))
+            for l in self.layers:
+                self.layersDict[l] = l
+            return
         self.layersDict = {}
         self.layers = []
         self.nrLayers = 0
@@ -159,6 +191,10 @@ class Sample:
         self.layers = sorted(self.layers)
         for i in range(self.nrLayers):
             self.layersDict[self.layers[i]] = i + 1
+    '''
+    creates a dictionary with keys = edges with nodes from self.usedNodes
+                              values = weight of the edge
+    '''
     def normEdges(self, edges_):
         self.edges = {}
         for edge in edges_:
@@ -167,10 +203,12 @@ class Sample:
                     self.deg[edge.nod1] = 0
                 if not(edge.nod2 in self.deg):
                     self.deg[edge.nod2] = 0
-                self.deg[edge.nod1] += 1
-                self.deg[edge.nod2] += 1
+                weight = edges_[edge]
+                self.deg[edge.nod1] += weight
+                self.deg[edge.nod2] += weight
                 self.addEdge(myEdge(self.usedNodes[edge.nod1], self.layersDict[edge.layer1],
-                                    self.usedNodes[edge.nod2], self.layersDict[edge.layer2], edge.color))
+                                    self.usedNodes[edge.nod2], self.layersDict[edge.layer2], edge.color),
+                             edges_[edge])
 
     def addOrdinalAliasEdges(self):
         for nod in self.usedNodes:
@@ -181,9 +219,9 @@ class Sample:
             layers_x = sorted(layers_x)
             nrL = len(layers_x)
             for i in range(nrL - 1):
-                self.deg[self.realNodes[x]] += 2
-                self.addEdge(myEdge(x, layers_x[i], x, layers_x[i + 1], 9))
-
+                self.deg[self.realNodes[x]] += 1
+                self.deg[self.realNodes[x]] += 1
+                self.addEdge(myEdge(x, layers_x[i], x, layers_x[i + 1], 9), 1)
 
     def addAliasEdges(self):
         for nod in self.usedNodes:
@@ -191,8 +229,9 @@ class Sample:
             for l1 in self.NLtuples[x]:
                 for l2 in self.NLtuples[x]:
                     if l1 != l2:
-                        self.deg[self.realNodes[x]] += 2
-                        self.addEdge(myEdge(x, l1, x, l2, 9))
+                        self.deg[self.realNodes[x]] += 1
+                        self.deg[self.realNodes[x]] += 1
+                        self.addEdge(myEdge(x, l1, x, l2, 9), 1)
 
     def getEdgesString(self):
         edgeStr = ''
@@ -210,6 +249,10 @@ class Sample:
         for edge in self.edges:
             f.write(edge.ToString() + ' ' + colorSet[edge.color] + ' 3\n')
         f.close()
+    '''
+    returns a dict with keys = types of nodes,
+                        values = list with the number of nodes of type in each layer
+    '''
     def getCountOfNodesPerLayer(self):
         count = {}
         for node in self.usedNodes:
@@ -219,7 +262,7 @@ class Sample:
             for layer in self.NLtuples[self.usedNodes[node]]:
                 count[nodeType][layer - 1] += 1
         return count
-
+    # prints the number of edges for each pair of layers
     def printCountOfEdgeTypes(self):
         Layer = getLayerName()
         edgeTypes = {}
@@ -234,6 +277,10 @@ class Sample:
         edgeTypesList = sorted(edgeTypesList)
         for key in edgeTypesList:
             print(Layer[key[0]], 'x', Layer[key[1]], '=', edgeTypes[key])
+    '''
+    creates a table with the number of edges of each type within each layer
+    edgeData[layerID] = list with the edges within layer layerID
+    '''
     def getEdgeTypeData(self):
         edgeTypeDetails = getEdgeTypeDetails()
         edgeData = []
@@ -250,5 +297,24 @@ class Sample:
             #     crossLayer[edgeTypeDetails[type][0]][edgeTypeDetails[type][1]] += 1
         layerName = getLayerName()
         for i in range(1, 5):
-            print(i, len(edgeData[i]))
             createLayerTable(layerName[i], edgeData[i])
+    # creates a NXMuliDiGraph from the Sample where nodes are node-layer tuples
+    def createNXGraph(self):
+        G = networkx.MultiDiGraph()
+        for node in self.usedNodes:
+            u = self.usedNodes[node]
+            for l in self.NLtuples[u]:
+                if self.NLtuples[u][l] == True:
+                    G.add_node((u, l))
+        return G
+    def getDegreeCentrality(self):
+        return degree_centrality(self.Graph)
+    def getWeightedDegreeCentrality(self):
+        weightedDC = {}
+        for node in self.usedNodes:
+            weightedDC[self.usedNodes[node]] = self.deg[node]
+        return weightedDC
+    def getBetweennessCentrality(self):
+        return betweenness_centrality(self.Graph, None)
+    def getClosenessCentrality(self):
+        return closeness_centrality(self.Graph)
