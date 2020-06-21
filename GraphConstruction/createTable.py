@@ -9,10 +9,9 @@ def getData(s):
     print(nodeTypes)
     nrRows = len(nodeTypes)
     nrColumns = s.getNrLayers()
-    countPerLayer = []#[[0]*nrRows]*s.getNrLayers()
+    countPerLayer = []
     for rowId in range(nrRows):
         key = nodeTypes[rowId]
-        colId = 0
         lst = []
         for val in count[key]:
             lst.append(val)
