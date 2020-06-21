@@ -1,21 +1,22 @@
 from OwnershipP import *
 from Edge import *
 from Sample import *
+from createTable import *
 import datetime
 from MyFile import *
 from MyHuman import *
 from readSNA_measure import *
+from EdgeTypeDetails import *
 from scipy.stats import spearmanr
-
 from scipy.stats import wilcoxon
 
 nrLayers = 4
-
 Adj = {}
 nrEdges = 0
 edgeList = []
-LayerPerm = [0, 2, 4, 3, 1]
+#[0, 2, 4, 3, 1]
 
+LayerPerm = getLayerPerm()
 
 # C, F, R, I
 def getLayer2(t1, t2):
@@ -43,7 +44,6 @@ def getLayer2(t1, t2):
     print(t1, t2)
     exit()
 
-
 def getLayer(type):
     if type == 'committer':
         return 1
@@ -65,6 +65,7 @@ def getLayer(type):
 
 humanNodes = []
 humansNodes = []
+
 issueNodes = []
 fileNodes = []
 humanRoles = 8
@@ -115,6 +116,7 @@ def addEdge(nod1, l1, nod2, l2, col):
 
 # Human Names files
 files = []
+Type = ['C', 'R', 'R', 'R', 'A', 'R', 'i_R', 'i_A', 'i_C']
 files.append(open("\\CommitterAuthorFiles.txt", "r"))
 files.append(open("\\OwnerNames2020.txt", "r"))
 files.append(open("\\UploaderNames2020.txt", "r"))
@@ -126,8 +128,8 @@ files.append(open("\\AssigneeNames2020B.txt", "rb"))
 files.append(open("\\CCedNames2020B.txt", "rb"))
 # File dependencies files
 depFile = []
-depFile.append(open("\\\\FileDep.txt", "r"))
-depFile.append(open("\\\\ClassDep.txt", "r"))
+depFile.append(open("\\FileDep.txt", "r"))
+depFile.append(open("\\ClassDep.txt", "r"))
 # Event/Edge files
 reviewFile = open("\\ReviewEdges2020.txt", "r")
 rc2BugEdge = open("\\RevMsg2BugEdge.txt", "r")
@@ -137,12 +139,12 @@ def addMyFile(crtFile, nrFiles):
     global nrNodes
     nrFiles += 1
     nrNodes += 1
-    Label[nrNodes] = crtFile
+    Label[nrNodes] = (crtFile, 'File')
     fileNodes.append(nrNodes)
     fileDict[crtFile] = nrNodes
     fileIssues[nrNodes] = {}
     nrFileIssues[nrNodes] = 0
-    files.append(MyFile(nrFiles, crtFile, 0, 0, 0))
+    files.append(MyFile(nrFiles, crtFile, 0, 0, 0, 0))
     return nrFiles
 
 class MyChange:
@@ -168,17 +170,27 @@ def readNameUsername():
             usernames[lst[-1][:-1]] = name
             dict[name].setUserName(lst[-1][:-1])
     f.close()
+def getHumanTable():
+    cols = ['Committer', 'reviewOwner', 'patchUploader', 'reviewer', 'patchApprover', 'patchAuthor',
+                  'issueReporter', 'issueAssignee', 'issueCC']
+    vals = []
+    for r in range(humanRoles):
+        vals.append([len(humanNodes[r])])
+    createTable2(cols[:-1], vals)
+
+
 
 def addHuman(name, nrHumans, fNr):
     global nrNodes
     if not (name in dict):
         nrHumans += 1
         nrNodes += 1
-        Label[nrNodes] = name
-        humanNodes[fNr].append(nrNodes)
+        Label[nrNodes] = (name, Type[fNr])
         humansNodes.append(nrNodes)
         dict[name] = MyHuman(name, nrNodes, nrHumans)
-
+    if dict[name].isFile[fNr] == False:
+        humanNodes[fNr].append(dict[name].index)
+    dict[name].isFile[fNr] = True
     dict[name].setRole(Role(fNr))
     dict[name].setSite(fNr)
     return nrHumans
@@ -189,7 +201,7 @@ def addReview(review_id, nrReviews):
     if not review_id in reviewDict:
         nrReviews += 1
         nrNodes += 1
-        Label[nrNodes] = 'R' + str(review_id)
+        Label[nrNodes] = (str(review_id), 'Review')
         reviewDict[review_id] = MyChange(nrNodes, nrReviews, review_id)
     return nrReviews
 def addCommit(hash_id, nrCommits):
@@ -219,9 +231,8 @@ def readCommits(nrHumans, nrCommits, nrFiles):
             commit_hash = commitId
             nrCommits = addCommit(commitId, nrCommits)
             if authorName != committerName:
-                # add edge committer->author
-                L = getLayer2('committer', 'author')
-                addEdge(dict[committerName].index, 1, dict[authorName].index, L, 2)
+                # add edge committer->author as cross layer edge
+                addEdge(dict[committerName].index, 1, dict[authorName].index, 3, 2)
             fileList = []
         else:
             crtFile = crtL.rsplit('.', 1)[0].replace("/", '.')
@@ -231,6 +242,10 @@ def readCommits(nrHumans, nrCommits, nrFiles):
             if len(fileList) > 0:
                 L = getLayer2('file', 'fileC')
                 addEdge(fileDict[crtFile], L, fileDict[fileList[len(fileList) - 1]], L, 3)
+            # Edges from commits to files:
+            addEdge(dict[authorName].index, 1, fileDict[crtFile], 1, 4)
+            if authorName != committerName:
+                addEdge(dict[committerName].index, 1, fileDict[crtFile], 1, 4)
             # for fileName in fileList:
             # nrEdges['file2fileCommit'] += addEdge(fileDict[crtFile], 10, fileDict[fileName], 10)
             # add undirected edge between co-committed files
@@ -293,9 +308,7 @@ def readReviews():
                 addEdge(dict[name2].index, L, dict[name1].index, L, 8)
         elif lst[0] == 'Review2Commit':
             reviewId = lst[1]
-            if not (reviewId in reviewDict):
-                addReview(reviewId, nrReviews)
-                nrReviews += 1
+            nrReviews = addReview(reviewId, nrReviews)
             commitId = lst[2].replace('\n', '')
             if (commitId in reviewID) and (reviewID[commitId] != reviewId):
                 exit()
@@ -303,6 +316,7 @@ def readReviews():
         else:
             commitId = lst[1]
             name = purifyName(lst[2][:-1])
+            #reviewEdges[commitId] = edges that relate to commitId s.t edges between the review coresp to commitId can be linked with the humans
             if not (commitId in reviewEdges):
                 reviewEdges[commitId] = []
             reviewEdges[commitId].append((lst[0], name))
@@ -322,6 +336,7 @@ def readReviews():
                     print(lst)
                     exit()
                 L = getLayer2(layer, 'file')
+                #link humans to the files of the commit
                 if name in dict:
                     fileNodes = commitDict[commitId].fileNodes
                     for fileNode in fileNodes:
@@ -354,7 +369,7 @@ def readReviewComments(nrReviews):
         fileName = fileName.replace('/', '.')[:-1]
         if fileName in fileDict:
             reviewDict[reviewId].addFile(fileDict[fileName])
-            # edge between reviewOwner and file on Review layer
+            # edge between reviewOwner and file on Review layer from comment
             addEdge(nod1, 3, fileDict[fileName], 3, 11)
     return nrReviews
 
@@ -368,7 +383,7 @@ def addIssue(issue, nrIssues):
     global nrNodes
     nrIssues += 1
     nrNodes += 1
-    Label[nrNodes] = issue
+    Label[nrNodes] = (issue, 'Issue')
     issueNodes.append(nrNodes)
     issueDict[issue] = nrNodes
     return nrIssues
@@ -467,11 +482,12 @@ def addIssueDependency(fName):
                     i2 = issueDict[elem]
                     addEdge(i1, L, i2, L, 15)
 def processReview(crtL):
-    reviewID = crtL[1]
+    reviewId = crtL[1]
     issueID = crtL[2][:-1]
     L = getLayer2('file', 'issue')
-    if reviewID in reviewDict and issueID in issueDict:
-        fileNodes = reviewDict[reviewID].fileNodes
+    if reviewId in reviewDict and issueID in issueDict:
+        addEdge(reviewDict[reviewId].nodeVal, 3, issueDict[issueID], 4, 17)
+        fileNodes = reviewDict[reviewId].fileNodes
         for fileNode in fileNodes:
             fileIssues[fileNode][issueDict[issueID]] = True
             nrFileIssues[fileNode] += addEdge(fileNode, L, issueDict[issueID], L, 12)
@@ -532,15 +548,13 @@ def addDepEdge(f):
             L = getLayer2('file', 'file')
             addEdge(fileDict[lst[1]], L, fileDict[lst[2]], L, 1)
 def readOwnershipFile(ownershipDict):
-    ownershipFile = open("\\\\OwnershipFile.txt")
-    minP = 100.0
-    avg = 0.0
+    ownershipFile = open("\\OwnershipFile.txt")
     nrFiles = 0
     nrCommitters = 0
     X = 0
     Y = 0
-    values = []
-    Values = []
+    valuesC = []
+    valuesL = []
     while (True):
         crtL = ownershipFile.readline()
         if not crtL:
@@ -562,36 +576,41 @@ def readOwnershipFile(ownershipDict):
             obj.addModif(getModifFromLine(nxtL, lineLen))
 
         allCommitters = obj.authorDex[0]
+        jarList = []
 
         L = getLayer2('committer', 'committer')
         A = getLayer2('committer', 'author')
+        if fileDict[obj.name] in posInFiles:
+            sAll = obj.sumAdd[0] + obj.sumRem[0] #files[posInFiles[fileDict[obj.name]]].sizeSum * 2
+        else:
+            sAll = 0
         for c1 in allCommitters:
             nrCommitters += 1
             cp = (100 * obj.authorDex[0][c1].nrCommits / obj.nrCommits[0])
-            if cp <= 5:
-                addEdge(dict[c1].index, 1, fileDict[obj.name], 1, 4)
-            if cp < 100:
-                values.append(cp)
-            avg += cp
-            minP = min(minP, cp)
+            if cp <= 50:
+                addEdge(dict[c1].index, 1, fileDict[obj.name], 1, 14)
+            valuesC.append(cp)
+            if sAll != 0:
+                if obj.authorDex[0][c1].sumAdd + obj.authorDex[0][c1].sumRem >= sAll:
+                    lp = 100
+                else:
+                    lp = (100 * (obj.authorDex[0][c1].sumAdd + obj.authorDex[0][c1].sumRem) / sAll)
+                valuesL.append(lp)
             for c2 in allCommitters:
                 if c1 != c2:
                     if dict[c1].isRole[0] and dict[c2].isRole[0]:
                         addEdge(dict[c1].index, L, dict[c2].index, L, 13)
                     elif dict[c2].isRole[0] or dict[c1].isRole[0]:
                         addEdge(dict[c1].index, L, dict[c2].index, A, 2)
+
         ownershipTuple = obj.nrCommitsOwner(0)
         ownershipDict[fileDict[obj.name]] = (ownershipTuple[0], obj.nrCommitsPercentage(0))
         m1, m2 = obj.getMeasures(0)
         m3 = m1 + m2
         X += m1
         Y += m2
-        if obj.nrCommitsPercentage(0) < 100:
-            Values.append(obj.nrCommitsPercentage(0))
-        if ownershipTuple[0] in dict:
-            addEdge(dict[ownershipTuple[0]].index, 1, fileDict[obj.name], 1, 14)
-
-    print(avg / (X + Y))
+     
+    #plotOwnershipHistogram(valuesL, 'histogramLines3')
     ownershipFile.close()
     return ownershipDict
 
@@ -631,15 +650,16 @@ addIssueDependency("\\BugDep.txt")
 for fileId in range(len(depFile)):
     addDepEdge(depFile[fileId])
     depFile[fileId].close()
+files, posInFiles = readFileMeasures(fileDict, "\\codeMeasures2020.txt")
 ownershipDict = {}
 ownershipDict = readOwnershipFile(ownershipDict)
-files = readFileMeasures(fileDict, "\\codeMeasures2020.txt")
 checkFilesIssues()
 
 def createSample():
-    nodes = getNodesFromEdgeSample(Edges)
+    #nodes = getNodesFromEdgeSample(Edges)
+    nodes = list(range(1, nrNodes + 1))
     # sampledEdges = sampleEdgesPerLayer(nrLayers, edgeList, 370)
-    s = Sample(nrLayers, nodes, Edges, Label)
+    s = Sample(nrLayers, nodes, Edges, Label, True)
     s.addAliasEdges()
     createLayoutFile("\\muxViz-master\\data\\graph1\\layoutFile.txt", s.getNrNodes(), False)
     s.createEdgesFile("\\muxViz-master\\data\\graph1\\EdgeFile.txt")
@@ -648,18 +668,23 @@ def createSample():
     return s
 
 def getSNAMeasures(s):
-    values = readCsv("C:\\Users\\Maria\\Downloads\\muxViz_13-06-2020_140817_centrality_table(1).csv")
-    DegreeCentrality = []
+    fileValues = []
     nrIssuesList = []
-    #d = []
+
+    values = s.getDegreeCentrality()
+
+    N = (s.Graph.number_of_nodes()) - 1
     for fileN in fileDict:
         nod = fileDict[fileN]
         sampleNod = s.usedNodes[nod]
-        DegreeCentrality.append(int(values[sampleNod]))
+        sum = 0
+        for l in s.NLtuples[sampleNod]:
+            sum += values[(sampleNod, l)]
+            break
         nrIssuesList.append(nrFileIssues[nod])
-        # d.append(int(values[file]) - nrFileIssues[file])
+        fileValues.append(sum)
 
-    w, p = spearmanr(DegreeCentrality, nrIssuesList)
+    w, p = spearmanr(fileValues, nrIssuesList)
     print(w, p)
 
 s = createSample()
