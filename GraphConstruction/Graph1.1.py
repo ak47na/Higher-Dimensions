@@ -8,60 +8,24 @@ from MyHuman import *
 from readSNA_measure import *
 from EdgeTypeDetails import *
 from scipy.stats import spearmanr
+from Issue import *
+from Settings import *
+
 from scipy.stats import wilcoxon
 
 nrLayers = 4
+
+
+project = getProjectList()
+projectID = getProjectID()
+issueType = getIssueType()
 Adj = {}
 nrEdges = 0
 edgeList = []
 #[0, 2, 4, 3, 1]
 
 LayerPerm = getLayerPerm()
-
 # C, F, R, I
-def getLayer2(t1, t2):
-    if t1 == 'committer' and t2 == 'author':
-        return 3
-    if t1 == 'committer' or t2 == 'committer':
-        return 1
-    if t1 == 'fileC' or t2 == 'fileC':
-        return 1
-    if t1 == 'file' and t2 == 'file':
-        return 2
-    if t1 == 'issueReporter' or t2 == 'issueReporter':
-        return 3
-    L1 = getLayer(t1)
-    L2 = getLayer(t2)
-    if L1 == 2 or L1 == 3 or L2 == 3 or L2 == 2:
-        return 3
-    if t1 == 'issueAssignee' and t2 == 'issue':
-        return 4
-    if t1 == 'file' and t2 == 'issue':
-        return 4
-    if t1 == 'issue' and t2 == 'issue':
-        return 4
-    # In case a pair is omitted
-    print(t1, t2)
-    exit()
-
-def getLayer(type):
-    if type == 'committer':
-        return 1
-    if type == 'reviewOwner' or type == 'author' or type == 'reviewer' or type == 'patchUploader':
-        return 2
-    if type == 'approver':
-        return 3
-    if type == 'issueReporter':
-        return 4
-    if type == 'issueAssignee':
-        return 5
-    if type == 'file':
-        return 6
-    if type == 'issue':
-        return 7
-    if type == 'ownership':
-        return 8
-
 
 humanNodes = []
 humansNodes = []
@@ -158,6 +122,7 @@ class MyChange:
 
 
 def readNameUsername():
+    #name/\username from Bugzilla
     f = open("\\emailName2020B.txt", "rb")
     while (True):
         crtL = f.readline().decode('utf-8')
@@ -178,8 +143,6 @@ def getHumanTable():
         vals.append([len(humanNodes[r])])
     createTable2(cols[:-1], vals)
 
-
-
 def addHuman(name, nrHumans, fNr):
     global nrNodes
     if not (name in dict):
@@ -194,7 +157,6 @@ def addHuman(name, nrHumans, fNr):
     dict[name].setRole(Role(fNr))
     dict[name].setSite(fNr)
     return nrHumans
-
 
 def addReview(review_id, nrReviews):
     global nrNodes
@@ -379,16 +341,18 @@ def getIssues():
         g.write(str(key) + '/\\')
     g.close()
 
-def addIssue(issue, nrIssues):
+def addIssue(issue, nrIssues, projectID):
     global nrNodes
     nrIssues += 1
     nrNodes += 1
-    Label[nrNodes] = (issue, 'Issue')
+    Label[nrNodes] = (issue.name, 'Issue')
     issueNodes.append(nrNodes)
-    issueDict[issue] = nrNodes
+    issueDict[issue.name] = nrNodes
     return nrIssues
+
 def readIssueEdges(nrIssues):
     global nrNodes
+    #HumanRole/\name/username/\bugID
     issueEdgesFile = open("\\IssueEdges2020B.txt", "rb")
     while True:
         crtL = issueEdgesFile.readline().decode('utf-8')
@@ -421,26 +385,34 @@ def readIssueEdges(nrIssues):
                 # ToDo add CCassignee edges
     issueEdgesFile.close()
     return nrIssues
-def readIssues(nrIssues):
+def readIssues(nrIssues, projectID):
     global nrNodes
-    issueFile = open("\\BugStatus2020.txt")
-
+    #bugID/\version/\creation_ts/\delta_ts/\status/\resolution
+    issueFile = open("\\BugDetails2020.txt")
     while True:
         crtL = issueFile.readline()
         if not crtL:
             break
         lst = crtL.split('/\\')
-        status_i = lst[1][:-1]
+        if len(lst) != 6:
+            print('Error\n')
+            exit()
+        lst[5] = lst[5][:-1] #ignore '\n'
+        issue = Issue(lst[0], lst[1], lst[2], lst[3], lst[4], lst[5], project[projectID])
+        if issue.getType() == issueType:
+            if not (issue.name in issueDict):
+                nrIssues = addIssue(issue, nrIssues, projectID)
+                issue.setIndex(nrIssues)
+                i_R[nrNodes] = {}
         # in case only fixed issues must be added =>
         #if ("CLOSED" in status_i) or ("RESOLVED" in status_i) or ("VERIFIED" in status_i) or ("FIXED" in status_i):
-        if not (lst[0] in issueDict):
-            nrIssues = addIssue(lst[0], nrIssues)
-            i_R[nrNodes] = {}
+
     issueFile.close()
     nrIssues = readIssueEdges(nrIssues)
     return nrIssues
 
 def readIssueComments():
+    #comments to Bugs:
     issueFile = open("\\comments2020.txt")
     while True:
         crtL = issueFile.readline()
@@ -464,6 +436,7 @@ def readIssueComments():
     addIrEdges()
     issueFile.close()
 def addIssueDependency(fName):
+    #b_1/\b_2 <=> b_2 is in b_1's list of "depends_on" in Bugzilla
     f = open(fName, "r")
     while True:
         crtL = f.readline()[:-1]
@@ -500,7 +473,9 @@ def processCommit(crtL):
         for fileNode in fileNodes:
             fileIssues[fileNode][issueDict[issueID]] = True
             nrFileIssues[fileNode] += addEdge(fileNode, L, issueDict[issueID], L, 12)
+
 def readI2CSeeAlso():
+    #type changeID bugID
     bugEdgeFile = open("\\BugEdges.txt", "r")
     while (True):
         crtL = bugEdgeFile.readline()
@@ -515,6 +490,7 @@ def readI2CSeeAlso():
             processCommit(crtL)
     bugEdgeFile.close()
 def readIssue2Change():
+    # type changeID bugID
     while (True):
         crtL = rc2BugEdge.readline()
         if not crtL:
@@ -544,10 +520,11 @@ def addDepEdge(f):
             break
         lst = crtL.split()
         if lst[1] in fileDict and lst[2] in fileDict:
-            # addEdge(fileDict[lst[1]], getLayer('file'), fileDict[lst[2]], getLayer('file'), 0)
             L = getLayer2('file', 'file')
             addEdge(fileDict[lst[1]], L, fileDict[lst[2]], L, 1)
 def readOwnershipFile(ownershipDict):
+    #fileName/\nrCommits
+    #author_name/\self.author_date/\author_timezone/\added/\removed/\complexity
     ownershipFile = open("\\OwnershipFile.txt")
     nrFiles = 0
     nrCommitters = 0
@@ -602,14 +579,12 @@ def readOwnershipFile(ownershipDict):
                         addEdge(dict[c1].index, L, dict[c2].index, L, 13)
                     elif dict[c2].isRole[0] or dict[c1].isRole[0]:
                         addEdge(dict[c1].index, L, dict[c2].index, A, 2)
-
         ownershipTuple = obj.nrCommitsOwner(0)
         ownershipDict[fileDict[obj.name]] = (ownershipTuple[0], obj.nrCommitsPercentage(0))
         m1, m2 = obj.getMeasures(0)
-        m3 = m1 + m2
         X += m1
         Y += m2
-     
+  
     #plotOwnershipHistogram(valuesL, 'histogramLines3')
     ownershipFile.close()
     return ownershipDict
@@ -665,13 +640,14 @@ def createSample():
     s.createEdgesFile("\\muxViz-master\\data\\graph1\\EdgeFile.txt")
     s.createColoredEdges("\\muxViz-master\\data\\graph1\\ExternalEdgeFile.txt")
     print(s.getNrNodes(), s.getNrEdges(), s.getNrLayers())
+    #s.getEdgeTypeData()
     return s
 
 def getSNAMeasures(s):
     fileValues = []
     nrIssuesList = []
 
-    values = s.getDegreeCentrality()
+    values = s.getClosenessCentrality()
 
     N = (s.Graph.number_of_nodes()) - 1
     for fileN in fileDict:
