@@ -1,11 +1,10 @@
 from OwnershipP import *
 from Edge import *
+from SNAMeasures import Monoplex
 from Sample import *
 from createTable import *
-import datetime
 from MyFile import *
 from MyHuman import *
-from readSNA_measure import *
 from EdgeTypeDetails import *
 from scipy.stats import spearmanr
 from Issue import *
@@ -71,6 +70,7 @@ def addEdge_util(crtEdge):
 def addEdge(nod1, l1, nod2, l2, col):
     l1 = LayerPerm[l1]
     l2 = LayerPerm[l2]
+    #dependency edges between files (col == 1) or issues (col = 5) are directed
     if col == 1 or col == 15:
         return addEdge_util(myEdge(nod1, l1, nod2, l2, col))
 
@@ -92,8 +92,8 @@ files.append(open("\\AssigneeNames2020B.txt", "rb"))
 files.append(open("\\CCedNames2020B.txt", "rb"))
 # File dependencies files
 depFile = []
-depFile.append(open("\\FileDep.txt", "r"))
-depFile.append(open("\\ClassDep.txt", "r"))
+depFile.append(open("\\\\FileDep.txt", "r"))
+depFile.append(open("\\\\ClassDep.txt", "r"))
 # Event/Edge files
 reviewFile = open("\\ReviewEdges2020.txt", "r")
 rc2BugEdge = open("\\RevMsg2BugEdge.txt", "r")
@@ -208,12 +208,6 @@ def readCommits(nrHumans, nrCommits, nrFiles):
             addEdge(dict[authorName].index, 1, fileDict[crtFile], 1, 4)
             if authorName != committerName:
                 addEdge(dict[committerName].index, 1, fileDict[crtFile], 1, 4)
-            # for fileName in fileList:
-            # nrEdges['file2fileCommit'] += addEdge(fileDict[crtFile], 10, fileDict[fileName], 10)
-            # add undirected edge between co-committed files
-            # addEdge(fileDict[crtFile], 12, fileDict[fileName], 12)
-            # addEdge(fileDict[fileName], 12, fileDict[crtFile], 12)
-            # change to L, L?
 
             fileList.append(crtFile)
     files[0].close()
@@ -295,7 +289,6 @@ def readReviews():
                     layer = 'approver'
                     col = 8
                 elif lst[0] != 'UploaderEdge':
-                    print(lst)
                     exit()
                 L = getLayer2(layer, 'file')
                 #link humans to the files of the commit
@@ -366,18 +359,19 @@ def readIssueEdges(nrIssues):
 
             if not (lst[-1][:-1] in issueDict): #issue was not fixed
                 continue
+
             if not (name in dict):
                 print(name, lst[1])
                 continue
             layer = 'issueReporter'
-            col = 1
+            col = 5
             if lst[0][0] == 'A':
                 layer = 'issueAssignee'
-                col = 2
+                col = 6
             else:
                 dict[name].isReporter = True
             L = getLayer2(layer, 'issue')
-            addEdge(dict[name].index, L, issueDict[lst[-1][:-1]], L, 6)
+            addEdge(dict[name].index, L, issueDict[lst[-1][:-1]], L, col)
         else:
             uname = lst[1]
             if uname in usernames:
@@ -388,24 +382,34 @@ def readIssueEdges(nrIssues):
 def readIssues(nrIssues, projectID):
     global nrNodes
     #bugID/\version/\creation_ts/\delta_ts/\status/\resolution
-    issueFile = open("\\BugDetails2020.txt")
+    issueFile = open("\\BugDetails.txt")
     while True:
         crtL = issueFile.readline()
         if not crtL:
             break
         lst = crtL.split('/\\')
+        a = lst[2].split(' ', 1)
+        a[1] = a[1].replace(' ', '')
+        if len(a) != 2:
+            exit()
+        lst[2] = getTime(a[0], a[1])
+        a = lst[3].split(' ', 1)
+        a[1] = a[1].replace(' ', '')
+        lst[3] = getTime(a[0], a[1])
+        if len(a) != 2:
+            exit()
         if len(lst) != 6:
             print('Error\n')
             exit()
         lst[5] = lst[5][:-1] #ignore '\n'
         issue = Issue(lst[0], lst[1], lst[2], lst[3], lst[4], lst[5], project[projectID])
+
         if issue.getType() == issueType:
             if not (issue.name in issueDict):
                 nrIssues = addIssue(issue, nrIssues, projectID)
                 issue.setIndex(nrIssues)
                 i_R[nrNodes] = {}
-        # in case only fixed issues must be added =>
-        #if ("CLOSED" in status_i) or ("RESOLVED" in status_i) or ("VERIFIED" in status_i) or ("FIXED" in status_i):
+
 
     issueFile.close()
     nrIssues = readIssueEdges(nrIssues)
@@ -444,7 +448,7 @@ def addIssueDependency(fName):
             break
         lst = crtL.split('/\\')
         if len(lst) != 2:
-            print(lst)
+            print(lst, '*')
             exit()
         crtL = f.readline()[1:-1].split(', ')
         L = getLayer2('issue', 'issue')
@@ -512,7 +516,6 @@ def addIrEdges():
                 if i_r1 != i_r2:
                     addEdge(nod1, layer, dict[i_r2].index, layer, 7)
 
-
 def addDepEdge(f):
     while True:
         crtL = f.readline()
@@ -525,7 +528,7 @@ def addDepEdge(f):
 def readOwnershipFile(ownershipDict):
     #fileName/\nrCommits
     #author_name/\self.author_date/\author_timezone/\added/\removed/\complexity
-    ownershipFile = open("\\OwnershipFile.txt")
+    ownershipFile = open("\\\\OwnershipFile.txt")
     nrFiles = 0
     nrCommitters = 0
     X = 0
@@ -553,12 +556,11 @@ def readOwnershipFile(ownershipDict):
             obj.addModif(getModifFromLine(nxtL, lineLen))
 
         allCommitters = obj.authorDex[0]
-        jarList = []
 
         L = getLayer2('committer', 'committer')
         A = getLayer2('committer', 'author')
         if fileDict[obj.name] in posInFiles:
-            sAll = obj.sumAdd[0] + obj.sumRem[0] #files[posInFiles[fileDict[obj.name]]].sizeSum * 2
+            sAll = obj.sumAdd[0] + obj.sumRem[0]
         else:
             sAll = 0
         for c1 in allCommitters:
@@ -579,31 +581,11 @@ def readOwnershipFile(ownershipDict):
                         addEdge(dict[c1].index, L, dict[c2].index, L, 13)
                     elif dict[c2].isRole[0] or dict[c1].isRole[0]:
                         addEdge(dict[c1].index, L, dict[c2].index, A, 2)
+
         ownershipTuple = obj.nrCommitsOwner(0)
         ownershipDict[fileDict[obj.name]] = (ownershipTuple[0], obj.nrCommitsPercentage(0))
-        m1, m2 = obj.getMeasures(0)
-        X += m1
-        Y += m2
-  
-    #plotOwnershipHistogram(valuesL, 'histogramLines3')
     ownershipFile.close()
     return ownershipDict
-
-
-def checkFilesIssues():
-    buggy = 0
-    nonBuggy = 0
-    buggyList = []
-    unBuggyFile = []
-    for key in fileDict:
-        if nrFileIssues[fileDict[key]] != 0:
-            buggy += 1
-            if fileDict[key] in ownershipDict:
-                buggyList.append(fileDict[key])
-        else:
-            nonBuggy += 1
-            unBuggyFile.append(fileDict[key])
-
 
 nrHumans, nrCommits, nrFiles = readCommits(0, 0, 0)
 
@@ -615,11 +597,13 @@ readNameUsername()
 nrReviews = readReviewComments(0)
 readReviews()
 
-nrIssues = readIssues(0)
+nrIssues = readIssues(0, projectID)
+
 readIssue2Change()
 readI2CSeeAlso()
 readIssueComments()
 getIssues()
+
 addIssueDependency("\\BugDep.txt")
 
 for fileId in range(len(depFile)):
@@ -628,40 +612,71 @@ for fileId in range(len(depFile)):
 files, posInFiles = readFileMeasures(fileDict, "\\codeMeasures2020.txt")
 ownershipDict = {}
 ownershipDict = readOwnershipFile(ownershipDict)
-checkFilesIssues()
 
 def createSample():
-    #nodes = getNodesFromEdgeSample(Edges)
     nodes = list(range(1, nrNodes + 1))
-    # sampledEdges = sampleEdgesPerLayer(nrLayers, edgeList, 370)
     s = Sample(nrLayers, nodes, Edges, Label, True)
     s.addAliasEdges()
     createLayoutFile("\\muxViz-master\\data\\graph1\\layoutFile.txt", s.getNrNodes(), False)
     s.createEdgesFile("\\muxViz-master\\data\\graph1\\EdgeFile.txt")
     s.createColoredEdges("\\muxViz-master\\data\\graph1\\ExternalEdgeFile.txt")
     print(s.getNrNodes(), s.getNrEdges(), s.getNrLayers())
-    #s.getEdgeTypeData()
+
     return s
 
-def getSNAMeasures(s):
+def getSNAMeasure(name):
+    if name == 'Betweenness Centrality':
+        return betweenness_centrality(Graph_o)
+    if name == 'Closeness Centrality':
+        return closeness_centrality(Graph_o)
+    if name == 'Degree Centrality':
+        return degree_centrality(Graph_o)
+    if name == 'Effective Size':
+        return effective_size(Graph_o)
+    if name == 'Constraint':
+        return constraint(Graph_o)
+    if name == 'Reachability':
+        return None
+    if name == 'Effective Size':
+        return monoplex.getEffectiveSize()
+    if name == 'Hierarchy':
+        return monoplex.getHierarhy()
+def getSNAResult(name):
     fileValues = []
     nrIssuesList = []
+    values = getSNAMeasure(name)
 
-    values = s.getClosenessCentrality()
-
-    N = (s.Graph.number_of_nodes()) - 1
     for fileN in fileDict:
         nod = fileDict[fileN]
-        sampleNod = s.usedNodes[nod]
-        sum = 0
-        for l in s.NLtuples[sampleNod]:
-            sum += values[(sampleNod, l)]
-            break
+        if not(nod in Nodes):
+            continue
         nrIssuesList.append(nrFileIssues[nod])
-        fileValues.append(sum)
+        if values == None:
+            fileValues.append(local_reaching_centrality(Graph_o, nod))
+        else:
+            fileValues.append(values[nod])
 
     w, p = spearmanr(fileValues, nrIssuesList)
-    print(w, p)
+    print(measure, w, p)
 
-s = createSample()
-getSNAMeasures(s)
+def createMonoplex(layer):
+    for e in Edges:
+        if Edges[e] > 0 and (e.layer1 == layer and e.layer2 == layer):
+            Graph_o.add_edge(e.nod1, e.nod2, w = Edges[e])
+    global Nodes
+    Nodes = list(Graph_o.nodes)
+
+
+
+Nodes = []
+Graph_o = networkx.DiGraph()
+
+measures1 = ['Degree Centrality', 'Betweenness Centrality', 'Closeness Centrality', 'Reachability']
+measures2 = ['Hierarchy', 'Effective Size']
+
+for layer in range(1, nrLayers + 1):
+    Graph_o = networkx.DiGraph()
+    createMonoplex(layer)
+    monoplex = Monoplex(Graph_o, True, "w")
+    for measure in measures2:
+        getSNAResult(measure)
