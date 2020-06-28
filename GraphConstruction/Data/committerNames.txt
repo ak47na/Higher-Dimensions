@@ -1,0 +1,20 @@
+Manoj Palat/\manpalat@in.ibm.com/\1
+Sarika Sinha/\sarika.sinha@in.ibm.com/\2
+Sravan Kumar Lakkimsetti/\sravankumarl@in.ibm.com/\3
+Stephan Herrmann/\stephan.herrmann@berlin.de/\4
+Mateusz Matela/\mateusz.matela@gmail.com/\5
+Andrey Loskutov/\loskutov@gmx.de/\6
+Jay Arthanareeswaran/\jarthana@in.ibm.com/\7
+Kalyan Prasad Tatavarthi/\kalyan_prasad@in.ibm.com/\8
+Vikas Chandra/\Vikas.Chandra@in.ibm.com/\9
+Roland Grunberg/\rgrunber@redhat.com/\10
+Thomas Wolf/\thomas.wolf@paranor.ch/\11
+Alexander Kurtakov/\akurtako@redhat.com/\12
+Till Brychcy/\register.eclipse@brychcy.de/\13
+Julian Honnen/\julian.honnen@vector.com/\14
+Dani Megert/\Daniel_Megert@ch.ibm.com/\15
+Noopur Gupta/\noopur_gupta@in.ibm.com/\16
+Mat Booth/\mat.booth@redhat.com/\17
+Carsten Hammer/\carsten.hammer@t-online.de/\18
+Jeff Johnston/\jjohnstn@redhat.com/\19
+Olivier Thomann/\Olivier_Thomann@ca.ibm.com/\20

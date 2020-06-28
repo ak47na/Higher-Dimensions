@@ -1,0 +1,1768 @@
+3e45c6483946f8d5a6b25b8d457256f2cd32f966/\Bug 558343: [14] Records - create implicit override methods - fix
+
+Change-Id: I63849959dae07051ac726408b19ad776f017e771/\
+18cd7cf818749294bc55809648a21bd0dabdb564/\API Filter warnings after baseline change
+
+Change-Id: Ie9414196a358bba31927f84a84301bd79405a39b/\
+6af76575d4f7930be7e89c13fa03f51d6536e4a9/\Bug 558497 - ecj-I20191219-1800.jar is broken, compilation with ecj is not possible due wrong signer data
+
+Change-Id: I18f13da79002043454bde15241cda8e66f887b65
+Signed-off-by: Sravan Kumar Lakkimsetti <sravankumarl@in.ibm.com>/\
+7cca567da44840670d67eae6789c9cb6e40d5424/\Bug 552506 - [14] Records - Code Generation
+
+Change-Id: I38d72a192dfd5732ae17f3e86ffb6de3fea3284e
+Signed-off-by: Manoj Palat <manpalat@in.ibm.com>/\
+77745aef3d0522476f7e972af1db6be761f02986/\Bug 558517 - ClassFile.getNewTypeBinding(...) throws
+NullPointerException
+
+Change-Id: I88358a0f96cfd73ac4a4734b0fd76914a57724d6/\
+3393a221971fc81b11b8c717e2b4d8ec57ce80f0/\Fix maven-antrun-plugin deprecation warning.
+
+[WARNING] Parameter tasks is deprecated, use target instead
+
+
+Change-Id: Ia6905b22d547fac2eb3839ddf1b6c280f3f62811
+Signed-off-by: Alexander Kurtakov <akurtako@redhat.com>/\
+13f7e07fece96abc7cb29cec2b89b953a4a2e096/\Bug 463320 - [compiler][resource] potential "resource leak" problem
+disappears when local variable inlined
+
+Change-Id: Ie0c8c1d4bd9e7e733a5ce3963adbe6189f5aba98/\
+67ec0337781445f433374d912562a6420c3130a4/\Bug 558574 - [resource] Resource leak analysis should understand
+well-known methods returning 'this'
+
+Change-Id: I0234827e930225c0f6a618044e39344e98c0d9ae/\
+abfd074d566b02cad792fdd003f292c2ebd53ad0/\Bug 463320 - [compiler][resource] potential "resource leak" problem
+disappears when local variable inlined
+
+- fix after re-open with test
+
+Change-Id: I4c234c034d8b99d99ce6fab8cc155287e563037e
+Signed-off-by: Ed Merks <ed.merks@gmail.com>
+Also-by: Stephan Herrmann <stephan.herrmann@berlin.de>/\
+956124562eb3b9e814a13212d1ed4c2577a40178/\Bug 552521 - [resource] warning against '<unassigned Closeable value>'
+is weakened to "potential" inside "if"
+
+Change-Id: I79f6397e6a1e022a90c6272008d6cd667f25599f/\
+290d202454cc7d9e26a9e0edec925d6c26879a87/\Bug 519740 - [compiler][resource] Bogus warning: 'Potential resource
+leak'
+
+Change-Id: I7185569c75eedc764fe0fe45876b4b21678b14c7/\
+3f16176dca63531a876ad5417969b1b88503c387/\Bug 552441 - "Potential resource leak" erroneously reported within
+for-loop
+
+- test case
+
+Change-Id: I31f142ba437d885a616ab810aeab46b0e2d6d667/\
+785c7ca7509cb0eb9aef1b5862a374ffd0b0a5d7/\Bug 400523 - Invalid Resource Leak Warning Reported for void Method;
+Adding Empty Return Resolves Warning
+
+Change-Id: Ib90613da99b7fbb27b6eea03ffe41b9e3899116f/\
+2351bf225faa8021b935aabfb7be18c664d99655/\Bug 459397 - [null] 3.7 Regression: potential null error when cannot be
+null - nullBit<n> vs. extra
+
+Change-Id: I81bb83ada74e75aaa4bac5cb28a666914a4a73cc/\
+0c28ff99b6216c76a371a59044a4079b8e409b65/\Bug 558421 [formatter] Generate getter/setter creates unnecessary blank
+line
+
+Change-Id: Ic73ae351e4181b09d4b437474fb5e2cce380bdd8
+Signed-off-by: Mateusz Matela <mateusz.matela@gmail.com>/\
+ba73b313fde63d8ccedec4bd1f0dfefd65dc4e33/\Bug 250656 - [formatter] Formatting selection destroys correct
+indentation
+
+Change-Id: I382169ac9f5875ae3935ca3b6d1c7ac244399cba
+Signed-off-by: Mateusz Matela <mateusz.matela@gmail.com>/\
+246d8d22974bec51c61913612ea769526b97ae88/\Bug 404648 - [1.8][compiler] investigate differences between ECJ & javac
+
+- fixed expectations re javac in ResourceLeakTests/\
+3a9db50446f79378daa85d34c348921f7fa08a58/\Bug 552521 - [resource] warning against '<unassigned Closeable value>'
+is weakened to "potential" inside "if"
+
+- addressing comment 14
+
+Change-Id: I9e4c1543b7e8cb75c31c6e6042ea97431f88c226/\
+6a1b569cd8c1b29ac527dc139575b75c0ac810dc/\Bug 552521 - [resource] warning against '<unassigned Closeable value>'
+is weakened to "potential" inside "if"
+
+- addressing comment 14 - other loop forms
+
+Change-Id: I1fc1ab5859b3e7a832118eea14a8982716637b3c/\
+efc21fe356ef830324cf0619abec4d9439239152/\Bug 558494: [14] Disassembler Support for records
+
+Change-Id: Iab123e77c6d647ac444a800289e544f3a626c5c5
+Signed-off-by: Manoj Palat <manpalat@in.ibm.com>/\
+f765c2d47f596d33a94f2cf95d52b12bfd8fb1ca/\Bug 558494: [14] Disassembler Support for records - component info
+decode bug fix
+
+Change-Id: Icff7d674cbf6d1a6819c2bcd0d39594ae4fa9d5c/\
+97609bfc7e97c6f6ae7ba958f656e2efd47c7fce/\Bug 527761 - Extension of Byte Array Output Stream warned to be closed.
+
+Change-Id: I5d3277ed3efb54fc27dfea960b6d01c16850f56c/\
+4755fb67cd2402cbebcb27beaec3636e0606e8a9/\Bug 558764 - [14] Records - Support for RECORD_COMPONENT annotations
+
+Change-Id: I58a8cbcbdcc24029720186d1a209de5c4909cebd
+Signed-off-by: Manoj Palat <manpalat@in.ibm.com>/\
+16ebd125b67e3fb21848f1cf93e610e6b19bf2c0/\Bug 558759 - Gerrits are failing for JDT core
+
+Change-Id: I34ae8d98fc41e8c47002736ae083576fe6faf9fe/\
+af36a4d61d16ed2e7dc7a2bcd257172b51335524/\Bug 479389 - [null] warn when annotation based null analysis is enabled
+but null annotations are not on the classpath
+
+Change-Id: Ie3d2e0f84c543ed9aeaf0316b04b20bf65164fda/\
+256ddbc372ca0b473cf9e1359cd51a98fe2f20d9/\Bug 479389 - [null] warn when annotation based null analysis is enabled
+but null annotations are not on the classpath
+
+- revert problem configurability
+
+Change-Id: Ide1060799976eee38b103fcd798f68252a3838f7/\
+68f8c32617a307f48908f60b98f2bf49698d9da9/\Bug 553152 - [14] Records - Type Resolution - bug fix wrt restricted
+identifier keyword and java.lang.Record  - manifests in Bug 558811 -
+[14] Type Hierarchy on record shows Object as the superclass
+
+Change-Id: I25ce5e21a2d64f1685d572e90b538f97e9aad800
+Signed-off-by: Manoj Palat <manpalat@in.ibm.com>/\
+5fc1db38fdd3de0488a8b9b4889509025b80c54e/\Bug 558008 - [14] Record - DOM AST rewrite support
+
+Change-Id: I638002241ab33de418cf5cc6dc8b757638d8d20e/\
+6fc05881f3908b870bea5b89f892f54c972c8ef5/\Bug 553154 - [14] Records - DOM AST Support
+
+Change-Id: I4a12297af74ba107b3c62436b055ea3e678dd6b8/\
+d17be6f2786df4c53f78eac09ef37efc6f9a0ddb/\Bug 558811 -
+[14] Type Hierarchy on record shows Object as the superclass - astnode
+source ranges issue - initial commit
+
+Change-Id: Icdc78cda319ca7c56949290a2319bf10fd46ba59/\
+f6ca35bc46a58901d24a836b1dc77576044bdb13/\Bug 558844 - ? : Operator causes java.lang.VerifyError: Inconsistent
+stackmap frames
+
+Change-Id: I8d871ef103e1ac2098fb393b2738c2a4f3223e9f
+Signed-off-by: Andrey Loskutov <loskutov@gmx.de>/\
+c68c1e4999fba991c5c5d3410da33a3f909b3462/\Bug 466477 - [null] Improve error message "...inherited method ...
+specifies ..."
+
+Change-Id: I2851d539bbcb6965f942a8f8f0d6968b2e98f230/\
+ba481134be15d3d72d078f1809b466546ade7d0d/\Bug 553567 - [14] Records - Flag error for Record ClassType
+
+Change-Id: I0ee28b922a4c59b30df7002fb048a024d9d20868
+Signed-off-by: Manoj Palat <manpalat@in.ibm.com>/\
+f414f843639cc270822cea65bcf5375caf28464b/\Bug 558343 - [14] Records - create implicit override methods - fixing
+implicit flagging
+
+Change-Id: I1394c2675007e87cd23b4e42becf8bb8cd8a5396/\
+0001a8c9ec3c95da203d2274a9737ebcd11c4565/\Bug 558497 - ecj-I20200106-1805.jar is broken, compilation with ecj is
+not possible due wrong signer data
+
+Change-Id: I6b55cdf2f482d3d4735904fa5cd93102a2ea34b2
+Signed-off-by: Andrey Loskutov <loskutov@gmx.de>/\
+7d5ca4d34c3267a0f49084b31147c12fd0922f53/\Bug 553154 - [14] Records - DOM AST Support
+
+Change-Id: I17f6946382125b5d4625b7f5d6d78d99a3166ee8/\
+67a3ce361d29320458a1d8de160c15d48f4f6d32/\Bug 558872 - ecj jar signer data is broken on every jdt core version bump
+
+Change-Id: Icbee51bc1c0815c6ac0458c5271fa2f74422728b
+Signed-off-by: Sravan Kumar Lakkimsetti <sravankumarl@in.ibm.com>/\
+b365a48c9f4d0e784f9c23760ba1da9534c3dcea/\Bug 551348 - [14] Create Java 14 version and supporting code in tests
+
+Duplication of tests causing several failures
+
+Change-Id: Iaa6710552257e96fdfd936c119c943ddb6cdbeb1
+Signed-off-by: Jay Arthanareeswaran <jarthana@in.ibm.com>/\
+0598b3bbfd9779f63474df08e2afa3e08760f45b/\Bug 558970 - [14] Track all failing tests at compliance 14
+
+Change-Id: Ie48fdcb1f0d1a278faa5a108de71d45c2e80f3b8/\
+b12508c0c528c0e353b8c6b31d0ad7827c0b3d4d/\Bug 558925 - [14] Provide API for start of "record" keyword in DOM
+AST
+
+Change-Id: Ic571a321329e02332a9a100f8e2a80c447e7ec0a
+Signed-off-by: Kalyan Prasad Tatavarthi <kalyan_prasad@in.ibm.com>/\
+7981c10bd3535ec152649aa02ae20bf17561669e/\Bug 559101 - [14] AttachedJavadocTests.test025() failing
+
+Change-Id: I980ca3467a36cd6ff4c7764042f417eb541a235a
+Signed-off-by: Jay Arthanareeswaran <jarthana@in.ibm.com>/\
+f267b5eebc9c2a51b71207cc7fa8a51ed2c464dd/\Bug 559119 - Warning: "Resource leak: '<unassigned Closeable value>' is
+never closed" for still closable resource
+
+Change-Id: I25d51b21cdc91f6966a07fbd52067d787b453d9d/\
+d04c2a1e0ff1279fd935640e680c6a597ce7ba9c/\Merge remote-tracking branch 'origin/master' into BETA_JAVA14
+
+# Conflicts:
+#	org.eclipse.jdt.core.tests.compiler/src/org/eclipse/jdt/core/tests/compiler/regression/ResourceLeakTests.java
+#	org.eclipse.jdt.core.tests.compiler/src/org/eclipse/jdt/core/tests/dom/StandAloneASTParserTest.java
+#	org.eclipse.jdt.core/compiler/org/eclipse/jdt/internal/compiler/lookup/TypeConstants.java
+
+Change-Id: I8e3bcb243de66196f358b6fb655a1f219fb07662/\
+fff653e221d24349843926a9fc87cfbc0cafdd78/\Bug 559137 - Fix Resource Leak warnings
+
+Change-Id: I19c275d87854cea99aaa8c857fd7bbd3bf8f9c1c/\
+28782a7c8ade50be5fbb2ca2069a38cad29fd355/\Bug 559137 - Fix Resource Leak warnings
+
+- tiny simplification
+
+Change-Id: I069c5cee4bfecec8462a370c85229c48dc65ef34/\
+d5bebfcd41e40e691236ae672f0c877a727409c1/\Bug 559006 - [formatter] Wrong indentation in region after wrapped line
+
+Change-Id: I7966f0fbe84399598f912846302b7170fbcdb7b0
+Signed-off-by: Mateusz Matela <mateusz.matela@gmail.com>/\
+9eac2d764cbec2160db1c91a3a05341846688165/\Bug 559210 - NullPointerExeption at
+SourceTypeBinding.hasMethodWithNumArgs
+
+Change-Id: I7f69654dbd633a6559dab38019b99ad5684e5a0e/\
+132f8bd4cc5ca517653803063f81c45162601f51/\Bug 559245 - [14] Records - interfaces implements in grammar
+
+Change-Id: Ifade057ea43c9b79ad873df1731bacaed1332ffc
+Signed-off-by: Manoj Palat <manpalat@in.ibm.com>/\
+99af941f1188ce99d319c9320057380a99f565a1/\Bug 553154 - [14] Records - DOM AST Support
+
+Change-Id: Ie7ed5111a85b0c3011f4bf65bd2530f5d796a26b/\
+000ab51015adb5b5d88d38ccbfa78e41777fbda8/\Bug 558343 - [14] Records - create implicit override
+methods - Comment 5
+- Moving to SyntheticMethodBinding
+
+Change-Id: Ic83eadc2a22727958c5008981f3e05c5332e7dcc
+Signed-off-by: Manoj Palat <manpalat@in.ibm.com>/\
+28edb69b5bee0985c95efe9b5dcfbc219159c921/\Bug 543363: Provide better error messages when -data not specified
+
+By pulling the formatter app into a new bundle, we can have a little
+more control on when the resource plug-in is loaded. This implementation
+can handle -help and missing -data without needing a workspace first.
+
+Note as CodeFormatterApplication is API, I am wrapping it, rather than
+moving it.
+
+Change-Id: I2ded0cb2a3b19e1c13f6bf9b5c6fb6235b46f3ab
+Signed-off-by: Jonah Graham <jonah@kichwacoders.com>/\
+5b6a0a625202603615a75b9af725aa08fdcb9280/\Bug 277691 - Constructor completion should boost relevance of subtypes.
+
+Change-Id: I2c9f5e5ab64c289919bd3b6b95967efedb08a07f/\
+a2fe577bf61e1ed35d46939dc324b5d898afeba9/\Bug 543363 - added about.html to src.includes to fix source build
+
+Change-Id: I0a71a4e1d096a28a34764578119c8706af15f4aa
+Signed-off-by: Andrey Loskutov <loskutov@gmx.de>/\
+12524a7fd7ce5303e458a59bbf5829905687e55d/\Bug 558759 - Gerrits are failing for JDT core
+
+- avoid warning from javac
+
+Change-Id: Ifef235e7393bacb4b4e8566207e9ba0cbc56c196/\
+5119d711a6734c6b92e7dd43247e69f5d72ad73c/\Bug 559331 - API tool invalid since tags in BETA_JAVA14 stream
+
+Change-Id: Idd8c2562c052492dec596c25d8293fcdc0094e1e
+Signed-off-by: Vikas Chandra <Vikas.Chandra@in.ibm.com>/\
+812ce14a4f745f02fbd1f5a93ecd4101bf3894ac/\Bug 531715 - [14] JEP 305: Pattern Matching for instanceof (Preview)
+
+Change-Id: Ia7200135c91d4a0b3d281a8b6049da03407e7d2a
+Signed-off-by: Jay Arthanareeswaran <jarthana@in.ibm.com>/\
+a1775317ec6beb9e51856f5bb751372cd1d44a9c/\Merge remote-tracking branch 'origin/master' into BETA_JAVA14
+
+# Conflicts:
+#	org.eclipse.jdt.core/compiler/org/eclipse/jdt/internal/compiler/ast/ConstructorDeclaration.java
+
+Change-Id: I73e1c2343c3f9099eb5b7ae6a631ff02fd1ff3eb/\
+0e26f4f1222a265482fd0e2267e070d7710b9d60/\Bug 558343 - [14] Records - create implicit override
+methods - Comment 5
+- Moving to SyntheticMethodBinding - restoring accidental deletion.
+
+
+Change-Id: I881b698473b6ca6be2388a857d8cb2a1f24792f1/\
+eff44959d2a65b90d27d620d842a998862eeac3b/\Bug 559331 - API tool invalid since tags in BETA_JAVA14 stream
+
+Change-Id: I16376cf4fcca69ce12010930cc870cd4270f07da/\
+b0722e5ba89cefa6419a6adfbcf87b69283d1330/\Bug 559331 - API tool invalid since tags in BETA_JAVA14 stream
+
+Change-Id: I1d204e9c403fb5c803b95497ef8b7e79e9ab6e21/\
+4c1093b36261a8d1b20fe32cfc8275218506b9c4/\Bug 559281 - [14] Record - void type, wait param error flagging and more
+
+Change-Id: Icad0dc7598cf9f95772799822bf63d36deb4d840
+Signed-off-by: Manoj Palat <manpalat@in.ibm.com>/\
+1a3cbc632618c6874ffa739044b91a8a15cb3373/\Bug 422760 - Certain escaped digits in string literals cause
+InvalidArgumentException
+
+Change-Id: Ia35ab842c5371b43ea904cbd0b24be960ceb5f04
+Signed-off-by: Olivier Thomann <Olivier_Thomann@ca.ibm.com>/\
+6f08739d15ec599beee7427c64ce5b0f54adf492/\Bug 559331 - API tool invalid since tags in BETA_JAVA14 stream
+
+Change-Id: Icf1f1d5a24a5f41141a8ec1fbc3e49d6031911ab/\
+ea806fff31a1ec812ba00a650c03d363ee4c3eeb/\Bug 559448 - [14] Records - multiple varargs not flagging error 
+
+Change-Id: Ib9d9663a03376e724300ee1ddda67d3d6b5c5872
+Signed-off-by: Manoj Palat <manpalat@in.ibm.com>/\
+1406d4d38f0de44d13f89707295b071867b2237c/\Bug 553386 - [test] clean-up of converterJclMin after bug 544943
+
+Change-Id: Id3906f5cea13b52b0dcbbac2eb4a2811f50d86dc
+Signed-off-by: Jay Arthanareeswaran <jarthana@in.ibm.com>/\
+7524d911155feb0decf44ddadea1a9585a4e3a97/\Bug 559449 - Array index out of bounds in
+org.eclipse.jdt.internal.compiler.ClassFile.isLikelyLocalTypeName
+
+Change-Id: I4674c31ba48dfc105be9c2051bc7397bf8817fea/\
+e84704bd5cce8b8b1123ebe325b4ebba7f60d80f/\Bug 553154 - [14] Records - DOM AST Support
+
+Change-Id: I352e042fe0b9979540fa3217f8981f3cb7d3dd72/\
+50a6c7414de6ae484b3d1872e5463fd177ac8135/\Bug 553154 - [14] Records - DOM AST Support
+
+Change-Id: I500593046929f480d2b4bf8338a4ab9593268217/\
+26442c4da93bb37c148503ede232875b5244e58f/\Bug 482242 - [compiler][null] option to raise problems when unsafely
+passing annotated parameterized types into unannotated code
+
+Change-Id: Ifd22f01d180a41fc1e7e9f878bfa6060c354e11f/\
+a1de6c1dd7cb7912b7e2b8fdaf34292a4e39cf91/\Bug 482242 - [compiler][null] option to raise problems when unsafely
+passing annotated parameterized types into unannotated code
+
+- new IProblem IDs
+
+Change-Id: If80b38dedbb2402af8af8b9e618ab7ccb34375f8/\
+0cff954c8ace88a7bfdc4dc601310e3b724e8d6e/\[14] Create jclMin13* and relevant code in test framework
+
+Change-Id: I23d3ef283ee6bb75698b811b20c11a3dd8953a1f
+Signed-off-by: Jay Arthanareeswaran <jarthana@in.ibm.com>/\
+3fd7480235af1d5957c919b5a1dd466fdb419481/\Bug 553154 - [14] Records - DOM AST Support - Comment 29 - 
+
+Change-Id: I7280bd83533d85d4d5b286b0db01156bca356700/\
+33570051996dbcf8550bc434abe6f3d627467cba/\Bug 559285 - [14] Provide API in IType to identify a record
+
+Change-Id: I3daa1ae05ec9b7b4ed6b6ab8c071ed697a71077f
+Signed-off-by: Kalyan Prasad Tatavarthi <kalyan_prasad@in.ibm.com>/\
+536416ac002f64d4721ef87c301aec75a6a79ac1/\Bug 559285 - [14] Provide API in IType to identify a record
+
+Patch cleanup, updating the copyright and removing unnecessary spaces
+added in the previous patch
+
+Change-Id: Ia0cb69deeb43ba5875f8f0c2c29ade4b6a159e21/\
+bec52a6625c2eca7071261008df43af936b87e38/\Bug 553154 - [14] Records - DOM AST Support - Comment 32
+
+Change-Id: Ic24494a4e97eddfba8f4875e2041ff3151e97822
+Signed-off-by: Manoj Palat <manpalat@in.ibm.com>/\
+1026aff3fba2df33644eb89b1cd0d491dfb90f5f/\Bug 559574 - [14] Record - NPE build error
+
+Change-Id: I36785410f5f15d124ce2c76ce1ae799791cc349f
+Signed-off-by: Manoj Palat <manpalat@in.ibm.com>/\
+77e64174572256aab3e314b6032f7edafbde0470/\Bug 553154 - [14] Records - DOM AST Support
+
+Change-Id: I3800dde5d8bc238768ef2cbcafd6cdff711a9e80/\
+79f5c9dad90b38f204d99dd53849b46bc5b717d0/\Bug 553143 - [14] Pattern Instanceof - DOM Support
+
+Change-Id: I4407cd30b52eb1f662bf726555887474fed8d877/\
+175e0ada4c91d036739191c4bc268084ec7ee99f/\Bug 558812 - Searching for record component should give references
+in the constructor if used there
+
+Change-Id: If9543ca95e99320780b8175cb68185e3fee230a1
+Signed-off-by: Vikas Chandra <Vikas.Chandra@in.ibm.com>/\
+2ce8dba720d43b8f74b2bfb91dedc91d03dfd730/\Bug 553143 - [14] Pattern Instanceof - DOM Support
+
+Change-Id: I5e5facb28c547c6b7d73bd029683272ae60cbba4/\
+7ec785d36e798cc544d177d73573f7b342a40500/\Bug 559677 - [compiler] Endless Loop in Parser.parse() while saving Java
+class causes Eclipse to hang
+
+Change-Id: Ia737631003513ef810a8285af7611c6279ef43d7/\
+c07bc1c3061d9d8cee7ea123d74e67f097c7ad56/\Bug 552082 - Fix the applicability of a no-@Target annotation type
+
+Change-Id: Iac1ffdc0398935a1fdd5be69947cc8c9bc5a677a/\
+de9bc7bf4331f269170c884d9c575400cad0e4c0/\Bug 404648 - [1.8][compiler] investigate differences between ECJ & javac
+
+- excuse null-related differences in NullTypeAnnotationTest
+- don't expect difference re 'real' (JLS) errors
+
+Change-Id: I1cee2c854b04d58b7e787941f2c561839b40e304/\
+dca945b44e00531039b6e9dc0e38efd6c65b498d/\Bug 559645 - Avoid NPE in EclipseCompilerImpl
+
+When an extraProblem has no originatingFileName, the Diagnostic created
+by EclipseCompilerImpl would throw an NPE in Diagnostic.getSource().
+
+Check for null before calling String::new.
+
+Change-Id: I6e5358789cfc938adbde90055e1a2decdfc2b784
+Signed-off-by: Thomas Wolf <thomas.wolf@paranor.ch>/\
+d4db6c5c6dd5bcf805c791e56f3a2b6cdbb77167/\Bug 559760 - Respect -failOnWarning in EclipseCompilerImpl
+
+Return false if -failOnWarning was specified and there were warnings.
+
+Change-Id: Ifd2a213003ec7dc00146d237567c9b025e6f9c94
+Signed-off-by: Thomas Wolf <thomas.wolf@paranor.ch>/\
+15851c5303d40e521271c9b4816a4db511e67aa0/\Bug 559730 - [14] Records - search - Go to definition not working for
+records
+
+Change-Id: Ic55577956d498a049359c560086830c5b1244876
+Signed-off-by: Vikas Chandra <Vikas.Chandra@in.ibm.com>/\
+9e1ac732038b1a4b68f8e1bc421f00c04c054ecd/\Test case for Bug 559730 - [14] Records - search - Go to definition not
+working for records 
+
+Change-Id: I31137a3ba0b5e628acc644ebe39e63423bfd0de3
+Signed-off-by: Vikas Chandra <Vikas.Chandra@in.ibm.com>/\
+9ee7d4fece374f782797d688de4d5f9af2834d49/\Merge remote-tracking branch 'origin/master' into BETA_JAVA14
+
+Change-Id: I0ce51f28f26403ab0519f7c3fcb5481c68aaa9f6
+Signed-off-by: Manoj Palat <manpalat@in.ibm.com>/\
+0ca242ecfeada5ee7290e2de1f856b3ee2dc5839/\Bug 553154 - [14] Records - DOM AST Support
+
+Change-Id: I60c429b7c0fae20668cb7ca508ebabccaf626939/\
+ebd2a383c2fe1a21ac49f4c45a51f9332095bd65/\Bug 559780 - [14] Create RunAllJava14Tests 
+
+Change-Id: I20e5e5cf7740115b4be23f59222a439c35683f5f
+Signed-off-by: Vikas Chandra <Vikas.Chandra@in.ibm.com>/\
+9c86e4dade5e645ccd516613ea24d52c73c8e740/\Bug 559780 - [14] Create RunAllJava14Tests and RunOnlyJava14Tests
+
+Change-Id: Icd83828306c739ad8ecfd7f0b792b4bed7f3a8d7
+Signed-off-by: Vikas Chandra <Vikas.Chandra@in.ibm.com>/\
+ce0d9765aa11b923769a0c10bd55e7dea2f19198/\Bug 559658 - Move all preview related Java 13 search test cases to Java
+14 search cases 
+
+Change-Id: I30abd687d8dff314d4449ab36fb6ebb9c92618ea
+Signed-off-by: Vikas Chandra <Vikas.Chandra@in.ibm.com>/\
+d9929cbf72c6f7a45071586b409d6b81f9b72338/\Bug 559731 - [14] Record - search for references for a parameter in a
+"normal" constructor incorrect
+
+Change-Id: Id182e30debb3713bc34c184cbc9e7a1ee1ba464f
+Signed-off-by: Vikas Chandra <Vikas.Chandra@in.ibm.com>/\
+f37841fc4f8d56938594f74bd8c9bb366f826a59/\Bug 553154 - [14] Records - DOM AST Support
+
+Change-Id: Iab0eb7e357cd19718edd13895f55cc09239af35e/\
+cb8b2aa2d2c8449323c1be863d52e633e44f72cf/\Bug 559285 - [14] Provide API in IType to identify a record
+
+Change-Id: I9c01482ecfbdcec5db1f101a50cbb4ce0113af0e
+Signed-off-by: Jay Arthanareeswaran <jarthana@in.ibm.com>/\
+8a595fac9a42b11d666cf7886cfaf44e3e80eef4/\Bug 559774 - [14] [model] Records - Incorrect error message "The method
+a() is undefined for the type X
+
+Change-Id: I22fa410fe4ccc49d060a17a4d81413d5fa7e0d7e
+Signed-off-by: Jay Arthanareeswaran <jarthana@in.ibm.com>/\
+0d77089910862fc718215c54fba2e50a8f0a16c1/\Bug 558008 - [14] Record - DOM AST rewrite support
+
+Change-Id: I7db647dc53e4191cdb24b8d540204a4c787b4290/\
+6aa4f7c2c85be51b177fd47246b5e4fb03a84039/\Bug 558008 - [14] Record - DOM AST rewrite support
+
+Change-Id: Ibd3696352b985058d08f523091c3989e9f1e665f/\
+f38a4b238eec84efd2a8f157c14485282beeb811/\Bug 558873 - [JUnit 5] Update to JUnit 5.6
+
+Probably related to the error below after update to JUnit from 5.5.1 to
+5.6.0?
+
+org.junit.platform.commons.JUnitException: TestEngine with ID
+'junit-jupiter' failed to discover tests
+
+Caused by: java.lang.ClassNotFoundException:
+org.eclipse.jdt.compiler.tool.tests.AllTests
+
+Change-Id: I5c0a54eac4d92328d69bea56205c0706a39e05ec
+Signed-off-by: Andrey Loskutov <loskutov@gmx.de>/\
+a42f9d48f8037fffda3c402225f62ed4762cf97a/\Bug 553143: [14] Pattern Instanceof - DOM Support
+
+Fixes the source range to consider only the pattern variable name. Also
+changes to the InstanceofExpression#getParameter to be of type
+SimpleName instead of SingleVariableDeclaration
+
+Change-Id: I477a1fd7f4175c01c44b1c4436c945727edd691b
+Signed-off-by: Jay Arthanareeswaran <jarthana@in.ibm.com>/\
+f630e006d379a16104b235de8ef087d0c89c9dc7/\Bug 559881 - [14] unimplemented methods error for Record highlights
+parameters also incorrectly
+
+Change-Id: I8f65ad0781e84a70b188a65b5d226cee9b476a20
+Signed-off-by: Manoj Palat <manpalat@in.ibm.com>/\
+b6f1330ff0fc1451f26fdecb565dba15a057bfb7/\Bug 558873 - bumped version number for tests bundle
+
+Change-Id: I0731eedb7b731483c7faa3bc1ee1fdce8161c023
+Signed-off-by: Andrey Loskutov <loskutov@gmx.de>/\
+578242f48f51c7fc538f351c9bc8794d2c042d1c/\Bug 558500 - [14] Pattern Instanceof - DOM AST Rewrite
+
+Change-Id: I10e2818e63797ebcfe8f034a92fc564d4aca2e2b/\
+e287357f86bccde12da7d5f22a941ee82f50cddf/\Bug 559911 - [14] Records - Implicit canonical constructor not read
+implicit
+
+Change-Id: I39f4e348e23146bb9605e371a8f2b7c86b8cf7f0
+Signed-off-by: Manoj Palat <manpalat@in.ibm.com>/\
+41c36b71d0f8c591ecbcd302250d5f0a4095a349/\Bug 558873 - fixed build.properties
+
+Added "." entry removed per mistake via bug 543324.
+
+Change-Id: Ic2d46a2af29754cb230a7e9e05fde7339872a878
+Signed-off-by: Andrey Loskutov <loskutov@gmx.de>/\
+c934b0402980c6fbcc23e78648f48c0ce54a2b14/\Bug 559951 - [10,11,12][compiler] NoSuchMethodError at runtime when
+invoking method on multiple bounded typed lambda argument
+
+Change-Id: I6bbe839e83175bef6e7d3b3c6d14b9ea0cc47fbb/\
+caa8a2429d8c7078cf497008e6c7723af7d9f7e7/\Bug 559854 - [14] [model] Records - Add java.lang.runtime.ObjectMethods
+stub
+
+Change-Id: I4b2060eeb9aca109464ec421648cd17c4d33a1b8
+Signed-off-by: Manoj Palat <manpalat@in.ibm.com>/\
+2c9d63bd83e37aedd88060605161c3355cccea06/\Bump o.e.jdt.compiler.tool version to 4.15
+
+Only qualifier change in nightly.
+
+Change-Id: I1a53db34d09cc3dfde0277ae95e65fbd2b7dcb5a
+Signed-off-by: Alexander Kurtakov <akurtako@redhat.com>/\
+b03129971378414b98fb8204d65cd33c36c1209e/\Bug 559992 - [14] Record - Compact Constructor should not have throws
+clause
+
+Change-Id: Ia31e220b456c0ecf103fbe19e80fb6dcd84ed634
+Signed-off-by: Manoj Palat <manpalat@in.ibm.com>/\
+470c18c006bd18cd7dc63747acf5b23da275d723/\Bug 15589 - code assist adds extra semicolons in import type
+declarations
+
+Change-Id: I2a8db9197f590e2633e13f8621026db476b0d2d0/\
+600900529636dc1ed1e9fbf3d9b122a2e82115d0/\Bug 559993 - [14] JavaDoc Grammar should be updated in RecordDeclaration
+and MethodDeclaration
+
+Change-Id: I8665e6f734b17aa89a4431aa68c57f8906c64cb7/\
+45202cd0f6e7a4e98fa6b27d7780c21de3c8ccaa/\Bug 547510 - subword matching for content assist
+
+Added subword matching similar to Code Recommender's Subword completion.
+
+Example: workbench.getmanag| offers
+- getDecoratorManager
+- getIntroManager, etc.
+
+Change-Id: Iad42eeba1c122e958f19d03fa1bd3877d773b17a
+Signed-off-by: Julian Honnen <julian.honnen@vector.com>/\
+5dbb6aab52273e0d8ae36705ace201c1c514583e/\Bug 547510 - tests for subword matching for content assist
+
+Change-Id: I8b0e4e121928a7362e67f1fafbbe45fea9782525
+Signed-off-by: Julian Honnen <julian.honnen@vector.com>/\
+837fc6117452521c22faca53a84b66d3747ac101/\Bug 553154 - [14] Records - DOM AST Support
+
+Change-Id: I247b7fcfc775ec74cb8e6c60f8ed6f45279f2ed5/\
+a457a5aee500850424330cb51a4d360b58b7a5b7/\Bug 559965 - No recompilation when deleting java file from
+test-source-folder
+
+Change-Id: I854478623755e5f30a7ab32ff826c61c60b2e873/\
+14911290092e8bfc431d773b644649190e0eff31/\Bug 547510 - fixed javadoc errors in getSubWordMatchingRegions
+
+Change-Id: I6ac7065477a03f3b81b19a0984a41361e6968a80
+Signed-off-by: Julian Honnen <julian.honnen@vector.com>/\
+686572a074e4fa9ab6cc524da56d021ba7065b22/\Bug 553155 - [14] Records - Formatter Support
+
+Change-Id: I373cd79244dbd81fe6771e07b9f3a117a8735902
+Signed-off-by: Mateusz Matela <mateusz.matela@gmail.com>/\
+9e98794071f445647a82c36dc8d2e6de4274013c/\Bug 559992 - [14] Record - Compact Constructor should not have throws
+clause - further fix for npe
+
+Change-Id: I6c03c899493884e6fae18837f754823cfe37fd2c
+Signed-off-by: Manoj Palat <manpalat@in.ibm.com>/\
+b82b9536f86899de9c0d6386e0843e89b677dc72/\Fixing the typo
+
+Change-Id: I859a08d087dc73754e7587242573d5bad3498d3e/\
+1c92dd5f9d58eadd7db8b2a56a4340f281baa322/\Bug 559965 - No recompilation when deleting java file from
+test-source-folder
+
+Bump version for 4.15 stream.
+
+Change-Id: I87a0be20cccba4a4e62e7d8dfb2f3aacf36c128a
+Signed-off-by: Alexander Kurtakov <akurtako@redhat.com>/\
+2b8e5d83803a6e169bd804472a54b6ca34446445/\Bug 560146 - Enable version comparison for jdt.core repo
+
+Disable version comparison for org.eclipse.jdt.annotation_v1
+
+Change-Id: I2b8e7daf93b625b49e2ee0022dabab75f58c875e
+Signed-off-by: Alexander Kurtakov <akurtako@redhat.com>/\
+135df094d333d63edee5ce30f951043a93ec031f/\Bug 377850 - Error "type X collides with a package" should not be raised
+if no compilation units declare the package
+
+Change-Id: I71932eea45b72258e38f1c2ea6c0e361384f61a0/\
+f8f67606ae10780ec62f44189f86b4bf1a166ba8/\Bug 531715: [14] JEP 305: Pattern Matching for instanceof (Preview)
+
+Flow analysis looking good
+
+Change-Id: Iec4e81d7379bdf97f18c62afc918ae46d66512d6
+Signed-off-by: Jay Arthanareeswaran <jarthana@in.ibm.com>
+Also-by: Stephan Herrmann <stephan.herrmann@berlin.de>/\
+217d41b8767f37a87c2e9a94efe53776518809dc/\Bug 559618 - No compiler warning for import from same package
+
+Change-Id: Iacdd20c09edf4e2a08d39ea591339195c66c3af6
+Signed-off-by: Pierre-Yves B. <PyvesDev@gmail.com>/\
+aea4a805d0676baf90115ecd4505ffd86f0fa9ad/\Bug 560210 - Multiple compilation errors in IDE about unused imports
+
+Change-Id: I645124baf5a0ce1b1bc4d6fbb4ee70dc67656242
+Signed-off-by: Andrey Loskutov <loskutov@gmx.de>/\
+396bc376135bea0e26771bd7ddd2548df55a0e15/\Bug 377850 - Error "type X collides with a package" should not be raised
+if no compilation units declare the package
+
+- fix for comment 24
+
+Change-Id: Ia5ff536ad63d72b068c1714baea9ff10346acc54/\
+6168e4f118f413a7d29228156d2ca29b87548b38/\Increased minor version for 4.15/\
+04350c54d7ad28a9113caced2d4650414a47e120/\Bug 547510 - fixed javadoc errors in getSubWordMatchingRegions
+
+Change-Id: I13a8c0099c610f7cb7811f76c0ade90b80f469d3
+Signed-off-by: Julian Honnen <julian.honnen@vector.com>/\
+1a930ae92c069b627b521736fa49ab1dc3794efb/\Bug 560146 - Enable version comparison for jdt.core repo
+
+Skip version comparison for o.e.jdt.annotation too.
+
+Change-Id: Ife1333e07550ed2f84fae65a6bb0055bb55c628f
+Signed-off-by: Alexander Kurtakov <akurtako@redhat.com>/\
+89f366a91c008f7ff476d2cde4a14dc21ddaf6fa/\Bug 560260 - [14] Provide JSR 269 support for Java 14 features
+
+Change-Id: I2ba1bdbc3fd3cb05b9888efbc21d7cf62454b7e8
+Signed-off-by: Jay Arthanareeswaran <jarthana@in.ibm.com>/\
+4ce8fc36a787f1398903447a1816ff5fb4392149/\Bug 560213 - [null] Bogus warning about @NonNullByDefault enum when
+accessed as BTB
+
+- avoid the new problem in this situation for now
+
+Change-Id: I32f46cf43d3e06336bcddcf79a9a8a46af384706/\
+a5e6a8967df6ce6eb6b2226d37eaefd8a33f0bd4/\Bug 560260 - Record components should also be considered as fields
+
+Change-Id: I9a3813da959235f0f47e0a25e0511ba009c99597
+Signed-off-by: Jay Arthanareeswaran <jarthana@in.ibm.com>/\
+a90251579973a8c3e76704e379d30a19d4354b54/\Bug 560256 - [14] Records shouldn't allow transient as modifier
+
+Change-Id: Ida61262214d78e05160b84c29ad46c8332586c70
+Signed-off-by: Jay Arthanareeswaran <jarthana@in.ibm.com>/\
+d341e1ea348247c4850702a35776351c0b83d262/\Bug 560260 - [14] Provide JSR 269 support for Java 14 features
+
+Remove/fix out-dated tests, add new tests to the top test suite
+
+Change-Id: Icfe3ecda78cef229ab29a20e92e2e4f4770ddb55
+Signed-off-by: Jay Arthanareeswaran <jarthana@in.ibm.com>/\
+a29dbe04febdc3cab76b9c88e8ecd30003e154cd/\Bug 560260 - [14] Provide JSR 269 support for Java 14 features - api to
+get component accessor
+
+Change-Id: I94fcc47a02c5d471dca1c44e809ec8011d8bb5e9
+Signed-off-by: Manoj Palat <manpalat@in.ibm.com>/\
+77a8187efade4da99289e7b85a335358a3c25d08/\Bug 560260 - Add implementation for RecordComponentElement#getAccessor()
+
+Change-Id: Ie7dabc68f0ca8bef769d2d2b80eedb1d5a3d944e
+Signed-off-by: Jay Arthanareeswaran <jarthana@in.ibm.com>/\
+8a639cb02c60e93abb1e500d151326447e7801ba/\Merge remote-tracking branch 'origin/master' into BETA_JAVA14/\
+f451606a372bf23d021449d82dc3e2fdc2c7b68f/\Bug 560310 - [null] Bogus error message in loop
+
+Change-Id: I9f28022b7c8af9dc08f4d7b3962b5b0f9b0fd013/\
+93b7413003d18d7935ee495d0d7167bdca4aa0e1/\Bug 560309 - [content assist] backtracking for subword matching
+
+Subword matcher backtracks and tries to find the next occurence of the
+last matched word on mismatch.
+
+E.g.: "addlistener" should match addListListener
+
+Change-Id: I83fe869982cbe3039cc737a6fe2f427bf0b18a0c
+Signed-off-by: Julian Honnen <julian.honnen@vector.com>/\
+16e1eadc4657dc316ac8ca6016e588e73b09277b/\Bug 560486 - [14] Selecting an accessor method gives record Java element 
+
+Change-Id: If7d47e83e4e9a21e3a25cc1292b52b2849a0815b
+Signed-off-by: Vikas Chandra <Vikas.Chandra@in.ibm.com>/\
+fc369a2f5999be035d8b3bf583ddd0e3d7a1d78e/\Bug 559681 - [14] Refactor rename is not working for component of a
+record.
+
+Change-Id: I05dd629ac6598fc3cc639a2081de68ba67656fd5
+Signed-off-by: Kalyan Prasad Tatavarthi <kalyan_prasad@in.ibm.com>/\
+86de04c2301bdbd31b5a93a385c4771996a4d3bf/\Bug 559995 - [14] Using extends for a Record does not create an AST for
+the Record 
+
+Change-Id: Ibe66886085c5d83107dbfc8b12e40f5d0882ae80
+Signed-off-by: Vikas.Chandra<Vikas.Chandra@in.ibm.com>/\
+8175768b6b993a423bcf78c413d74a3db5c0cb80/\Bug 560531 - [14] Records - compilation error in Records with type
+params
+
+Change-Id: I5e0bfb3bed60e8572fdc5e9308844aea7c073f7d
+Signed-off-by: Manoj Palat <manpalat@in.ibm.com>/\
+7c43c51c2aadd8288e87e1c97b4899d7c46da78c/\Bug 560496 - [14] [compiler] Records - missing final modifier for
+hashCode() and equals()
+
+Change-Id: Ib0b7fd07370747006ffad52b069bf397c83967dd
+Signed-off-by: Manoj Palat <manpalat@in.ibm.com>/\
+1471bbb4048ddc41921cd02c6637026c039a0f67/\Bug 560572 - [14] Record components should be computed sooner
+
+Change-Id: I2b07e62c9629e559eee4094e8bcc264fe837175f
+Signed-off-by: Jay Arthanareeswaran <jarthana@in.ibm.com>/\
+82525da580bb91edd3ce6da88a1444c4b750ed2f/\Bug 560260 - Implicit methods should get specific modifiers
+
+Patch also contains an experimental fix.
+
+Change-Id: Icc1426030f32e0477c4444f7fbbefd898e9365ab
+Signed-off-by: Jay Arthanareeswaran <jarthana@in.ibm.com>/\
+fd004092b02ee9fb497e7b93c98547a8648720ff/\Bug 560605 - [14] Record - static modifier should not be allowed in top
+level record
+
+Change-Id: I1ae22d97d81ea219ba9eed8cb577a29d4ab139ae
+Signed-off-by: Manoj Palat <manpalat@in.ibm.com>/\
+02f2318239f4f57725187ac1964724baf9231ca2/\Bug 543073 - The CompilationUnitSorter.sort() throws on level = 11 in
+4.10 
+
+Change-Id: I9d59929fa2fee1c3b8dc47322233dd38bf74313b
+Signed-off-by: Manoj Palat <manpalat@in.ibm.com>/\
+d5298b9e7642cea9fec52043ed04dc34dbe2cd9b/\[test] Bug 560310 - [null] Bogus error message in loop
+
+- improve test for run.javac testing/\
+f155ad2529cdd4348090a6325d855cd5909e98bf/\Bug 560460 - add java.util.Scanner to well-known fluent resource classes
+
+This removes false positive "unclosed resource" warnings in code like
+
+new Scanner(input).useDelimiter("foobar")
+
+Change-Id: I608f0dbb5438560e4dd48d9fc08dcab39eadb4da
+Signed-off-by: Michael Keppler <Michael.Keppler@gmx.de>/\
+1d8654c7df0790c2b897ff5b2ea778cefeeaa6c7/\Bug 558073: [13] Var type with switch expression + yield doesn't infer
+the correct numeric type
+
+Change-Id: I14d83f918479da63f84a45721813ff2b51320393
+Signed-off-by: Jay Arthanareeswaran <jarthana@in.ibm.com>/\
+91dbfcd102dd27313e46aae5ce3460eacbf78c1d/\Bug 549687 - NPE in AnnotationDiscoveryVisitor#resolveAnnotations in
+modularized project
+
+Testcase and partial fix
+
+Change-Id: I23946998d9b58351dd23723e5de185f44b966b15
+Signed-off-by: Jay Arthanareeswaran <jarthana@in.ibm.com>
+Also-by: Stephan Herrmann <stephan.herrmann@berlin.de>
+
+# Conflicts:
+#	org.eclipse.jdt.compiler.apt.tests/lib/apttestprocessors8.jar
+
+Change-Id: Iac9132500252ea10d21ce30a26f9200a5b0d15c9/\
+964325af9709ba62fa989bec14800789b319273e/\Bug 560486 - [14] Selecting an accessor method gives record Java element
+- test case correction
+
+Change-Id: If699d2eae4b5c57693e61f833ab8cd0817017e48
+Signed-off-by: Vikas Chandra <Vikas.Chandra@in.ibm.com>/\
+a9300a752feef20de270d243af1e4ee002ce67bd/\Merge remote-tracking branch 'origin/master' into BETA_JAVA14/\
+226f750049a9b41bd361ef869ab2e734f3d112d6/\Bug 560569 - [14] generated record class file has some kind of weird
+side effect - REF_getField
+
+Change-Id: Iba7fef7b8a208b34c20176925e7cf0202f02e97c
+Signed-off-by: Manoj Palat <manpalat@in.ibm.com>/\
+a4e6e304fcc64bd320167a7edd3aec29a9a71799/\Bug 560486 - [14] Selecting an accessor method gives record Java element
+
+Change-Id: Ie72e440667a0bd9cba39578eab38927928c8b815
+Signed-off-by: Kalyan Prasad Tatavarthi <kalyan_prasad@in.ibm.com>/\
+e84b46d6a6dd8cfd8bfdec3426ae8a9cbb8c0168/\Bug 560486 - [14] Selecting an accessor method gives record Java element
+
+removing unnecessary spaces added in earlier commit
+
+Change-Id: I4f1db6f718b4c9220ce880f5bb2380371e4f5845
+Signed-off-by: Kalyan Prasad Tatavarthi <kalyan_prasad@in.ibm.com>/\
+51f8b603b211559e8b2067d2995a7f7a9e1c3064/\Bug 553157 - [14] Records - Content Assist - don't propose extends in
+arecord header (but propose implements)
+
+Change-Id: I61ca61b3b8371349a5b75d874a9dee7f86fa5855
+Signed-off-by: Vikas Chandra <Vikas.Chandra@in.ibm.com>/\
+ad33648384270b784ad2878e500f82e5194f5b67/\Followup of Bug 560569 - [14] generated record class file has some kind
+of weird side effect
+
+Change-Id: I910b835a9ff6db55b813bc3d840b3ac0f6a3d503/\
+884426b70ece60a939e811242b01797de361ea35/\Testcases for Bug 560496 - [14] [compiler] Records - missing final
+modifier for hashCode() and equals()
+
+Change-Id: I366377f035e6cbad757753ecddd68413fb3112b2/\
+f627c1bdecbf15afcb87348fce6de73a1ba9cd83/\Fixed bundle versions/\
+0f7f8deedae272c9a2f72b3f6d1f52ac38edc3ee/\Bug 560772 - Local ecj build has a SHA-256 digest error for
+org/eclipse/jdt/internal/compiler/apt/model/PackageElementImpl.class
+
+Change-Id: I0e8951b17e272038957726237d8d9eff77c6514e
+Signed-off-by: Andrey Loskutov <loskutov@gmx.de>/\
+11dd9578c7f190fac49318048b76432efece0744/\Bug 560797 - [14] Record - strictfp modifier not propagated to generated
+accessor Methods
+
+Change-Id: I7a6d0aa1f8deeed2444ff682c3999c1be5e2b977
+Signed-off-by: Manoj Palat <manpalat@in.ibm.com>/\
+7601d403b8b31d50dd1d645fb682f4680aecd879/\Bug 560798 - [14] Records - Annotation on record component with
+PARAMETER target flags error 
+
+Change-Id: Iea362a1f204cc68afc277bd628e669d747d20eaf
+Signed-off-by: Manoj Palat <manpalat@in.ibm.com>/\
+e188366329611d605f4319b66a94346c7a680248/\Bug 560827 - [14] CR followed by LF in a textblock is interpreted as two
+line endings
+
+Change-Id: Ie161411e2b2f6c8b15c2283f5c5dcfb5d17c50a9
+Signed-off-by: Jay Arthanareeswaran <jarthana@in.ibm.com>/\
+7b9c1df21cde1b5da90ba32b2b81b393dde632ed/\Bug 553157 - [14] Records - Content Assist - records not proposed as
+something which class can extend
+
+Change-Id: I0e801a30fdc4ab737409fe695a3833bad5ebb194
+Signed-off-by: Vikas Chandra <Vikas.Chandra@in.ibm.com>/\
+d60d0212175c31196c40c450c809a6ee2a61fa43/\Bug 553088 - [14] DOM Support for JLS14
+
+Change-Id: I95f0b71a7089d4089dfd6c08e34d3fa6eca91ff1/\
+bd89306e771be576120e18438ac04b90194f0798/\Bug 560770 - [14] No preview warning on record
+
+Change-Id: I4873da612a3d4749e5195c117bf62d1985d67f26
+Signed-off-by: Manoj Palat <manpalat@in.ibm.com>/\
+1228f1ca4ab16fa96b65bec99578ba70bdccab59/\Bug 560872 - POM and product version change for 4.16 release
+
+Change-Id: Ib88763c36636b8417b6f9fb9558341f88f8016b2
+Signed-off-by: Mat Booth <mat.booth@redhat.com>/\
+274629e31baf81131db0bde27ed8a15272b193a5/\Bug 558008 - [14] Record - DOM AST rewrite support
+Typo correction
+
+Change-Id: I834343b8099842177b21e2b7b2ba84af31396706/\
+d92f20e7ce752561e581c2c9a51bcb5817f26adc/\Bug 560569 - [14] generated record class file has some kind of weird
+side effect
+
+Change-Id: I5d923de9b0ffd476565e26e5e0322bd2c43484d4/\
+b36bc0524351060dad1c1631ea3e7b2594092d1a/\Bug 560002 - [14][javadoc] Records - javadoc for record components
+
+Change-Id: I326e0bdac3e7ec4a08cc98a7ba35bde58f9465e1
+Signed-off-by: Vikas Chandra <Vikas.Chandra@in.ibm.com>/\
+6611b61c758636fece38ddf7ffc146e23e6a22b0/\Bug 560878 - Enable API check for new bundles introduced in 4.15
+
+Change-Id: Ie78d8d72df075a59205221a9a8f18ed43441220f
+Signed-off-by: Mat Booth <mat.booth@redhat.com>/\
+fae0790db3a22ba0cf89ab840b93023966f7fbd8/\Bug 560807 - [14] IType.isRecord returns false for record
+
+Change-Id: I4bfd7cb731e55a4c13a4357e4929855c78cc234a
+Signed-off-by: Kalyan Prasad Tatavarthi <kalyan_prasad@in.ibm.com>/\
+0868f3b2221bc1d98910c1d867395871c555bc88/\Bug 560610 - "Bound mismatch" compilation error if analyseResourceLeaks
+option is enabled
+
+- includes update of version service segment
+
+Change-Id: I8bc4fffb961bd4bd0f73f1575e54949e76c01838/\
+e58a73a30002eec95ace959394ec18f1f85b30ef/\Bug 560634 - Eclipse rebuilds after every restart when "Use '--release'
+option" is enabled
+
+Change-Id: I75518c74937bfed1d0810e75bf85e9ee1f5e5c43/\
+f029daf7acccc5f5889eb324b1ca254310bcea0a/\Bug 560606 - Avoiding extra semicolons in import type declarations does
+not work in modular context
+
+Change-Id: I9d9a5df97a84555635dbadb48514da95da6432ce/\
+2e0d5e83a26a37b546777ce45b1eba2858d7a2e0/\Follow up commit for 
+Bug 560807 - [14] IType.isRecord returns false for record
+
+Change-Id: I383e4e0a50bb8ca1200a4c101668d4f62d6cdbae
+Signed-off-by: Manoj Palat <manpalat@in.ibm.com>/\
+ff8398f15aafcf8583bb74da76b165cd0e423d22/\Bug 531715: [14] JEP 305: Pattern Matching for instanceof (Preview)
+
+Addressing leftover issues + more tests
+
+Change-Id: I8d0a2304e8c5eac30e138b319c1b7214434e6fac
+Signed-off-by: Jay Arthanareeswaran <jarthana@in.ibm.com>/\
+ba1cb527d6d2e1825e762adfa4fb05cac5381fc5/\Bug 552678 - [14]JEP 368: Text Blocks (Second Preview)
+
+Change-Id: Ib92a75355f6633a4c105d4d2016d79b4117d80c2
+Signed-off-by: Jay Arthanareeswaran <jarthana@in.ibm.com>/\
+91bd2c3486aeb4a2ef91ad352e023e842c8284d0/\Merge tag 'S4_15_0_RC2' into BETA_JAVA14
+
+4.15RC2/\
+eae3ae38f0982820e1de548fa410e91e48d769c2/\Bug 560893 - [14] local record and internal record are not supported
+
+Change-Id: I2b79500fa23ca1aebd29ef1e4d77a19bc3828cb2
+Signed-off-by: Manoj Palat <manpalat@in.ibm.com>/\
+af2a72dd016b73df047da1ca46d9a5635f908e25/\Bug 560781 - [14] isRecord for a SourceTypeBinding for a record with
+compilation error gives wrong result 
+
+Change-Id: I745c0cdfe00060dbbd08960070ecf3786cd4b860
+Signed-off-by: Vikas Chandra <Vikas.Chandra@in.ibm.com>/\
+8c58d652d5dcf22d3523bcd8a35bba72614d86bd/\Bug 560566 - Incorrect Collectors.toList usage leads to compiler NPE
+
+Change-Id: If5acee1490aaca0968543097fa813a842f071f98/\
+96d1214c2ac9504c781ee817afb739ad6a8f112c/\Bug 560671 - [resource] "fluent resources" are not correctly analyzed in
+assignments
+
+Change-Id: I9a5920b3a982c6f4c929831c99278b373fe81548/\
+f75ba1319d83aca6f56f1c9b61eae3fd3810d561/\Bug 560733 - Missing warning of unused variables in try-with-resources
+declaration
+
+Change-Id: I3273d4ada2d9321dde9b1bf22b692d571eeee1a2/\
+9402ee8f2280c526360ce0226a047878111c21e3/\Bug 561048 - [14] Search not available for Instance of pattern variable
+
+Change-Id: I66c7f4b3b0fc2d7cd440b83c2763b760c2156889
+Signed-off-by: Vikas Chandra <Vikas.Chandra@in.ibm.com>/\
+2b6a1206266d3642885f54f48046c058af9f6bb2/\Bug 560357 - Enable subword matching by default
+
+Change-Id: I0c82b241fee8fcd7c2cca5a363f2548b8e009446/\
+f16860cabf179b4fc7a31f62623a15fd4f8284be/\Bug 561067 - [14] - Refactor rename of instanceof pattern variable
+doesnt work
+
+Change-Id: If6ba3db68a8a5a38d1771604ef62184fb7080fec
+Signed-off-by: Kalyan Prasad Tatavarthi <kalyan_prasad@in.ibm.com>/\
+0de573041a4b0b06b89efcb8706e364b5e40b25a/\Bug 560499 - [14] Run all search tests on gerrit
+
+Change-Id: Idecc1c849a0219ea0ce4d02ff295e1ed7e19f11d
+Signed-off-by: Jay Arthanareeswaran <jarthana@in.ibm.com>/\
+520c1ca5bf6a7bb2d987a57fe70a7d3c885c64a2/\Bug 561092 - [14] Renaming record does not work correctly
+
+Change-Id: I02b8f113ed48526c71ba3455e24771a70502ab12
+Signed-off-by: Kalyan Prasad Tatavarthi <kalyan_prasad@in.ibm.com>/\
+481744a9c272ce6253d34826b0bcee179b8e8fa5/\Bug 561049 - [14] Organise JDT completion tests for Java 14 
+
+Change-Id: I624d80500e0b8d75f5e9907e02c1e11c29d7c9e9
+Signed-off-by: Vikas Chandra <Vikas.Chandra@in.ibm.com>/\
+a1ebb241d08b63d5c03db6c6cb0f731a4356f894/\Revert "Bug 560733 - Missing warning of unused variables in
+try-with-resources declaration"
+
+This reverts commit f75ba1319d83aca6f56f1c9b61eae3fd3810d561.
+
+Change-Id: Ia296747b3139c59df6002a19e63c4d0420ce745f/\
+d4d67ab78052cc98a3ad76758af409158d954850/\Bug 559682 - [14] Copy and paste of a record file with compact
+constructor in a package gives errors
+
+Change-Id: I7fef6fe9abb164babbb99aab9d1730b005c4c4b2
+Signed-off-by: Kalyan Prasad Tatavarthi <kalyan_prasad@in.ibm.com>/\
+772125095eab0669100f2dbafe4e1f30093a0758/\Bug 559774 - Fix test that fails with older JDK.
+
+Change-Id: Ic4378f589e896a146c8468aa1a1f775ce5d7a182
+Signed-off-by: Jay Arthanareeswaran <jarthana@in.ibm.com>/\
+95bb1d85f27248c09348a3f72af4627fd313121c/\Bug 553252 - [14] Incorrect compile error for preview features in Java
+13 project
+
+Change-Id: I1a8bf8091023b7b9975cd3fbf55845fdfc13ad46
+Signed-off-by: Jay Arthanareeswaran <jarthana@in.ibm.com>/\
+ed4b9173725302c434932874e3ec8c1acc7fdc4f/\Bug 553157 - Fixing warnings and few other formatter issues, missing
+copyright etc.
+
+Change-Id: I295db2fd627b61db42319e7b85c398a0bdbc07c5
+Signed-off-by: Jay Arthanareeswaran <jarthana@in.ibm.com>/\
+4dcac34f08be4d041f740a302c941b1977d4a354/\Bug 561147 - Typo in javadoc in AST.java
+
+Change-Id: I9bd5bc1cc5ebe3ae1ade571b80d61d57d673bf72/\
+4314d0ca19d28e8749c2fc2ac2a43b5da7d5128d/\Bug 560954 - [14] [javadoc] Records - javadoc for record components
+
+Change-Id: I5c60c9d10cf62dea99d084016376e4d7b40bddeb
+Signed-off-by: Vikas Chandra <Vikas.Chandra@in.ibm.com>/\
+f3f6d2572e4a965b4fb2c7fd4300166e4879a5fb/\Bug 560954 - [14] [javadoc] Records - javadoc for record components -
+add test to gerrit tests
+
+Change-Id: I55a35ecfd624315d53bbf7de435d93004f573e24
+Signed-off-by: Vikas Chandra <Vikas.Chandra@in.ibm.com>/\
+17816c831a3202386281d49d135b77bfc7026bc4/\Bug 560954 - [14] [javadoc] Records - javadoc for record components -
+added conform tests
+
+Change-Id: Ic482598373c01af72dd1fc8291eceb92737101a4
+Signed-off-by: Vikas Chandra <Vikas.Chandra@in.ibm.com>/\
+9b69fdf7c7510a2147ee6b2d9e09939d21c2842d/\Bug 561156 - [14] Record - return type size incorrect in generated
+synthetic methods
+
+Change-Id: I3834c0da016f50bf971f625f72ece65671cb1693
+Signed-off-by: Manoj Palat <manpalat@in.ibm.com>/\
+1671aa612b846f4ca6a0f77c344c83b5e9339964/\Bug 560954 - [14] [javadoc] Records - javadoc for record components -
+- fix the failures and the compiler warnings
+
+Change-Id: Id19bcfe899d65e36f2b726ca241812a78dade71d
+Signed-off-by: Manoj Palat <manpalat@in.ibm.com>/\
+3f9675b9ac3cc321bd33f36f64b997cd2743f750/\Bug 551496 - [14] Remove JCP disclaimers from code, UI and marketplace
+
+Change-Id: I83d9bb822140edf0e641eb61f759fb1ee7e502f2
+Signed-off-by: Jay Arthanareeswaran <jarthana@in.ibm.com>/\
+fb08cc33a608153aa4196a0190bc3fc6400f31cb/\Bug 551496 - [14] Remove JCP disclaimers from code, UI and marketplace -
+removing BETA references from @since and related changes
+
+Change-Id: I938034df37f12d4ce08e2d5707bbc29e91220401
+Signed-off-by: Manoj Palat <manpalat@in.ibm.com>/\
+1d93e583fd67508f466d0e91149e0cd736c0f66f/\Bug 551496 - [14] Remove JCP disclaimers from code, UI and marketplace
+
+Change-Id: I6ab42af1d02f3328be6f7a4a2b385e9530750e56
+
+Change-Id: I6ab42af1d02f3328be6f7a4a2b385e9530750e56
+Signed-off-by: Jay Arthanareeswaran <jarthana@in.ibm.com>/\
+68476795d25c8454169503ab189322c253063d37/\Merge remote-tracking branch 'origin/BETA_JAVA14'/\
+2068e62f1437cc42d9847f614396a5445cddb7d7/\Bug 551496 - Update all @since versions to 3.22 (the version currently
+in master)
+
+Change-Id: Ic30c608996e5fbccd61abbd5373e7831aa4650fb
+Signed-off-by: Jay Arthanareeswaran <jarthana@in.ibm.com>/\
+90ab6aaa9a215307f91675f65724e5ab66d67f5c/\Bug 551496 - [14] Remove JCP disclaimers from code, UI and marketplace -
+minor followup commit.
+
+Change-Id: I2030675be2554f343740c90defa1241d53c3c427/\
+ff4cd0e7a3e7dd9c3c572610c9c83650924e91f4/\Update bundle versions that were modified
+
+Change-Id: I631c3ede6b289a197866b61d7a0e578e9493ebbe
+Signed-off-by: Jay Arthanareeswaran <jarthana@in.ibm.com>/\
+ffd1d14944dd1c9e256837a9088cf467472e0b76/\Bug 561237 - [comparator] Comparator errors I20200318-1800
+
+Change-Id: I6a90c0f977986f4ae60710fbd00c69693ee0c2ea
+Signed-off-by: Manoj Palat <manpalat@in.ibm.com>/\
+268f86fe8d807ed77eeb83bfc0abbf7661409e25/\Bug 561193 - [14]record keyword inside method not colored correctly
+
+Change-Id: Icd6ca112cab3506f7835f14d99fa17eb33eb0277
+Signed-off-by: Kalyan Prasad Tatavarthi <kalyan_prasad@in.ibm.com>/\
+8f68ce4464f063259009e409d974e96ed60fe208/\Bug 561251 - [14] CR followed by LF in the beginning of text block
+inserts an additional line
+
+Change-Id: I34d6225df698a68289ff10dc497c3855ba1ce8fa
+Signed-off-by: Jay Arthanareeswaran <jarthana@in.ibm.com>/\
+07329519f5ac8fd8379eab265d25b2c09a24fd96/\Bug 561259 - [resource] closing inner resource of wrapper chain causes
+warning out outer resource
+
+Change-Id: I044c098ea89317be5fb447429fc9250cf22923b9/\
+e56c823649b351a74f287ec1479c9004ef6ed11f/\Bug 560451 - Activate automatic removal on unnecessary whitespace in
+org.eclipse.jdt.core
+
+Change-Id: Ie27502ac7333e8940a5f0e78fbb749a2c210b5d4/\
+4e1bb8251ee41afe829d845246fe030af7d2d0f0/\Fix version for bundle that has changed
+
+Change-Id: Ie564ef54791d0c94bc96728c63e84022b89a11bf
+Signed-off-by: Jay Arthanareeswaran <jarthana@in.ibm.com>/\
+3f3180b4fac968256f3e4b126c5b6a9ed43cebcc/\Bug 526116 - JavaElement#openWhenClosed may close comp unit working copy
+
+Change-Id: I5198306e0a138463a556524d62c36246219cc819
+Signed-off-by: Eric Milles <eric.milles@thomsonreuters.com>/\
+a237222f20259f2e35c7ba1b198d1bfe885f1e78/\Bug 560451 - Activate automatic removal on unnecessary whitespace in
+org.eclipse.jdt.core
+
+- enable save action
+
+Change-Id: I1cb6b3e68b6efc06576caee6f672fb0801986af2/\
+2e700e6675151e21ac162e348e34ce6d8a92e1ec/\Bug 560451 - Activate automatic removal on unnecessary whitespace in
+org.eclipse.jdt.core
+
+- bump versions
+
+Change-Id: I879aac0ca29c37b417397412cb63d79f9b6222a6/\
+ac501ce52b87c123d5cc8164d8865aff590f4be1/\Bug 418795 - [compiler] Unnecessary cast warning is wrong when casting
+primitive to object type
+
+Change-Id: If1ff8dcb9d5e8b10dee9cdd06d798e22d64877bc/\
+469a566103170a86792f84175198e9ea4e7b49cf/\Bug 521778 - Meaningful floating-point cast is treated as unnecessary
+
+Change-Id: I1f1d8eb1758aae3156d99f0dfc32e484e2472f16/\
+8c29a0f2ca923455e4c772743b032a9fdf573af8/\560889 - [formatter] Unneeded wraps with "Format edited lines" save
+action
+
+Change-Id: Ia37d2728a6d7823ec49e4cb331ad975073ea6c6b
+Signed-off-by: Mateusz Matela <mateusz.matela@gmail.com>/\
+37724c7804da2fbd6930fc8a681b5ab8bfb7c6aa/\Bug 559723 - Add override annotation
+
+Change-Id: I16c34dd4608c27688faa5ca28da2d5d142b23086
+Signed-off-by: Carsten Hammer <carsten.hammer@t-online.de>/\
+f77044f0b1e3fb751a26d1f579e5ef117376d757/\Bug 559724 - Manual array copy Use Arrays.asList or System.arraycopy
+instead of copying array in a for
+loop
+
+Change-Id: Ide697655e30fe65b99e4b082c8737b7ddd44655b
+Signed-off-by: Carsten Hammer <carsten.hammer@t-online.de>/\
+4e8b7c5ae715a08685a321654686b706c660b6f3/\Bug 561280 - [null] another wrong warning after 64 fields
+
+Change-Id: If52fa9a1f6fa0d9607037ad8e84eb794f61cce90/\
+6520c240d5ddc5834c89e4c6334e4036fed8bc73/\Bug 558718 - [14] Record created in a Java14 project with previews not
+enabled does not throw appropriate error
+
+Change-Id: Iaa3d852f4659b9ede85177076a418328daf3076a
+Signed-off-by: Kalyan Prasad Tatavarthi <kalyan_prasad@in.ibm.com>/\
+93f1e3dfaae626044d5cf2c9504cc6361ce28828/\Bug 561439 - Failures in test mode jdt.flow.test.extra
+
+Change-Id: If53fa0ec53d5783311b243241e61be2e050dc7b9/\
+649f56eb1d0af8d8c57e5b7f2f6e533d2978ab71/\Bug 561287 - temporary flag to check if bug 559965 is related
+
+Added system flag DISABLE_FIX_FOR_559965 that allows temporarily "undo"
+the fix for bug 559965. If the flag is set to true, the fix for bug
+559965 is disabled.
+
+Change-Id: Idb5e515af30dfe857fc450aae4b7839669fbcf77
+Signed-off-by: Andrey Loskutov <loskutov@gmx.de>/\
+1af077ed411af15b32b25dcb86f4750f98237ed1/\Revert "Bug 561287 - temporary flag to check if bug 559965 is related"
+
+This reverts commit 649f56eb1d0af8d8c57e5b7f2f6e533d2978ab71.
+
+Change-Id: If5ff1797b99bc04ec058cf55e480ad093304dab0/\
+b22f05252a5dfd6b1d6030f09cc92daa7dd6c2dc/\Bug 561316 - [test] regressions in jobs eclipse.jdt.core-run.javac-*
+
+- reverting infra structure changes from bug 531715
+
+Change-Id: I941128bc64211b27b7c7d12a556ad4b3a7266fa5/\
+78780b68b5ff0638fc0959b1558d0983c80ccaf0/\Bug 465085 - [null] False positive potential null warning/error when
+using isInstance()
+
+Change-Id: Ia1a92c41b0cc7f21f56efa0ea8b19f5dd4a045bc/\
+11bfdeef6d0486b1e737526983b27922b011a974/\Bug 552082 - Fix the applicability of a no-@Target annotation type
+
+- add an excuse for javac bug JDK-8231436, not yet fixed
+
+Change-Id: I065a8db1c3ac1616b38ee0d4e132cde7c693e298/\
+f45640e68f703e4e86cce5d8659260815b7ac0c1/\Bug 561549 - [1.8][annotation] javac no longer complains about type
+annotation on static type part
+
+- add an EclipseJustification
+
+Change-Id: I8ba7c5a8ab8a22ce1ad43d68990d04625a8b57ae/\
+61a4dab578c7398aef3409a2b85df5352d8e7063/\Bug 465085 - [null] False positive potential null warning/error when
+using isInstance()
+
+- !Class.isInstance(x) does not imply x == null
+
+Change-Id: I0f510f3ac95ea76613cfd8e4bd1bc8250c9ff94a/\
+20fcfe25af9df981d82c1572f9c3e97221753210/\Bug 472446 - [compiler] bogus warning "unnecessary cast"
+
+Alternative fix:
+- minimally extends the fix from bug 418795
+
+- add new test to CastTest
+
+Change-Id: I88df88e119826f41ebf896b59a90f85e629b5e48
+Also-by: Stephan Herrmann <stephan.herrmann@berlin.de>/\
+a73b1a7fffb30d9caa292d9b62a6eaaac4b616ef/\Bug 561287 - Incremental compilation reports spurious compilation errors
+with bigger workspaces
+
+- band aid
+
+Change-Id: I71246702519f3d7f10359a9a41967b80b0f9c718/\
+0ca9ce0133667c7b75c2eb41398cdad2069d4e43/\Bug 465085 - [null] False positive potential null warning/error when
+using isInstance()
+
+Change-Id: Ica0b19897bd64b4686658f297aefc2f00b2bec91/\
+a06381b8b8c907dc5f2f29fd27f4b1bc1c254de9/\Bug 561044 - [14] jdt.compiler.tool.tests do not finish after the Java
+14 work
+
+We should pick up all libs from the lib folder, instead of individual
+jars. And this is consistent with other test bundles.
+
+Change-Id: Id0c0a428438837a7bf88be7c6e0b9a2ccd042614
+Signed-off-by: Jay Arthanareeswaran <jarthana@in.ibm.com>/\
+f375124eefbf3be4e9a3be4afb14413b2ffad795/\Bug 561528 - [14] Records - Eclipse hangs for records with recursive
+type parameters
+
+Change-Id: Ibecaca2ae156d2feddf1c6ae296ccdec5332cec1
+Signed-off-by: Kalyan Prasad Tatavarthi <kalyan_prasad@in.ibm.com>/\
+16112d59e5818c281ad57b4e6c29e1b7ed251c41/\Bug 553564 - Create a new scope kind Scope.MODULE_SCOPE
+
+Change-Id: Id6fbd309f10cd3108f1eb350b8fdfbc35442bffb
+Signed-off-by: Christoph Langer <christoph.langer@sap.com>
+Also-by: Stephan Herrmann <stephan.herrmann@berlin.de>/\
+83ee02d468cc5498d7763e491576ef4a26a35af3/\Bug 560076 - [null] UnconditionalFlowInfo.isDefinitelyNull(...) throws
+NullPointerException
+
+Change-Id: I9939a2a604bed2b5216f34344555b350be8765d0/\
+5888605027c9bd10c9c03fc2378abfb62445217e/\Bug 561197 - extracted subword matcher
+
+Extracted logic out of CharOperation in preparation for better word
+boundary detection.
+
+Change-Id: I7f0b3ea4625235406c5300b8ebbc42b35b847b4e
+Signed-off-by: Julian Honnen <julian.honnen@vector.com>/\
+2b199baf0f81213aba0a780e24afc49286b99d4a/\Bug 561197 - improve subword boundaries for UPPER_CASE names
+
+Find all word boundaries in a first pass via state machine.
+Distinguish between consecutive upper case letters in camel case vs.
+caps names:
+- getXYListener has boundaries at |get|X|Y|Listener
+- UPPER_CASE_NAME has boundaries at |UPPER|_|CASE|_|NAME, but not
+  in-between separators
+
+
+Change-Id: Iffddd4307068a6194d207cca9143d733d18f8c10
+Signed-off-by: Julian Honnen <julian.honnen@vector.com>/\
+74957ea9182f53b199c28221d0b1f24ac23dc7b4/\Bug 545567 - [14][codegen] switch expression with try -
+java.lang.VerifyError: Inconsistent stackmap frames error
+
+
+Change-Id: Ie62fe6bc58501a832e0bd3630fd955957d4081a2
+Signed-off-by: Manoj Palat <manpalat@in.ibm.com>/\
+71348ee7db5a47af8f56e03c9070953ebc8d7589/\Bug 561762 - [14] Switch Expressions - Error not flagged for incorrect
+yield with lambda
+
+Change-Id: I4de25f817806caa0f2dd5a955fcb95669d744caa
+Signed-off-by: Manoj Palat <manpalat@in.ibm.com>/\
+da6e9f80c68f81fc210e3e1cb9b5667993200959/\Bug 561316 - [test] regressions in jobs eclipse.jdt.core-run.javac-*
+
+clean-up in
+ - TypeAnnotationTest (incl. excusing a javac9+ crash)
+ - RepeatableAnnotationTest (javac excuse)
+
+Change-Id: I6bd6a953671eb3e33158542187a877d6a5d36f9f/\
+e3c63bc9f4d24230bbbf0479451396a17305624c/\Bug 561766 - [14] Switch Expression - NPE in nested switch expression
+with yield
+
+Change-Id: I5360b9a0f65b580243196c981abedfcf7d66c849
+Signed-off-by: Manoj Palat <manpalat@in.ibm.com>/\
+1516e7dfb31d2d0e5dd3c25b8d561bd62562204a/\Bug 561439 - Failures in test mode jdt.flow.test.extra
+
+Also: improved debug toString() of UnconditionalFlowInfo
+
+Change-Id: I09f9fd02c96914ddfcdffde7ba6ae6936f2e8dfe/\
+2dc615c30449e9dd89c3902662985505bf1b042b/\Bug 560204 - Map Diagnostic.Kind.{NOTE,OTHER} to ProblemSeverities.Info
+
+Formerly those Kinds were emitted as warnings, which is wrong and may
+make builds fail when they should not. ("Zero-warnings builds")
+
+Change-Id: I2e4c9bd15af412bed7ce4a2e76262076900b6fe4
+Signed-off-by: Thomas Wolf <thomas.wolf@paranor.ch>/\
+08cd89a2896cd4516e93fdb50d014faa8b4b73c7/\Bug 560471 - Several typos or omissions for JDK version support
+
+Change-Id: Id30ecbcb8418a153037c4b04c549c7244223ba86
+Signed-off-by: Eric Milles <eric.milles@thomsonreuters.com>/\
+a4fb8c4975c8ed11fc286c74470669c60c9a406b/\Bug 560813 - [test] Java12ElementsTests.testBug549687() failing with JDK
+13+
+
+Change-Id: I19d3baef2795827cab632706b71083e10080bb03
+Signed-off-by: Jay Arthanareeswaran <jarthana@in.ibm.com>/\
+9d535d0548290d0ca132ef241e97a53b849902fb/\Bug 299378 - OperationCancelledException should be handled gracefully
+
+Change-Id: Ia74740db40c8271a185de1f71acfbb50c329193f/\
+bd136f6c5758768b001961053c4be86ba5bc57bf/\Bug 561132 - [14] Hovering over Pattern Instance of variable in block
+does not work
+Change-Id: Iaca24228cc320bcffb23b3d7ffb38a256d5cdac2
+Signed-off-by: Jay Arthanareeswaran <jarthana@in.ibm.com>/\
+513601d5a68cd7549ce42323561cebf04335f0f7/\Bug 561132 - Test case
+
+Change-Id: I3134a4abb9686d93d01335e079142ad9655b91f8
+Signed-off-by: Vikas Chandra <Vikas.Chandra@in.ibm.com>/\
+71f80e637624f7302f077d9c9282eb666920ea4d/\Increased version number for 4.16/\
+f99415b04dd8d083fc4f548a7806e464afa729d9/\Bug 561844 - [14][test] SwitchExpressionsYieldTest tests need to remove
+preview
+
+Change-Id: Ief0c32c84210f84678e5463906b1930f2309f451/\
+64f1a513a862ff415c7d90370eb028e1350d6e03/\Trying to fix version issue in repo report. Will revert if it does not work/\
+7b9776d4f4b2785a2713ae2e9f4d6eec904275fe/\Bug 562057 - [14] regression in diagnose parsing is made the test
+expectation
+
+Change-Id: I9f510ba4654313197c6617c906cc5829c82994d4/\
+65d3e80b07d0f8e0f4597b44343f86b9c784fd42/\trivial clean-up: remove import that is now detected to be unused
+
+Change-Id: Icf7c0d231019766bf723de53e99fbce5432dcfc0/\
+a5d182a56da4684d8c90405e6432596d3d1bb373/\Bug 531715 - Fix scenarios when the expression is not a name reference
+
+Change-Id: I79004238b56eee21e2282b9cc2b09f4e467efa16
+Signed-off-by: Jay Arthanareeswaran <jarthana@in.ibm.com>/\
+e21293c175f879e1f8b293e5dceaa724ea711e0f/\Bug 561139 - [14] Report missing param tag for component of record
+
+- add logic to Javadoc.resolveTypeParameterTags to handle record
+  parameters to add checking for duplicates, missing tags, and
+  invalid param tags
+- add tests to JavadocTestForRecord
+
+Change-Id: I59c4c66b5f437f85b18a5524b173679400364f46/\
+352109cf982a5a3f6946f2f28b39248397aabc0f/\Bug 560291 - Fix -nowarn for warnings from APT processors
+
+Since APTProblems do not have individual IDs filter them based on the
+severity before logging or passing on to a DiagnosticListener.
+
+Change-Id: Idfd375036e12495b658726ba9349eaa63e92f916
+Signed-off-by: Thomas Wolf <thomas.wolf@paranor.ch>/\
+4b54df8150d0f19c517019d4235447cc1a048e9b/\Bug 561778 - [14] Records - Generated record members return Object
+instead of T in a generic record
+
+Change-Id: I4cc674ee1a7a94a641c36d9c5dd4dc29f85867cb/\
+c31996959a111b9c8cca0fab738a829d27ffdc80/\Bug 562129 - NullPointerException on SwitchExpression.resolveType
+
+Change-Id: I4938b48ed7bd0a95ba2ac4be647a7b7e8a041677/\
+dc174590e55bcfc1a1d665509aa1061ced17ed6e/\Bug 562128 - JavadocTestForModule not being run
+
+- add JavadocTestForModule to JavadocTest
+- fix JavadocTestForModule testBug549855b() and testBug549855h()
+
+Change-Id: Id7f3a97b0f27e35ec00a21647da1e63d1cdfdc2e/\
+2879704212fa36dd959c9c467a2ea65bd9f6ed3c/\Bug 552769 - [14] ComplianceDiagnoseTest.test0042 and Compliance_1_{4,
+5}.test079 failures
+
+Change-Id: I283d1e0a180bbd66c6678c96bc8d9f311f811169/\
+48c3f7668a46f27425bc5e21e2fddae8aa0efebd/\Bug 562198 - [14] Switch Expression - CCE in switch expression with
+yield array access
+
+Change-Id: Id55242e9f61c33d8b7596f9a7b796c85e3640254/\
+30c7385ebc8bdb1713175816d6766d1ba583823a/\Bug 562044: Simplify generating the parser-
+Add a script for generating the parser. It requires that you set
+String Substitution JIKESPG to the full path of the JikesPG executable.
+
+Change-Id: I3ac12276b82935613074e244f6f4722ff03349fa
+Signed-off-by: Bart Jacobs <bart.jacobs@cs.kuleuven.be>
+Also-by: Stephan Herrmann <stephan.herrmann@berlin.de>/\
+73db115343008e6a7b78545d57ef9666495f5546/\Bug 562219 - [14] Records - Error not flagged for records in method
+local inner class
+
+Change-Id: I154ee820bb5c4dc22e41b0cdc8b8cd8b0b056645/\
+9e45ff2497c133b1d310b103512373907c614f77/\Bug 562242 - [14] RecordComponentElementImpl should override/impl
+accept(...)
+
+Change-Id: I261d3f1ebf40defcdbf7c2712ae5bedb774d921a
+Signed-off-by: Jay Arthanareeswaran <jarthana@in.ibm.com>/\
+ae970031c5045aa6920ebb11a7a86e6ded5eafe5/\Bug 562250 - [14] Annotations on record components should also be
+applied on their accessor methods
+
+Change-Id: I61833c274889f40c982913edc940b9aa442a34c8
+Signed-off-by: Jay Arthanareeswaran <jarthana@in.ibm.com>/\
+fbb4ed13e4907ca832ea158000c8a85e0dcdd5d1/\Bug 560292 - Handle -nowarn:[paths] for generated sources
+
+Set the "ignore optional problems" flag correctly on the
+ICompilationUnit created for a generated source.
+
+Fix the parsing of the option: for existing paths, remember both the
+absolute and the canonical path. The compilation units use the absolute
+path, so if only the canonical path is remembered, comparisons will
+not match for absolute path containing links.
+
+This occurs for instance in tests on Mac: the gen-src directory is
+under java.io.tmpdir, which is /var. But on a Mac, /var is a link to
+/private/var. Later compilation phases use paths beginning with /var,
+but the canonical path remembered is /private/var.
+
+Change-Id: Ie0c55f481828eb169ee310b9b0c91c5f2258d02f
+Signed-off-by: Thomas Wolf <thomas.wolf@paranor.ch>/\
+86977798000fb6b0ff98a4b47de7532b8ff90e2c/\Bug 562347 - UnconditionalFlowInfo.mergedWith(...) throws
+NullPointerException
+
+Change-Id: I223714c7f6a90a022afe21ae2bb81d32c4a0a62c/\
+66cf112065df8663f9345b90fec839a7cb53c9e3/\Bug 562370 - Remove tycho-extras.version maven property
+
+Handle jdt.core repo.
+
+Change-Id: If2c155bfef98295c439f633e7ca604e146209db4
+Signed-off-by: Alexander Kurtakov <akurtako@redhat.com>/\
+5d9cc1986eb8f3d5aef5656ecc74d5ec0c392fc1/\Bug 562364 - [14] Pattern variable introduced in for statement is
+rejected
+
+Change-Id: Ic71ad859bf59c7f09f8cb9bbf11971979219923f
+Signed-off-by: Jay Arthanareeswaran <jarthana@in.ibm.com>/\
+7bd737f958efefb05ab8cc567eff85d4f5efca69/\Bug 562392 - [14] Type parameters should be allowed in instanceof
+expressions from Java 14
+
+Change-Id: I2b1d720fd174d06520d7425a6e94acb2199b145d
+Signed-off-by: Jay Arthanareeswaran <jarthana@in.ibm.com>/\
+2ae935c22b77d54558d701c50e4fbfcec3c60edd/\Bug 561709 - [content assist] remove substring matching preference
+
+Deprecated the codeComplete.substringMatch preference and enabled it by
+default.
+As a fallback it can be disabled with the system property
+-Djdt.codeCompleteSubstringMatch=false
+
+
+Change-Id: I7b4e8b2a0090af93015e9042a5808d9b3ce7eb27
+Signed-off-by: Julian Honnen <julian.honnen@vector.com>/\
+fe68f231e342054f2a6bb574587cc54deaab5441/\Bug 562382 - [11] NPE on anonymous class with inferred generics
+
+Change-Id: I56e838b57cc6d01cdf8f0735940da4a73045b873
+Also-by: Andrey Loskutov <loskutov@gmx.de>/\
+aeb10adbe3092fd61d30a2461995af2907731d3a/\Remove .cvsignore files.
+
+We have been on git for very long time now.
+
+Change-Id: I6467aa0494f34f0418f7f389db11e295ee16caad
+Signed-off-by: Alexander Kurtakov <akurtako@redhat.com>/\
+ee3ca7af25d58effe0bfa136078955ba02fff70e/\Revert "Bug 562392 - [14] Type parameters should be allowed in
+instanceof"
+
+This only reverts the fix but retains the new tests in disabled
+condition
+
+This reverts commit 7bd737f958efefb05ab8cc567eff85d4f5efca69.
+
+Change-Id: I6b5d466580a27dd9d94ad75c5985f9bad47ca618/\
+a7e11dca488676e8e2ed5f913a582f2cb638743c/\Bug 562295 - use only '.' in source type names
+
+Change-Id: I22173a9dff6ef2a77345961c5160694152f68a01
+Signed-off-by: Andrey Loskutov <loskutov@gmx.de>/\
+1ca49319fb2777c7374cd678ecb39ad80d895b38/\Bug 562122 - Improve performance of ClasspathJar.hasCompilationUnit
+
+Check the existing "knownPackageNames" cache first and return early when
+possible without walking over zip file entries.
+
+Change-Id: Iea26725ae8864d2cc74478bf3a152a9b53dd3138
+Signed-off-by: alee <andy.ja.lee@gmail.com>/\
+f979c299b5b6894174120a1afd70b331d94129ee/\Bug 562347 - UnconditionalFlowInfo.mergedWith(...) throws
+NullPointerException
+
+- adjust test for run.javac testing
+
+Change-Id: Id292544a562caf25693b1f62da626f78edf86396/\
+8c28cd8ea76b0ff54be7901daadedababec1889f/\Bug 562420 - Java builder stack overflow on compile when lowering source
+compatibility to 1.8 under JDK 14
+
+Change-Id: Ic4880474a9e4214fb28a4cce8620554e2faf91a9/\
+a3855b0571f0ba0e7dcf84d5a93153b2081ba412/\Bug 562460 - [14] Text block omits first character if followed by an
+escape sequence
+
+Change-Id: I103bcc52e1fd40fa4fc43e86f80b0148ed9a0ca0
+Signed-off-by: Jay Arthanareeswaran <jarthana@in.ibm.com>/\
+7703952e861a2c9c717f3e24646d99644137d398/\Bug 562502 - [14][compiler][internal] Merge RecordComponent with
+TypeDeclaration
+
+Change-Id: I21ef8b59ba58b92fa513760ce94f6cd92e6bbc92/\
+1b037f16837438caec60154444a8fd4eb665b250/\Bug 562473 - ECJ help reports supported source level up to 1.9 only
+
+Change-Id: I90ea19b46519eddfa1a936f8481fba7da999a41d/\
+f1f6763f5069b7e6c2e75d4a849238713ebcb99c/\Bug 562473 - Testcase
+
+Change-Id: I3937cbe001806fed7e48a8aa56e2311d17049f42
+Signed-off-by: Jay Arthanareeswaran <jarthana@in.ibm.com>/\
+e4072da524adc7f2cdd4f60e326b870e61ee6a04/\Bug 559348 - Investigate API tooling warnings in jdt.core 
+
+Change-Id: Iabeedfe1bc099319f5b55e38c07e1e6641ce13a7
+Signed-off-by: Vikas Chandra <Vikas.Chandra@in.ibm.com>/\
+07b721bc3b658abcda3447c183f4433b52376df5/\Bug 546852 - Cache JRT classfiles for faster class reading
+
+Enable stupid simple JRT file cache for files retrieved from JRT file
+system. The cache is enabled by default and can be disabled by
+setting system property -Dorg.eclipse.jdt.disable_JRT_cache=true.
+
+Note: we also cache "null" cache lookup results to speedup false
+searches.
+
+Change-Id: I5233354a2e5e80058fb01fb6d796434ec3eb6389
+Signed-off-by: Andrey Loskutov <loskutov@gmx.de>
+Also-by: Simeon Andreev <simeon.danailov.andreev@gmail.com>
+Also-by: Markus Duft <markus.duft@ssi-schaefer.com>
+Also-by: Sebastian Zarnekow <sebastian.zarnekow@gmail.com>/\
+6f048d1aab26bf3060aa31484e70a37fde4c5db6/\Bug 562559 - avoid declaring ClassFormatException if not needed
+
+JrtUtilorg.getClassfileContent(File, String, String) declares that it
+can throw ClassFormatException but it is actually doesn't and so many
+clients have catch blocks it without ever need them.
+
+Change-Id: I7fa4bed3dd145b16e0d2ea0adffb2dc5870992f0
+Signed-off-by: Andrey Loskutov <loskutov@gmx.de>/\
+46b389e11fedf87b85b092ced8a823572e4ffadd/\Bug 562559 - simplified getJrtSystem() implementation / synchronization
+
+Replaces static HashMap with static ConcurrentHashMap and removed
+unneded synchronization around it.
+
+Change-Id: Ic9da6354ff236d851312b6d225ccd21c6b0df12f
+Signed-off-by: Andrey Loskutov <loskutov@gmx.de>/\
+954ea79a9532e06a3b2216eb824f6e9c52403095/\Bug 562559 - code cleanup
+
+Made code more readable and fixed some smaller issues.
+
+Change-Id: I03444258e6eb1153463592b6b67eaebc51bf677d
+Signed-off-by: Andrey Loskutov <loskutov@gmx.de>/\
+1f93561bae63c9cb26248cb8b8f2581c869490e1/\Use PlatformUI.getWorkbench() to avoid deprecated warning
+
+Change-Id: I18a6ded6add759c7cbe3f01698ceeb30ce26947f
+Signed-off-by: Jay Arthanareeswaran <jarthana@in.ibm.com>/\
+5f2272e458f30f9f8dc791cca6e4e0d92346b1fc/\Bug 548416 - [13] [test][dom ast rewrite] Fix test failures in Java 13
+Moved break to yield statements
+
+Change-Id: I5c46c3dd36d8c61401eb91122b32a3ea07033d6e/\
+57460b9c53188deef848183c3e504880d733b757/\Bug 561268 - Search for all methods returning type misses generics
+
+- add new override method consumeMethodHeaderNameWithTypeParameters()
+  to MatchLocatorParser that will look for a finegrain of
+  IJavaSearchConstants.RETURN_TYPE_REFERENCE and attempt to find
+  a match for a return type similar to consumeMethodHeaderName()
+
+Change-Id: I77c239ab69eb2ef50520b50e7cd84d34e29df250/\
+0da13740bd5530ee1f5475770b634e150c63d195/\Bug 459092 - Intermittent failures in CopyMoveElementsTests
+
+- split asserts, log stacktraces on failure
+
+Change-Id: I38219e7833b48511cc397db4e97a8c932770a6f1/\
+26219c87caea52bcdfb1d6a29826659f891b48ef/\Bug 562439 - [14][compiler][internal] Record components to have separate
+compiler.ast.node and bindings
+
+
+Change-Id: Ie46dbff6a78e8346e0d73b65ed7173f65889b00b/\
+18c2e0b07c1a4401acd684bdf060611d46df69b9/\Bug 562379 - [14] Duplicate variable reported even when a namesake
+pattern variable is not in scope
+
+Change-Id: I34f4911843471c68a8cf65758c694e7f708671f7
+Signed-off-by: Jay Arthanareeswaran <jarthana@in.ibm.com>/\
+f3da8e568a49f24deb97b9ffca636152eaad1255/\Bug 562439 - [14][compiler][internal] Record components to have separate
+compiler.ast.node and bindings - follow up for accessor annot
+Change-Id: I6abe0fbe76a29fe87ac772fe6ef9ab325be4a1ad/\
+5242be46d1960c5063ff459292d90897eccf8a35/\Bug 562760 - [apt] APT annotation changes / JavaElement14 testRecords
+failure
+
+Change-Id: I1e43efc283a87bdebad33d7a453c3fda72249bbe
+Signed-off-by: Jay Arthanareeswaran <jarthana@in.ibm.com>/\
+261283cb409f0bedd24b6e6d1b920375f2d487b0/\Bug 562853 - Compiler build stats are wrong
+
+Collect overall time to avoid none sense data printed with
+debug/builder/stats flag if number of compiled units exceeds 2000
+(default in AbstractImageBuilder.MAX_AT_ONCE).
+
+Change-Id: I3296826fe6a65cde773c2579aea50fb4a31c30eb
+Signed-off-by: Andrey Loskutov <loskutov@gmx.de>/\
+27a3363782077f04200df5641b28cd5beb4a24af/\Bug 562758 - [14] Pattern variable conflicts with lambda parameter even
+when not in scope
+
+Change-Id: I151a46e258131a56a358065b909fd09b3c692603
+Signed-off-by: Jay Arthanareeswaran <jarthana@in.ibm.com>/\
+17a5584b0bfe19fc2df35e84709381ea07242ba1/\Bug 562854 - verifyError from ?: with private derived classes/\
+a7f9700a75b484d7da7f5a6ce64bfeb33f417337/\Bug 548612 - API report for org.eclipse.core.databinding.observable is
+missing  - Remove 1 filter to see if jdt.core comes
+
+Change-Id: I95d5d910f8abeae75a6e2147bd1a1ce0474d8443
+Signed-off-by: Vikas Chandra <Vikas.Chandra@in.ibm.com>/\
+ef0eb08a978a9a6317783e43806f13a1063efc5f/\Revert "Bug 548612 - API report for org.eclipse.core.databinding.observable is missing  - Remove 1 filter to see if jdt.core comes"
+
+This reverts commit a7f9700a75b484d7da7f5a6ce64bfeb33f417337.
+
+Change-Id: I04fe7dd06cd57e6b23bbdbff608936e0dddc2f59/\
+83ac9675a3966474e957f47a5d75ff425e10d713/\Bug 562964 - Internal error during build due to MarkerInfo
+AssertionFailedException: Marker property value is too long
+
+Change-Id: Icd25a715325e130f65b842c537606193680271f1/\
+56c5d112530094c1f1d5b271a150441609fdc1cd/\Bug 560470 - Implement getChar(int)
+
+Change-Id: Ic61743e0d5d7587d49c1795c18f19af8417ea161
+Signed-off-by: Eric Milles <eric.milles@thomsonreuters.com>/\
+3e93547d4ae42cdb05d1f31c1c89cd13ef956056/\Bug 562728 - [13] switch statement with arrow falls through
+
+Change-Id: I0a1fe2de7c8e5c3ec9ffa0044f11ff6476daa245/\
+797a7afd3bf03afa301d82425a68573ea9e76d2c/\Bug 563025 - [14] Switch Expression - error not flagged for return
+inside (edit)
+
+Change-Id: Icd5d9e758fe903e2d12bf49ea920596dd95d3a99/\
+aa930daf6545d757b7e55d1cfef67c6ba4fa3e4f/\Bug 562637 - [14][model] Record Component to be added as a new Java
+element
+
+Change-Id: I622eb7f93eadfe4cbe946630d4fda7cc5073bec2
+Signed-off-by: Jay Arthanareeswaran <jarthana@in.ibm.com>
+Also-by :  Manoj Palat <manpalat@in.ibm.com>/\
+f096265a748f60c96f72744a44c341fbcc7653bf/\Bug 560260 - Adding more tests
+
+Change-Id: I4ce77478064b2cb963742d41e36f152ca77d1bdf
+Signed-off-by: Jay Arthanareeswaran <jarthana@in.ibm.com>/\
+1da17a63369d617b3654f6410ae0c21ac63dcc5b/\Bug 562948 - [14] "record" name for a Record gives error after creation of Record
+
+Change-Id: I9785ff7d354fbbff9bc2f6ea85389425b909bf95
+Signed-off-by: Kalyan Prasad Tatavarthi <kalyan_prasad@in.ibm.com>/\
+f9f9c212151b509b8e4a2cb93adba21fc546d492/\Bug 563010 - propose static interface methods on missing types
+
+NameReference::isTypeAccess returned false for problem bindings. That
+breaks MethodBinding::canBeSeenBy for static interface methods on
+missing types.
+Changed NameReference::isTypeAccess to check the binding's kind instead
+of its type.
+
+Change-Id: Iab438a4b1061097ed0bda891a06fd6b6c5471ba3
+Signed-off-by: Julian Honnen <julian.honnen@vector.com>/\
+91e063ba131d7041233f08bdf4acbe4a50602366/\Bug 562770 - NPE in at JavaSearchNameEnvironment.addModuleClassPathInfo
+
+ClasspathLocation cp can be null so we should not call
+addClassPathToModule() with cp == null.
+
+Change-Id: Icda00fdbf74d96dc24658a5c46f211f5fa773bcd
+Signed-off-by: Andrey Loskutov <loskutov@gmx.de>/\
+d404ac773e545304cc49cb032fa354e7aee43b4f/\Bug 560630 - No warning on unused import on class from same package
+
+Change-Id: I80381be29dd8298147f3936323409252fdeda4f8
+Signed-off-by: Pierre-Yves B. <PyvesDev@gmail.com>/\
+92bd67174ef32f8bd6ee0560833d24fbc1544460/\Bug 562763 - ClasspathJrt.cleanup() is not called by
+ClasspathJrtWithReleaseOption.cleanup()
+
+Change-Id: I11e8a046182f07740b8c71496269e1dfe979ad0d
+Signed-off-by: Andrey Loskutov <loskutov@gmx.de>/\
+b4ef933a2eb6a626ac46a0b6b74b39d792552f4a/\Bug 540712 - Running JUnit takes long due to Creating Type Hierarchy
+
+This does not fully fix the bug, but does reduce memory usage and saves
+a few seconds during a long type hierarchy operation.
+
+Change-Id: I55caa1ef1379af968d81fad6023c19f8e12077ff
+Signed-off-by: Eric Milles <eric.milles@thomsonreuters.com>/\
+4209460ffca4e578fdcb95766f8746097770f57c/\Bug 562960 - "Missing code implementation in the compiler" when javadoc
+links to sun.security.ssl.X509TrustManagerImpl
+
+Change-Id: I9b70b3090ae73634f0adaccefb17bbae505ab937/\
+ea9eb8e53fa30cbe88c7d852c6ad1d52995fa1e5/\Bug 560630 - fixed compilation errors with new JDT build
+
+Change-Id: Ia25b0a82e0b05d5efed45f0669a90bfa2ec3dd6d
+Signed-off-by: Andrey Loskutov <loskutov@gmx.de>/\
+9cdc05d7080c656f72b12ac257a8cfa3493338eb/\Bug 562948 - Fix warnings due to deprecation of method and update
+Javadoc
+
+Change-Id: Id58fbb8c44aa9a685471d4c97e25276014727022
+Signed-off-by: Jay Arthanareeswaran <jarthana@in.ibm.com>/\
+813f4e4cbe1b654a7556075491cd184d3d2e138f/\Bug 562727 - ct.sym access is slow
+
+Interoduced CtSym class as abstraction to the ct.sym file access (see
+https://openjdk.java.net/jeps/247) and moved duplicated code from
+ClasspathJrtWithReleaseOption and JrtFileSystemWithOlderRelease to it.
+
+Enable stupid simple ct.sym file cache for files/paths retrieved from
+ct.sym file. The cache is enabled by default and can be disabled by
+setting system property -Dorg.eclipse.jdt.disable_CTSYM_cache=true.
+
+Change-Id: Ide6ae133de4b21c0c609cd3c0e81b92a7bfd7253
+Signed-off-by: Andrey Loskutov <loskutov@gmx.de>
+Also-by: alee <andy.ja.lee@gmail.com>/\
+53022ce4a0390470da9bbf2e286a2f79f50687fe/\Bug 562727 - fixed unreachable references in
+org.eclipse.jdt.core.ecj.validation
+
+Change-Id: I6e080e54f138c46bdf1c6686d0155b3c39a93a36
+Signed-off-by: Andrey Loskutov <loskutov@gmx.de>/\
+9295bf84c9dbff60af20ec946d9d9cb0c37008df/\Bug 562392 - [14] Type parameters should be allowed in instanceof
+expressions from Java 14
+
+Change-Id: Ib9587a26209337d3abf033d1be176b8f4be99da2
+Signed-off-by: Jay Arthanareeswaran <jarthana@in.ibm.com>/\
+53406d1e15e587846c44d66f8dde900edc9d36d0/\Bug 410086 - Unnecessary String/char[] copying in JavadocContents
+
+Change-Id: I15072ecc75fbfd0464bcfafc29a6c60e49a8c9dc
+Signed-off-by: Jay Arthanareeswaran <jarthana@in.ibm.com>/\
+89fb579b4a8027979207a45d233220ee910fc345/\Bug 563144 - [14]
+IProblem.SwitchExpressionaYieldSwitchLabeledBlockCompletesNormally
+source position change for error reporting
+
+Change-Id: I09edfc648c6eaba3c5735f069da4238893d32595/\
+618da9b0c9caf1158ea6f03901fac160c2cf4b10/\Bug 562948 - fixed javadoc error on unexpected end tag
+
+Change-Id: I89dc652f16be2dc46e82dc82f3da42838af83392
+Signed-off-by: Andrey Loskutov <loskutov@gmx.de>/\
+50ef901adb0dfc4f68616b8c5ee8bf24bb75c839/\Bug 563147 - [14] Switch Expressions - return statement error flagged
+incorrectly
+
+Change-Id: Ifa8140c622fc404ebadc5b2af7d77270615cd528/\
+7764772c16a268ab0f81abb866119b541b2ffb60/\Bug 563030 - builder.State: SimpleLookupTable performance does not
+scale
+
+Changes "references" and "typeLocators" fields type in
+org.eclipse.jdt.internal.core.builder.State from SimpleLookupTable to
+LinkedHashMap.
+
+The standard collection API has no problems with performance of the
+re-hashing the table on changing table size.
+
+Change-Id: I89b22dcfe262e67bb0ec1c92a01ea95e5c88af35
+Signed-off-by: Andrey Loskutov <loskutov@gmx.de>/\
+28edbf1262165302ab535a12e4da10c870507c1d/\Bug 563023 - [14] Switch Expression - Investigate the usage of
+doesNotCompleteNormally() - Switch Statement in Switch Expression error
+
+Change-Id: I97a4b3cfbd45b90561f90fe604208aeb6297e6fe/\
+36e51e1058f0054413f84447a0e271834bc5eab5/\Bug 562960 - "Missing code implementation in the compiler" when javadoc
+links to sun.security.ssl.X509TrustManagerImpl
+
+- avoid running tests in unsuitable JREs
+
+Change-Id: I8a21c68ba4271adaa3f1bb08184fa426272ed4a3/\
+ba9e8fcdc735c34def1c5422dd23da9a7a1c36bb/\Bug 562727 - verbose logging cleanup, no functional changes
+
+Change-Id: I2cbb235f992fe16009ee3cf5b1af8a97084f50f3
+Signed-off-by: Andrey Loskutov <loskutov@gmx.de>/\
+a6a0a4494850bf57704c2290bc8458a497f74fc6/\Bug 560184 - [test]
+AbstractCompilerTest.setpossibleComplianceLevels(int) must not set
+isJRE*Plus
+
+Change-Id: If787e2053c50774cf60e9ec5b3953737bd598d57/\
+5f948b66f7901ef74a73c54f2f9a1b7e357bba45/\Bug 562128 - JavadocTestForModule not being run
+
+- comparison vis-a-vis javac -Xdoclint:all
+
+Change-Id: I0eb867321fe0320df625d0f0099646609159fa71/\
+ac6bed561e9af89b13ba8e95bbecba7412d9702c/\Bug 562182 - [test] Future of SwitchExpressionTest?
+
+Change-Id: Id190ca814b8d9d1fa4c3b5b19869c226331ca28c/\
+8cf64302cf48ebc8b9e15908bc66f2358cbcccb9/\Bug 562727 - special handling of broken module data in Java 11 for
+compilation with --release 10
+
+See bug 549647 for the explanation.
+
+Change-Id: If08c00abbc8061f68fac1c7fffe3f0b28a58ea56
+Signed-off-by: Andrey Loskutov <loskutov@gmx.de>/\
+26ed2eeed70be007d0d75c31379cc16a0c6c4ed2/\Bug 560630 - No warning on unused import on class from same package
+
+- fix for comment 25
+
+Change-Id: I8f4f0937ad5f4734ae020218c7b0f78fd455d6ba/\
+dc10897d3229dd1bd4ff5ddcf1a227fca24c7486/\Bug 563030 - don't rely on values to guess keys in typeLocators map
+
+State.typeLocators map contains key/value pairs like
+"InspectTests=src/InspectTests.java", where the value is FQN of the top
+level type in binary notation, and the value the file path where the
+type is defined, relative to project.
+
+removeLocator(typeLocatorToRemove) used to iterate over values from
+"typeLocators" map. This iteration over values of typeLocators map costs
+lot of time for big projects, so with commit
+7764772c16a268ab0f81abb866119b541b2ffb60 we made a wrong assumption that
+we can avoid values iteration via reverse lookup with the key
+constructed by the value.
+
+This however doesn't work if there are sources with multiple top level
+types defined in the same java file. Not all keys in typeLocators for
+such types can't be re-constructed from values, and this leads to the
+inconsistent state of the map, so that it contains more values as
+another, "references" map, which keys are the values in the
+"typeLocators" map. This is a problem due optimized way of persisting
+the State to disk, where we iterate over keys of "references" and create
+indices for them, so that we can avoid saving values of "typeLocators"
+again, instead we just save indices. Here if we have less indices in
+"references", we fail to find right index for "leftovers" in the
+"typeLocators" and fail with NPE trying to persist a null index.
+
+The solution is unfortunately to go back to iteration over map values
+for removal of "typeLocators" values. Fortunately, the overall
+performance is still way better as doing this with SimpleLookupTable.
+
+Change-Id: Ia6e8090e42952056e73368f804d79e52c92111e2
+Signed-off-by: Andrey Loskutov <loskutov@gmx.de>/\
+302894c7bc98fd880776f5e317788c7b3da88ebe/\Bug 563030 - builder.State: SimpleLookupTable performance does not
+scale
+
+- resolve new warning
+
+Change-Id: I20cd500a7872eaa5cbda532f8f316d1a4168a3d9/\
+baa72b2d647bbaed44f058f5813ebda53de453b4/\Bug 538512 - [9] Another NPE in Sorting.sortSuper() due to ambiguous
+type binding from split package under JMPS rules
+
+Change-Id: If16cbc344deba28d614ad0a14ba9a2a42e19757e/\
+3c7c941c3c45317df1b273767698f62f60de914f/\Bug 528108 - Add @Override to jdt.core
+
+- @Override should be added by developers, not automatically
+
+Change-Id: I96e07d7d9ff6b05bca4a13bedd8cfe5baa92484b/\
+52605209658b93177a2cd8f1de09dbb940059695/\Bug 550480 - ClassFile.addFieldInfos throws
+ArrayIndexOutOfBoundsException - part 2
+
+Change-Id: I2aedda2b757e060fef815127158171efde362847/\
+8767458107de1a7d57e3c050b80cbc7196b54be7/\Bug 562681 - don't use proc file system for getting pid
+
+Who knows what all this new docker infra is doingm nay be they don't
+have the /proc/self/stat or it is not accessible or ... Whatever, just
+use RuntimeMXBean, that *seem* to work.
+
+Change-Id: I3ea5ec96163c3ac67f5d5d584a1d90d0d74fed8c
+Signed-off-by: Andrey Loskutov <loskutov@gmx.de>/\
+b6f11a1732f11ce5a45b023441a4b452ef46f84f/\Bug 474080 - NullPointerException in
+QualifiedNameReference.optimizedBooleanConstant (913)
+
+Change-Id: I0c86b720cbe69c746d7aea9571017c6040ffa6ee/\
+82287a66aaf75e7f3bdf74d92cd30b312946ca34/\Bug 563546 - Regression test for failure in bug 563030 comment 16
+
+Change-Id: I0494ca5d0a00c258e898358b692f2e142d57db6c/\
+7370ba8eeee34d98b6349ebdbbd663b12ad19d01/\Bug 563501 - ClosedFileSystemException concerning ZipFileSystem
+containing ct.sym path
+
+Do not hide exceptions on creation of CtSym, and re-create CTSym in case
+somebody closed underlined FileSystem.
+
+Change-Id: Iaf066944069e09489bc4d186a3616cae281d5725/\
+5e0db3247cddcefaf34a8edf09d741748bc5a073/\Bug 562736 - [14][dom ast] RecordComponentBinding and node changes
+record component details testing and IVariable method with
+isRecordComponent new method
+
+Change-Id: Id97b1aa297f257ea185268d2b26758a317b86f53/\
+90ae3ae71788fb03107dcd6c2ebc39d5c3f00108/\Bug 563664 - [14] Problems in renaming record components
+
+Change-Id: If682b63962a71e7ea413a9408e2991f39883ad4d/\
+20593908fba81601b46d2576abde81781d2bc542/\Bug 563622 - [14] Using Enclosing type in Record wizard fails to create
+record
+
+Change-Id: I0affb685c831a633601f2631e349ef6a578fecc4
+Signed-off-by: Jay Arthanareeswaran <jarthana@in.ibm.com>/\
+f3c6f1407f1890a707ec2c4f28ca7a69da53c606/\Bug 563487 - [formatter] Wrong indentation with "Format edited lines"
+save action in lambda body after wrap
+
+Change-Id: I00627614a9b18fedd62b8de4309a05380a5f0a44
+Signed-off-by: Mateusz Matela <mateusz.matela@gmail.com>/\
+66e28a4cdde7ad38f8bbf4da340b280bc8930555/\Bug 563840 - POM and product version change for 4.17 release
+
+Change-Id: Ie139bfd77cdf48ed5d951e92645af76c7cb3acd7
+Signed-off-by: Sravan Kumar Lakkimsetti <sravankumarl@in.ibm.com>/\
+4660e32eca67ecb827126d309213e16a72cf15c4/\Bug 562436 - ASTParser.createBindings fails if Editor opens concurrently
+
+CompilationUnit.getContents() and CompilationUnit.discardWorkingCopy()
+can be called concurrently, causing the getContents() method to throw an
+exception. This in turn can cause ASTParser.createBindings() to fail.
+
+In particular, its possible for CompilationUnit.getContents() to
+retrieve an open buffer via BufferManager.getBuffer(). This buffer can
+then be closed, before CompilationUnit.getContents() calls
+IBuffer.getCharacters(). As a result, getCharacters() returns null and
+CompilationUnit.getContents() throws an exception.
+
+With this change CompilationUnit.getContents() resorts to reading the
+compilation unit file directly, in case the compilation unit buffer was
+closed after obtaining it, but before the buffers characters were
+retrieved.
+
+Change-Id: I01772e638bf4160defc63196629a710f214181c5
+Signed-off-by: Simeon Andreev <simeon.danailov.andreev@gmail.com>/\
+e199098ffba9b8263ba214975f103238cb9d3e99/\Bug 560473 - Add interface for getting type, field or method from import
+
+Change-Id: I1d465166d972a78f72cef9c6b062d8d0cdf51769
+Signed-off-by: Eric Milles <eric.milles@thomsonreuters.com>/\
+ac8d818958a2bb1980a69b06e376cc79478cb444/\Version bump for 4.17
+
+Change-Id: Iee10450878e791f3a30f07b5fdd59585ada2b1dd
+Signed-off-by: Alexander Kurtakov <akurtako@redhat.com>/\
+7acea359fe605084db24f8e2d48cbed265feed98/\Bug 535062 - Annotation with @target MODULE are not processed
+
+Change-Id: Ib9a8974ec13644444b10fb0bf2c119da6d453410
+Signed-off-by: Jeremy Kuhn <jeremy.kuhn1@gmail.com>/\
+507b2ed26269623efabbe7b5116c033807bcad9c/\Bug 560472 - MethodScope.createMethod does not populate method.binding.parameterNames from Argument[]
+
+Change-Id: I8e173d29bf6142bab3487051229bb5f544a40983
+Signed-off-by: Eric Milles <eric.milles@thomsonreuters.com>/\
+d190758dff5828ee7573c258060fb0afa733c921/\Bug 477291 - Ensure the module field is being set
+
+Change-Id: Ibbfb775dc082a91e7d7189f2159b3b39a4e4a0e6
+Signed-off-by: Jay Arthanareeswaran <jarthana@in.ibm.com>/\
+64720d21eb76269a73ddba60b9898a05ba97d95d/\Bug 563713 - [Tests] Build up AST rewrite tests for record components
+
+Change-Id: If44c19f8f6a8faf88cbcfa4b81c72e0a482a2c91/\
+475591df71dc3e97c1ebea9d583779b10c2f1505/\Bug 563713 - [Tests] Build up AST rewrite tests for record components
+
+Change-Id: Ia7d223c1d1e7362369f2e2efcd3477fc88f4e2ac/\
