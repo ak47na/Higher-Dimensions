@@ -82,22 +82,22 @@ def addEdge(nod1, l1, nod2, l2, col):
 # Human Names files
 files = []
 Type = ['C', 'R', 'R', 'R', 'A', 'R', 'i_R', 'i_A', 'i_C']
-files.append(open("\\CommitterAuthorFiles.txt", "r"))
-files.append(open("\\OwnerNames2020.txt", "r"))
-files.append(open("\\UploaderNames2020.txt", "r"))
-files.append(open("\\CommentRevNames2020.txt", "r"))
-files.append(open("\\ApproverNames2020.txt", "r"))
-files.append(open("\\AuthorNames2020.txt", "r"))
-files.append(open("\\ReporterNames2020B.txt", "rb"))
-files.append(open("\\AssigneeNames2020B.txt", "rb"))
-files.append(open("\\CCedNames2020B.txt", "rb"))
+files.append(open("Data\\CommitterAuthorFiles.txt", "r"))
+files.append(open("Data\\OwnerNames2020.txt", "r"))
+files.append(open("Data\\UploaderNames2020.txt", "r"))
+files.append(open("Data\\CommentRevNames2020.txt", "r"))
+files.append(open("Data\\ApproverNames2020.txt", "r"))
+files.append(open("Data\\AuthorNames2020.txt", "r"))
+files.append(open("Data\\ReporterNames2020B.txt", "rb"))
+files.append(open("Data\\AssigneeNames2020B.txt", "rb"))
+files.append(open("Data\\CCedNames2020B.txt", "rb"))
 # File dependencies files
 depFile = []
-depFile.append(open("\\\\FileDep.txt", "r"))
-depFile.append(open("\\\\ClassDep.txt", "r"))
+depFile.append(open("Data\\Data\\FileDep.txt", "r"))
+depFile.append(open("Data\\Data\\ClassDep.txt", "r"))
 # Event/Edge files
-reviewFile = open("\\ReviewEdges2020.txt", "r")
-rc2BugEdge = open("\\RevMsg2BugEdge.txt", "r")
+reviewFile = open("Data\\ReviewEdges2020.txt", "r")
+rc2BugEdge = open("Data\\RevMsg2BugEdge.txt", "r")
 
 
 def addMyFile(crtFile, nrFiles):
@@ -124,12 +124,12 @@ class MyChange:
 
 def readNameUsername():
     #name/\username from Bugzilla
-    f = open("\\emailName2020B.txt", "rb")
+    f = open("Data\\emailName2020B.txt", "rb")
     while (True):
         crtL = f.readline().decode('utf-8')
         if not crtL:
             break
-        lst = crtL.split('/\\')
+        lst = crtL.split('/Data\\')
         Len = len(lst)
         name = purifyName(lst[0])
         if name in dict:
@@ -182,10 +182,10 @@ def readCommits(nrHumans, nrCommits, nrFiles):
             break
         if (crtL == '' or crtL == '\n'):
             continue
-        # committer/\\author/\\commitHash
-        Lst = crtL.split('/\\')
-        if not (('.' in Lst[0]) or ('/' in Lst[0]) or ('\\' in Lst[0])):
-            Lst = crtL.split('/\\')
+        # committer/Data\\author/Data\\commitHash
+        Lst = crtL.split('/Data\\')
+        if not (('.' in Lst[0]) or ('/' in Lst[0]) or ('Data\\' in Lst[0])):
+            Lst = crtL.split('/Data\\')
             committerName = purifyName(Lst[0])
             authorName = purifyName(Lst[1])
             nrHumans = addHuman(committerName, nrHumans, 0)
@@ -223,8 +223,8 @@ def readHumanF(fNr, nrHumans):
 
         if not crtL:
             break
-        if '/\\' in crtL:  # name/\email/\index
-            name = purifyName(crtL.split('/\\')[0])
+        if '/Data\\' in crtL:  # name/\email/\index
+            name = purifyName(crtL.split('/Data\\')[0])
             nrHumans = addHuman(name, nrHumans, fNr)
         else:  # name email index
             lst = crtL.split()
@@ -254,7 +254,7 @@ def readReviews():
         crtL = reviewFile.readline()
         if not crtL:
             break
-        lst = crtL.split('/\\')
+        lst = crtL.split('/Data\\')
         if lst[0] == 'CommentEdge' or lst[0] == 'PCommentEdge':
             name1 = purifyName(lst[1])
             name2 = purifyName(lst[2][:-1])
@@ -300,12 +300,12 @@ def readReviews():
     processReviewEdges(reviewEdges, 3)
     reviewFile.close()
 def readReviewComments(nrReviews):
-    revFileComm = open("\\ReviewFilesFromComments.txt", "r")
+    revFileComm = open("Data\\ReviewFilesFromComments.txt", "r")
     while (True):
         crtL = revFileComm.readline()
         if not crtL:
             break
-        lst = crtL[:-1].split("/\\")
+        lst = crtL[:-1].split("/Data\\")
         reviewId = lst[4]
         if not (reviewId in reviewDict):
             nrReviews = addReview(reviewId, nrReviews)
@@ -332,7 +332,7 @@ def readReviewComments(nrReviews):
 def getIssues():
     g = open("BugDex2020.txt", "w")
     for key in issueDict:
-        g.write(str(key) + '/\\')
+        g.write(str(key) + '/Data\\')
     g.close()
 
 def addIssue(issue, nrIssues, projectID):
@@ -347,14 +347,14 @@ def addIssue(issue, nrIssues, projectID):
 def readIssueEdges(nrIssues):
     global nrNodes
     #HumanRole/\name/username/\bugID
-    issueEdgesFile = open("\\IssueEdges2020B.txt", "rb")
+    issueEdgesFile = open("Data\\IssueEdges2020B.txt", "rb")
     while True:
         crtL = issueEdgesFile.readline().decode('utf-8')
         if not crtL:
             break
         if crtL == '':
             continue
-        lst = crtL.split('/\\')
+        lst = crtL.split('/Data\\')
         if (lst[0][0] != 'C'):
             name = purifyName(lst[1])
 
@@ -383,12 +383,12 @@ def readIssueEdges(nrIssues):
 def readIssues(nrIssues, projectID):
     global nrNodes
     #bugID/\version/\creation_ts/\delta_ts/\status/\resolution
-    issueFile = open("\\BugDetails.txt")
+    issueFile = open("Data\\BugDetails.txt")
     while True:
         crtL = issueFile.readline()
         if not crtL:
             break
-        lst = crtL.split('/\\')
+        lst = crtL.split('/Data\\')
         a = lst[2].split(' ', 1)
         a[1] = a[1].replace(' ', '')
         if len(a) != 2:
@@ -418,7 +418,7 @@ def readIssues(nrIssues, projectID):
 
 def readIssueComments():
     #comments to Bugs:
-    issueFile = open("\\comments2020.txt")
+    issueFile = open("Data\\comments2020.txt")
     while True:
         crtL = issueFile.readline()
         if not crtL:
@@ -426,14 +426,14 @@ def readIssueComments():
         bug = crtL[:-1]
         crtL = issueFile.readline()
         while crtL and crtL != 'EOB1':
-            lst = crtL.split('/\\')
+            lst = crtL.split('/Data\\')
             if bug in issueDict and lst[0] in usernames:
                 i_R[issueDict[bug]][usernames[lst[0]]] = True
                 # all commenters are issueReporters
             crtL = issueFile.readline()
         crtL = issueFile.readline()
         while crtL and crtL != 'EOB2':
-            lst = crtL.split('/\\')
+            lst = crtL.split('/Data\\')
             if bug in issueDict and lst[0] in usernames:
                 # all commenters are issueReporters
                 i_R[issueDict[bug]][usernames[lst[0]]] = True
@@ -447,7 +447,7 @@ def addIssueDependency(fName):
         crtL = f.readline()[:-1]
         if not crtL:
             break
-        lst = crtL.split('/\\')
+        lst = crtL.split('/Data\\')
         if len(lst) != 2:
             print(lst, '*')
             exit()
@@ -481,7 +481,7 @@ def processCommit(crtL):
 
 def readI2CSeeAlso():
     #type changeID bugID
-    bugEdgeFile = open("\\BugEdges.txt", "r")
+    bugEdgeFile = open("Data\\BugEdges.txt", "r")
     while (True):
         crtL = bugEdgeFile.readline()
         if not crtL:
@@ -529,7 +529,7 @@ def addDepEdge(f):
 def readOwnershipFile(ownershipDict):
     #fileName/\nrCommits
     #author_name/\self.author_date/\author_timezone/\added/\removed/\complexity
-    ownershipFile = open("\\\\OwnershipFile.txt")
+    ownershipFile = open("Data\\Data\\OwnershipFile.txt")
     nrFiles = 0
     nrCommitters = 0
     X = 0
@@ -540,7 +540,7 @@ def readOwnershipFile(ownershipDict):
         crtL = ownershipFile.readline()
         if not crtL:
             break
-        lst = crtL.split('/\\')
+        lst = crtL.split('/Data\\')
         compName = lst[0].replace('/', '.')
         compName = compName.rsplit('.', 1)[0]
         if not (compName in fileDict):
@@ -550,7 +550,7 @@ def readOwnershipFile(ownershipDict):
         obj = Ownership(compName)
         nrFiles += 1
         for i in range(int(lst[1])):
-            nxtL = ownershipFile.readline().split('/\\')
+            nxtL = ownershipFile.readline().split('/Data\\')
             lineLen = len(nxtL)
             if lineLen == 0:
                 continue
@@ -605,12 +605,12 @@ readI2CSeeAlso()
 readIssueComments()
 getIssues()
 
-addIssueDependency("\\BugDep.txt")
+addIssueDependency("Data\\BugDep.txt")
 
 for fileId in range(len(depFile)):
     addDepEdge(depFile[fileId])
     depFile[fileId].close()
-files, posInFiles = readFileMeasures(fileDict, "\\codeMeasures2020.txt")
+files, posInFiles = readFileMeasures(fileDict, "Data\\codeMeasures2020.txt")
 ownershipDict = {}
 ownershipDict = readOwnershipFile(ownershipDict)
 
@@ -618,9 +618,9 @@ def createSample():
     nodes = list(range(1, nrNodes + 1))
     s = Sample(nrLayers, nodes, Edges, Label, True)
     s.addAliasEdges()
-    createLayoutFile("\\muxViz-master\\data\\graph1\\layoutFile.txt", s.getNrNodes(), False)
-    s.createEdgesFile("\\muxViz-master\\data\\graph1\\EdgeFile.txt")
-    s.createColoredEdges("\\muxViz-master\\data\\graph1\\ExternalEdgeFile.txt")
+    createLayoutFile("Data\\muxViz-masterData\\dataData\\graph1Data\\layoutFile.txt", s.getNrNodes(), False)
+    s.createEdgesFile("Data\\muxViz-masterData\\dataData\\graph1Data\\EdgeFile.txt")
+    s.createColoredEdges("Data\\muxViz-masterData\\dataData\\graph1Data\\ExternalEdgeFile.txt")
     print(s.getNrNodes(), s.getNrEdges(), s.getNrLayers())
 
     return s
@@ -675,7 +675,7 @@ Graph_o = networkx.DiGraph()
 measures1 = ['Degree Centrality', 'Betweenness Centrality', 'Closeness Centrality', 'Reachability']
 measures2 = ['Hierarchy', 'Effective Size']
 
-for layer in range(1, nrLayers + 1):
+for layer in range(1, nrLayers + 1)
     Graph_o = networkx.DiGraph()
     createMonoplex(layer)
     monoplex = Monoplex(Graph_o, True, "w")
