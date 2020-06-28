@@ -17,6 +17,7 @@ nrLayers = 4
 
 project = getProjectList()
 projectID = getProjectID()
+networkType = getNetworkType()
 issueType = getIssueType()
 Adj = {}
 nrEdges = 0
@@ -566,7 +567,7 @@ def readOwnershipFile(ownershipDict):
         for c1 in allCommitters:
             nrCommitters += 1
             cp = (100 * obj.authorDex[0][c1].nrCommits / obj.nrCommits[0])
-            if cp <= 50:
+            if (cp <= 50 and networkType != "Major") or (cp > 50 and networkType != "Minor"):
                 addEdge(dict[c1].index, 1, fileDict[obj.name], 1, 14)
             valuesC.append(cp)
             if sAll != 0:
