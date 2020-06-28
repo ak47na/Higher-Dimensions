@@ -1,13 +1,27 @@
+from datetime import datetime
+from datetime import timedelta
+import datetime as dt
+
 projectID = 0
-issueType = 'pre-release'
+networkType = "Major"
+issueType = "post-release"
+projectName = 'jdt'
+timeInterval = timedelta(hours = 1)
+
 def getProjectList():
     return ['JDT', 'Platform']
 def getProjectID():
     return projectID
+def getProjectName():
+    return projectName
+def getTimeInterval():
+    return timeInterval
 
+#'jdt/eclipse.jdt.core'
 def getIssueType():
     return issueType
-
+def getNetworkType():
+    return networkType
 def getLayer2(t1, t2):
     if t1 == 'committer' and t2 == 'author':
         return 3
