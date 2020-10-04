@@ -1,4 +1,4 @@
-from mailID import *
+import mailID
 from datetime import datetime
 from datetime import timedelta
 from networkx import *
@@ -32,7 +32,7 @@ def initData():
 
 
 def addHuman(name):
-    name = getIdentity(name)
+    name = mailID.getIdentity(name)
     global nrNodes
     if not (name in humanDict):
         nrNodes += 1
@@ -78,43 +78,44 @@ def updateTimeBorders(minTime, maxTime, t):
     maxTime = max(maxTime, t)
     return minTime, maxTime
 
-
+'''
+    Reads the message details from file and updates the messages dictionary to store for each 
+    message key, the email of the sender and the date of the message as a tuple.
+'''
 def readMsgDetails():
     global minTime, maxTime
     nrM = 0
-    detailsFile = open("msgDetails.txt", "r")
+    # read the file with the details of all messages in format :
+    # msgKey/\senderName/\senderEmail/\date(%Y-%m-%d %H:%M:%S)
+    detailsFile = open("Data\\msgDetails.txt", "r")
     while True:
-        crtL = detailsFile.readline()
-        if not crtL:
+        crtLine = detailsFile.readline()
+        if not crtLine:
             break
-        crtL = crtL.replace('\n', '')
+        crtLine = crtLine.replace('\n', '')
         # msgKey/\name/\email/\date
-        lst = crtL.split('/\\')
-        if len(lst) != 4:
-            exit()
+        lst = crtLine.split('/\\')
+        assert len(lst) == 4
+        # increment the number of messages
         nrM += 1
-        msgEmail = lst[2].replace(' ', '')
-        msgEmail = purifyEmail(removeStrings(msgEmail.replace('\n', '')))
+        msgEmail = mailID.purifyEmail(lst[2].replace(' ', ''))
         msgDate = datetime.strptime(lst[3], '%Y-%m-%d %H:%M:%S')
         msgDict[lst[0]] = (msgEmail, msgDate)
         minTime, maxTime = updateTimeBorders(minTime, maxTime, msgDate.timestamp())
     detailsFile.close()
 
-
-
 def readMsgEdges(delta_t):
     errors = 0
     invalidMsg = {}
-    edgeFile = open("msgEdges.txt", "r")
+    edgeFile = open("Data\\msgEdges.txt", "r")
+
     while True:
-        crtL = edgeFile.readline()
-        if not crtL:
+        crtLine = edgeFile.readline()
+        if not crtLine:
             break
-        crtL = crtL.replace('\n', '')
-        lst = crtL.split(' ')
-        if len(lst) != 2:
-            print(lst)
-            exit()
+        crtLine = crtLine.replace('\n', '')
+        lst = crtLine.split(' ')
+        assert len(lst) == 2
         if not (lst[0] in msgDict) and not (lst[0] in invalidMsg):
             invalidMsg[lst[0]] = True
             errors += 1
@@ -226,7 +227,7 @@ def getRanginkCorrelationAggregate():
     w, p = spearmanr(order[0], order[2])
     print(w, p)
 
-init()
+mailID.init()
 
 def getValues(delta_t):
     initData()

@@ -1,12 +1,11 @@
 import editdistance
-# import pylcs
+
 from pyjarowinkler.distance import get_jaro_distance
 nameLim = [[-4, 0.60], [-3, 0.80], [-1, 0.95]]
 emailLim = [[-4, 0.60], [-3, 0.80], [-1, 0.95]]
 lim = 10
 Identity = {}
 
-nameEmails = open("\\emailNames.txt", "r")
 removeStr = ['eclipse', 'jdt', 'admin', 'support', '.']
 def isLetter(a):
   return (ord(a) <= ord('z') and ord(a) >= ord('a')) or (ord(a) <= ord('Z') and ord(a) >= ord('A'))
@@ -17,8 +16,8 @@ def removeStrings(name):
     for removeS in removeStr:
         name = name.replace(removeS, '')
     newName = ''
-    nameLen = len(newName)
     nameLen = len(name)
+    # remove the spaces at the end of the name
     while nameLen > 0 and name[nameLen - 1] == ' ':
         name = name[:-1]
         nameLen -= 1
@@ -27,20 +26,22 @@ def removeStrings(name):
             newName += name[i]
     return newName
 def purifyEmail(name):
-    return name.lower()
+    return removeStrings(name.replace(' ', '').replace('\n', '')).lower()
+
 def purifyName(name):
-    if name[0] == ' ':
+    # remove leading spaces from the beginning of the name
+    while len(name) > 0 and name[0] == ' ':
         name = name[1:]
     name = removeStrings(name)
     firstN = []
-
     NameList = name.split(' ')
     lastN = NameList[-1]
     firstN = NameList[:-1]
+    # todo: remember why the firstName contains lastName when no first name given
     if firstN == []:
         firstN.append(lastN)
 
-    return firstN, lastN, name.replace(' ','')
+    return firstN, lastN, name.replace(' ','').replace('\n', '')
 
 def stringSimilarity(s1, s2, type):
     if type == 0:
@@ -123,30 +124,38 @@ N = 0
 nrC = 0
 fakeList = [132]# [58, 121, 191]
 nrHumans = 0
+# humanID[email] = the index of human with email
 humanID = {}
+# fullNames[email] = the list of full names for the human with email
 fullNames = {}
+# email[fullName] = the email of person with fullName
 email = {}
 
 def readNames():
     global N
+    # File with developers' names and email in format Name1 Name2 .. LastName /\ email.
+    # Name1, Name2, .., lastName can be empty.
+    # todo: change file name and check if correct file.
+    nameEmails = open("Data\\emailName2020B.txt", "rb")
     while True:
-        crtL = nameEmails.readline()
-        if not crtL:
+        crtLine = nameEmails.readline().decode()
+        if not crtLine:
             break
-        lst = crtL.split('/\\')
+        lst = crtLine.split('/\\')
+        # Ignore the lines where the name of the developer is not mentioned.
         if lst[0] == '':
             continue
-        if len(lst) != 2:
-            print(lst)
-            exit()
-
-        email_i = lst[1].replace(' ', '')
-        email_i = purifyEmail(removeStrings(email_i.replace('\n', '')).replace(' ', ''))
+        assert len(lst) == 2
+        # remove spaces, newlines and fixed strings from the email.
+        email_i = purifyEmail(lst[1])
         first_i, last_i, full_i = purifyName(lst[0])
         name_i = {'first': first_i, 'last': last_i, 'full': full_i}
         pairs.append((name_i, email_i))
         N = len(pairs)
 
+'''
+    Join every two names that are similar.
+'''
 def joinNames():
     for i in range(N):
         par.append(i)
@@ -154,9 +163,10 @@ def joinNames():
         for j in range(i + 1, N):
             if similarPairs(pairs[i], pairs[j]):
                 joinRoots(root(i), root(j))
-                p1 = pairs[i]
-                p2 = pairs[j]
 
+'''
+    
+'''
 def createClusters():
     global nrC
     global nrHumans
