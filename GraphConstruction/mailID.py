@@ -67,7 +67,6 @@ def nameSimilarity(name1, name2, type, l):
 
 def emailsSimilarity(p1, p2, type, l):
     sim = stringSimilarity(p1[1], p2[1], type)
-
     if len(p1[0]['last']) <= 2:
         return sim >= emailLim[l][type]
     firsts = p1[0]['first']
@@ -170,25 +169,27 @@ def joinNames():
 def createClusters():
     global nrC
     global nrHumans
+    cluster = {}
+    for i in range(N):
+        if root(i) == i:
+            cluster[i] = [i]
+        else:
+            cluster[root(i)].append(i)
+
     for i in range(N):
         if root(i) == i:
             nrC += 1
-            cluster = [i]
-            for j in range(i + 1, N):
-                if root(j) == i:
-                    cluster.append(j)
-            clusterSize = len(cluster)
+            clusterSize = len(cluster[i])
             if clusterSize > 1 and (not (nrC in fakeList)):
                 nrHumans += 1
                 fullNames[nrHumans] = []
-
-                for j in cluster:
+                for j in cluster[i]:
                     Identity[pairs[j][1]] = pairs[i][1]
                     humanID[pairs[j][1]] = nrHumans
                     fullNames[nrHumans].append(pairs[j][0]['full'])
                     email[pairs[j][0]['full']] = pairs[j][1]
             else:
-                for j in cluster:
+                for j in cluster[i]:
                     nrHumans += 1
                     Identity[pairs[j][1]] = pairs[j][1]
                     humanID[pairs[j][1]] = nrHumans
