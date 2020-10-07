@@ -11,25 +11,25 @@ humanDict = {}
 
 def initData():
     global minT, maxT, minTime, maxTime, Label, Adj, msgDict, nrNodes, nrLayers
-    global timeDict, nodeLayers, Edges, tGraphs, nrGraphs, edges
+    global timeDict, tGraphs, nrGraphs
     minT = {}
     maxT = {}
 
     minTime = datetime.now().timestamp()
     maxTime = 0
-
+    # Label[index] = the label of node with index in the graph
     Label = {}
+    # Adj[graphIndex][node] = the adjacency list of node in the graphIndex-th graph.
     Adj = {}
+    # msgDict[msgKey] = (sender, time)
     msgDict = {}
-
+    # timeDict[timeInterval] = the index of the network with messages sent in timeInterval
+    # timeInterval = integer
     timeDict = {}
-    nodeLayers = []
-    Edges = {}
+    # tGraphs = List of the networkX multiDiGraphs for each time time interval, i.e
+    # TGraphs[index] = the graph for timeInterval with timeDict[timeInterval] = index.
     tGraphs = [0]
     nrGraphs = 0
-    edges = []
-
-
 
 def addHuman(name):
     name = mailID.getIdentity(name)
@@ -39,10 +39,13 @@ def addHuman(name):
         Label[nrNodes] = name
         humanDict[name] = nrNodes
 
-
-# u is a reply to v, a is the sender of u, b is the sender of v
+'''
+    Adds an edge between the sender of message u and the sender of message v. delta_t represents the
+    number of seconds aggregated into one time interval.
+'''
 def addEdge(u, v, delta_t):
     global nrGraphs
+    # u is a reply to v, a is the sender of u, b is the sender of v.
     a = msgDict[u][0]
     b = msgDict[v][0]
     addHuman(a)
@@ -51,6 +54,7 @@ def addEdge(u, v, delta_t):
         return
     A = humanDict[a]
     B = humanDict[b]
+    # Compute the index of the network which contains the point in time when message v was sent.
     tIntervalId = trunc((msgDict[v][1].timestamp() - minTime) / delta_t)
     if not (tIntervalId in timeDict):
         nrGraphs += 1
@@ -61,18 +65,24 @@ def addEdge(u, v, delta_t):
         timeDict[tIntervalId] = nrGraphs
 
     T = timeDict[tIntervalId]
+    # Update the minimum and maximum time for a conversation from person A to person B.
+    # The value is necessary for computing transitive faults.
     if not ((A, B) in minT[T]):
         minT[T][(A, B)] = msgDict[v][1].timestamp()
         maxT[T][(A, B)] = msgDict[v][1].timestamp()
     else:
         minT[T][(A, B)], maxT[T][(A, B)] = updateTimeBorders(minT[T][(A, B)], maxT[T][(A, B)],
                                                              msgDict[v][1].timestamp())
+    # Add an edge in the T-th MultiDiGraph from the node representing human a to the node
+    # representing human b.
     tGraphs[T].add_edge(humanDict[a], humanDict[b], time=msgDict[v][1])
     if not (A in Adj[T]):
         Adj[T][A] = []
     Adj[T][A].append(B)
 
-
+'''
+    Updates the minimum and maximum number of seconds with t.
+'''
 def updateTimeBorders(minTime, maxTime, t):
     minTime = min(minTime, t)
     maxTime = max(maxTime, t)
@@ -100,13 +110,19 @@ def readMsgDetails():
         nrM += 1
         msgEmail = mailID.purifyEmail(lst[2].replace(' ', ''))
         msgDate = datetime.strptime(lst[3], '%Y-%m-%d %H:%M:%S')
+        # store the message with key lst[0]
         msgDict[lst[0]] = (msgEmail, msgDate)
         minTime, maxTime = updateTimeBorders(minTime, maxTime, msgDate.timestamp())
     detailsFile.close()
 
+'''
+    Reads the file with messages' relations and adds a directed edge from the reply to the message.
+'''
 def readMsgEdges(delta_t):
     errors = 0
     invalidMsg = {}
+    # file with each line containing two string numbers u v representing that message with key v is
+    # a reply to message with key u.
     edgeFile = open("Data\\msgEdges.txt", "r")
 
     while True:
@@ -128,14 +144,23 @@ def readMsgEdges(delta_t):
 
 nr2paths = [{}, {}, {}]
 
+'''
+    Computes the number of 2-paths(with or without transitive faults) for each node. The number of
+    seconds aggregated in each network is delta_t.
+    Transitive fault = "a directed path of length exactly two where the time label on the first edge
+    is later than the time label on the second edge along the path, i.e. a directed 2-path with
+    decreasing edge time stamps."
+'''
 def getTransitiveFault(delta_t):
     upperBound = 0
     lowerBound = 1
-    Y = 3600 * 24 * 30 * 12
+    Y = 3600 * 24 * 365
     for netw in range(1, nrGraphs + 1):
         N = tGraphs[netw].number_of_nodes()
         transFaultSum = [0, 0]
-        #0 = with transitive faults, 1 & 2 without
+        # 0 = with transitive faults,
+        # 1 = without transitive faults(optimistic model)
+        # 2 = without transitive faults(pessimistic model)
         nr2paths[0][netw] = {}
         nr2paths[1][netw] = {}
         nr2paths[2][netw] = {}
@@ -143,25 +168,41 @@ def getTransitiveFault(delta_t):
             nr2paths[0][netw][a] = 0
             nr2paths[1][netw][a] = 0
             nr2paths[2][netw][a] = 0
+            # optimisticCount - "lower bound on the transitive fault rate.
+            # whenever we see b->c following a->b, we indicate no transitive faults for the 2-path
+            # a->b->c, regardless of if there is an edge b->c prior to the edge a->b(which in
+            # isolation would represent a transitive fault)."
             optimisticCount = 0
+            # pessimisticCount - "upper bound on the fault rate. Here, whenever we see an edge a->b
+            # after an edge b->c, we label the 2-path a->b->c as a transitive fault regardless of
+            # what other edges between a, b and c exist in the same time interval."
             pesimisticCount = 0
             for b in Adj[netw][a]:
                 if not (b in Adj[netw]):
+                    # Ignore a's neighbours with out-degree = 0.
                     continue
                 for c in Adj[netw][b]:
+                    # Count the 2-path : a->b->c
                     nr2paths[0][netw][a] += 1
                     nr2paths[1][netw][a] += 1
                     nr2paths[2][netw][a] += 1
+                    # If there is no edge a->b with time smaller than an edge b->c, then a->b->c is
+                    # a transitive-fault.
                     if minT[netw][(a, b)] > maxT[netw][(b, c)]:
                         optimisticCount += 1
                         nr2paths[1][netw][a] -= 1
+                    # If there is an edge a->b with time bigger than b->c, then a->b->c is a
+                    # transitive fault in the pessimistic model.
                     if maxT[netw][(a, b)] > minT[netw][(b, c)]:
                         pesimisticCount += 1
                         nr2paths[2][netw][a] -= 1
             if nr2paths[0][netw][a] == 0:
+                # When computing the transitive fault rate, ignore the nodes without 2-paths.
                 continue
             transFaultSum[0] += (optimisticCount / nr2paths[0][netw][a])
             transFaultSum[1] += (pesimisticCount / nr2paths[0][netw][a])
+        # The network transitive fault rate is the sum of the node transitive fault rates over all
+        # nodes, divided by the number of nodes in the network.
         transFaultSum[0] /= N
         transFaultSum[1] /= N
         upperBound = max(max(transFaultSum[0], transFaultSum[1]), upperBound)
@@ -169,6 +210,11 @@ def getTransitiveFault(delta_t):
 
     print('For delta_t ', delta_t / Y, 'years', lowerBound, upperBound)
 
+'''
+    Returns the list of nodes in the netw-th network, sorted in increasing order by the number of
+    2-paths for each node. id represents the type of network (0 = without transitive faults, 
+    1 = with optimistic transitive faults, 2 =  with pessimistic transitive faults.)
+'''
 def getNodesOrder(id, netw):
     centralityList = []
     for nod in nr2paths[id][netw]:
@@ -179,6 +225,11 @@ def getNodesOrder(id, netw):
         order.append(p[1])
     return order
 
+'''
+    Returns the list of nodes in the aggregate network, sorted in increasing order by the number of
+    2-paths for each node. id represents the type of network (0 = without transitive faults, 
+    1 = with optimistic transitive faults, 2 =  with pessimistic transitive faults.)
+'''
 def getNodesOrderAggregate(id):
     centralityList = []
     for nod in nr2p[id]:
@@ -191,7 +242,11 @@ def getNodesOrderAggregate(id):
 
 nr2p = [{}, {}, {}]
 
-def AggregateNetwork():
+'''
+    For the current delta_t time interval, compute the number of 2-paths for each node in the
+    aggregate network as the sum of the number of 2-paths of the node in each network.
+'''
+def compute2PathsAggregateNetwork():
     for netw in range(1, nrGraphs + 1):
         for nod in nr2paths[0][netw]:
             if not (nod in nr2p[0]):
@@ -203,8 +258,6 @@ def AggregateNetwork():
                 nr2p[i][nod] += nr2paths[i][netw][nod]
 
 def getRanginkCorrelation():
-    #order1 = order of nodes without transitive faults
-    #order2 = order of nodes with transitive faults
     Order = [[], [], []]
     for netw in range(1, nrGraphs + 1):
         order = []
@@ -217,8 +270,13 @@ def getRanginkCorrelation():
     w, p = spearmanr(Order[0], Order[2])
     print(w, p)
 
+'''
+    Returns the Spearman rank correlation value between the 2-path ranking of the nodes in the
+    network with transitive faults with the 2-path ranking of the nodes in the network without 
+    transitive faults.
+'''
 def getRanginkCorrelationAggregate():
-    AggregateNetwork()
+    compute2PathsAggregateNetwork()
     order = []
     for i in range(3):
         order.append(getNodesOrderAggregate(i))
@@ -229,6 +287,11 @@ def getRanginkCorrelationAggregate():
 
 mailID.init()
 
+'''
+    Method that creates all information flow networks such that the number of seconds for each 
+    network is delta_t, computes the number of transitive faults and the Spearman correlation of
+    the 2-path rankings between the (aggregate) network with transitive faults and the one without.
+'''
 def getValues(delta_t):
     initData()
     readMsgDetails()

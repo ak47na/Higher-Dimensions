@@ -50,6 +50,12 @@ def stringSimilarity(s1, s2, type):
         return -lim
     return get_jaro_distance(s1, s2)
 
+'''
+    Returns True if:
+    1. the similarity[type] of the full name of p1 and the full name of p2 is >= nameLim[type] OR
+    2. (the similarity[type] of one of the names of p1 and one of the names of p2 is >= nameLim[type] AND
+       the similarity[type] of the last name of p1 and the last name of p2 is >= nameLim[type])  OR
+'''
 def nameSimilarity(name1, name2, type, l):
     firstN1 = name1['first']
     firstN2 = name2['first']
@@ -65,6 +71,14 @@ def nameSimilarity(name1, name2, type, l):
 
     return max(min(simF, simL), fullSim) >= nameLim[l][type]
 
+'''
+    Returns True if:
+    1. the emails of p1 and p2 have similarity[type] >= emailLim[l][type] OR
+    2. the last name of p1 has length >= 2 AND 
+      2.1 all names of p1 are present in the email of p2 OR
+      2.2 the first letter of the one name and the last name of p1 are present in the email of p2 OR
+      2.3 the first letter of the last name and one name with length >= 2 are present in the email of p2
+'''
 def emailsSimilarity(p1, p2, type, l):
     sim = stringSimilarity(p1[1], p2[1], type)
     if len(p1[0]['last']) <= 2:
@@ -89,6 +103,9 @@ def emailsSimilarity(p1, p2, type, l):
         return True
     return sim >= emailLim[l][type]
 
+'''
+    Returns True if the (name, email) pairs p1 and p2 have high similarity.
+'''
 def similarPairs(p1, p2):
     if nameSimilarity(p1[0], p2[0], 0, 2) and nameSimilarity(p1[0], p2[0], 1, 2):
         return True
@@ -164,7 +181,9 @@ def joinNames():
                 joinRoots(root(i), root(j))
 
 '''
-    
+    For each component of joined names, update the details(Identity, fullName, humanID, email) for
+    each pair (name, email). The pair is updated depending on whether or not all names correspond
+    to the same person,.
 '''
 def createClusters():
     global nrC
