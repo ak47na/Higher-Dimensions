@@ -5,18 +5,14 @@ from networkx import *
 from scipy.stats import spearmanr
 from math import *
 
-nrNodes = 0
-nrLayers = 0
 humanDict = {}
 
 def initData():
-    global minT, maxT, minTime, maxTime, Label, Adj, msgDict, nrNodes, nrLayers
-    global timeDict, tGraphs, nrGraphs
+    global minT, maxT, Label, Adj, msgDict
+    global timeDict, tGraphs
     minT = {}
     maxT = {}
 
-    minTime = datetime.now().timestamp()
-    maxTime = 0
     # Label[index] = the label of node with index in the graph
     Label = {}
     # Adj[graphIndex][node] = the adjacency list of node in the graphIndex-th graph.
@@ -29,29 +25,29 @@ def initData():
     # tGraphs = List of the networkX multiDiGraphs for each time time interval, i.e
     # TGraphs[index] = the graph for timeInterval with timeDict[timeInterval] = index.
     tGraphs = [0]
-    nrGraphs = 0
 
-def addHuman(name):
+def addHuman(name, nrNodes):
     name = mailID.getIdentity(name)
-    global nrNodes
     if not (name in humanDict):
         nrNodes += 1
         Label[nrNodes] = name
         humanDict[name] = nrNodes
+    return nrNodes
 
 '''
     Adds an edge between the sender of message u and the sender of message v. delta_t represents the
     number of seconds aggregated into one time interval.
+    Returns the current number of graphs of messages spanning delta_t seconds, the number of human
+    nodes across all networks.
 '''
-def addEdge(u, v, delta_t):
-    global nrGraphs
+def addEdge(u, v, delta_t, nrGraphs, nrNodes, minTime):
     # u is a reply to v, a is the sender of u, b is the sender of v.
     a = msgDict[u][0]
     b = msgDict[v][0]
-    addHuman(a)
-    addHuman(b)
+    nrNodes = addHuman(a, nrNodes)
+    nrNodes = addHuman(b, nrNodes)
     if a == b:
-        return
+        return nrGraphs, nrNodes
     A = humanDict[a]
     B = humanDict[b]
     # Compute the index of the network which contains the point in time when message v was sent.
@@ -79,6 +75,7 @@ def addEdge(u, v, delta_t):
     if not (A in Adj[T]):
         Adj[T][A] = []
     Adj[T][A].append(B)
+    return nrGraphs, nrNodes
 
 '''
     Updates the minimum and maximum number of seconds with t.
@@ -92,8 +89,7 @@ def updateTimeBorders(minTime, maxTime, t):
     Reads the message details from file and updates the messages dictionary to store for each 
     message key, the email of the sender and the date of the message as a tuple.
 '''
-def readMsgDetails():
-    global minTime, maxTime
+def readMsgDetails(minTime, maxTime):
     nrM = 0
     # read the file with the details of all messages in format :
     # msgKey/\senderName/\senderEmail/\date(%Y-%m-%d %H:%M:%S)
@@ -114,11 +110,11 @@ def readMsgDetails():
         msgDict[lst[0]] = (msgEmail, msgDate)
         minTime, maxTime = updateTimeBorders(minTime, maxTime, msgDate.timestamp())
     detailsFile.close()
-
+    return minTime, maxTime
 '''
     Reads the file with messages' relations and adds a directed edge from the reply to the message.
 '''
-def readMsgEdges(delta_t):
+def readMsgEdges(delta_t, nrGraphs, nrNodes, minTime):
     errors = 0
     invalidMsg = {}
     # file with each line containing two string numbers u v representing that message with key v is
@@ -139,8 +135,9 @@ def readMsgEdges(delta_t):
             invalidMsg[lst[1]] = True
             errors += 1
         if lst[0] in msgDict and lst[1] in msgDict:
-            addEdge(lst[1], lst[0], delta_t)
+            nrGraphs, nrNodes = addEdge(lst[1], lst[0], delta_t, nrGraphs, nrNodes, minTime)
     edgeFile.close()
+    return nrGraphs, nrNodes
 
 nr2paths = [{}, {}, {}]
 
@@ -151,7 +148,7 @@ nr2paths = [{}, {}, {}]
     is later than the time label on the second edge along the path, i.e. a directed 2-path with
     decreasing edge time stamps."
 '''
-def getTransitiveFault(delta_t):
+def getTransitiveFault(delta_t, nrGraphs):
     upperBound = 0
     lowerBound = 1
     Y = 3600 * 24 * 365
@@ -246,7 +243,7 @@ nr2p = [{}, {}, {}]
     For the current delta_t time interval, compute the number of 2-paths for each node in the
     aggregate network as the sum of the number of 2-paths of the node in each network.
 '''
-def compute2PathsAggregateNetwork():
+def compute2PathsAggregateNetwork(nrGraphs):
     for netw in range(1, nrGraphs + 1):
         for nod in nr2paths[0][netw]:
             if not (nod in nr2p[0]):
@@ -257,7 +254,7 @@ def compute2PathsAggregateNetwork():
             for i in range(3):
                 nr2p[i][nod] += nr2paths[i][netw][nod]
 
-def getRanginkCorrelation():
+def getRanginkCorrelation(nrGraphs):
     Order = [[], [], []]
     for netw in range(1, nrGraphs + 1):
         order = []
@@ -275,8 +272,8 @@ def getRanginkCorrelation():
     network with transitive faults with the 2-path ranking of the nodes in the network without 
     transitive faults.
 '''
-def getRanginkCorrelationAggregate():
-    compute2PathsAggregateNetwork()
+def getRanginkCorrelationAggregate(nrGraphs):
+    compute2PathsAggregateNetwork(nrGraphs)
     order = []
     for i in range(3):
         order.append(getNodesOrderAggregate(i))
@@ -294,7 +291,7 @@ mailID.init()
 '''
 def getValues(delta_t):
     initData()
-    readMsgDetails()
-    readMsgEdges(delta_t)
-    getTransitiveFault(delta_t)
-    getRanginkCorrelationAggregate()
+    minTime, maxTime = readMsgDetails(datetime.now().timestamp(), 0)
+    nrGraphs, nrNodes = readMsgEdges(delta_t, 0, 0, minTime)
+    getTransitiveFault(delta_t, nrGraphs)
+    getRanginkCorrelationAggregate(nrGraphs)
