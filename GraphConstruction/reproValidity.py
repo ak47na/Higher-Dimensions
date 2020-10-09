@@ -111,6 +111,7 @@ def readMsgDetails(minTime, maxTime):
         minTime, maxTime = updateTimeBorders(minTime, maxTime, msgDate.timestamp())
     detailsFile.close()
     return minTime, maxTime
+
 '''
     Reads the file with messages' relations and adds a directed edge from the reply to the message.
 '''
@@ -281,8 +282,6 @@ def getRanginkCorrelationAggregate(nrGraphs):
     print(w, p)
     w, p = spearmanr(order[0], order[2])
     print(w, p)
-
-mailID.init()
 
 '''
     Method that creates all information flow networks such that the number of seconds for each 
