@@ -4,9 +4,25 @@ from pyjarowinkler.distance import get_jaro_distance
 nameLim = [[-4, 0.60], [-3, 0.80], [-1, 0.95]]
 emailLim = [[-4, 0.60], [-3, 0.80], [-1, 0.95]]
 lim = 10
+# Dictionary used for determining the email address representative for each email address, i.e
+# Identity[email2] = email1 iff email2 and email1 correspond to the same person and email1 appears
+# before email2 in the file with email addresses.
 Identity = {}
-
+# List with the strings that must be removed from the email addresses.
 removeStr = ['eclipse', 'jdt', 'admin', 'support', '.']
+# List of pairs (name, email) for all email addresses in the file.
+pairs = []
+
+# List with the cluster ids of false positives (groups of email addresses that don't actually
+# correspond to the same person.
+fakeList = [132]# [58, 121, 191]
+# humanID[email] = the index of human with email
+humanID = {}
+# fullNames[email] = the list of full names for the human with email
+fullNames = {}
+# email[fullName] = the email of person with fullName
+email = {}
+
 def isLetter(a):
   return (ord(a) <= ord('z') and ord(a) >= ord('a')) or (ord(a) <= ord('Z') and ord(a) >= ord('A'))
 
@@ -120,13 +136,13 @@ def similarPairs(p1, p2):
             return False
     return True
 
-def root(x):
+def root(par, x):
     if par[x] == x:
         return x
-    par[x] = root(par[x])
+    par[x] = root(par, par[x])
     return par[x]
 
-def joinRoots(rx, ry):
+def joinRoots(par, rx, ry):
     if rx == ry:
         return
     if rx > ry:
@@ -134,21 +150,7 @@ def joinRoots(rx, ry):
     else:
         par[ry] = rx
 
-pairs = []
-par = []
-N = 0
-nrC = 0
-fakeList = [132]# [58, 121, 191]
-nrHumans = 0
-# humanID[email] = the index of human with email
-humanID = {}
-# fullNames[email] = the list of full names for the human with email
-fullNames = {}
-# email[fullName] = the email of person with fullName
-email = {}
-
 def readNames():
-    global N
     # File with developers' names and email in format Name1 Name2 .. LastName /\ email.
     # Name1, Name2, .., lastName can be empty.
     # todo: change file name and check if correct file.
@@ -167,36 +169,39 @@ def readNames():
         first_i, last_i, full_i = purifyName(lst[0])
         name_i = {'first': first_i, 'last': last_i, 'full': full_i}
         pairs.append((name_i, email_i))
-        N = len(pairs)
 
 '''
     Join every two names that are similar.
 '''
 def joinNames():
-    for i in range(N):
+    par = []
+    nrEmailAdd = len(pairs)
+    for i in range(nrEmailAdd):
         par.append(i)
-    for i in range(N):
-        for j in range(i + 1, N):
+    for i in range(nrEmailAdd):
+        for j in range(i + 1, nrEmailAdd):
             if similarPairs(pairs[i], pairs[j]):
-                joinRoots(root(i), root(j))
+                joinRoots(par, root(par, i), root(par, j))
+    return par
 
 '''
     For each component of joined names, update the details(Identity, fullName, humanID, email) for
     each pair (name, email). The pair is updated depending on whether or not all names correspond
     to the same person,.
 '''
-def createClusters():
-    global nrC
-    global nrHumans
+def createClusters(par):
+    nrHumans = 0
     cluster = {}
-    for i in range(N):
-        if root(i) == i:
+    nrC = 0
+    nrEmailAdd = len(pairs)
+    for i in range(nrEmailAdd):
+        if root(par, i) == i:
             cluster[i] = [i]
         else:
-            cluster[root(i)].append(i)
+            cluster[root(par, i)].append(i)
 
-    for i in range(N):
-        if root(i) == i:
+    for i in range(nrEmailAdd):
+        if root(par, i) == i:
             nrC += 1
             clusterSize = len(cluster[i])
             if clusterSize > 1 and (not (nrC in fakeList)):
@@ -225,5 +230,5 @@ def getFullNames():
 
 def init():
     readNames()
-    joinNames()
-    createClusters()
+    par = joinNames()
+    createClusters(par)
