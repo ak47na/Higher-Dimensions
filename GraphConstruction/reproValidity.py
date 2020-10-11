@@ -5,7 +5,7 @@ from networkx import *
 from scipy.stats import spearmanr
 from math import *
 class InformationFlowNetwork:
-    def __init__(self, msgDict):
+    def __init__(self, msgDict, delta_t):
         self.humanDict = {}
         self.Label = {}
         self.minT = {}
@@ -28,6 +28,8 @@ class InformationFlowNetwork:
         # nr2p[t][node] = the number of 2-paths of node in aggregate network, i.e
         #               = sum(network in networks, nr2p[t][network][node])
         self.nr2p = [{}, {}, {}]
+        self.nrGraphs = 0
+        self.delta_t = delta_t
 
     '''
         Add the human with name to humanDict and as a graph node with index nrNodes + 1 and label
@@ -47,25 +49,25 @@ class InformationFlowNetwork:
         Returns the current number of graphs of messages spanning delta_t seconds, the number of human
         nodes across all networks.
     '''
-    def addEdge(self, u, v, delta_t, nrGraphs, nrNodes, minTime):
+    def addEdge(self, u, v, nrNodes, minTime):
         # u is a reply to v, a is the sender of u, b is the sender of v.
         a = self.msgDict[u][0]
         b = self.msgDict[v][0]
         nrNodes = self.addHuman(a, nrNodes)
         nrNodes = self.addHuman(b, nrNodes)
         if a == b:
-            return nrGraphs, nrNodes
+            return nrNodes
         A = self.humanDict[a]
         B = self.humanDict[b]
         # Compute the index of the network which contains the point in time when message v was sent.
-        tIntervalId = trunc((self.msgDict[v][1].timestamp() - minTime) / delta_t)
+        tIntervalId = trunc((self.msgDict[v][1].timestamp() - minTime) / self.delta_t)
         if not (tIntervalId in self.timeDict):
-            nrGraphs += 1
-            self.Adj[nrGraphs] = {}
-            self.minT[nrGraphs] = {}
-            self.maxT[nrGraphs] = {}
+            self.nrGraphs += 1
+            self.Adj[self.nrGraphs] = {}
+            self.minT[self.nrGraphs] = {}
+            self.maxT[self.nrGraphs] = {}
             self.tGraphs.append(networkx.MultiDiGraph())
-            self.timeDict[tIntervalId] = nrGraphs
+            self.timeDict[tIntervalId] = self.nrGraphs
 
         T = self.timeDict[tIntervalId]
         # Update the minimum and maximum time for a conversation from person A to person B.
@@ -83,13 +85,13 @@ class InformationFlowNetwork:
         if not (A in self.Adj[T]):
             self.Adj[T][A] = []
         self.Adj[T][A].append(B)
-        return nrGraphs, nrNodes
+        return nrNodes
 
     '''
         Reads the file with messages' relations and adds a directed edge from the reply to the message.
     '''
 
-    def readMsgEdges(self, delta_t, nrGraphs, nrNodes, minTime):
+    def readMsgEdges(self, nrNodes, minTime):
         errors = 0
         invalidMsg = {}
         # file with each line containing two string numbers u v representing that message with key v is
@@ -110,9 +112,9 @@ class InformationFlowNetwork:
                 invalidMsg[lst[1]] = True
                 errors += 1
             if lst[0] in self.msgDict and lst[1] in self.msgDict:
-                nrGraphs, nrNodes = self.addEdge(lst[1], lst[0], delta_t, nrGraphs, nrNodes, minTime)
+                nrNodes = self.addEdge(lst[1], lst[0], nrNodes, minTime)
         edgeFile.close()
-        return nrGraphs, nrNodes
+        return nrNodes
 
     '''
         Computes the number of 2-paths(with or without transitive faults) for each node. The number of
@@ -122,11 +124,11 @@ class InformationFlowNetwork:
         decreasing edge time stamps."
     '''
 
-    def getTransitiveFault(self, delta_t, nrGraphs):
+    def getTransitiveFault(self):
         upperBound = 0
         lowerBound = 1
         Y = 3600 * 24 * 365
-        for netw in range(1, nrGraphs + 1):
+        for netw in range(1, self.nrGraphs + 1):
             N = self.tGraphs[netw].number_of_nodes()
             transFaultSum = [0, 0]
             # 0 = with transitive faults,
@@ -179,7 +181,7 @@ class InformationFlowNetwork:
             upperBound = max(max(transFaultSum[0], transFaultSum[1]), upperBound)
             lowerBound = min(min(transFaultSum[0], transFaultSum[1]), lowerBound)
 
-        print('For delta_t ', delta_t / Y, 'years', lowerBound, upperBound)
+        print('For delta_t ', self.delta_t / Y, 'years', lowerBound, upperBound)
 
     '''
         Returns the list of nodes in the netw-th network, sorted in increasing order by the number of
@@ -216,8 +218,8 @@ class InformationFlowNetwork:
         For the current delta_t time interval, compute the number of 2-paths for each node in the
         aggregate network as the sum of the number of 2-paths of the node in each network.
     '''
-    def compute2PathsAggregateNetwork(self, nrGraphs):
-        for netw in range(1, nrGraphs + 1):
+    def compute2PathsAggregateNetwork(self):
+        for netw in range(1, self.nrGraphs + 1):
             for nod in self.nr2paths[0][netw]:
                 if not (nod in self.nr2p[0]):
                     for i in range(3):
@@ -227,9 +229,9 @@ class InformationFlowNetwork:
                 for i in range(3):
                     self.nr2p[i][nod] += self.nr2paths[i][netw][nod]
 
-    def getRanginkCorrelation(self, nrGraphs):
+    def getRanginkCorrelation(self):
         Order = [[], [], []]
-        for netw in range(1, nrGraphs + 1):
+        for netw in range(1, self.nrGraphs + 1):
             order = []
             for i in range(3):
                 order.append(self.getNodesOrder(i, netw))
@@ -246,8 +248,8 @@ class InformationFlowNetwork:
         transitive faults.
     '''
 
-    def getRanginkCorrelationAggregate(self, nrGraphs):
-        self.compute2PathsAggregateNetwork(nrGraphs)
+    def getRanginkCorrelationAggregate(self):
+        self.compute2PathsAggregateNetwork()
         order = []
         for i in range(3):
             order.append(self.getNodesOrderAggregate(i))
@@ -301,7 +303,7 @@ def readMsgDetails():
     the 2-path rankings between the (aggregate) network with transitive faults and the one without.
 '''
 def getValues(delta_t, minTime, maxTime, msgDict):
-    infoFlowNetwork = InformationFlowNetwork(msgDict)
-    nrGraphs, nrNodes = infoFlowNetwork.readMsgEdges(delta_t, 0, 0, minTime)
-    infoFlowNetwork.getTransitiveFault(delta_t, nrGraphs)
-    infoFlowNetwork.getRanginkCorrelationAggregate(nrGraphs)
+    infoFlowNetwork = InformationFlowNetwork(msgDict, delta_t)
+    nrNodes = infoFlowNetwork.readMsgEdges(0, minTime)
+    infoFlowNetwork.getTransitiveFault()
+    infoFlowNetwork.getRanginkCorrelationAggregate()
