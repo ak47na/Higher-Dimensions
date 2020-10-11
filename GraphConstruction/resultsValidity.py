@@ -6,5 +6,7 @@ Y = 3600 * 24 * 365
 
 timeInt = [3600, 3600 * 24, 3600 * 24 * 5, 3600 * 24 * 30, Y, Y * 2, Y * 5, Y * 10, Y * 20]
 mailID.init()
+minTime, maxTime, msgDict = reproValidity.readMsgDetails()
+
 for delta_t in timeInt:
-    reproValidity.getValues(delta_t)
+    reproValidity.getValues(delta_t, minTime, maxTime, msgDict)

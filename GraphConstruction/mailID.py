@@ -13,9 +13,6 @@ removeStr = ['eclipse', 'jdt', 'admin', 'support', '.']
 # List of pairs (name, email) for all email addresses in the file.
 pairs = []
 
-# List with the cluster ids of false positives (groups of email addresses that don't actually
-# correspond to the same person.
-fakeList = [132]# [58, 121, 191]
 # humanID[email] = the index of human with email
 humanID = {}
 # fullNames[email] = the list of full names for the human with email
@@ -190,6 +187,9 @@ def joinNames():
     to the same person,.
 '''
 def createClusters(par):
+    # List with the cluster ids of false positives (groups of email addresses that don't actually
+    # correspond to the same person.
+    fakeList = [132]  # [58, 121, 191]
     nrHumans = 0
     cluster = {}
     nrC = 0
