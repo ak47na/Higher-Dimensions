@@ -6,6 +6,8 @@ from scipy.stats import spearmanr
 from math import *
 class InformationFlowNetwork:
     def __init__(self, msgDict):
+        self.humanDict = {}
+        self.Label = {}
         self.minT = {}
         self.maxT = {}
         # Adj[graphIndex][node] = the adjacency list of node in the graphIndex-th graph.
@@ -31,12 +33,12 @@ class InformationFlowNetwork:
         Add the human with name to humanDict and as a graph node with index nrNodes + 1 and label
         name.
     '''
-    def addHuman(self, name, nrNodes, humanDict, Label):
+    def addHuman(self, name, nrNodes):
         name = mailID.getIdentity(name)
-        if not (name in humanDict):
+        if not (name in self.humanDict):
             nrNodes += 1
-            Label[nrNodes] = name
-            humanDict[name] = nrNodes
+            self.Label[nrNodes] = name
+            self.humanDict[name] = nrNodes
         return nrNodes
 
     '''
@@ -45,16 +47,16 @@ class InformationFlowNetwork:
         Returns the current number of graphs of messages spanning delta_t seconds, the number of human
         nodes across all networks.
     '''
-    def addEdge(self, u, v, delta_t, nrGraphs, nrNodes, minTime, humanDict, Label):
+    def addEdge(self, u, v, delta_t, nrGraphs, nrNodes, minTime):
         # u is a reply to v, a is the sender of u, b is the sender of v.
         a = self.msgDict[u][0]
         b = self.msgDict[v][0]
-        nrNodes = self.addHuman(a, nrNodes, humanDict, Label)
-        nrNodes = self.addHuman(b, nrNodes, humanDict, Label)
+        nrNodes = self.addHuman(a, nrNodes)
+        nrNodes = self.addHuman(b, nrNodes)
         if a == b:
             return nrGraphs, nrNodes
-        A = humanDict[a]
-        B = humanDict[b]
+        A = self.humanDict[a]
+        B = self.humanDict[b]
         # Compute the index of the network which contains the point in time when message v was sent.
         tIntervalId = trunc((self.msgDict[v][1].timestamp() - minTime) / delta_t)
         if not (tIntervalId in self.timeDict):
@@ -77,7 +79,7 @@ class InformationFlowNetwork:
                                                                                 self.msgDict[v][1].timestamp())
         # Add an edge in the T-th MultiDiGraph from the node representing human a to the node
         # representing human b.
-        self.tGraphs[T].add_edge(humanDict[a], humanDict[b], time=self.msgDict[v][1])
+        self.tGraphs[T].add_edge(self.humanDict[a], self.humanDict[b], time=self.msgDict[v][1])
         if not (A in self.Adj[T]):
             self.Adj[T][A] = []
         self.Adj[T][A].append(B)
@@ -87,7 +89,7 @@ class InformationFlowNetwork:
         Reads the file with messages' relations and adds a directed edge from the reply to the message.
     '''
 
-    def readMsgEdges(self, delta_t, nrGraphs, nrNodes, minTime, humanDict, Label):
+    def readMsgEdges(self, delta_t, nrGraphs, nrNodes, minTime):
         errors = 0
         invalidMsg = {}
         # file with each line containing two string numbers u v representing that message with key v is
@@ -108,7 +110,7 @@ class InformationFlowNetwork:
                 invalidMsg[lst[1]] = True
                 errors += 1
             if lst[0] in self.msgDict and lst[1] in self.msgDict:
-                nrGraphs, nrNodes = self.addEdge(lst[1], lst[0], delta_t, nrGraphs, nrNodes, minTime, humanDict, Label)
+                nrGraphs, nrNodes = self.addEdge(lst[1], lst[0], delta_t, nrGraphs, nrNodes, minTime)
         edgeFile.close()
         return nrGraphs, nrNodes
 
@@ -300,8 +302,6 @@ def readMsgDetails():
 '''
 def getValues(delta_t, minTime, maxTime, msgDict):
     infoFlowNetwork = InformationFlowNetwork(msgDict)
-    humanDict = {}
-    Label = {}
-    nrGraphs, nrNodes = infoFlowNetwork.readMsgEdges(delta_t, 0, 0, minTime, humanDict, Label)
+    nrGraphs, nrNodes = infoFlowNetwork.readMsgEdges(delta_t, 0, 0, minTime)
     infoFlowNetwork.getTransitiveFault(delta_t, nrGraphs)
     infoFlowNetwork.getRanginkCorrelationAggregate(nrGraphs)
