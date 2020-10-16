@@ -1,4 +1,4 @@
-from Edge import myEdge
+import Edge
 from queue import Queue
 import random
 from EdgeTypeDetails import *
