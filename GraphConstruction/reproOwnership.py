@@ -1,8 +1,7 @@
-from OwnershipP import *
+from Ownership import *
 from Edge import *
 from Sample import *
 from createTable import *
-import datetime
 from MyFile import *
 from MyHuman import *
 from readSNA_measure import *
@@ -12,8 +11,6 @@ from Issue import *
 from networkx import *
 from Settings import *
 from SNAMeasures import *
-
-from scipy.stats import wilcoxon
 
 nrLayers = 1
 
@@ -85,22 +82,22 @@ def addEdge(nod1, l1, nod2, l2, col):
 # Human Names files
 files = []
 Type = ['C', 'R', 'R', 'R', 'A', 'R', 'i_R', 'i_A', 'i_C']
-files.append(open("\\CommitterAuthorFiles.txt", "r"))
-files.append(open("\\OwnerNames2020.txt", "r"))
-files.append(open("\\UploaderNames2020.txt", "r"))
-files.append(open("\\CommentRevNames2020.txt", "r"))
-files.append(open("\\ApproverNames2020.txt", "r"))
-files.append(open("\\AuthorNames2020.txt", "r"))
-files.append(open("\\ReporterNames2020B.txt", "rb"))
-files.append(open("\\AssigneeNames2020B.txt", "rb"))
-files.append(open("\\CCedNames2020B.txt", "rb"))
+files.append(open("Data\\CommitterAuthorFiles.txt", "r"))
+files.append(open("Data\\OwnerNames2020.txt", "r"))
+files.append(open("Data\\UploaderNames2020.txt", "r"))
+files.append(open("Data\\CommentRevNames2020.txt", "r"))
+files.append(open("Data\\ApproverNames2020.txt", "r"))
+files.append(open("Data\\AuthorNames2020.txt", "r"))
+files.append(open("Data\\ReporterNames2020B.txt", "rb"))
+files.append(open("Data\\AssigneeNames2020B.txt", "rb"))
+files.append(open("Data\\CCedNames2020B.txt", "rb"))
 # File dependencies files
 depFile = []
-depFile.append(open("\\FileDep.txt", "r"))
-depFile.append(open("\\ClassDep.txt", "r"))
+depFile.append(open("Data\\FileDep.txt", "r"))
+depFile.append(open("Data\\ClassDep.txt", "r"))
 # Event/Edge files
-reviewFile = open("\\ReviewEdges2020.txt", "r")
-rc2BugEdge = open("\\RevMsg2BugEdge.txt", "r")
+reviewFile = open("Data\\ReviewEdges2020.txt", "r")
+rc2BugEdge = open("Data\\RevMsg2BugEdge.txt", "r")
 
 
 def addMyFile(crtFile, nrFiles):
@@ -127,7 +124,7 @@ class MyChange:
 
 def readNameUsername():
     #name/\username from Bugzilla
-    f = open("\\emailName2020B.txt", "rb")
+    f = open("Data\\emailName2020B.txt", "rb")
     while (True):
         crtL = f.readline().decode('utf-8')
         if not crtL:
@@ -309,7 +306,7 @@ def readReviews():
     processReviewEdges(reviewEdges, 3)
     reviewFile.close()
 def readReviewComments(nrReviews):
-    revFileComm = open("\\ReviewFilesFromComments.txt", "r")
+    revFileComm = open("Data\\ReviewFilesFromComments.txt", "r")
     while (True):
         crtL = revFileComm.readline()
         if not crtL:
@@ -356,7 +353,7 @@ def addIssue(issue, nrIssues):
 def readIssueEdges(nrIssues):
     global nrNodes
     #HumanRole/\name/username/\bugID
-    issueEdgesFile = open("\\IssueEdges2020B.txt", "rb")
+    issueEdgesFile = open("Data\\IssueEdges2020B.txt", "rb")
     while True:
         crtL = issueEdgesFile.readline().decode('utf-8')
         if not crtL:
@@ -392,7 +389,7 @@ def readIssueEdges(nrIssues):
 def readIssues(nrIssues, projectID):
     global nrNodes
     #bugID/\version/\creation_ts/\delta_ts/\status/\resolution
-    issueFile = open("\\BugDetails.txt")
+    issueFile = open("Data\\BugDetails.txt")
     while True:
         crtL = issueFile.readline()
         if not crtL:
@@ -427,7 +424,7 @@ def readIssues(nrIssues, projectID):
 
 def readIssueComments():
     #comments to Bugs:
-    issueFile = open("\\comments2020.txt")
+    issueFile = open("Data\\comments2020.txt")
     while True:
         crtL = issueFile.readline()
         if not crtL:
@@ -489,7 +486,7 @@ def processCommit(crtL):
 
 def readI2CSeeAlso():
     #type changeID bugID
-    bugEdgeFile = open("\\BugEdges.txt", "r")
+    bugEdgeFile = open("Data\\BugEdges.txt", "r")
     while (True):
         crtL = bugEdgeFile.readline()
         if not crtL:
@@ -537,7 +534,7 @@ def addDepEdge(f):
 def readOwnershipFile(ownershipDict):
     #fileName/\nrCommits
     #author_name/\self.author_date/\author_timezone/\added/\removed/\complexity
-    ownershipFile = open("\\ownership.txt")
+    ownershipFile = open("Data\\ownership.txt")
     nrFiles = 0
     nrCommitters = 0
     X = 0
@@ -619,12 +616,12 @@ readIssue2Change()
 readI2CSeeAlso()
 readIssueComments()
 
-addIssueDependency("\\BugDep.txt")
+addIssueDependency("Data\\BugDep.txt")
 
 for fileId in range(len(depFile)):
     addDepEdge(depFile[fileId])
     depFile[fileId].close()
-files, posInFiles = readFileMeasures(fileDict, "\\codeMeasures2020.txt")
+files, posInFiles = readFileMeasures(fileDict, "Data\\codeMeasures2020.txt")
 ownershipDict = {}
 ownershipDict = readOwnershipFile(ownershipDict)
 

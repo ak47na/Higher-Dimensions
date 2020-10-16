@@ -5,6 +5,7 @@ class MyHuman:
         self.email = None
         self.username = None
         self.isRole = [False] * 7
+        self.isFile = [False] * 9
         self.index = index_
         self.site = 0
         # self.commits.append(commit)
@@ -37,6 +38,7 @@ def Role(x):
     if x == 4:
         return 3
     return x - 2
+
 def Site(layer):
     if layer == 0 or layer == 5:
         return 0
