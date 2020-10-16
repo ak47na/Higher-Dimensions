@@ -1,4 +1,4 @@
-class MyHuman:
+class Human:
     def __init__(self, name_, index_, human_index):
         self.name = name_
         self.humanId = human_index

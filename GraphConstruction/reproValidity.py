@@ -1,6 +1,5 @@
 import mailID
 from datetime import datetime
-from datetime import timedelta
 from networkx import *
 from scipy.stats import spearmanr
 from math import *

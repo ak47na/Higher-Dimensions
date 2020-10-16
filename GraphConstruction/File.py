@@ -1,4 +1,4 @@
-class MyFile:
+class File:
     def __init__(self, index_, name_, complexity_, churn_, size_, sizeSum_):
         self.index = index_
         self.name = name_
@@ -35,6 +35,6 @@ def readFileMeasures(fileDict, readFileName):
         churn = Int(lst[2])
         size = Int(lst[3])
         sizeSum = Int(lst[4])
-        files.append(MyFile(fileID, fileName, complexity, churn, size, sizeSum))
+        files.append(File(fileID, fileName, complexity, churn, size, sizeSum))
         posInFiles[fileID] = len(files) - 1
     return files, posInFiles

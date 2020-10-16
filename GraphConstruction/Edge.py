@@ -1,4 +1,4 @@
-class myEdge:
+class Edge:
     def __init__(self, nod1_, layer1_, nod2_, layer2_, color_):
         self.nod1 = nod1_
         self.layer1 = layer1_
