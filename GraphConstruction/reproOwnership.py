@@ -82,7 +82,6 @@ class ContributionNetwork:
         self.reviewIdForCommit = {}  # dict with commits as keys and their value represent the review they belong to
         # commitDict[commitHash] = Change object that has the index as the index of the commit.
         self.commitDict = {}
-        self.nrCommits = 0
         #fileDict[fileName] = the index of the file node in the network.
         self.fileDict = {}
         
@@ -178,8 +177,7 @@ class ContributionNetwork:
 
     def addCommit(self, hashValue):
         if not (hashValue in self.commitDict):
-            self.nrCommits += 1
-            self.commitDict[hashValue] = Change(-1, self.nrCommits)
+            self.commitDict[hashValue] = Change(-1, len(self.commitDict))
 
     def readCommits(self, commitDataFile):
         fileListForCrtCommit = []
@@ -358,7 +356,6 @@ class ContributionNetwork:
         self.issueDict[issue.name] = self.nrNodes
 
     def readIssueEdges():
-        global nrNodes
         # HumanRole/\name/username/\bugID
         issueEdgesFile = open("Data\\IssueEdges2020B.txt", "rb")
         while True:
@@ -395,7 +392,6 @@ class ContributionNetwork:
         return self.nrIssues
 
     def readIssues():
-        global nrNodes
         # bugID/\version/\creation_ts/\delta_ts/\status/\resolution
         issueFile = open("Data\\BugDetails.txt")
         while True:
@@ -422,7 +418,7 @@ class ContributionNetwork:
                 if not (issue.name in self.issueDict):
                     self.nrIssues = addIssue(issue)
                     issue.setIndex(self.nrIssues)
-                    self.i_R[nrNodes] = {}
+                    self.i_R[self.nrNodes] = {}
             # in case only fixed issues must be added =>
             # if ("CLOSED" in status_i) or ("RESOLVED" in status_i) or ("VERIFIED" in status_i) or ("FIXED" in status_i):
 
