@@ -17,10 +17,10 @@ class Change:
     def __init__(self, nodeVal_, index_):
         self.nodeVal = nodeVal_
         self.index = index_
-        self.fileNoes = []
+        self.modifiedFiles = []
 
     def addFile(self, fileNode):
-        self.fileNoes.append(fileNode)
+        self.modifiedFiles.append(fileNode)
 
 class ContributionNetwork:
     '''
@@ -170,14 +170,11 @@ class ContributionNetwork:
         self.humanDict[name].setRole(Human.Role(fileId))
         self.humanDict[name].setSite(fileId)
 
-    def addReview(review_id, nrReviews):
-        global nrNodes
-        if not review_id in self.reviewDict:
-            nrReviews += 1
-            nrNodes += 1
-            self.Label[nrNodes] = (str(review_id), 'Review')
-            self.reviewDict[review_id] = Change(nrNodes, nrReviews)
-        return nrReviews
+    def addReview(self, reviewNumber):
+        if not reviewNumber in self.reviewDict:
+            self.nrNodes += 1
+            self.Label[self.nrNodes] = (str(reviewNumber), 'Review')
+            self.reviewDict[reviewNumber] = Change(self.nrNodes, len(self.reviewDict))
 
     def addCommit(self, hashValue):
         if not (hashValue in self.commitDict):
@@ -246,7 +243,7 @@ class ContributionNetwork:
             self.addHuman(name, fileId)
         humanRoleFile.close()
 
-    def processReviewEdges(reviewEdges, L):
+    def processReviewEdges(self, reviewEdges, L):
         edge4Review = {}
         for key in reviewEdges:
             revId = self.reviewIdForCommit[key]
@@ -256,10 +253,9 @@ class ContributionNetwork:
             for edge in humanEdges:
                 edge4Review[revId][edge[1]] = True
             for edge in edge4Review[revId]:
-                addEdge(self.humanDict[edge].index, L, self.reviewDict[revId].nodeVal, L, 16)
+                self.addEdge(self.humanDict[edge].index, L, self.reviewDict[revId].nodeVal, L, 16)
 
-    def readReviews():
-        global nrReviews
+    def readReviews(self):
         reviewEdges = {}
         reviewFile = open("Data\\ReviewEdges2020.txt", "r")
         while True:
@@ -268,28 +264,31 @@ class ContributionNetwork:
                 break
             lst = crtLine.split('/\\')
             if lst[0] == 'CommentEdge' or lst[0] == 'PCommentEdge':
+                # The format of current line is "edgeType/\ownerName/\commenterName".
                 name1 = Ownership.purifyName(lst[1])
                 name2 = Ownership.purifyName(lst[2][:-1])
                 L = Settings.getLayer2('reviewer', 'reviewOwner')
-                if lst[0] == 'CommentEdge':
-                    addEdge(self.humanDict[name2].index, L, self.humanDict[name1].index, L, 8)
-                else:
-                    addEdge(self.humanDict[name2].index, L, self.humanDict[name1].index, L, 8)
+                self.addEdge(self.humanDict[name2].index, L, self.humanDict[name1].index, L, 8)
             elif lst[0] == 'Review2Commit':
-                reviewId = lst[1]
-                nrReviews = addReview(reviewId, nrReviews)
-                commitId = lst[2].replace('\n', '')
-                if (commitId in self.reviewIdForCommit) and (self.reviewIdForCommit[commitId] != reviewId):
-                    exit()
-                self.reviewIdForCommit[commitId] = reviewId
+                # The format of current line is "edgeType/\reviewNumber/\commitHash".
+                reviewNumber = lst[1]
+                self.addReview(reviewNumber)
+                commitHash = lst[2].replace('\n', '')
+                # If the commit belongs to multiple reviews, then data is invalid.
+                assert (not((commitHash in self.reviewIdForCommit) and
+                            (self.reviewIdForCommit[commitHash] != reviewNumber)))
+                self.reviewIdForCommit[commitHash] = reviewNumber
             else:
-                commitId = lst[1]
-                name = Ownership.purifyName(lst[2][:-1])
-                # reviewEdges[commitId] = edges that relate to commitId s.t edges between the review coresp to commitId can be linked with the humans
-                if not (commitId in reviewEdges):
-                    reviewEdges[commitId] = []
-                reviewEdges[commitId].append((lst[0], name))
-                if commitId in self.commitDict:
+                # The format of current line is "edgeType/\commitHash/\developerName", where
+                # edgeType in {AuthorEdge, UploaderEdge, ApprovalEdge, OwnerEdge}
+                commitHash = lst[1]
+                developerName = Ownership.purifyName(lst[2][:-1])
+                # reviewEdges[commitHash] = edges that relate to commitHash s.t edges between the 
+                # review coresponding to commitHash can be linked with the humans.
+                if not (commitHash in reviewEdges):
+                    reviewEdges[commitHash] = []
+                reviewEdges[commitHash].append((lst[0], developerName))
+                if commitHash in self.commitDict:
                     layer = 'patchUploader'
                     col = 5
                     if lst[0] == 'OwnerEdge':
@@ -301,46 +300,49 @@ class ContributionNetwork:
                     elif lst[0] == 'ApprovalEdge':
                         layer = 'approver'
                         col = 8
-                    elif lst[0] != 'UploaderEdge':
-                        exit()
+                    else:
+                        assert lst[0] == 'UploaderEdge'
+                        
                     L = Settings.getLayer2(layer, 'file')
                     # link humans to the self.files of the commit
-                    if name in self.humanDict:
-                        self.fileNoes = self.commitDict[commitId].self.fileNoes
-                        for fileNode in self.fileNoes:
-                            addEdge(self.humanDict[name].index, L, fileNode, L, 10)
-        processReviewEdges(reviewEdges, 3)
+                    if developerName in self.humanDict:
+                        modifiedFiles = self.commitDict[commitHash].modifiedFiles
+                        for fileNode in modifiedFiles:
+                            self.addEdge(self.humanDict[developerName].index, L, fileNode, L, 10)
+        self.processReviewEdges(reviewEdges, 3)
         reviewFile.close()
 
-    def readReviewComments():
+    def readReviewComments(self):
+        # File with review, commit, file and developer data from comments in format:
+        # relationType/\\fileName/\\ownerName/\\commenterName/\\reviewNumber/\\commitHash
         revFileComm = open("Data\\ReviewFilesFromComments.txt", "r")
         while (True):
             crtLine = revFileComm.readline()
             if not crtLine:
                 break
             lst = crtLine[:-1].split("/\\")
-            reviewId = lst[4]
-            if not (reviewId in self.reviewDict):
-                nrReviews = addReview(reviewId, nrReviews)
-            name1 = Ownership.purifyName(lst[2])
-            name2 = Ownership.purifyName(lst[3])
+            reviewNumber = lst[4]
+            self.addReview(reviewNumber)
+            ownerName = Ownership.purifyName(lst[2])
+            commenterName = Ownership.purifyName(lst[3])
 
-            nod1 = self.humanDict[name1].index
-            nod2 = self.humanDict[name2].index
+            node1 = self.humanDict[ownerName].index
+            node2 = self.humanDict[commenterName].index
             L = Settings.getLayer2('reviewer', 'reviewOwner')
-            if name1 != name2:
-                addEdge(nod2, L, nod1, L, 8)
-            fileList = lst[1].rsplit('.', -1)[:-1]
+            if ownerName != commenterName:
+                # Add edge from commenter to owner.
+                self.addEdge(node2, L, node1, L, 8)
+            fileList = lst[1].rsplit('.')[:-1]
             fileName = ''
             for x in fileList:
                 fileName += x
                 fileName += '.'
+            # Replace '/' with '.' and remove the ending '.' from the file type. (E.g. '.java').
             fileName = fileName.replace('/', '.')[:-1]
             if fileName in self.fileDict:
-                self.reviewDict[reviewId].addFile(self.fileDict[fileName])
-                # edge between reviewOwner and file on Review layer from comment
-                addEdge(nod1, 3, self.fileDict[fileName], 3, 11)
-        return nrReviews
+                self.reviewDict[reviewNumber].addFile(self.fileDict[fileName])
+                #Add edge between reviewOwner and file on Review layer.
+                self.addEdge(node1, 3, self.fileDict[fileName], 3, 11)
 
     def getIssues():
         g = open("BugDex2020.txt", "w")
@@ -478,8 +480,8 @@ class ContributionNetwork:
         L = Settings.getLayer2('file', 'issue')
         if reviewId in self.reviewDict and issueID in self.issueDict:
             addEdge(self.reviewDict[reviewId].nodeVal, 3, self.issueDict[issueID], 4, 17)
-            self.fileNoes = self.reviewDict[reviewId].self.fileNoes
-            for fileNode in self.fileNoes:
+            self.fileNodes = self.reviewDict[reviewId].self.fileNodes
+            for fileNode in self.fileNodes:
                 self.fileIssues[fileNode][self.issueDict[issueID]] = True
                 self.nrFileIssues[fileNode] += addEdge(fileNode, L, self.issueDict[issueID], L, 12)
 
@@ -488,8 +490,8 @@ class ContributionNetwork:
         issueID = crtLine[2][:-1]
         L = Settings.getLayer2('file', 'issue')
         if commitID in self.commitDict and issueID in self.issueDict:
-            self.fileNoes = self.commitDict[commitID].self.fileNoes
-            for fileNode in self.fileNoes:
+            self.fileNodes = self.commitDict[commitID].self.fileNodes
+            for fileNode in self.fileNodes:
                 self.fileIssues[fileNode][self.issueDict[issueID]] = True
                 self.nrFileIssues[fileNode] += addEdge(fileNode, L, self.issueDict[issueID], L, 12)
 
@@ -618,8 +620,8 @@ class ContributionNetwork:
         for fileId in range(1, self.nrHumanSubRoles):
             self.readHumanRoleFile(humanRolesFiles[fileId], fileId)
         self.readNameUsername()
-        nrReviews = readReviewComments(0)
-        readReviews()
+        self.readReviewComments()
+        self.readReviews()
 
     def readAndUpdateDataForIssues(self):
         self.nrIssues = readIssues()
