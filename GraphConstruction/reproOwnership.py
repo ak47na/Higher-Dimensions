@@ -43,6 +43,8 @@ class ContributionNetwork:
     def __init__(self, nrHumanSubRoles_):
         # Initialize the lists with the indexes of nodes within each type.
         ### why used?????
+        self.setProject()
+        self.setIssueType()
         self.humansNodes = []
         self.humanNodes = []
         self.issueNodes = []
@@ -56,7 +58,7 @@ class ContributionNetwork:
         self.edgeList = []
         self.Edges = {}
         # C, F, R, I
-        # The permutation represnts the order in which layers will be displayed.
+        # The permutation represents the order in which layers will be displayed.
         self.LayerPerm = EdgeTypeDetails.getLayerPerm()
 
         for i in range(self.nrHumanSubRoles):
@@ -243,9 +245,9 @@ class ContributionNetwork:
 
     def processReviewEdges(self, reviewEdges, L):
         edge4Review = {}
-        for key in reviewEdges:
-            revId = self.reviewIdForCommit[key]
-            humanEdges = reviewEdges[key]
+        for commitHash in reviewEdges:
+            revId = self.reviewIdForCommit[commitHash]
+            humanEdges = reviewEdges[commitHash]
             if not (revId in edge4Review):
                 edge4Review[revId] = {}
             for edge in humanEdges:
@@ -342,21 +344,21 @@ class ContributionNetwork:
                 #Add edge between reviewOwner and file on Review layer.
                 self.addEdge(node1, 3, self.fileDict[fileName], 3, 11)
 
-    def getIssues():
+    def writeIssuesFile(self):
         g = open("BugDex2020.txt", "w")
         for key in self.issueDict:
             g.write(str(key) + '/\\')
         g.close()
 
-    def addIssue(issue):
+    def addIssue(self, issue):
         self.nrIssues += 1
         self.nrNodes += 1
         self.Label[self.nrNodes] = (issue.name, 'Issue')
         self.issueNodes.append(self.nrNodes)
         self.issueDict[issue.name] = self.nrNodes
 
-    def readIssueEdges():
-        # HumanRole/\name/username/\bugID
+    def readIssueEdges(self):
+        # Each line of file contains data for an issue in format HumanRole/\name/\username/\bugID.
         issueEdgesFile = open("Data\\IssueEdges2020B.txt", "rb")
         while True:
             crtLine = issueEdgesFile.readline().decode('utf-8')
@@ -366,14 +368,14 @@ class ContributionNetwork:
                 continue
             lst = crtLine.split('/\\')
             if (lst[0][0] != 'C'):
+                # Ignore "CC-Assignees".
                 name = Ownership.purifyName(lst[1])
-
-                if not (lst[-1][:-1] in self.issueDict):  # issue was not fixed
+                bugId = lst[-1][:-1]
+                if not (bugId in self.issueDict):
+                    # issue was not fixed
                     continue
-
-                if not (name in self.humanDict):
-                    print(name, lst[1])
-                    continue
+                # All humans must have been introduced previously.
+                assert (name in self.humanDict)
                 layer = 'issueReporter'
                 col = 5
                 if lst[0][0] == 'A':
@@ -382,7 +384,7 @@ class ContributionNetwork:
                 else:
                     self.humanDict[name].isReporter = True
                 L = Settings.getLayer2(layer, 'issue')
-                addEdge(self.humanDict[name].index, L, self.issueDict[lst[-1][:-1]], L, col)
+                self.addEdge(self.humanDict[name].index, L, self.issueDict[bugId], L, col)
             else:
                 uname = lst[1]
                 if uname in self.nameOfUsername:
@@ -391,8 +393,9 @@ class ContributionNetwork:
         issueEdgesFile.close()
         return self.nrIssues
 
-    def readIssues():
-        # bugID/\version/\creation_ts/\delta_ts/\status/\resolution
+    def readIssues(self):
+        # Each line of file contains issue data in format:
+        # bugID/\version/\creation_ts/\delta_ts/\status/\resolution.
         issueFile = open("Data\\BugDetails.txt")
         while True:
             crtLine = issueFile.readline()
@@ -401,32 +404,28 @@ class ContributionNetwork:
             lst = crtLine.split('/\\')
             a = lst[2].split(' ', 1)
             a[1] = a[1].replace(' ', '')
-            if len(a) != 2:
-                exit()
+            assert len(a) == 2
             lst[2] = Ownership.getTime(a[0], a[1])
             a = lst[3].split(' ', 1)
             a[1] = a[1].replace(' ', '')
             lst[3] = Ownership.getTime(a[0], a[1])
-            if len(a) != 2:
-                exit()
-            if len(lst) != 6:
-                exit()
+            assert len(a) == 2
+            assert len(lst) == 6
             lst[5] = lst[5][:-1]  # ignore '\n'
             issue = Issue.Issue(lst[0], lst[1], lst[2], lst[3], lst[4], lst[5], self.projectList[self.projectID])
 
             if issue.getType() == self.issueType and (lst[5] == 'FIXED' or lst[5] == 'WORKSFORME'):
                 if not (issue.name in self.issueDict):
-                    self.nrIssues = addIssue(issue)
+                    self.addIssue(issue)
                     issue.setIndex(self.nrIssues)
                     self.i_R[self.nrNodes] = {}
             # in case only fixed issues must be added =>
             # if ("CLOSED" in status_i) or ("RESOLVED" in status_i) or ("VERIFIED" in status_i) or ("FIXED" in status_i):
 
         issueFile.close()
-        self.nrIssues = readIssueEdges()
-        return self.nrIssues
+        self.readIssueEdges()
 
-    def readIssueComments():
+    def readIssueComments(self):
         # comments to Bugs:
         issueFile = open("Data\\comments2020.txt")
         while True:
@@ -448,10 +447,10 @@ class ContributionNetwork:
                     # all commenters are issueReporters
                     self.i_R[self.issueDict[bug]][self.nameOfUsername[lst[0]]] = True
                 crtLine = issueFile.readline()
-        addIrEdges()
+        self.addIrEdges()
         issueFile.close()
 
-    def addIssueDependency(fName):
+    def addIssueDependency(self, fName):
         # b_1/\b_2 <=> b_2 is in b_1's list of "depends_on" in Bugzilla
         f = open(fName, "r")
         while True:
@@ -468,9 +467,9 @@ class ContributionNetwork:
                 for elem in crtLine:
                     if elem in self.issueDict:
                         i2 = self.issueDict[elem]
-                        addEdge(i1, L, i2, L, 15)
+                        self.addEdge(i1, L, i2, L, 15)
 
-    def processReview(crtLine):
+    def processReview(self, crtLine):
         reviewId = crtLine[1]
         issueID = crtLine[2][:-1]
         L = Settings.getLayer2('file', 'issue')
@@ -481,17 +480,17 @@ class ContributionNetwork:
                 self.fileIssues[fileNode][self.issueDict[issueID]] = True
                 self.nrFileIssues[fileNode] += addEdge(fileNode, L, self.issueDict[issueID], L, 12)
 
-    def processCommit(crtLine):
+    def processCommit(self, crtLine):
         commitID = crtLine[1]
         issueID = crtLine[2][:-1]
         L = Settings.getLayer2('file', 'issue')
         if commitID in self.commitDict and issueID in self.issueDict:
-            self.fileNodes = self.commitDict[commitID].self.fileNodes
+            self.fileNodes = self.commitDict[commitID].modifiedFiles
             for fileNode in self.fileNodes:
                 self.fileIssues[fileNode][self.issueDict[issueID]] = True
-                self.nrFileIssues[fileNode] += addEdge(fileNode, L, self.issueDict[issueID], L, 12)
+                self.nrFileIssues[fileNode] += self.addEdge(fileNode, L, self.issueDict[issueID], L, 12)
 
-    def readI2CSeeAlso():
+    def readI2CSeeAlso(self):
         # type changeID bugID
         bugEdgeFile = open("Data\\BugEdges.txt", "r")
         while (True):
@@ -502,12 +501,12 @@ class ContributionNetwork:
                 continue
             crtLine = crtLine.split(' ')
             if crtLine[0] == 'ReviewEdge':
-                processReview(crtLine)
+                self.processReview(crtLine)
             else:
-                processCommit(crtLine)
+                self.processCommit(crtLine)
         bugEdgeFile.close()
 
-    def readIssue2Change():
+    def readIssue2Change(self):
         # type changeID bugID
         rc2BugEdge = open("Data\\RevMsg2BugEdge.txt", "r")
         while (True):
@@ -518,12 +517,12 @@ class ContributionNetwork:
                 continue
             crtLine = crtLine.split(' ')
             if crtLine[0] == 'Review2Bug':
-                processReview(crtLine)
+                self.processReview(crtLine)
             else:
-                processCommit(crtLine)
+                self.processCommit(crtLine)
         rc2BugEdge.close()
 
-    def addIrEdges():
+    def addIrEdges(self):
         layer = Settings.getLayer2('issueReporter', 'issueReporter')
         for key in self.i_R:
             crtDict = self.i_R[key]
@@ -533,7 +532,7 @@ class ContributionNetwork:
                     if i_r1 != i_r2:
                         addEdge(nod1, layer, self.humanDict[i_r2].index, layer, 7)
 
-    def addDepEdge(f):
+    def addDepEdgeFromFile(self, f):
         while True:
             crtLine = f.readline()
             if not crtLine:
@@ -541,7 +540,7 @@ class ContributionNetwork:
             lst = crtLine.split()
             if lst[1] in self.fileDict and lst[2] in self.fileDict:
                 L = Settings.getLayer2('file', 'file')
-                addEdge(self.fileDict[lst[1]], L, self.fileDict[lst[2]], L, 1)
+                self.addEdge(self.fileDict[lst[1]], L, self.fileDict[lst[2]], L, 1)
 
     def readOwnershipFile():
         # fileName/\nrCommits
@@ -620,11 +619,11 @@ class ContributionNetwork:
         self.readReviews()
 
     def readAndUpdateDataForIssues(self):
-        self.nrIssues = readIssues()
-        readIssue2Change()
-        readI2CSeeAlso()
-        readIssueComments()
-        addIssueDependency("Data\\BugDep.txt")
+        self.readIssues()
+        self.readIssue2Change()
+        self.readI2CSeeAlso()
+        self.readIssueComments()
+        self.addIssueDependency("Data\\BugDep.txt")
 
     def readDataForFiles(self):
         # File dependencies files
@@ -632,13 +631,13 @@ class ContributionNetwork:
         depFile.append(open("Data\\FileDep.txt", "r"))
         depFile.append(open("Data\\ClassDep.txt", "r"))
         for fileId in range(len(depFile)):
-            addDepEdge(depFile[fileId])
+            self.addDepEdgeFromFile(depFile[fileId])
             depFile[fileId].close()
         self.files, posInFiles = File.readFileMeasures(self.fileDict, "Data\\codeMeasures2020.txt")
 
     def readAndUpdateDataForOwnership(self):
         self.ownershipDict = {}
-        readOwnershipFile(self)
+        self.readOwnershipFile()
 
     def getSNAMeasure(self, name):
         if name == 'Betweenness Centrality':
@@ -658,7 +657,7 @@ class ContributionNetwork:
         if name == 'Constraint':
             return None
 
-    def getSNAResult(name):
+    def getSNAResult(self, name):
         fileValues = []
         self.nrIssuesList = []
         values = getSNAMeasure(name)
@@ -693,4 +692,9 @@ class ContributionNetwork:
 
 network = ContributionNetwork(8)
 network.readDataForHumans()
+network.readDataForFiles()
+network.readReviewComments()
+network.readReviews()
+network.readAndUpdateDataForIssues()
+
 network.createMonoplex()
