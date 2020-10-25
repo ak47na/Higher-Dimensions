@@ -23,10 +23,9 @@ class Monoplex:
             self.Edges = list(G.edges.data(weightStr_))
         self.weightStr = weightStr_
         self.wSum = {}
-        self.N = {}
+        self.Nbhd = {}
         self.Adj = {}
         self.getAdjList()
-        self.Constr = constraint(self.G)
         self.precomputeNeighbourhood()
         self.precomputeMutualWeights()
 
@@ -59,13 +58,13 @@ class Monoplex:
         there is at least one edge v->u but no edge u->v.
     '''
     def getNeighbourhood(self, u):
-        self.N[u] = {}
-        self.N[u][u] = False
+        self.Nbhd[u] = {}
+        self.Nbhd[u][u] = False
         for adj in self.Adj[u]:
-            self.N[u][adj] = True
+            self.Nbhd[u][adj] = True
         for v in self.nodes:
             if (u in self.Adj[v] and self.Adj[v][u] == True):
-                self.N[u][v] = True
+                self.Nbhd[u][v] = True
 
     '''
         Computes the neighbourhood of all nodes in the graph.
@@ -75,7 +74,7 @@ class Monoplex:
         self.Mw = {}
         self.Pw = {}
         for u in self.nodes:
-            if not(u in self.N):
+            if not(u in self.Nbhd):
                 self.getNeighbourhood(u)
 
     '''
@@ -83,7 +82,6 @@ class Monoplex:
         each pair of adjacent nodes in the network.
     '''
     def precomputeMutualWeights(self):
-
         for u in self.nodes:
             # self.maxMw[u] = the maximum mutual weight of u with all its neighbours.
             self.maxMw[u] = 0
@@ -93,13 +91,15 @@ class Monoplex:
             self.Pw[u] = {}
             # self.Pw[u][v] = "normalized mutual weight of the edges from `u` to `v` with respect to
             # the mutual weights of the neighbors of `u` in `G`."
-            for v in self.N[u]:
+            for v in self.Nbhd[u]:
                 self.Mw[u][v] = mutual_weight(self.G, u, v, weight = self.weightStr)
                 if self.Mw[u][v] == 0:
                     self.Pw[u][v] = 0
                 else:
                     self.Pw[u][v] = normalized_mutual_weight(self.G, u, v, weight=self.weightStr)
                 self.maxMw[u] = max(self.maxMw[u], self.Mw[u][v])
+    def computeConstraint(self):
+        self.localConstraint = constraint(self.G)
 
     '''
         Returns a dictionary with the effective size value of each node in the network.
@@ -108,11 +108,11 @@ class Monoplex:
         value = {}
         for u in self.nodes:
             value[u] = 0
-            for v in self.N[u]:
+            for v in self.Nbhd[u]:
                 if v == u:
                     continue
                 value[u] += 1
-                for w in self.N[v]:
+                for w in self.Nbhd[v]:
                     Puw = self.Pw[u][w]
                     if self.maxMw[v] == 0:
                         Mvw = 0
@@ -120,6 +120,39 @@ class Monoplex:
                         Mvw = self.Mw[v][w] / self.maxMw[v]
                     value[u] -= Puw * Mvw
         return value
+
+    def computeReachabilityForNode(self, x):
+        reach = {}
+        N = len(self.nodes)
+        reachableNodes = 0
+        if (x in self.Adj[x]):
+            # x has a self-loop, thus it is reachable from itself.
+            reach[x] = True
+            reachableNodes += 1
+        # Run BFS with x as source node to get all nodes reachable from x.
+        Q = Queue(maxsize=N)
+        Q.put(x)
+        while (not(Q.empty())):
+            nod = Q.get()
+            # loop through nod's neighbours
+            for adj in self.Adj[nod]:
+                if (not(adj in reach)) or (not(reach[adj])):
+                    reach[adj] = True
+                    Q.put(x)
+                    reachableNodes += 1
+        return reachableNodes
+
+
+    def computeReachabilityArray(self):
+        # reachability[x] = the number of nodes that can be reached from self.nodes[x].
+        # reach[x][y] = True iff self.nodes[x] can reach self.nodes[y]
+        # O(N * (N + M))
+        N = len(self.nodes)
+        self.reachability = []
+        for node in self.nodes:
+            self.reachability.append(self.computeReachabilityForNode(node))
+
+        return self.reachability
 
     '''
         Returns a dictionary with the hierarchy value of each node in the network.
@@ -130,10 +163,10 @@ class Monoplex:
         self.Hierarchy = {}
         for u in self.nodes:
             self.H[u] = {}
-            C = self.Constr[u]
+            C = self.localConstraint[u]
             sizeN = 0
             sum = 0
-            for v in self.N[u]:
+            for v in self.Nbhd[u]:
                 sizeN += 1
                 self.H[u][v] = local_constraint(self.G, u, v)
             for v in self.H[u]:
@@ -141,3 +174,4 @@ class Monoplex:
                 sum += self.H[u][v]
             self.Hierarchy[u] = sum / sizeN
         return self.Hierarchy
+

@@ -458,8 +458,7 @@ class ContributionNetwork:
             if not crtLine:
                 break
             lst = crtLine.split('/\\')
-            if len(lst) != 2:
-                exit()
+            assert len(lst) == 2
             crtLine = f.readline()[1:-1].split(', ')
             L = Settings.getLayer2('issue', 'issue')
             if (lst[0] in self.issueDict):
@@ -474,11 +473,11 @@ class ContributionNetwork:
         issueID = crtLine[2][:-1]
         L = Settings.getLayer2('file', 'issue')
         if reviewId in self.reviewDict and issueID in self.issueDict:
-            addEdge(self.reviewDict[reviewId].nodeVal, 3, self.issueDict[issueID], 4, 17)
+            self.addEdge(self.reviewDict[reviewId].nodeVal, 3, self.issueDict[issueID], 4, 17)
             self.fileNodes = self.reviewDict[reviewId].self.fileNodes
             for fileNode in self.fileNodes:
                 self.fileIssues[fileNode][self.issueDict[issueID]] = True
-                self.nrFileIssues[fileNode] += addEdge(fileNode, L, self.issueDict[issueID], L, 12)
+                self.nrFileIssues[fileNode] += self.addEdge(fileNode, L, self.issueDict[issueID], L, 12)
 
     def processCommit(self, crtLine):
         commitID = crtLine[1]
@@ -530,7 +529,7 @@ class ContributionNetwork:
                 nod1 = self.humanDict[i_r1].index
                 for i_r2 in crtDict:
                     if i_r1 != i_r2:
-                        addEdge(nod1, layer, self.humanDict[i_r2].index, layer, 7)
+                        self.addEdge(nod1, layer, self.humanDict[i_r2].index, layer, 7)
 
     def addDepEdgeFromFile(self, f):
         while True:
@@ -586,7 +585,7 @@ class ContributionNetwork:
                 cp = (100 * obj.authorDex[0][c1].nrCommits / obj.nrCommits[0])
                 # change to cp > 50 for only major edges
                 if cp <= 50:
-                    addEdge(self.humanDict[c1].index, 1, self.fileDict[obj.name], 1, 14)
+                    self.addEdge(self.humanDict[c1].index, 1, self.fileDict[obj.name], 1, 14)
                 valuesC.append(cp)
                 if sAll != 0:
                     if obj.authorDex[0][c1].sumAdd + obj.authorDex[0][c1].sumRem >= sAll:
@@ -597,9 +596,9 @@ class ContributionNetwork:
                 for c2 in allCommitters:
                     if c1 != c2:
                         if self.humanDict[c1].isRole[0] and self.humanDict[c2].isRole[0]:
-                            addEdge(self.humanDict[c1].index, L, self.humanDict[c2].index, L, 13)
+                            self.addEdge(self.humanDict[c1].index, L, self.humanDict[c2].index, L, 13)
                         elif self.humanDict[c2].isRole[0] or self.humanDict[c1].isRole[0]:
-                            addEdge(self.humanDict[c1].index, L, self.humanDict[c2].index, A, 2)
+                            self.addEdge(self.humanDict[c1].index, L, self.humanDict[c2].index, A, 2)
 
             ownershipTuple = obj.nrCommitsOwner(0)
             self.ownershipDict[self.fileDict[obj.name]] = (ownershipTuple[0], obj.nrCommitsPercentage(0))
@@ -651,7 +650,7 @@ class ContributionNetwork:
         if name == 'Constraint':
             return constraint(self.ownershipGraph)
         if name == 'Reachability':
-            return None
+            return self.monoplex.computeReachabilityArray()
         if name == 'Effective Size':
             return self.monoplex.getEffectiveSize()
         if name == 'Constraint':
@@ -660,11 +659,11 @@ class ContributionNetwork:
     def getSNAResult(self, name):
         fileValues = []
         self.nrIssuesList = []
-        values = getSNAMeasure(name)
+        values = self.getSNAMeasure(name)
 
         for fileN in self.fileDict:
             nod = self.fileDict[fileN]
-            if not (nod in Nodes):
+            if not (nod in self.Nodes):
                 continue
             self.nrIssuesList.append(self.nrFileIssues[nod])
             if values == None:
@@ -672,23 +671,22 @@ class ContributionNetwork:
             else:
                 fileValues.append(values[nod])
         w, p = spearmanr(fileValues, self.nrIssuesList)
-        print(measure, w, p)
+        print(name, w, p)
 
     def createMonoplex(self):
-        self.Nodes = []
         self.ownershipGraph = networkx.DiGraph()
         for e in self.Edges:
             if self.Edges[e] > 0 and (e.color == 1 or e.color == 14):
                 self.ownershipGraph.add_edge(e.nod1, e.nod2, w=self.Edges[e])
-        Nodes = list(self.ownershipGraph.nodes)
+        self.Nodes = list(self.ownershipGraph.nodes)
         self.monoplex = SNAMeasures.Monoplex(self.ownershipGraph, True, "w")
 
     def getResultsFromSNAMeasures(self, measures):
         for measure in measures:
-            SNAMeasures.getSNAResult(measure)
+            self.getSNAResult(measure)
 
-    # measures1 = ['Degree Centrality', 'Betweenness Centrality', 'Closeness Centrality', 'Reachability']
-    # measures2 = ['Effective Size', 'Constraint']
+    # Measures: ['Degree Centrality', 'Betweenness Centrality', 'Closeness Centrality',
+    # 'Reachability', 'Effective Size', 'Constraint']
 
 network = ContributionNetwork(8)
 network.readDataForHumans()
@@ -698,3 +696,4 @@ network.readReviews()
 network.readAndUpdateDataForIssues()
 
 network.createMonoplex()
+# network.getResultsFromSNAMeasures(["Reachability"])
