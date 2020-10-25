@@ -104,22 +104,22 @@ class Monoplex:
     '''
         Returns a dictionary with the effective size value of each node in the network.
     '''
-    def getEffectiveSize(self):
-        value = {}
+    def computeEffectiveSize(self):
+        effectiveSize = {}
         for u in self.nodes:
-            value[u] = 0
+            effectiveSize[u] = 0
             for v in self.Nbhd[u]:
                 if v == u:
                     continue
-                value[u] += 1
+                effectiveSize[u] += 1
                 for w in self.Nbhd[v]:
                     Puw = self.Pw[u][w]
                     if self.maxMw[v] == 0:
                         Mvw = 0
                     else:
                         Mvw = self.Mw[v][w] / self.maxMw[v]
-                    value[u] -= Puw * Mvw
-        return value
+                    effectiveSize[u] -= Puw * Mvw
+        return effectiveSize
 
     def computeReachabilityForNode(self, x):
         reach = {}
@@ -143,16 +143,15 @@ class Monoplex:
         return reachableNodes
 
 
-    def computeReachabilityArray(self):
+    def computeReachability(self):
         # reachability[x] = the number of nodes that can be reached from self.nodes[x].
         # reach[x][y] = True iff self.nodes[x] can reach self.nodes[y]
         # O(N * (N + M))
         N = len(self.nodes)
-        self.reachability = []
+        reachability = {}
         for node in self.nodes:
-            self.reachability.append(self.computeReachabilityForNode(node))
-
-        return self.reachability
+            reachability[node] = self.computeReachabilityForNode(node)
+        return reachability
 
     '''
         Returns a dictionary with the hierarchy value of each node in the network.

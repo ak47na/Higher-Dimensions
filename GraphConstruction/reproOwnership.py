@@ -650,7 +650,7 @@ class ContributionNetwork:
         if name == 'Constraint':
             return constraint(self.ownershipGraph)
         if name == 'Reachability':
-            return self.monoplex.computeReachabilityArray()
+            return self.monoplex.computeReachability()
         if name == 'Effective Size':
             return self.monoplex.getEffectiveSize()
         if name == 'Constraint':
@@ -666,10 +666,7 @@ class ContributionNetwork:
             if not (nod in self.Nodes):
                 continue
             self.nrIssuesList.append(self.nrFileIssues[nod])
-            if values == None:
-                fileValues.append(local_reaching_centrality(self.ownershipGraph, nod))
-            else:
-                fileValues.append(values[nod])
+            fileValues.append(values[nod])
         w, p = spearmanr(fileValues, self.nrIssuesList)
         print(name, w, p)
 
