@@ -99,7 +99,7 @@ class Monoplex:
                     self.Pw[u][v] = normalized_mutual_weight(self.G, u, v, weight=self.weightStr)
                 self.maxMw[u] = max(self.maxMw[u], self.Mw[u][v])
     def computeConstraint(self):
-        self.localConstraint = constraint(self.G)
+        self.constraint = constraint(self.G)
 
     '''
         Returns a dictionary with the effective size value of each node in the network.
@@ -155,22 +155,24 @@ class Monoplex:
 
     '''
         Returns a dictionary with the hierarchy value of each node in the network.
-        TODO - find formula for Hierarchy.
+        Hierarchy (H) indicates the extent to which aggregate constraint on ego is concentrated
+        in a single alter.
+        It measures inequality in the distribution of constraints on a focal person across the other
+        actors in its neighborhood.
+        For node u, 
+        C = sum of constraint (from an actor’s network) across all N relationships of an actor
+        N = number of contacts in the actor’s network
+        H[i] = )C[i][j] / (C/N)[
     '''
     def getHierarhy(self):
-        self.H = {}
-        self.Hierarchy = {}
+        H = {}
+        Hierarchy = {}
         for u in self.nodes:
-            self.H[u] = {}
-            C = self.localConstraint[u]
-            sizeN = 0
-            sum = 0
-            for v in self.Nbhd[u]:
-                sizeN += 1
-                self.H[u][v] = local_constraint(self.G, u, v)
-            for v in self.H[u]:
-                self.H[u][v] = self.H[u][v] * sizeN / C
-                sum += self.H[u][v]
-            self.Hierarchy[u] = sum / sizeN
-        return self.Hierarchy
+            H[u] = {}
+            C = self.constraint[u]
+            sizeNbhd = len(self.Nbhd[u])
 
+            for v in self.Nbhd[u]:
+                H[u][v] = local_constraint(self.G, u, v) * (sizeNbhd / C)
+            # TODO compute hierarchy for u from formula using H[u][v].
+        return Hierarchy
