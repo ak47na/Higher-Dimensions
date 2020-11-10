@@ -138,7 +138,7 @@ class Monoplex:
             for adj in self.Adj[nod]:
                 if (not(adj in reach)) or (not(reach[adj])):
                     reach[adj] = True
-                    Q.put(x)
+                    Q.put(adj)
                     reachableNodes += 1
         return reachableNodes
 
