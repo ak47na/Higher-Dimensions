@@ -12,7 +12,11 @@ from networkx import *
 import Settings
 import SNAMeasures
 
-
+'''
+    Class that represents a code change using its node value in the ContributionNetwork (if it's a
+    node or -1 otw) and its index in the set of code changes of its type(commit/review).
+    Each change object stores a list with the names of the files it modified.
+'''
 class Change:
     def __init__(self, nodeVal_, index_):
         self.nodeVal = nodeVal_
@@ -41,13 +45,17 @@ class ContributionNetwork:
         
     '''
     def __init__(self, nrHumanSubRoles_):
-        # Initialize the lists with the indexes of nodes within each type.
         ### why used?????
         self.setProject()
         self.setIssueType()
+        # Initialize the lists with the indexes of graph nodes within each type.
+        # humansNodes = list of graph nodes of that represent humans.
         self.humansNodes = []
+        # humanNodes[humanRole] = list of graph nodes of humans that have the role humanRole.
         self.humanNodes = []
+        # issueNodes = list of graph nodes that represent issues.
         self.issueNodes = []
+        # fileNodes = list of graph nodes that represent files.
         self.fileNodes = []
         self.nrNodes = 0
         self.nrIssues = 0
@@ -68,23 +76,23 @@ class ContributionNetwork:
         self.i_R = {}
         # For user with name A and username B, self.nameOfUsername[B] = A.
         self.nameOfUsername = {}
-        # self.issueDict = dictionary with issue names as keys and their corresponding node index
-        # as values.
+        # self.issueDict = dictionary with issue names as keys and their corresponding graph node
+        #  index as values.
         self.issueDict = {}
+        # list of File objects corresponding to all the files in the ContributionNetwork.
         self.networkFiles = []
         # self.fileIssues contains for each file node, the nodes of issues related to that file.
         # self.fileIssues[fileNode] = {issueNode1 : True, issueNode2 : True, ... }
         self.fileIssues = {}
-        # self.nrFileIssues[x] = the number of issues of file nod x.
-        self.nrFileIssues = {}
-        # self.reviewDict[reviewIndex] = Change object with the index of the review and the node
-        # of the review in the network.
+        # self.reviewDict[reviewId] = Change object with the index of the review in the set of
+        # reviews and the node of the review in the network.
         self.reviewDict = {}
-        # reviewIdForCommit[commitHash] = reviewId if commitHash was committed in reviewId.
-        self.reviewIdForCommit = {}  # dict with commits as keys and their value represent the review they belong to
+        # reviewIdForCommit[commitHash] = reviewId if commitHash was committed in reviewId:
+        # dict with commits as keys and their value represent the review they belong to
+        self.reviewIdForCommit = {}
         # commitDict[commitHash] = Change object that has the index as the index of the commit.
         self.commitDict = {}
-        #fileDict[fileName] = the index of the file node in the network.
+        # fileDict[fileName] = the graph node of the file with fileName in the network.
         self.fileDict = {}
         
     def addEdge_util(self, crtEdge):
@@ -133,7 +141,6 @@ class ContributionNetwork:
         self.fileNodes.append(self.nrNodes)
         self.fileDict[crtFile] = self.nrNodes
         self.fileIssues[self.nrNodes] = {}
-        self.nrFileIssues[self.nrNodes] = 0
         self.networkFiles.append(File.File(nrFiles, crtFile, 0, 0, 0, 0))
 
     def readNameUsername(self):
@@ -163,8 +170,8 @@ class ContributionNetwork:
         if not (name in self.humanDict):
             self.nrNodes += 1
             self.Label[self.nrNodes] = (name, self.Type[fileId])
-            self.humansNodes.append(self.nrNodes)
             self.humanDict[name] = Human.Human(name, self.nrNodes, len(self.humanDict))
+            self.humansNodes.append(self.humanDict[name].index)
         if self.humanDict[name].isFile[fileId] == False:
             self.humanNodes[fileId].append(self.humanDict[name].index)
         self.humanDict[name].isFile[fileId] = True
@@ -477,7 +484,7 @@ class ContributionNetwork:
             self.fileNodes = self.reviewDict[reviewId].self.fileNodes
             for fileNode in self.fileNodes:
                 self.fileIssues[fileNode][self.issueDict[issueID]] = True
-                self.nrFileIssues[fileNode] += self.addEdge(fileNode, L, self.issueDict[issueID], L, 12)
+                self.addEdge(fileNode, L, self.issueDict[issueID], L, 12)
 
     def processCommit(self, crtLine):
         commitID = crtLine[1]
@@ -487,7 +494,7 @@ class ContributionNetwork:
             self.fileNodes = self.commitDict[commitID].modifiedFiles
             for fileNode in self.fileNodes:
                 self.fileIssues[fileNode][self.issueDict[issueID]] = True
-                self.nrFileIssues[fileNode] += self.addEdge(fileNode, L, self.issueDict[issueID], L, 12)
+                self.addEdge(fileNode, L, self.issueDict[issueID], L, 12)
 
     def readI2CSeeAlso(self):
         # type changeID bugID
@@ -665,7 +672,7 @@ class ContributionNetwork:
             nod = self.fileDict[fileN]
             if not (nod in self.Nodes):
                 continue
-            self.nrIssuesList.append(self.nrFileIssues[nod])
+            self.nrIssuesList.append(len(self.fileIssues[nod]))
             fileValues.append(values[nod])
         w, p = spearmanr(fileValues, self.nrIssuesList)
         print(name, w, p)
