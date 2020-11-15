@@ -98,13 +98,22 @@ class Monoplex:
                 else:
                     self.Pw[u][v] = normalized_mutual_weight(self.G, u, v, weight=self.weightStr)
                 self.maxMw[u] = max(self.maxMw[u], self.Mw[u][v])
+
+    '''
+        Computes the constraint for all nodes wrt constraint[v] = sum(l(v, w)), v in N(v)\{v}.
+        l(u, v) = (p(u, v) + sum(p(u,w)*p(w,v), w in N(v)))^2
+        p(u, v) = normalized mutual weight of the (directed or undirected) edges joining u and v.
+    '''
     def computeConstraint(self):
         self.constraint = constraint(self.G)
 
     '''
         Returns a dictionary with the effective size value of each node in the network.
+        effectiveSize(i) = sum(j, (1 - sum(q, p(i,q)*m(j,q))), where
+        m(u, v) = mutual weight of u and v divided by u's highest mutual weight with any of its
+        neighbors. 
     '''
-    def computeEffectiveSize(self):
+    def computeEffectiveSizeFormula(self):
         effectiveSize = {}
         for u in self.nodes:
             effectiveSize[u] = 0
@@ -113,13 +122,23 @@ class Monoplex:
                     continue
                 effectiveSize[u] += 1
                 for w in self.Nbhd[v]:
-                    Puw = self.Pw[u][w]
+                    if w in self.Pw[u]:
+                        Puw = self.Pw[u][w]
+                    else:
+                        Puw = 0
                     if self.maxMw[v] == 0:
                         Mvw = 0
                     else:
                         Mvw = self.Mw[v][w] / self.maxMw[v]
                     effectiveSize[u] -= Puw * Mvw
+            #assert effectiveSize[u] == effective_size(self.G, [u], self.weightStr)
         return effectiveSize
+
+    '''
+        Returns a dictionary with nodes as keys and their effective size as values.
+    '''
+    def computeEffectiveSize(self):
+        return effective_size(self.G, self.nodes, self.weightStr)
 
     def computeReachabilityForNode(self, x):
         reach = {}
