@@ -151,7 +151,7 @@ class ContributionNetwork:
             if not crtLine:
                 break
             lst = crtLine.split('/\\')
-            Len = len(lst)
+            assert len(lst) == 2
             name = Ownership.purifyName(lst[0])
             if name in self.humanDict:
                 self.nameOfUsername[lst[-1][:-1]] = name
@@ -166,17 +166,17 @@ class ContributionNetwork:
             vals.append([len(self.humanNodes[r])])
         createTable2(cols[:-1], vals)
 
-    def addHuman(self, name, fileId):
+    def addHuman(self, name, roleId):
         if not (name in self.humanDict):
             self.nrNodes += 1
-            self.Label[self.nrNodes] = (name, self.Type[fileId])
+            self.Label[self.nrNodes] = (name, self.Type[roleId])
             self.humanDict[name] = Human.Human(name, self.nrNodes, len(self.humanDict))
             self.humansNodes.append(self.humanDict[name].index)
-        if self.humanDict[name].isFile[fileId] == False:
-            self.humanNodes[fileId].append(self.humanDict[name].index)
-        self.humanDict[name].isFile[fileId] = True
-        self.humanDict[name].setRole(Human.Role(fileId))
-        self.humanDict[name].setSite(fileId)
+        if self.humanDict[name].isFile[roleId] == False:
+            self.humanNodes[roleId].append(self.humanDict[name].index)
+        self.humanDict[name].isFile[roleId] = True
+        self.humanDict[name].setRole(Human.Role(roleId))
+        self.humanDict[name].setSite(roleId)
 
     def addReview(self, reviewNumber):
         if not reviewNumber in self.reviewDict:
@@ -227,12 +227,6 @@ class ContributionNetwork:
                 if authorName != committerName:
                     # Add edge from committer of file to file.
                     self.addEdge(self.humanDict[committerName].index, 1, self.fileDict[crtFile], 1, 4)
-                # for fileName in fileList:
-                # nrEdges['file2fileCommit'] += addEdge(self.fileDict[crtFile], 10, self.fileDict[fileName], 10)
-                # add undirected edge between co-committed self.files
-                # addEdge(self.fileDict[crtFile], 12, self.fileDict[fileName], 12)
-                # addEdge(self.fileDict[fileName], 12, self.fileDict[crtFile], 12)
-                # change to L, L?
                 fileListForCrtCommit.append(crtFile)
         commitDataFile.close()
 
@@ -240,13 +234,15 @@ class ContributionNetwork:
         while (True):
             # names in Bugzilla are read from binary files
             if fileId >= 6 and fileId <= 8:
-                crtLineine = humanRoleFile.readline().decode('utf-8')
+                crtLine = humanRoleFile.readline().decode('utf-8')
             else:
-                crtLineine = humanRoleFile.readline()
-            if not crtLineine:
+                crtLine = humanRoleFile.readline()
+            if not crtLine:
                 break
             # name/\email/\index
-            name = Ownership.purifyName(crtLineine.split('/\\')[0])
+            lst = crtLine.split('/\\')
+            assert len(lst) == 3 - (fileId >= 6 and fileId <= 8)
+            name = Ownership.purifyName(lst[0])
             self.addHuman(name, fileId)
         humanRoleFile.close()
 
@@ -259,8 +255,8 @@ class ContributionNetwork:
                 edge4Review[revId] = {}
             for edge in humanEdges:
                 edge4Review[revId][edge[1]] = True
-            for edge in edge4Review[revId]:
-                self.addEdge(self.humanDict[edge].index, L, self.reviewDict[revId].nodeVal, L, 16)
+            for humanName in edge4Review[revId]:
+                self.addEdge(self.humanDict[humanName].index, L, self.reviewDict[revId].nodeVal, L, 16)
 
     def readReviews(self):
         reviewEdges = {}
@@ -270,6 +266,7 @@ class ContributionNetwork:
             if not crtLine:
                 break
             lst = crtLine.split('/\\')
+            assert len(lst) == 3
             if lst[0] == 'CommentEdge' or lst[0] == 'PCommentEdge':
                 # The format of current line is "edgeType/\ownerName/\commenterName".
                 name1 = Ownership.purifyName(lst[1])
@@ -291,7 +288,7 @@ class ContributionNetwork:
                 commitHash = lst[1]
                 developerName = Ownership.purifyName(lst[2][:-1])
                 # reviewEdges[commitHash] = edges that relate to commitHash s.t edges between the 
-                # review coresponding to commitHash can be linked with the humans.
+                # review corresponding to commitHash can be linked with the humans in one pass.
                 if not (commitHash in reviewEdges):
                     reviewEdges[commitHash] = []
                 reviewEdges[commitHash].append((lst[0], developerName))
@@ -311,10 +308,9 @@ class ContributionNetwork:
                         assert lst[0] == 'UploaderEdge'
                         
                     L = Settings.getLayer2(layer, 'file')
-                    # link humans to the self.files of the commit
+                    # link humans to the files of the commit
                     if developerName in self.humanDict:
-                        modifiedFiles = self.commitDict[commitHash].modifiedFiles
-                        for fileNode in modifiedFiles:
+                        for fileNode in self.commitDict[commitHash].modifiedFiles:
                             self.addEdge(self.humanDict[developerName].index, L, fileNode, L, 10)
         self.processReviewEdges(reviewEdges, 3)
         reviewFile.close()
@@ -328,6 +324,7 @@ class ContributionNetwork:
             if not crtLine:
                 break
             lst = crtLine[:-1].split("/\\")
+            assert len(lst) == 6
             reviewNumber = lst[4]
             self.addReview(reviewNumber)
             ownerName = Ownership.purifyName(lst[2])
@@ -339,13 +336,10 @@ class ContributionNetwork:
             if ownerName != commenterName:
                 # Add edge from commenter to owner.
                 self.addEdge(node2, L, node1, L, 8)
-            fileList = lst[1].rsplit('.')[:-1]
-            fileName = ''
-            for x in fileList:
-                fileName += x
-                fileName += '.'
-            # Replace '/' with '.' and remove the ending '.' from the file type. (E.g. '.java').
-            fileName = fileName.replace('/', '.')[:-1]
+            if not('.' in lst[1]):
+                # All files should contain at least one '.' from the file type.
+                continue
+            fileName = (lst[1].rsplit('.', 1)[0]).replace('/', '.')[:-1]
             if fileName in self.fileDict:
                 self.reviewDict[reviewNumber].addFile(self.fileDict[fileName])
                 #Add edge between reviewOwner and file on Review layer.
@@ -365,7 +359,7 @@ class ContributionNetwork:
         self.issueDict[issue.name] = self.nrNodes
 
     def readIssueEdges(self):
-        # Each line of file contains data for an issue in format HumanRole/\name/\username/\bugID.
+        # Each line of file contains data for an issue in format HumanRole/\name/username/\bugID.
         issueEdgesFile = open("Data\\IssueEdges2020B.txt", "rb")
         while True:
             crtLine = issueEdgesFile.readline().decode('utf-8')
@@ -374,6 +368,7 @@ class ContributionNetwork:
             if crtLine == '':
                 continue
             lst = crtLine.split('/\\')
+            assert(len(lst) == 3)
             if (lst[0][0] != 'C'):
                 # Ignore "CC-Assignees".
                 name = Ownership.purifyName(lst[1])
@@ -389,6 +384,7 @@ class ContributionNetwork:
                     layer = 'issueAssignee'
                     col = 6
                 else:
+                    assert lst[0][0] == 'R'
                     self.humanDict[name].isReporter = True
                 L = Settings.getLayer2(layer, 'issue')
                 self.addEdge(self.humanDict[name].index, L, self.issueDict[bugId], L, col)
@@ -409,15 +405,16 @@ class ContributionNetwork:
             if not crtLine:
                 break
             lst = crtLine.split('/\\')
-            a = lst[2].split(' ', 1)
-            a[1] = a[1].replace(' ', '')
-            assert len(a) == 2
-            lst[2] = Ownership.getTime(a[0], a[1])
-            a = lst[3].split(' ', 1)
-            a[1] = a[1].replace(' ', '')
-            lst[3] = Ownership.getTime(a[0], a[1])
-            assert len(a) == 2
-            assert len(lst) == 6
+            assert(len(lst) == 6)
+            dateTime = lst[2].split(' ', 1)
+            dateTime[1] = dateTime[1].replace(' ', '')
+            assert len(dateTime) == 2
+            lst[2] = Ownership.getTime(dateTime[0], dateTime[1])
+            dateTime = lst[3].split(' ', 1)
+            dateTime[1] = dateTime[1].replace(' ', '')
+            lst[3] = Ownership.getTime(dateTime[0], dateTime[1])
+            assert len(dateTime) == 2
+
             lst[5] = lst[5][:-1]  # ignore '\n'
             issue = Issue.Issue(lst[0], lst[1], lst[2], lst[3], lst[4], lst[5], self.projectList[self.projectID])
 
@@ -426,11 +423,11 @@ class ContributionNetwork:
                     self.addIssue(issue)
                     issue.setIndex(self.nrIssues)
                     self.i_R[self.nrNodes] = {}
-            # in case only fixed issues must be added =>
+                # only fixed issues must be added =>
             # if ("CLOSED" in status_i) or ("RESOLVED" in status_i) or ("VERIFIED" in status_i) or ("FIXED" in status_i):
 
         issueFile.close()
-        self.readIssueEdges()
+
 
     def readIssueComments(self):
         # comments to Bugs:
@@ -441,15 +438,19 @@ class ContributionNetwork:
                 break
             bug = crtLine[:-1]
             crtLine = issueFile.readline()
-            while crtLine and crtLine != 'EOB1':
+            while crtLine and crtLine != 'EOB1\n':
+                # Format of comments of type 1 ['who']['name']/\\['bug_when']['__text__'].
                 lst = crtLine.split('/\\')
+                assert(len(lst) == 2)
                 if bug in self.issueDict and lst[0] in self.nameOfUsername:
                     self.i_R[self.issueDict[bug]][self.nameOfUsername[lst[0]]] = True
                     # all commenters are issueReporters
                 crtLine = issueFile.readline()
             crtLine = issueFile.readline()
-            while crtLine and crtLine != 'EOB2':
+            while crtLine and crtLine != 'EOB2\n':
+                # Format of comments of type 2 ['Who']/\\['When']/\\['Added']/\\['Removed'].
                 lst = crtLine.split('/\\')
+                assert(len(lst) == 4)
                 if bug in self.issueDict and lst[0] in self.nameOfUsername:
                     # all commenters are issueReporters
                     self.i_R[self.issueDict[bug]][self.nameOfUsername[lst[0]]] = True
@@ -466,11 +467,11 @@ class ContributionNetwork:
                 break
             lst = crtLine.split('/\\')
             assert len(lst) == 2
-            crtLine = f.readline()[1:-1].split(', ')
+            issueList = lst[1][1:-1].split(', ')
             L = Settings.getLayer2('issue', 'issue')
             if (lst[0] in self.issueDict):
                 i1 = self.issueDict[lst[0]]
-                for elem in crtLine:
+                for elem in issueList:
                     if elem in self.issueDict:
                         i2 = self.issueDict[elem]
                         self.addEdge(i1, L, i2, L, 15)
@@ -626,6 +627,7 @@ class ContributionNetwork:
 
     def readAndUpdateDataForIssues(self):
         self.readIssues()
+        self.readIssueEdges()
         self.readIssue2Change()
         self.readI2CSeeAlso()
         self.readIssueComments()
