@@ -477,16 +477,13 @@ class ContributionNetwork:
                         self.addEdge(i1, L, i2, L, 15)
 
     def processReview(self, crtLine):
-        print(crtLine)
         reviewId = crtLine[1]
         issueID = crtLine[2][:-1]
-        print(reviewId)
-        print(issueID)
-        exit(0)
+
         L = Settings.getLayer2('file', 'issue')
         if reviewId in self.reviewDict and issueID in self.issueDict:
             self.addEdge(self.reviewDict[reviewId].nodeVal, 3, self.issueDict[issueID], 4, 17)
-            self.fileNodes = self.reviewDict[reviewId].self.fileNodes
+            self.fileNodes = self.reviewDict[reviewId].modifiedFiles
             for fileNode in self.fileNodes:
                 self.fileIssues[fileNode][self.issueDict[issueID]] = True
                 self.addEdge(fileNode, L, self.issueDict[issueID], L, 12)
@@ -498,6 +495,7 @@ class ContributionNetwork:
         if commitID in self.commitDict and issueID in self.issueDict:
             self.fileNodes = self.commitDict[commitID].modifiedFiles
             for fileNode in self.fileNodes:
+                # add issueID to the issues of fileNode
                 self.fileIssues[fileNode][self.issueDict[issueID]] = True
                 self.addEdge(fileNode, L, self.issueDict[issueID], L, 12)
 
@@ -513,8 +511,11 @@ class ContributionNetwork:
             crtLine = crtLine.split(' ')
             if crtLine[0] == 'ReviewEdge':
                 self.processReview(crtLine)
-            else:
+            elif crtLine[0] == 'CommitEdge':
                 self.processCommit(crtLine)
+            else:
+                print("error")
+                exit(0)
         bugEdgeFile.close()
 
     def readIssue2Change(self):
@@ -537,11 +538,13 @@ class ContributionNetwork:
         layer = Settings.getLayer2('issueReporter', 'issueReporter')
         for key in self.i_R:
             crtDict = self.i_R[key]
+            # i_r1 and i_r2 are 2 distinct reporters of issue i_R.
             for i_r1 in crtDict:
                 nod1 = self.humanDict[i_r1].index
                 for i_r2 in crtDict:
                     if i_r1 != i_r2:
-                        self.addEdge(nod1, layer, self.humanDict[i_r2].index, layer, 7)
+                        nod2 = self.humanDict[i_r2].index
+                        self.addEdge(nod1, layer, nod2, layer, 7)
 
     def addDepEdgeFromFile(self, f):
         while True:
@@ -553,70 +556,73 @@ class ContributionNetwork:
                 L = Settings.getLayer2('file', 'file')
                 self.addEdge(self.fileDict[lst[1]], L, self.fileDict[lst[2]], L, 1)
 
-    def readOwnershipFile():
+    def readOwnershipFile(self):
+        # For each modified file in the repository, the format is as follows:
         # fileName/\nrCommits
         # author_name/\self.author_date/\author_timezone/\added/\removed/\complexity
+        # Note: author_date = '%Y-%m-%d %H:%M:%S'
         ownershipFile = open("Data\\ownership.txt")
-        nrFiles = 0
-        nrCommitters = 0
-        X = 0
-        Y = 0
         valuesC = []
         valuesL = []
+        self.ownershipDict = {}
         while (True):
+            # Read the line with file details, then read nrCommits lines with commit details.
             crtLine = ownershipFile.readline()
             if not crtLine:
                 break
             lst = crtLine.split('/\\')
+            # Format the file names to contain '.' instead of '/'
             compName = lst[0].replace('/', '.')
+            # Remove the file type (i.e "dir.file.java" -> "dir.file").
             compName = compName.rsplit('.', 1)[0]
             if not (compName in self.fileDict):
+                # Ignore modified files that are not in the Contribution Network.
                 for i in range(int(lst[1])):
-                    nxtL = ownershipFile.readline()
+                    ownershipFile.readline()
                 continue
             obj = Ownership.Ownership(compName)
-            nrFiles += 1
+
             for i in range(int(lst[1])):
-                nxtL = ownershipFile.readline().split('/\\')
-                lineLen = len(nxtL)
+                nxtLine = ownershipFile.readline().split('/\\')
+                lineLen = len(nxtLine)
                 if lineLen == 0:
                     continue
-                obj.addModif(Ownership.getModifFromLine(nxtL, lineLen))
+                obj.addModif(Ownership.getModifFromLine(nxtLine))
 
             allCommitters = obj.authorDex[0]
-            jarList = []
-
             L = Settings.getLayer2('committer', 'committer')
             A = Settings.getLayer2('committer', 'author')
-            if self.fileDict[obj.name] in posInFiles:
-                sAll = obj.sumAdd[0] + obj.sumRem[0]
-            else:
-                sAll = 0
+            nrChangedLines = 0
+            if self.fileDict[obj.name] in self.posInFiles:
+                nrChangedLines = obj.sumAdd[0] + obj.sumRem[0]
+
             for c1 in allCommitters:
-                nrCommitters += 1
                 cp = (100 * obj.authorDex[0][c1].nrCommits / obj.nrCommits[0])
-                # change to cp > 50 for only major edges
+                # Add only minor edges. Change to cp > 50 for only major edges.
                 if cp <= 50:
                     self.addEdge(self.humanDict[c1].index, 1, self.fileDict[obj.name], 1, 14)
                 valuesC.append(cp)
-                if sAll != 0:
-                    if obj.authorDex[0][c1].sumAdd + obj.authorDex[0][c1].sumRem >= sAll:
+                if nrChangedLines != 0:
+                    c1ChangedLines = obj.authorDex[0][c1].sumAdd + obj.authorDex[0][c1].sumRem
+                    assert (c1ChangedLines <= nrChangedLines)
+                    if c1ChangedLines == nrChangedLines:
                         lp = 100
                     else:
-                        lp = (100 * (obj.authorDex[0][c1].sumAdd + obj.authorDex[0][c1].sumRem) / sAll)
+                        lp = (100 * (obj.authorDex[0][c1].sumAdd + obj.authorDex[0][c1].sumRem) / nrChangedLines)
                     valuesL.append(lp)
                 for c2 in allCommitters:
                     if c1 != c2:
                         if self.humanDict[c1].isRole[0] and self.humanDict[c2].isRole[0]:
+                            # Add committer to committer edge.
                             self.addEdge(self.humanDict[c1].index, L, self.humanDict[c2].index, L, 13)
                         elif self.humanDict[c2].isRole[0] or self.humanDict[c1].isRole[0]:
+                            # Add committer to author edge.
                             self.addEdge(self.humanDict[c1].index, L, self.humanDict[c2].index, A, 2)
 
+            # Tuple(name, nrCommits) for obj file where name is the name of the committer with
+            # the highest number of the commits to obj.
             ownershipTuple = obj.nrCommitsOwner(0)
             self.ownershipDict[self.fileDict[obj.name]] = (ownershipTuple[0], obj.nrCommitsPercentage(0))
-            m1, m2 = obj.getMeasures(0)
-            X += m1
-            Y += m2
 
         ownershipFile.close()
 
@@ -645,7 +651,7 @@ class ContributionNetwork:
         for fileId in range(len(depFile)):
             self.addDepEdgeFromFile(depFile[fileId])
             depFile[fileId].close()
-        self.files, posInFiles = File.readFileMeasures(self.fileDict, "Data\\codeMeasures2020.txt")
+        self.files, self.posInFiles = File.readFileMeasures(self.fileDict, "Data\\codeMeasures2020.txt")
 
     def readAndUpdateDataForOwnership(self):
         self.ownershipDict = {}
@@ -677,17 +683,18 @@ class ContributionNetwork:
         for fileN in self.fileDict:
             nod = self.fileDict[fileN]
             if not (nod in self.Nodes):
+                #Ignore deleted files.
                 continue
             self.nrIssuesList.append(len(self.fileIssues[nod]))
             fileValues.append(values[nod])
         w, p = spearmanr(fileValues, self.nrIssuesList)
         print(name, w, p)
 
-    def createMonoplex(self):
+    def createMonoplex(self, edgeList):
         self.ownershipGraph = networkx.DiGraph()
-        for e in self.Edges:
-            if self.Edges[e] > 0 and (e.color == 1 or e.color == 14):
-                self.ownershipGraph.add_edge(e.nod1, e.nod2, w=self.Edges[e])
+        for e in edgeList:
+            if edgeList[e] > 0 and (e.color == 1 or e.color == 14):
+                self.ownershipGraph.add_edge(e.nod1, e.nod2, w=edgeList[e])
         self.Nodes = list(self.ownershipGraph.nodes)
         self.monoplex = SNAMeasures.Monoplex(self.ownershipGraph, True, "w")
 
@@ -704,6 +711,7 @@ network.readDataForFiles()
 network.readReviewComments()
 network.readReviews()
 network.readAndUpdateDataForIssues()
-
-network.createMonoplex()
-# network.getResultsFromSNAMeasures(["Reachability"])
+network.readOwnershipFile()
+#TODO implement filerEdges method.
+network.createMonoplex(Edge.filterEdges(network.Edges, perc, [1, 14]));
+network.getResultsFromSNAMeasures(["Reachability"])

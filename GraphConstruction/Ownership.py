@@ -102,6 +102,7 @@ class Ownership:
     def __ne__(self, other):
         return not (self == other)
     def addModif(self, modif):
+        #Index 0 corresponds to all modifs.
         self.addModifAt(modif, 0)
         #binary search the index of epoch the modification belongs to
         p2 = 1
@@ -178,7 +179,7 @@ def getTime(str1, str2):
     return dateTime
 
 OwnershipDex = {}
-def getModifFromLine(nxtL, lineLen):
+def getModifFromLine(nxtL):
     AuthorName = purifyName(nxtL[0])
     dateLn = nxtL[1].split(' ')
     Time = getTime(dateLn[0], dateLn[1])
