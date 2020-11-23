@@ -1,3 +1,5 @@
+import Sample
+
 class Edge:
     def __init__(self, nod1_, layer1_, nod2_, layer2_, color_):
         self.nod1 = nod1_
@@ -28,3 +30,27 @@ class Edge:
     def ToString(self):
         edge = str(self.nod1) + ' ' + str(self.layer1) + ' ' + str(self.nod2) + ' ' + str(self.layer2)
         return edge
+
+def filterEdges(edges, edgeTypes):
+    filteredEdges = {}
+    for edge in edges:
+        if (edge.color in edgeTypes):
+            filteredEdges[edge] = edges[edge]
+
+    return filteredEdges
+
+def getEdgeSample(edges, perc):
+    nrEdges = len(edges)
+    selectedEdgeId = sorted(Sample.getSample(0, nrEdges - 1, int((nrEdges * perc) / 100)))
+    selectedEdges = {}
+    currentId = 0
+    currentSelectedId = 0
+
+    for edge in edges:
+        if (currentSelectedId == len(selectedEdgeId)):
+            break
+        if (selectedEdgeId[currentSelectedId] == currentId):
+            selectedEdges[edge] = edges[edge]
+            currentSelectedId += 1
+        currentId += 1
+    return selectedEdges

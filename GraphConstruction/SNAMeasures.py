@@ -1,7 +1,14 @@
+import math
 from networkx import*
 from queue import Queue
 
 from networkx.algorithms.structuralholes import mutual_weight, normalized_mutual_weight
+
+def replaceNanWithZero(res):
+    for elem in res:
+        if (math.isnan(res[elem])):
+            res[elem] = 0
+    return res
 
 '''
     A Monoplex object extends the functionality of a networkx graph:
@@ -105,7 +112,8 @@ class Monoplex:
         p(u, v) = normalized mutual weight of the (directed or undirected) edges joining u and v.
     '''
     def computeConstraint(self):
-        self.constraint = constraint(self.G)
+        self.constraint = replaceNanWithZero(constraint(self.G))
+        return self.constraint
 
     '''
         Returns a dictionary with the effective size value of each node in the network.
@@ -138,7 +146,11 @@ class Monoplex:
         Returns a dictionary with nodes as keys and their effective size as values.
     '''
     def computeEffectiveSize(self):
-        return effective_size(self.G, self.nodes, self.weightStr)
+        res = replaceNanWithZero(effective_size(self.G, self.nodes, self.weightStr))
+        formulaRes = self.computeEffectiveSizeFormula()
+        for elem in res:
+            assert (res[elem] != formulaRes[elem])
+        return res
 
     def computeReachabilityForNode(self, x):
         reach = {}

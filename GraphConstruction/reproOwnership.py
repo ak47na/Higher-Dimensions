@@ -665,15 +665,11 @@ class ContributionNetwork:
         if name == 'Degree Centrality':
             return degree_centrality(self.ownershipGraph)
         if name == 'Effective Size':
-            return effective_size(self.ownershipGraph)
+            return self.monoplex.computeEffectiveSizeFormula()
         if name == 'Constraint':
-            return constraint(self.ownershipGraph)
+            return self.monoplex.computeConstraint()
         if name == 'Reachability':
             return self.monoplex.computeReachability()
-        if name == 'Effective Size':
-            return self.monoplex.getEffectiveSize()
-        if name == 'Constraint':
-            return None
 
     def getSNAResult(self, name):
         fileValues = []
@@ -712,6 +708,7 @@ network.readReviewComments()
 network.readReviews()
 network.readAndUpdateDataForIssues()
 network.readOwnershipFile()
-#TODO implement filerEdges method.
-network.createMonoplex(Edge.filterEdges(network.Edges, perc, [1, 14]));
-network.getResultsFromSNAMeasures(["Reachability"])
+
+network.createMonoplex(Edge.getEdgeSample(Edge.filterEdges(network.Edges, [1, 14]), 10))
+network.getResultsFromSNAMeasures(['Degree Centrality', 'Betweenness Centrality', 'Closeness Centrality',
+                                   'Reachability', 'Effective Size', 'Constraint'])
