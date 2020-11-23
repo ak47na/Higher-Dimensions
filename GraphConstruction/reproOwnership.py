@@ -459,7 +459,7 @@ class ContributionNetwork:
         issueFile.close()
 
     def addIssueDependency(self, fName):
-        # b_1/\b_2 <=> b_2 is in b_1's list of "depends_on" in Bugzilla
+        # b_1/\[b_2, ..] <=> b_2 is in b_1's list of "depends_on" in Bugzilla
         f = open(fName, "r")
         while True:
             crtLine = f.readline()[:-1]
@@ -477,8 +477,12 @@ class ContributionNetwork:
                         self.addEdge(i1, L, i2, L, 15)
 
     def processReview(self, crtLine):
+        print(crtLine)
         reviewId = crtLine[1]
         issueID = crtLine[2][:-1]
+        print(reviewId)
+        print(issueID)
+        exit(0)
         L = Settings.getLayer2('file', 'issue')
         if reviewId in self.reviewDict and issueID in self.issueDict:
             self.addEdge(self.reviewDict[reviewId].nodeVal, 3, self.issueDict[issueID], 4, 17)
