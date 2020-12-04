@@ -123,3 +123,22 @@ def getLayer(type):
         return 7
     if type == 'ownership':
         return 8
+
+def getPaper7TwoPathCorrelations():
+    results = {}
+    oneDay = 3600 * 24
+    results[oneDay] = [(0.67, 0.01), (0.52, 0.22), (0.74, 0.01)]
+    results[oneDay * 5] = [(0.71, 0.01), (0.63, 0.01), (0.77, 0.0001)]
+    results[oneDay * 365] = [(0.82, 0.0001), (0.73, 0.0001), (0.86, 0.0001)]
+    return results
+
+def getPaper7UpperLowerTransitiveFaultRate():
+    results = {}
+    oneHour = 3600
+    oneDay = oneHour * 24
+    results[oneHour] = [(0.48, 0.55), (0.38, 0.43), (0.45, 0.52)]
+    results[oneDay] = [(0.43, 0.55), (0.41, 0.53), (0.44, 0.55)]
+    results[oneDay * 30] = [(0.21, 0.50), (0.38, 0.51), (0.27, 0.51)]
+    results[oneDay * 365] = [(0.11, 0.49), (0.37, 0.50), (0.17, 0.50)]
+    results[oneDay * 365 * 20] = [(0.15, 0.50), (0.41, 0.51), (0.17, 0.51)]
+    return results

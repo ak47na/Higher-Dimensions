@@ -6,7 +6,7 @@ from math import *
 # Note: t0 < t1 <=> t0 happened before t1
 
 class InformationFlowNetwork:
-    def __init__(self, msgDict, delta_t):
+    def __init__(self, msgDict, delta_t, t):
         self.nrEdges = 0
         self.replyDict = {}
         self.humanDict = {}
@@ -34,6 +34,8 @@ class InformationFlowNetwork:
         self.nr2p = [{}, {}, {}]
         self.nrGraphs = 0
         self.delta_t = delta_t
+        self.analysedT = t
+        self.crtResult = [(0, 0), (0, 0), (0, 0)]
 
     '''
         Add the human with name to humanDict and as a graph node with index nrNodes + 1 and label
@@ -59,6 +61,7 @@ class InformationFlowNetwork:
             u, v = v, u
         assert (self.msgDict[u][1].timestamp() >= self.msgDict[v][1].timestamp())
         if ((u, v) in self.replyDict):
+            # The reply from u to v was already processed.
             return nrNodes
 
         self.replyDict[(u, v)] = True
@@ -71,7 +74,7 @@ class InformationFlowNetwork:
         A = self.humanDict[a]
         B = self.humanDict[b]
         # Compute the index of the network which contains the point in time when message v was sent.
-        tIntervalId = trunc((self.msgDict[v][1].timestamp() - minTime) / self.delta_t)
+        tIntervalId = trunc((self.msgDict[u][1].timestamp() - minTime) / self.delta_t)
         if not (tIntervalId in self.timeDict):
             # Create the graph for tIntervalId
             self.nrGraphs += 1
@@ -85,31 +88,33 @@ class InformationFlowNetwork:
         # Update the minimum and maximum time for a conversation from person A to person B.
         # The value is necessary for computing transitive faults.
         if not ((A, B) in self.minT[T]):
-            self.minT[T][(A, B)] = self.msgDict[v][1].timestamp()
-            self.maxT[T][(A, B)] = self.msgDict[v][1].timestamp()
+            self.minT[T][(A, B)] = self.msgDict[u][1].timestamp()
+            self.maxT[T][(A, B)] = self.msgDict[u][1].timestamp()
         else:
             self.minT[T][(A, B)], self.maxT[T][(A, B)] = updateTimeBorders(self.minT[T][(A, B)],
                                                                                 self.maxT[T][(A, B)],
-                                                                                self.msgDict[v][1].timestamp())
+                                                                                self.msgDict[u][1].timestamp())
         # Add an edge in the T-th MultiDiGraph from the node representing human a to the node
         # representing human b.
-        self.tGraphs[T].add_edge(self.humanDict[a], self.humanDict[b], time=self.msgDict[v][1])
+
         if not (A in self.Adj[T]):
-            self.Adj[T][A] = []
-        self.Adj[T][A].append(B)
-        self.nrEdges += 1
+            self.Adj[T][A] = {}
+        if not (B in self.Adj[T][A]):
+            self.tGraphs[T].add_edge(self.humanDict[a], self.humanDict[b], time=self.msgDict[u][1])
+            self.Adj[T][A][B] = self.msgDict[u][1]
+            self.nrEdges += 1
         return nrNodes
 
     '''
         Reads the file with messages' relations and adds a directed edge from the reply to the message.
     '''
 
-    def readMsgEdges(self, nrNodes, minTime):
+    def readMsgEdges(self, nrNodes, minTime, filePath):
         errors = 0
         invalidMsg = {}
         # file with each line containing two string numbers u v representing that message with key u is
         # a reply to message with key v.
-        edgeFile = open("Data\\msgEdges.txt", "r")
+        edgeFile = open(filePath, "r")
 
         while True:
             crtLine = edgeFile.readline()
@@ -193,10 +198,11 @@ class InformationFlowNetwork:
             transFaultSum[1] /= N
             #optimistic model should have at most pessimistic model transitive faults.
             assert transFaultSum[0] <= transFaultSum[1]
-            upperBound = max(max(transFaultSum[0], transFaultSum[1]), upperBound)
-            lowerBound = min(min(transFaultSum[0], transFaultSum[1]), lowerBound)
+            upperBound = max(transFaultSum[1], upperBound)
+            lowerBound = min(transFaultSum[0], lowerBound)
 
-        print('For delta_t ', self.delta_t / Y, 'years', lowerBound, upperBound)
+        self.crtResult[0] = (lowerBound, upperBound)
+        #print('For ', self.analysedT, lowerBound, upperBound)
 
     '''
         Returns the list of nodes in the netw-th network, sorted in increasing order by the number of
@@ -227,6 +233,9 @@ class InformationFlowNetwork:
         order = []
         for p in centralityList:
             order.append(p[1])
+            if len(order) > 1:
+                assert(self.nr2p[id][order[-1]] >= self.nr2p[id][order[-2]])
+
         return order
 
     '''
@@ -253,9 +262,11 @@ class InformationFlowNetwork:
                 for x in order[i]:
                     Order[i].append(x)
         w, p = spearmanr(Order[0], Order[1])
-        print(w, p)
+        self.crtResult[1] = (w, p)
+        #print(w, p)
         w, p = spearmanr(Order[0], Order[2])
-        print(w, p)
+        #print(w, p)
+        self.crtResult[2] = (w, p)
 
     '''
         Returns the Spearman rank correlation value between the 2-path ranking of the nodes in the
@@ -269,9 +280,11 @@ class InformationFlowNetwork:
         for i in range(3):
             order.append(self.getNodesOrderAggregate(i))
         w, p = spearmanr(order[0], order[1])
-        print(w, p)
+        self.crtResult[1] = (w, p)
+        #print(w, p)
         w, p = spearmanr(order[0], order[2])
-        print(w, p)
+        self.crtResult[2] = (w, p)
+        #print(w, p)
 
 '''
     Updates the minimum and maximum number of seconds with t.
@@ -285,12 +298,12 @@ def updateTimeBorders(minTime, maxTime, t):
     Reads the message details from file and updates the messages dictionary to store for each 
     message key, the email of the sender and the date of the message as a tuple.
 '''
-def readMsgDetails():
+def readMsgDetails(filePath):
     msgDict = {}
     nrM = 0
     # read the file with the details of all messages in format :
     # msgKey/\senderName/\senderEmail/\date(%Y-%m-%d %H:%M:%S)
-    detailsFile = open("Data\\msgDetails.txt", "r")
+    detailsFile = open(filePath, "r")
     # Initialise time borders.
     minTime = datetime.now().timestamp()
     maxTime = 0
@@ -317,9 +330,13 @@ def readMsgDetails():
     network is delta_t, computes the number of transitive faults and the Spearman correlation of
     the 2-path rankings between the (aggregate) network with transitive faults and the one without.
 '''
-def getValues(delta_t, minTime, maxTime, msgDict):
-    infoFlowNetwork = InformationFlowNetwork(msgDict, delta_t)
-    nrNodes = infoFlowNetwork.readMsgEdges(0, minTime)
-    print(nrNodes, infoFlowNetwork.nrEdges)
+def getValues(t, delta_t, minTime, maxTime, msgDict):
+    infoFlowNetwork = InformationFlowNetwork(msgDict, delta_t, t)
+    msgEdgesFilePath = "Data\\msgEdges.txt"
+    nrNodes = infoFlowNetwork.readMsgEdges(0, minTime, msgEdgesFilePath)
+    #print(nrNodes, infoFlowNetwork.nrEdges)
     infoFlowNetwork.getTransitiveFault()
     infoFlowNetwork.getRanginkCorrelationAggregate()
+    return infoFlowNetwork.crtResult
+
+
