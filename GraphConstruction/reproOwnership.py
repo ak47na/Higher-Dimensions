@@ -94,7 +94,9 @@ class ContributionNetwork:
         self.commitDict = {}
         # fileDict[fileName] = the graph node of the file with fileName in the network.
         self.fileDict = {}
-        
+        self.ownershipGraph = {}
+        self.monoplex = {}
+
     def addEdge_util(self, crtEdge):
         if crtEdge in self.Edges:
             self.Edges[crtEdge] += 1
@@ -562,9 +564,10 @@ class ContributionNetwork:
         # author_name/\self.author_date/\author_timezone/\added/\removed/\complexity
         # Note: author_date = '%Y-%m-%d %H:%M:%S'
         ownershipFile = open("Data\\ownership.txt")
+        Itype = Settings.getIssueType()
+        Ntype = Settings.getNetworkType()
         valuesC = []
         valuesL = []
-        self.ownershipDict = {}
         while (True):
             # Read the line with file details, then read nrCommits lines with commit details.
             crtLine = ownershipFile.readline()
@@ -599,8 +602,12 @@ class ContributionNetwork:
             for c1 in allCommitters:
                 cp = (100 * obj.authorDex[0][c1].nrCommits / obj.nrCommits[0])
                 # Add only minor edges. Change to cp > 50 for only major edges.
-                if cp <= 50:
+                if (cp > 50):
+                    # Add major edge
                     self.addEdge(self.humanDict[c1].index, 1, self.fileDict[obj.name], 1, 14)
+                else:
+                    # Add minor edge
+                    self.addEdge(self.humanDict[c1].index, 1, self.fileDict[obj.name], 1, -14)
                 valuesC.append(cp)
                 if nrChangedLines != 0:
                     c1ChangedLines = obj.authorDex[0][c1].sumAdd + obj.authorDex[0][c1].sumRem
@@ -657,24 +664,25 @@ class ContributionNetwork:
         self.ownershipDict = {}
         self.readOwnershipFile()
 
-    def getSNAMeasure(self, name):
+    def getSNAMeasure(self, name, Ntype):
         if name == 'Betweenness Centrality':
-            return betweenness_centrality(self.ownershipGraph)
+            return betweenness_centrality(self.ownershipGraph[Ntype])
         if name == 'Closeness Centrality':
-            return closeness_centrality(self.ownershipGraph)
+            return closeness_centrality(self.ownershipGraph[Ntype])
         if name == 'Degree Centrality':
-            return degree_centrality(self.ownershipGraph)
+            return degree_centrality(self.ownershipGraph[Ntype])
         if name == 'Effective Size':
-            return self.monoplex.computeEffectiveSizeFormula()
+            return self.monoplex[Ntype].computeEffectiveSizeFormula()
         if name == 'Constraint':
-            return self.monoplex.computeConstraint()
+            return self.monoplex[Ntype].computeConstraint()
         if name == 'Reachability':
-            return self.monoplex.computeReachability()
+            return self.monoplex[Ntype].computeReachability()
 
     def getSNAResult(self, name):
         fileValues = []
         self.nrIssuesList = []
-        values = self.getSNAMeasure(name)
+
+        values = self.getSNAMeasure(name, Settings.getNetworkType())
 
         for fileN in self.fileDict:
             nod = self.fileDict[fileN]
@@ -684,15 +692,18 @@ class ContributionNetwork:
             self.nrIssuesList.append(len(self.fileIssues[nod]))
             fileValues.append(values[nod])
         w, p = spearmanr(fileValues, self.nrIssuesList)
-        print(name, w, p)
+        reproMeasureCorrelation[name][Settings.getIssueType()][Settings.getNetworkType()] = (w, p)
+        print(w, p)
 
-    def createMonoplex(self, edgeList):
-        self.ownershipGraph = networkx.DiGraph()
+
+    def createMonoplex(self, edgeList, Ntype):
+        self.ownershipGraph[Ntype] = networkx.DiGraph()
         for e in edgeList:
-            if edgeList[e] > 0 and (e.color == 1 or e.color == 14):
-                self.ownershipGraph.add_edge(e.nod1, e.nod2, w=edgeList[e])
-        self.Nodes = list(self.ownershipGraph.nodes)
-        self.monoplex = SNAMeasures.Monoplex(self.ownershipGraph, True, "w")
+            if edgeList[e] > 0:
+                self.ownershipGraph[Ntype].add_edge(e.nod1, e.nod2, w=edgeList[e])
+
+        self.Nodes = list(self.ownershipGraph[Ntype].nodes)
+        self.monoplex[Ntype] = SNAMeasures.Monoplex(self.ownershipGraph[Ntype], True, "w")
 
     def getResultsFromSNAMeasures(self, measures):
         for measure in measures:
@@ -701,14 +712,46 @@ class ContributionNetwork:
     # Measures: ['Degree Centrality', 'Betweenness Centrality', 'Closeness Centrality',
     # 'Reachability', 'Effective Size', 'Constraint']
 
+Settings.setNetworkType('Minor')
 network = ContributionNetwork(8)
 network.readDataForHumans()
 network.readDataForFiles()
 network.readReviewComments()
 network.readReviews()
 network.readAndUpdateDataForIssues()
-network.readOwnershipFile()
+network.readAndUpdateDataForOwnership()
 
-network.createMonoplex(Edge.getEdgeSample(Edge.filterEdges(network.Edges, [1, 14]), 10))
-network.getResultsFromSNAMeasures(['Degree Centrality', 'Betweenness Centrality', 'Closeness Centrality',
-                                   'Reachability', 'Effective Size', 'Constraint'])
+# Network represents the ownership graph and has one layer and two types of edges:
+# file-file and developer-file
+def createNetworkByType(Ntype):
+    NtypeEdgeCol = 14
+    if Ntype == 'Minor':
+        NtypeEdgeCol = -14
+    network.createMonoplex(Edge.getEdgeSample(Edge.filterEdges(network.Edges, [1, NtypeEdgeCol]), 100), Ntype)
+    print(len(network.monoplex[Ntype].G.nodes), len(network.monoplex[Ntype].G.edges))
+
+def compareSNAResult(name):
+    # check if w in (wResult + 1/4 * wResult, wResult - 1/4*wResult)
+    wResultMaj = Settings.getMeasureCorrelation(name, 'Major')
+    wResultMin = Settings.getMeasureCorrelation(name, 'Minor')
+    wReproDelta = reproMeasureCorrelation[name][Settings.getIssueType()]['Major'][0] - reproMeasureCorrelation[name][Settings.getIssueType()]['Minor'][0]
+    diff = [0, 0]
+    wResultDelta = [0, 0]
+    for t in range(2):
+        wResultDelta[t] = wResultMaj[t] - wResultMin[t]
+        diff[t] = (abs(wReproDelta - wResultDelta[t]) / wResultDelta[t]) * 100
+    print(wReproDelta, wResultDelta, diff)
+
+measures = Settings.getMeasureNames()
+reproMeasureCorrelation = Settings.getReproMeasureCorrelation()
+createNetworkByType(Settings.getNetworkType())
+Settings.getPastPaperResult()
+print(Settings.getNetworkType())
+network.getResultsFromSNAMeasures(measures)#, 'Constraint'])
+Settings.setNetworkType('Major')
+createNetworkByType(Settings.getNetworkType())
+network.getResultsFromSNAMeasures(measures)#, 'Constraint'])
+
+for measure in measures:
+    compareSNAResult(measure)
+

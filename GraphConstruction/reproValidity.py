@@ -3,23 +3,28 @@ from datetime import datetime
 from networkx import *
 from scipy.stats import spearmanr
 from math import *
+# Note: t0 < t1 <=> t0 happened before t1
+
 class InformationFlowNetwork:
     def __init__(self, msgDict, delta_t):
+        self.nrEdges = 0
+        self.replyDict = {}
         self.humanDict = {}
         self.Label = {}
+        # minT[graphIndex][(A, B)] = min time t in graphIndex s.t there was a message from B to A at t.
         self.minT = {}
         self.maxT = {}
         # Adj[graphIndex][node] = the adjacency list of node in the graphIndex-th graph.
         self.Adj = {}
         # msgDict[msgKey] = (sender, time)
         self.msgDict = msgDict
-        # timeDict[timeInterval] = the index of the network with messages sent in timeInterval
+        # timeDict[timeInterval] = the index of the network(graphIndex) with messages sent in timeInterval
         # timeInterval = integer
         self.timeDict = {}
         # tGraphs = List of the networkX multiDiGraphs for each time time interval, i.e
-        # TGraphs[index] = the graph for timeInterval with timeDict[timeInterval] = index.
+        # TGraphs[graphIndex] =the graph for timeInterval with timeDict[timeInterval] = graphIndex.
         self.tGraphs = [0]
-        # nr2paths[t][network][node] = the number of 2-paths of node in network
+        # nr2paths[t][graphIndex][node] = the number of 2-paths of node in network
         # if t == 0, then the count includes transitive faults
         #    t == 1, then the count excludes transitive faults with optimistic model
         #    t == 2, then the count excludes transitive faults with pessimistic model
@@ -50,6 +55,13 @@ class InformationFlowNetwork:
     '''
     def addEdge(self, u, v, nrNodes, minTime):
         # u is a reply to v, a is the sender of u, b is the sender of v.
+        if (self.msgDict[u][1].timestamp() < self.msgDict[v][1].timestamp()):
+            u, v = v, u
+        assert (self.msgDict[u][1].timestamp() >= self.msgDict[v][1].timestamp())
+        if ((u, v) in self.replyDict):
+            return nrNodes
+
+        self.replyDict[(u, v)] = True
         a = self.msgDict[u][0]
         b = self.msgDict[v][0]
         nrNodes = self.addHuman(a, nrNodes)
@@ -61,6 +73,7 @@ class InformationFlowNetwork:
         # Compute the index of the network which contains the point in time when message v was sent.
         tIntervalId = trunc((self.msgDict[v][1].timestamp() - minTime) / self.delta_t)
         if not (tIntervalId in self.timeDict):
+            # Create the graph for tIntervalId
             self.nrGraphs += 1
             self.Adj[self.nrGraphs] = {}
             self.minT[self.nrGraphs] = {}
@@ -84,6 +97,7 @@ class InformationFlowNetwork:
         if not (A in self.Adj[T]):
             self.Adj[T][A] = []
         self.Adj[T][A].append(B)
+        self.nrEdges += 1
         return nrNodes
 
     '''
@@ -93,8 +107,8 @@ class InformationFlowNetwork:
     def readMsgEdges(self, nrNodes, minTime):
         errors = 0
         invalidMsg = {}
-        # file with each line containing two string numbers u v representing that message with key v is
-        # a reply to message with key u.
+        # file with each line containing two string numbers u v representing that message with key u is
+        # a reply to message with key v.
         edgeFile = open("Data\\msgEdges.txt", "r")
 
         while True:
@@ -110,7 +124,7 @@ class InformationFlowNetwork:
             if not (lst[1] in self.msgDict) and not (lst[1] in invalidMsg):
                 invalidMsg[lst[1]] = True
                 errors += 1
-            if lst[0] in self.msgDict and lst[1] in self.msgDict:
+            if (lst[0] in self.msgDict) and (lst[1] in self.msgDict):
                 nrNodes = self.addEdge(lst[1], lst[0], nrNodes, minTime)
         edgeFile.close()
         return nrNodes
@@ -177,6 +191,8 @@ class InformationFlowNetwork:
             # nodes, divided by the number of nodes in the network.
             transFaultSum[0] /= N
             transFaultSum[1] /= N
+            #optimistic model should have at most pessimistic model transitive faults.
+            assert transFaultSum[0] <= transFaultSum[1]
             upperBound = max(max(transFaultSum[0], transFaultSum[1]), upperBound)
             lowerBound = min(min(transFaultSum[0], transFaultSum[1]), lowerBound)
 
@@ -304,5 +320,6 @@ def readMsgDetails():
 def getValues(delta_t, minTime, maxTime, msgDict):
     infoFlowNetwork = InformationFlowNetwork(msgDict, delta_t)
     nrNodes = infoFlowNetwork.readMsgEdges(0, minTime)
+    print(nrNodes, infoFlowNetwork.nrEdges)
     infoFlowNetwork.getTransitiveFault()
     infoFlowNetwork.getRanginkCorrelationAggregate()

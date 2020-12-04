@@ -4,9 +4,68 @@ import datetime as dt
 
 projectID = 0
 networkType = "Major"
-issueType = "post-release"
+issueType = "pre-release"
 projectName = 'jdt'
 timeInterval = timedelta(hours = 1)
+measureCorrelation = {}
+reproMeasureCorrelation = {}
+measureNames = ['Degree Centrality', 'Closeness Centrality', 'Betweenness Centrality', 'Reachability', 'Effective Size']
+
+def setNetworkType(networkType_):
+    global networkType
+    networkType = networkType_
+
+def setIssueType(issueType_):
+    global issueType
+    issueType = issueType_
+
+def initMeasureCorrelation():
+    for measure in measureNames:
+        measureCorrelation[measure] = {}
+        reproMeasureCorrelation[measure] = {}
+        for Itype in ['pre-release', 'post-release']:
+            measureCorrelation[measure][Itype] = {}
+            reproMeasureCorrelation[measure][Itype] = {}
+            for Ntype in ['Minor', 'Major']:
+                measureCorrelation[measure][Itype][Ntype] = {}
+                reproMeasureCorrelation[measure][Itype][Ntype] = {}
+
+def getReproMeasureCorrelation():
+    return reproMeasureCorrelation
+def getMeasureNames():
+    return measureNames
+
+def getMeasureCorrelation(measureName):
+    return measureCorrelation[measureName][issueType][networkType]
+def getMeasureCorrelation(measureName, networkType_):
+    return measureCorrelation[measureName][issueType][networkType_]
+
+def getPastPaperResult():
+    initMeasureCorrelation()
+    measureCorrelation['Degree Centrality']['pre-release']['Minor'] = (0.861, 0.931)
+    measureCorrelation['Degree Centrality']['pre-release']['Major'] = (0.909, 0.797)
+    measureCorrelation['Degree Centrality']['post-release']['Minor'] = (0.668, 0.269)
+    measureCorrelation['Degree Centrality']['post-release']['Major'] = (0.599, 0.319)
+
+    measureCorrelation['Closeness Centrality']['pre-release']['Minor'] = (0.624, 0.737)
+    measureCorrelation['Closeness Centrality']['pre-release']['Major'] = (-0.098, 0.167)
+    measureCorrelation['Closeness Centrality']['post-release']['Minor'] = (0.602, 0.130)
+    measureCorrelation['Closeness Centrality']['post-release']['Major'] = (0.107, 0.013)
+
+    measureCorrelation['Reachability']['pre-release']['Minor'] = (0.647, 0.747)
+    measureCorrelation['Reachability']['pre-release']['Major'] = (-0.091, 0.176)
+    measureCorrelation['Reachability']['post-release']['Minor'] = (0.618, 0.135)
+    measureCorrelation['Reachability']['post-release']['Major'] = (0.199, 0.018)
+
+    measureCorrelation['Betweenness Centrality']['pre-release']['Minor'] = (0.703, 0.748)
+    measureCorrelation['Betweenness Centrality']['pre-release']['Major'] = (0.146, 0.285)
+    measureCorrelation['Betweenness Centrality']['post-release']['Minor'] = (0.601 , 0.289)
+    measureCorrelation['Betweenness Centrality']['post-release']['Major'] = (0.132 , 0.154)
+
+    measureCorrelation['Effective Size']['pre-release']['Minor'] = (0.775, 0.884)
+    measureCorrelation['Effective Size']['pre-release']['Major'] = (0.311, 0.391)
+    measureCorrelation['Effective Size']['post-release']['Minor'] = (0.649 , 0.223)
+    measureCorrelation['Effective Size']['post-release']['Major'] = (0.286 , 0.196)
 
 def getProjectList():
     return ['JDT', 'Platform']

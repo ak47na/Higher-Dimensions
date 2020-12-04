@@ -41,7 +41,7 @@ def filterEdges(edges, edgeTypes):
 
 def getEdgeSample(edges, perc):
     nrEdges = len(edges)
-    selectedEdgeId = sorted(Sample.getSample(0, nrEdges - 1, int((nrEdges * perc) / 100)))
+    selectedEdgeId = sorted(Sample.getSample(0, nrEdges - 1, min(nrEdges - 1, int((nrEdges * perc) / 100))))
     selectedEdges = {}
     currentId = 0
     currentSelectedId = 0
