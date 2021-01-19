@@ -21,6 +21,9 @@ class InformationFlowNetwork:
         # timeDict[timeInterval] = the index of the network(graphIndex) with messages sent in timeInterval
         # timeInterval = integer
         self.timeDict = {}
+        # timeDict[timeInterval] = the index of the network(graphIndex) with messages sent in timeInterval
+        # timeInterval = integer
+        self.crossLayerEdges = []
         # tGraphs = List of the networkX multiDiGraphs for each time time interval, i.e
         # TGraphs[graphIndex] =the graph for timeInterval with timeDict[timeInterval] = graphIndex.
         self.tGraphs = [0]
@@ -50,41 +53,45 @@ class InformationFlowNetwork:
         return nrNodes
 
     '''
-        Adds an edge between the sender of message u and the sender of message v. delta_t represents the
+        Adds an edge between the sender of message v and the sender of message u. delta_t represents the
         number of seconds aggregated into one time interval.
-        Returns the current number of graphs of messages spanning delta_t seconds, the number of human
-        nodes across all networks.
+        Returns the number of human nodes across all networks.
     '''
     def addEdge(self, u, v, nrNodes, minTime):
-        # u is a reply to v, a is the sender of u, b is the sender of v.
+        # u is a reply to v, b is the sender of u, a is the sender of v.
         if (self.msgDict[u][1].timestamp() < self.msgDict[v][1].timestamp()):
             u, v = v, u
         assert (self.msgDict[u][1].timestamp() >= self.msgDict[v][1].timestamp())
         if ((u, v) in self.replyDict):
-            # The reply from u to v was already processed.
+            # The reply u to message v was already processed.
             return nrNodes
 
         self.replyDict[(u, v)] = True
-        a = self.msgDict[u][0]
-        b = self.msgDict[v][0]
+        b = self.msgDict[u][0]
+        a = self.msgDict[v][0]
         nrNodes = self.addHuman(a, nrNodes)
         nrNodes = self.addHuman(b, nrNodes)
         if a == b:
             return nrNodes
         A = self.humanDict[a]
         B = self.humanDict[b]
-        # Compute the index of the network which contains the point in time when message v was sent.
-        tIntervalId = trunc((self.msgDict[u][1].timestamp() - minTime) / self.delta_t)
-        if not (tIntervalId in self.timeDict):
-            # Create the graph for tIntervalId
+        # Compute the index of the network which contains the point in time when message u was sent.
+        tIntervalIdU = trunc((self.msgDict[u][1].timestamp() - minTime) / self.delta_t)
+        tIntervalIdV = trunc((self.msgDict[v][1].timestamp() - minTime) / self.delta_t)
+
+        if tIntervalIdU != tIntervalIdV:
+            self.crossLayerEdges.append(((A, tIntervalIdU), (B, tIntervalIdV)))
+
+        if not (tIntervalIdU in self.timeDict):
+            # Create the graph for tIntervalIdU
             self.nrGraphs += 1
             self.Adj[self.nrGraphs] = {}
             self.minT[self.nrGraphs] = {}
             self.maxT[self.nrGraphs] = {}
             self.tGraphs.append(networkx.MultiDiGraph())
-            self.timeDict[tIntervalId] = self.nrGraphs
+            self.timeDict[tIntervalIdU] = self.nrGraphs
 
-        T = self.timeDict[tIntervalId]
+        T = self.timeDict[tIntervalIdU]
         # Update the minimum and maximum time for a conversation from person A to person B.
         # The value is necessary for computing transitive faults.
         if not ((A, B) in self.minT[T]):
@@ -96,7 +103,6 @@ class InformationFlowNetwork:
                                                                                 self.msgDict[u][1].timestamp())
         # Add an edge in the T-th MultiDiGraph from the node representing human a to the node
         # representing human b.
-
         if not (A in self.Adj[T]):
             self.Adj[T][A] = {}
         if not (B in self.Adj[T][A]):
@@ -145,7 +151,7 @@ class InformationFlowNetwork:
     def getTransitiveFault(self):
         upperBound = 0
         lowerBound = 1
-        Y = 3600 * 24 * 365
+
         for netw in range(1, self.nrGraphs + 1):
             N = self.tGraphs[netw].number_of_nodes()
             transFaultSum = [0, 0]
@@ -327,16 +333,23 @@ def readMsgDetails(filePath):
 
 '''
     Method that creates all information flow networks such that the number of seconds for each 
-    network is delta_t, computes the number of transitive faults and the Spearman correlation of
-    the 2-path rankings between the (aggregate) network with transitive faults and the one without.
+    network is delta_t.
 '''
-def getValues(t, delta_t, minTime, maxTime, msgDict):
+def createInfoFlowNetwork(t, delta_t, minTime, maxTime, msgDict):
     infoFlowNetwork = InformationFlowNetwork(msgDict, delta_t, t)
     msgEdgesFilePath = "Data\\msgEdges.txt"
     nrNodes = infoFlowNetwork.readMsgEdges(0, minTime, msgEdgesFilePath)
+    return infoFlowNetwork
+
+'''
+    Method that computes the number of transitive faults and the Spearman correlation of
+    the 2-path rankings between the (aggregate) network with transitive faults and the one without.
+'''
+def getValues(t, delta_t, minTime, maxTime, msgDict):
+    infoFlowNetwork = createInfoFlowNetwork(t, delta_t, minTime, maxTime, msgDict)
     #print(nrNodes, infoFlowNetwork.nrEdges)
     infoFlowNetwork.getTransitiveFault()
     infoFlowNetwork.getRanginkCorrelationAggregate()
-    return infoFlowNetwork.crtResult
 
+    return infoFlowNetwork.crtResult, len(infoFlowNetwork.crossLayerEdges)
 
