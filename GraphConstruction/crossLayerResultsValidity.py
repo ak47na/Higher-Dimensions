@@ -1,3 +1,5 @@
+from math import trunc
+
 import reproValidity
 import mailID
 import matplotlib.pyplot as plt
@@ -32,8 +34,63 @@ def plotGraph(startTimeSec, endTimeSec, step):
     plt.ylabel('number of cross-layer edges')
     plt.show()
 
-plotGraph(60, 3600 * 24, 10)
-plotGraph(3600 * 24, 3600 * 30 * 24, 3600)
-plotGraph(3600 * 30 * 24, Y, 3600 * 24)
-plotGraph(Y, Y * 10, 3600 * 24 * 30)
-plotGraph(Y * 10, Y * 20, 3600 * 24 * 30 * 2)
+def plotCLEGraphs():
+    plotGraph(60, 3600 * 24, 10)
+    plotGraph(3600 * 24, 3600 * 30 * 24, 3600)
+    plotGraph(3600 * 30 * 24, Y, 3600 * 24)
+    plotGraph(Y, Y * 10, 3600 * 24 * 30)
+    plotGraph(Y * 10, Y * 20, 3600 * 24 * 30 * 2)
+
+def createHistogramForTime(t, timeDist):
+    for i, binsCount in enumerate([25, 50, 75, 100]):
+        # Set up the plot
+        ax = plt.subplot(2, 2, i + 1)
+        # Draw the plot
+        ax.hist(timeDist, bins=binsCount,
+                color='blue', edgecolor='black')
+        # Title and labels
+        ax.set_title('Histogram for ' + t +' with BinCount = %d' % binsCount, size=6)
+        ax.set_xlabel('Time (seconds)', size=10)
+        ax.set_ylabel('CLE', size=10)
+
+    plt.tight_layout()
+    plt.show()
+
+def createBasicHistogramForTime(t, timeDist):
+    plt.hist(timeDist,
+            color='blue', edgecolor='black')
+    plt.title('Histogram for ' + t, size=10)
+    plt.xlabel('Time (seconds)', size=10)
+    plt.ylabel('CLE', size=10)
+    plt.tight_layout()
+    plt.show()
+
+def createBasicHistogramForLayer(t, layerDist):
+    plt.hist(layerDist,
+            color='blue', edgecolor='black')
+    plt.title('Histogram for ' + t, size=10)
+    plt.xlabel('Layer distance', size=10)
+    plt.ylabel('CLE', size=10)
+    plt.tight_layout()
+    plt.show()
+
+def creteHistogramsWithTimeDistanceForCLE():
+    times = [3600, 3600 * 24, 3600 * 24 * 30, Y, Y * 2, Y * 3]
+    for delta_t in times:
+        t = str(delta_t) + 'seconds'
+        infoFlowNetwork = reproValidity.createInfoFlowNetwork(t, delta_t, minTime, maxTime, msgDict)
+        crossLayerEdges = infoFlowNetwork.crossLayerEdges
+        timeDist = []
+        layerDist = []
+        for edge in crossLayerEdges:
+            if delta_t == 3600:
+                print(delta_t, edge)
+            timeDist.append(edge[0][1] - edge[1][1])
+            t1 = trunc((edge[0][1] - minTime) / delta_t)
+            t2 = trunc((edge[1][1] - minTime) / delta_t)
+            layerDist.append(t1 - t2)
+        #createBasicHistogramForTime(t, timeDist)
+        #createHistogramForTime(t, timeDist)
+        createBasicHistogramForLayer(t, layerDist)
+
+creteHistogramsWithTimeDistanceForCLE()

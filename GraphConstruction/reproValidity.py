@@ -80,7 +80,7 @@ class InformationFlowNetwork:
         tIntervalIdV = trunc((self.msgDict[v][1].timestamp() - minTime) / self.delta_t)
 
         if tIntervalIdU != tIntervalIdV:
-            self.crossLayerEdges.append(((A, tIntervalIdU), (B, tIntervalIdV)))
+            self.crossLayerEdges.append(((A, self.msgDict[u][1].timestamp()), (B, self.msgDict[v][1].timestamp())))
 
         if not (tIntervalIdU in self.timeDict):
             # Create the graph for tIntervalIdU
