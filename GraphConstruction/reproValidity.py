@@ -5,6 +5,9 @@ from scipy.stats import spearmanr
 from math import *
 # Note: t0 < t1 <=> t0 happened before t1
 
+def getMinMax(timePair, t):
+    return (min(timePair[0], t), max(timePair[1], t))
+
 class InformationFlowNetwork:
     def __init__(self, msgDict, delta_t, t):
         self.nrEdges = 0
@@ -14,6 +17,12 @@ class InformationFlowNetwork:
         # minT[graphIndex][(A, B)] = min time t in graphIndex s.t there was a message from B to A at t.
         self.minT = {}
         self.maxT = {}
+        #inLayer[graphIndex][A][B] = (minT, maxT)
+        #crossLayerIn[graphIndex][A][B] = maxL
+        #crossLayerOut[graphIndex][A][B] = minL
+        self.inLayer = {}
+        self.crossLayerIn = {}
+        self.crossLayerOut = {}
         # Adj[graphIndex][node] = the adjacency list of node in the graphIndex-th graph.
         self.Adj = {}
         # msgDict[msgKey] = (sender, time)
@@ -32,6 +41,7 @@ class InformationFlowNetwork:
         #    t == 1, then the count excludes transitive faults with optimistic model
         #    t == 2, then the count excludes transitive faults with pessimistic model
         self.nr2paths = [{}, {}, {}]
+        self.MLNnr2paths = [{}, {}, {}]
         # nr2p[t][node] = the number of 2-paths of node in aggregate network, i.e
         #               = sum(network in networks, nr2p[t][network][node])
         self.nr2p = [{}, {}, {}]
@@ -39,6 +49,7 @@ class InformationFlowNetwork:
         self.delta_t = delta_t
         self.analysedT = t
         self.crtResult = [(0, 0), (0, 0), (0, 0)]
+        self.MLNcrtResult = [(0, 0), (0, 0), (0, 0)]
 
     '''
         Add the human with name to humanDict and as a graph node with index nrNodes + 1 and label
@@ -51,6 +62,17 @@ class InformationFlowNetwork:
             self.Label[nrNodes] = name
             self.humanDict[name] = nrNodes
         return nrNodes
+
+    def createTGraphForT(self, tIntervalId):
+        self.nrGraphs += 1
+        self.Adj[self.nrGraphs] = {}
+        self.minT[self.nrGraphs] = {}
+        self.maxT[self.nrGraphs] = {}
+        self.tGraphs.append(networkx.MultiDiGraph())
+        self.timeDict[tIntervalId] = self.nrGraphs
+        self.inLayer[self.nrGraphs] = {}
+        self.crossLayerIn[self.nrGraphs] = {}
+        self.crossLayerOut[self.nrGraphs] = {}
 
     '''
         Adds an edge between the sender of message v and the sender of message u. delta_t represents the
@@ -79,19 +101,39 @@ class InformationFlowNetwork:
         tIntervalIdU = trunc((self.msgDict[u][1].timestamp() - minTime) / self.delta_t)
         tIntervalIdV = trunc((self.msgDict[v][1].timestamp() - minTime) / self.delta_t)
 
-        if tIntervalIdU != tIntervalIdV:
-            self.crossLayerEdges.append(((A, self.msgDict[u][1].timestamp()), (B, self.msgDict[v][1].timestamp())))
 
         if not (tIntervalIdU in self.timeDict):
             # Create the graph for tIntervalIdU
-            self.nrGraphs += 1
-            self.Adj[self.nrGraphs] = {}
-            self.minT[self.nrGraphs] = {}
-            self.maxT[self.nrGraphs] = {}
-            self.tGraphs.append(networkx.MultiDiGraph())
-            self.timeDict[tIntervalIdU] = self.nrGraphs
+            self.createTGraphForT(tIntervalIdU)
+        if not (tIntervalIdV in self.timeDict):
+            # Create the graph for tIntervalIdU
+            self.createTGraphForT(tIntervalIdV)
 
         T = self.timeDict[tIntervalIdU]
+        if tIntervalIdU != tIntervalIdV:
+            self.crossLayerEdges.append(((A, self.msgDict[u][1].timestamp()), (B, self.msgDict[v][1].timestamp())))
+            Tv = self.timeDict[tIntervalIdV]
+            # Add cross-layer edge outgoing from A
+            if (not A in self.crossLayerOut[Tv]):
+                self.crossLayerOut[Tv][A] = {}
+            if (not B in self.crossLayerOut[Tv][A]):
+                self.crossLayerOut[Tv][A][B] = tIntervalIdU
+            else:
+                self.crossLayerOut[Tv][A][B] = min(self.crossLayerOut[Tv][A][B], tIntervalIdU)
+            #Add cross-layer edge ingoing to B
+            if (not B in self.crossLayerIn[T]):
+                self.crossLayerIn[T][B] = {}
+            if (not A in self.crossLayerIn[T][B]):
+                self.crossLayerIn[T][B][A] = tIntervalIdV
+            else:
+                self.crossLayerIn[T][B][A] = max(self.crossLayerIn[T][B][A], tIntervalIdV)
+        else:
+            if not(A in self.inLayer[T]):
+                self.inLayer[T][A] = {}
+            if not(B in self.inLayer[T][A]):
+                self.inLayer[T][A][B] = (self.msgDict[u][1].timestamp(), self.msgDict[u][1].timestamp())
+            else:
+                self.inLayer[T][A][B] = getMinMax(self.inLayer[T][A][B], self.msgDict[u][1].timestamp())
         # Update the minimum and maximum time for a conversation from person A to person B.
         # The value is necessary for computing transitive faults.
         if not ((A, B) in self.minT[T]):
@@ -139,6 +181,70 @@ class InformationFlowNetwork:
                 nrNodes = self.addEdge(lst[1], lst[0], nrNodes, minTime)
         edgeFile.close()
         return nrNodes
+
+    def getTransitiveFaultForMLN(self):
+        upperBound = 0
+        lowerBound = 1
+        for netw in range(1, self.nrGraphs + 1):
+            N = len(self.inLayer[netw])
+            if N == 0:
+                continue
+            transFaultSum = [0, 0]
+            # 0 = with transitive faults,
+            # 1 = without transitive faults(optimistic model)
+            # 2 = without transitive faults(pessimistic model)
+            self.MLNnr2paths[0][netw] = {}
+            self.MLNnr2paths[1][netw] = {}
+            self.MLNnr2paths[2][netw] = {}
+            for a in self.inLayer[netw]:
+                self.MLNnr2paths[0][netw][a] = 0
+                self.MLNnr2paths[1][netw][a] = 0
+                self.MLNnr2paths[2][netw][a] = 0
+                # optimisticCount - "lower bound on the transitive fault rate.
+                # whenever we see b->c following a->b, we indicate no transitive faults for the 2-path
+                # a->b->c, regardless of if there is an edge b->c prior to the edge a->b(which in
+                # isolation would represent a transitive fault)."
+                optimisticCount = 0
+                # pessimisticCount - "upper bound on the fault rate. Here, whenever we see an edge a->b
+                # after an edge b->c, we label the 2-path a->b->c as a transitive fault regardless of
+                # what other edges between a, b and c exist in the same time interval."
+                pesimisticCount = 0
+                for b in self.inLayer[netw][a]:
+                    if not (b in self.inLayer[netw]):
+                        # Ignore a's neighbours with out-degree = 0.
+                        continue
+                    for c in self.inLayer[netw][b]:
+                        # Count the 2-path : a->b->c
+                        self.MLNnr2paths[0][netw][a] += 1
+                        self.MLNnr2paths[1][netw][a] += 1
+                        self.MLNnr2paths[2][netw][a] += 1
+                        if (b in self.crossLayerOut[netw] and a in self.crossLayerOut[netw][b]) or (b in self.crossLayerIn[netw] and c in self.crossLayerIn[netw][b]):
+                            continue
+                        # If there is no edge a->b with time smaller than an edge b->c, then a->b->c is
+                        # a transitive-fault.
+                        if self.inLayer[netw][a][b][0] > self.inLayer[netw][b][c][1]:
+                            optimisticCount += 1
+                            self.MLNnr2paths[1][netw][a] -= 1
+                        # If there is an edge a->b with time bigger than b->c, then a->b->c is a
+                        # transitive fault in the pessimistic model.
+                        if self.inLayer[netw][a][b][1] > self.inLayer[netw][b][c][0]:
+                            pesimisticCount += 1
+                            self.MLNnr2paths[2][netw][a] -= 1
+                if self.MLNnr2paths[0][netw][a] == 0:
+                    # When computing the transitive fault rate, ignore the nodes without 2-paths.
+                    continue
+                transFaultSum[0] += (optimisticCount / self.MLNnr2paths[0][netw][a])
+                transFaultSum[1] += (pesimisticCount / self.MLNnr2paths[0][netw][a])
+            # The network transitive fault rate is the sum of the node transitive fault rates over all
+            # nodes, divided by the number of nodes in the network.
+            transFaultSum[0] /= N
+            transFaultSum[1] /= N
+            # optimistic model should have at most pessimistic model transitive faults.
+            assert transFaultSum[0] <= transFaultSum[1]
+            upperBound = max(transFaultSum[1], upperBound)
+            lowerBound = min(transFaultSum[0], lowerBound)
+
+        self.MLNcrtResult[0] = (lowerBound, upperBound)
 
     '''
         Computes the number of 2-paths(with or without transitive faults) for each node. The number of
@@ -350,6 +456,15 @@ def getValues(t, delta_t, minTime, maxTime, msgDict):
     #print(nrNodes, infoFlowNetwork.nrEdges)
     infoFlowNetwork.getTransitiveFault()
     infoFlowNetwork.getRanginkCorrelationAggregate()
+    print("The number of edges is ", infoFlowNetwork.nrEdges)
 
     return infoFlowNetwork.crtResult, len(infoFlowNetwork.crossLayerEdges)
+
+def getValuesForMLN(t, delta_t, minTime, maxTime, msgDict):
+    infoFlowNetwork = createInfoFlowNetwork(t, delta_t, minTime, maxTime, msgDict)
+    #print(nrNodes, infoFlowNetwork.nrEdges)
+    infoFlowNetwork.getTransitiveFaultForMLN()
+    print("The MLN ntework for ", t, " has ", infoFlowNetwork.MLNcrtResult)
+
+    return infoFlowNetwork.MLNcrtResult
 

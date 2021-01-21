@@ -93,4 +93,10 @@ def creteHistogramsWithTimeDistanceForCLE():
         #createHistogramForTime(t, timeDist)
         createBasicHistogramForLayer(t, layerDist)
 
-creteHistogramsWithTimeDistanceForCLE()
+def crossLayerVsInLayerEdges():
+    times = []
+    for delta_t in times:
+        t = str(delta_t) + 'seconds'
+        infoFlowNetwork = reproValidity.createInfoFlowNetwork(t, delta_t, minTime, maxTime, msgDict)
+
+#creteHistogramsWithTimeDistanceForCLE()
