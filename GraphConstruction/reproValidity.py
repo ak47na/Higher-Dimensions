@@ -218,7 +218,7 @@ class InformationFlowNetwork:
                         self.MLNnr2paths[0][netw][a] += 1
                         self.MLNnr2paths[1][netw][a] += 1
                         self.MLNnr2paths[2][netw][a] += 1
-                        if (b in self.crossLayerOut[netw] and a in self.crossLayerOut[netw][b]) or (b in self.crossLayerIn[netw] and c in self.crossLayerIn[netw][b]):
+                        if (b in self.crossLayerOut[netw] and c in self.crossLayerOut[netw][b]) or (b in self.crossLayerIn[netw] and a in self.crossLayerIn[netw][b]):
                             continue
                         # If there is no edge a->b with time smaller than an edge b->c, then a->b->c is
                         # a transitive-fault.
@@ -398,6 +398,27 @@ class InformationFlowNetwork:
         self.crtResult[2] = (w, p)
         #print(w, p)
 
+    def getMLNEdgeCount(self):
+        inLayerEdgeCount = 0
+        crossLayerEdgeCount = 0
+        for netw in range(1, self.nrGraphs + 1):
+            for a in self.inLayer[netw]:
+                inLayerEdgeCount += len(self.inLayer[netw][a])
+            for a in self.crossLayerOut[netw]:
+                crossLayerEdgeCount += len(self.crossLayerOut[netw][a])
+        return (inLayerEdgeCount, crossLayerEdgeCount, crossLayerEdgeCount + inLayerEdgeCount)
+
+    def getEdgeCount(self):
+        edgeCount = 0
+        for netw in range(1, self.nrGraphs + 1):
+            for a in self.Adj[netw]:
+                for b in self.Adj[netw][a]:
+                    edgeCount += 1
+                    if (self.minT[netw][(a, b)] != self.maxT[netw][(a, b)]):
+                        edgeCount += 1
+        return edgeCount
+
+
 '''
     Updates the minimum and maximum number of seconds with t.
 '''
@@ -465,6 +486,7 @@ def getValuesForMLN(t, delta_t, minTime, maxTime, msgDict):
     #print(nrNodes, infoFlowNetwork.nrEdges)
     infoFlowNetwork.getTransitiveFaultForMLN()
     print("The MLN ntework for ", t, " has ", infoFlowNetwork.MLNcrtResult)
-
+    print("The MLN ntework for ", t, " has ", infoFlowNetwork.getMLNEdgeCount(), " edges")
+    print("The CP ntework for ", t, " has ", infoFlowNetwork.getEdgeCount(), " edges")
     return infoFlowNetwork.MLNcrtResult
 
