@@ -461,8 +461,8 @@ def getValues(t, delta_t, minTime, maxTime, msgDict, netwType):
         print("The number of edges is ", infoFlowNetwork.nrEdges)
         return infoFlowNetwork.crtResult[netwType], len(infoFlowNetwork.crossLayerEdges)
     else:
-        print("The MLN ntework for ", t, " has ", infoFlowNetwork.getMLNEdgeCount(), " edges")
-        print("The monoplex ntework for ", t, " has ", infoFlowNetwork.getEdgeCount(), " edges")
+        print("The MLN network for ", t, " has ", infoFlowNetwork.getMLNEdgeCount(), " edges")
+        print("The monoplex network for ", t, " has ", infoFlowNetwork.getEdgeCount(), " edges")
         return infoFlowNetwork.crtResult[netwType]
 
 
