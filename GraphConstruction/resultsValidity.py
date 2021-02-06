@@ -41,7 +41,7 @@ t2Times = []
 t2Rows = [[[] for i in range(6)], [[] for j in range(6)]]
 
 for (t, delta_t) in timeIntWithResults:
-    crtResult, crossLayerEdgesCount = reproValidity.getValues(t, delta_t, minTime, maxTime, msgDict)
+    crtResult, crossLayerEdgesCount = reproValidity.getValues(t, delta_t, minTime, maxTime, msgDict, 'monoplex')
     print("The number of cross-layer edge for ", t, "is ", crossLayerEdgesCount)
     if (delta_t in transitiveFaultRate):
         projectId = 0

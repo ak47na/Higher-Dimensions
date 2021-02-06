@@ -1,6 +1,7 @@
 import reproValidity
 import mailID
 import Settings
+import parameters
 import plotly.graph_objects as go
 
 # the number of seconds in a year
@@ -30,6 +31,8 @@ mailID.init()
 msgDetailsFilePath = "Data\\msgDetails.txt"
 minTime, maxTime, msgDict = reproValidity.readMsgDetails(msgDetailsFilePath)
 t1Rows = [[] for k in range(6)]
+
+parameters.setLayerDistance(1)
 
 for (t, delta_t) in timeIntWithResults:
     MLNcrtResult = reproValidity.getValues(t, delta_t, minTime, maxTime, msgDict, 'MLN')
