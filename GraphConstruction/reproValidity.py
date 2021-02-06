@@ -33,6 +33,7 @@ class InformationFlowNetwork:
         self.timeDict = {}
         # timeDict[timeInterval] = the index of the network(graphIndex) with messages sent in timeInterval
         # timeInterval = integer
+        self.invTimeDict = {}
         self.crossLayerEdges = []
         # tGraphs = List of the networkX multiDiGraphs for each time time interval, i.e
         # TGraphs[graphIndex] =the graph for timeInterval with timeDict[timeInterval] = graphIndex.
@@ -66,6 +67,10 @@ class InformationFlowNetwork:
     def getTimeRange(self, timestmp):
         return trunc((timestmp - self.minTime) / self.delta_t)
 
+    def getLayerDistForCLE(self, netw, timeVal):
+        timeIntNetw = self.invTimeDict[netw]
+        return abs(timeIntNetw - self.getTimeRange(timeVal))
+
     def createTGraphForT(self, tIntervalId):
         self.nrGraphs += 1
         self.Adj[self.nrGraphs] = {}
@@ -73,6 +78,7 @@ class InformationFlowNetwork:
         self.maxT[self.nrGraphs] = {}
         self.tGraphs.append(networkx.MultiDiGraph())
         self.timeDict[tIntervalId] = self.nrGraphs
+        self.invTimeDict[self.nrGraphs] = tIntervalId
         self.inLayer[self.nrGraphs] = {}
         self.crossLayerIn[self.nrGraphs] = {}
         self.crossLayerOut[self.nrGraphs] = {}
