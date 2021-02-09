@@ -58,7 +58,9 @@ class InformationFlowNetwork:
         self.nrGraphs = 0
         self.delta_t = delta_t
         self.analysedT = t
+        self.TFperNetw = {}
         self.crtResult = {"monoplex" : [(0, 0), (0, 0), (0, 0)], "MLN": [(0, 0), (0, 0), (0, 0)]}
+        self.meanRes = {}
 
     '''
         Add the human with name to humanDict and as a graph node with index nrNodes + 1 and label
@@ -225,7 +227,7 @@ class InformationFlowNetwork:
             self.nr2paths[netwType][1][netw][a] -= 1
         # If there is an edge a->b with time bigger than b->c, then a->b->c is a
         # transitive fault in the pessimistic model.
-        if self.inLayer[netw][a][b][1] > self.inLayer[netw][b][c][0] or cleBdowntoC:
+        if self.inLayer[netw][a][b][1] > self.inLayer[netw][b][c][0] or cleBdowntoC or cleAtoBup:
             pesimisticCount += 1
             self.nr2paths[netwType][2][netw][a] -= 1
         return optimisticCount, pesimisticCount
@@ -284,10 +286,12 @@ class InformationFlowNetwork:
                     continue
                 transFaultSum[0] += (optimisticCount / self.nr2paths[netwType][0][netw][a])
                 transFaultSum[1] += (pesimisticCount / self.nr2paths[netwType][0][netw][a])
+
             # The network transitive fault rate is the sum of the node transitive fault rates over all
             # nodes, divided by the number of nodes in the network.
             transFaultSum[0] /= N
             transFaultSum[1] /= N
+            self.TFperNetw[netw] = (transFaultSum[0], transFaultSum[1])
             # optimistic model should have at most pessimistic model transitive faults.
             assert transFaultSum[0] <= transFaultSum[1]
             upperBound = max(transFaultSum[1], upperBound)

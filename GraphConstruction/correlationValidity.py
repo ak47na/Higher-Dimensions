@@ -2,8 +2,6 @@ import mailID
 import constants
 import reproValidity
 import infoFlowNetwork
-from datetime import datetime
-from networkx import *
 from scipy.stats import spearmanr
 from math import *
 
