@@ -58,7 +58,7 @@ class InformationFlowNetwork:
         self.nrGraphs = 0
         self.delta_t = delta_t
         self.analysedT = t
-        self.TFperNetw = {}
+        self.TFperNetw = {"monoplex" : {}, "MLN": {}}
         self.crtResult = {"monoplex" : [(0, 0), (0, 0), (0, 0)], "MLN": [(0, 0), (0, 0), (0, 0)]}
         self.meanRes = {}
 
@@ -167,6 +167,10 @@ class InformationFlowNetwork:
                                                                                 timeU)
         # Add an edge in the T-th MultiDiGraph from the node representing human a to the node
         # representing human b.
+        # Comment this if-statement if CLE should be considered parallel edges in CP network
+        if tIntervalIdU != tIntervalIdV:
+            return nrNodes
+
         if not (A in self.Adj[T]):
             self.Adj[T][A] = {}
         if not (B in self.Adj[T][A]):
@@ -247,29 +251,50 @@ class InformationFlowNetwork:
             self.nr2paths[netwType][2][netw][a] -= 1
         return optimisticCount, pesimisticCount
 
-    def addCLEPath(self, netw, netwType, a, b, optimisticCount, pesimisticCount):
+    def addCLEPathAB(self, netw, netwType, a, b, optimisticCount, pesimisticCount):
         assert netwType == 'MLN'
         if b in self.crossLayerOut[netw]:
             for c in self.crossLayerOut[netw][b]:
-                if not (b in self.inLayer[netw] and c in self.inLayer[netw][b][c]):
+                if not (b in self.inLayer[netw] and c in self.inLayer[netw][b]):
                     # Cross-edges b->c where there is also an in-layer edge b->c are treated in getTFaultMLN.
-                    assert (self.crossLayerOut[netw][b][c] > self.inLayer[netw][a][b])
+                    assert (self.crossLayerOut[netw][b][c] > self.inLayer[netw][a][b][1])
                     for ty in range(3):
-                        self.nr2paths[netw][a][ty] += 1
-        if a in self.crossLayerIn[netw]:
-            for c in self.crossLayerIn[netw][a]:
-                if not (c in self.inLayer[netw] and a in self.inLayer[netw][c]):
-                    for ty in range(3):
-                        self.nr2paths[netw][c][ty] += 1
-                    # Cross-edges c->a where there is also an in-layer edge c->a are treated in getTFaultMLN.
-                    if self.crossLayerIn[netw][a][c][0] > self.inLayer[netw][a][b][1]:
-                        optimisticCount += 1
-                        self.nr2paths[netwType][1][netw][c] -= 1
-                    if self.crossLayerIn[netw][a][c][1] > self.inLayer[netw][a][b][0]:
-                        pesimisticCount += 1
-                        self.nr2paths[netwType][2][netw][c] -= 1
+                        self.nr2paths[netwType][ty][netw][a] += 1
         return optimisticCount, pesimisticCount
 
+    def addCLEPathA(self, netw, netwType, a, optimisticCount, pesimisticCount):
+        for b in self.crossLayerOut[netw][a]:
+            netwb = self.timeDict[self.getTimeRange(self.crossLayerOut[netw][a][b])]
+            if not (b in self.inLayer[netwb]):
+                # Ignore bs with no inLayer edge b->c
+                continue
+            if not (a in self.inLayer[netwb] and b in self.inLayer[netwb][a]):
+                for c in self.inLayer[netwb][b]:
+                    for ty in range(3):
+                        self.nr2paths[netwType][ty][netw][a] += 1
+                    # Cross-edges c->a where there is also an in-layer edge c->a are treated in getTFaultMLN.
+                    if self.crossLayerOut[netw][a][b] > self.inLayer[netwb][b][c][1]:
+                        optimisticCount += 1
+                        self.nr2paths[netwType][1][netw][a] -= 1
+                    if self.crossLayerOut[netw][a][b] > self.inLayer[netwb][b][c][0]:
+                        pesimisticCount += 1
+                        self.nr2paths[netwType][2][netw][a] -= 1
+        return optimisticCount, pesimisticCount
+
+    def initTFRForNode(self, netw, netwType, a):
+        self.nr2paths[netwType][0][netw][a] = 0
+        self.nr2paths[netwType][1][netw][a] = 0
+        self.nr2paths[netwType][2][netw][a] = 0
+        optimisticCount = 0
+        pesimisticCount = 0
+        return optimisticCount, pesimisticCount
+
+    def addTFRForNode(self, netw, netwType, transFaultSum, a, optimisticCount, pesimisticCount):
+        if self.nr2paths[netwType][0][netw][a] == 0:
+            # When computing the transitive fault rate, ignore the nodes without 2-paths.
+            return
+        transFaultSum[0] += (optimisticCount / self.nr2paths[netwType][0][netw][a])
+        transFaultSum[1] += (pesimisticCount / self.nr2paths[netwType][0][netw][a])
 
     '''
         Computes the number of 2-paths(with or without transitive faults) for each node. The number of
@@ -287,6 +312,7 @@ class InformationFlowNetwork:
             else:
                 N = self.tGraphs[netw].number_of_nodes()
             if N == 0:
+                self.TFperNetw[netwType][netw] = [0, 0]
                 continue
             transFaultSum = [0, 0]
             # 0 = with transitive faults,
@@ -295,6 +321,14 @@ class InformationFlowNetwork:
             self.nr2paths[netwType][0][netw] = {}
             self.nr2paths[netwType][1][netw] = {}
             self.nr2paths[netwType][2][netw] = {}
+            if netwType == 'MLN':
+                for a in self.crossLayerOut[netw]:
+                    if not (a in self.inLayer[netw]):
+                        optimisticCount, pesimisticCount = self.initTFRForNode(netw, netwType, a)
+                        N += 1
+                        optimisticCount, pesimisticCount = self.addCLEPathA(netw, netwType, a, optimisticCount, pesimisticCount)
+                        self.addTFRForNode(netw, netwType, transFaultSum, a, optimisticCount, pesimisticCount)
+
             netwEdges = self.inLayer[netw]
             # Uncomment this part if the CP network adds CLE as inLayer parallel edges.
             # if (netwType == "MLN"):
@@ -309,7 +343,7 @@ class InformationFlowNetwork:
                 pesimisticCount = 0
                 for b in netwEdges[a]:
                     if netwType == 'MLN':
-                        optimisticCount, pesimisticCount = addCLEPath(netw, netwType, a, b, optimisticCount, pesimisticCount)
+                        optimisticCount, pesimisticCount = self.addCLEPathAB(netw, netwType, a, b, optimisticCount, pesimisticCount)
                     if not (b in netwEdges):
                         # Ignore a's neighbours with out-degree = 0.
                         continue
@@ -324,17 +358,13 @@ class InformationFlowNetwork:
                         else:
                             optimisticCount, pesimisticCount = \
                                 self.getTFaultMonoplex(a, b, c, netw, netwType, optimisticCount, pesimisticCount)
-                if self.nr2paths[netwType][0][netw][a] == 0:
-                    # When computing the transitive fault rate, ignore the nodes without 2-paths.
-                    continue
-                transFaultSum[0] += (optimisticCount / self.nr2paths[netwType][0][netw][a])
-                transFaultSum[1] += (pesimisticCount / self.nr2paths[netwType][0][netw][a])
+                self.addTFRForNode(netw, netwType, transFaultSum, a, optimisticCount, pesimisticCount)
 
             # The network transitive fault rate is the sum of the node transitive fault rates over all
             # nodes, divided by the number of nodes in the network.
             transFaultSum[0] /= N
             transFaultSum[1] /= N
-            self.TFperNetw[netw] = (transFaultSum[0], transFaultSum[1])
+            self.TFperNetw[netwType][netw] = (transFaultSum[0], transFaultSum[1])
             # optimistic model should have at most pessimistic model transitive faults.
             assert transFaultSum[0] <= transFaultSum[1]
             upperBound = max(transFaultSum[1], upperBound)
@@ -351,12 +381,18 @@ class InformationFlowNetwork:
                 for b in self.inLayer[netw][a]:
                     if (self.inLayer[netw][a][b][0] != self.inLayer[netw][a][b][1]):
                         inLayerEdgeCount += 1
+
+            for a in self.crossLayerIn[netw]:
+                for b in self.crossLayerIn[netw][a]:
+                    crossLayerEdgeCount += 1
+                    if self.crossLayerIn[netw][a][b][0] != self.crossLayerIn[netw][a][b][1]:
+                        crossLayerEdgeCount += 1
+
             for a in self.crossLayerOut[netw]:
-                crossLayerEdgeCount += len(self.crossLayerOut[netw][a])
                 for b in self.crossLayerOut[netw][a]:
                     netwb = self.timeDict[self.getTimeRange(self.crossLayerOut[netw][a][b])]
                     if b in self.crossLayerIn[netwb]:
-                        if (self.timeDict[self.getTimeRange(self.crossLayerIn[netwb][b][a])] != netw):
+                        if self.crossLayerIn[netwb][b][a][0] != self.crossLayerOut[netw][a][b] and self.crossLayerIn[netwb][b][a][1] != self.crossLayerOut[netw][a][b]:
                             crossLayerEdgeCount += 1
 
         return (inLayerEdgeCount, crossLayerEdgeCount, crossLayerEdgeCount + inLayerEdgeCount)

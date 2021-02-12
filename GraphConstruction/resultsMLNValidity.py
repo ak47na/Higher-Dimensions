@@ -37,15 +37,28 @@ parameters.setLayerDistance(1)
 # monoplex, and displays a table that compares them.
 def getResults():
     for (t, delta_t) in timeIntWithResults:
-        MLNcrtResult = reproValidity.getValues(t, delta_t, minTime, maxTime, msgDict, 'MLN')
         t1Times.append(t)
+        MLN = reproValidity.getValues(t, delta_t, minTime, maxTime, msgDict, 'MLN')
+        MLNcrtResult = MLN.crtResult['MLN']
+        cleCount = len(MLN.crossLayerEdges)
         t1Rows[0].append(MLNcrtResult[0][0])
         t1Rows[2].append(MLNcrtResult[0][1])
-        crtResult, cleCount = reproValidity.getValues(t, delta_t, minTime, maxTime, msgDict, 'monoplex')
+        t1Rows[4].append(MLNcrtResult[0][0] / MLNcrtResult[0][1])
+        monoplex = reproValidity.getValues(t, delta_t, minTime, maxTime, msgDict, 'monoplex')
+        crtResult = monoplex.crtResult['monoplex']
+        assert(cleCount == len(monoplex.crossLayerEdges))
         t1Rows[1].append(crtResult[0][0])
         t1Rows[3].append(crtResult[0][1])
-        t1Rows[4].append(MLNcrtResult[0][0] / MLNcrtResult[0][1])
         t1Rows[5].append(crtResult[0][0] / crtResult[0][1])
+        assert(monoplex.nrGraphs == MLN.nrGraphs)
+        # Compare OP bounds for all interval networks for MLN with monoplex.
+        diff = [0]
+        for netw in range(1, monoplex.nrGraphs + 1):
+            diffNetw = []
+            for i in range(2):
+                diffNetw.append(MLN.TFperNetw['MLN'][netw][i] - monoplex.TFperNetw['monoplex'][netw][i])
+            diff.append(diffNetw)
+        print('For time ', t, ' and delta_t ', delta_t, ' diff array is ', diff)
 
     plotTableOPBounds(t1Times, t1Rows)
 
@@ -82,5 +95,5 @@ def getSpecialCasesResults():
 
 t2Times = []
 t2Rows = [[] for elem in range(11)]
-
+getResults()
 

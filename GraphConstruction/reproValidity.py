@@ -73,11 +73,10 @@ def getValues(t, delta_t, minTime, maxTime, msgDict, netwType):
     if netwType == 'monoplex':
         infoFlowNetwork.getRanginkCorrelationAggregate()
         print("The number of edges is ", infoFlowNetwork.nrEdges)
-        return infoFlowNetwork.crtResult[netwType], len(infoFlowNetwork.crossLayerEdges)
     else:
         print("The MLN network for ", t, " has ", infoFlowNetwork.getMLNEdgeCount(), " edges")
         print("The monoplex network for ", t, " has ", infoFlowNetwork.getEdgeCount(), " edges")
-        return infoFlowNetwork.crtResult[netwType]
+    return infoFlowNetwork
 
 def getSpecialCases(t, delta_t, minTime, maxTime, msgDict):
     infoFlowNetwork = createAdvInfoFlowNetwork(t, delta_t, minTime, maxTime, msgDict)
