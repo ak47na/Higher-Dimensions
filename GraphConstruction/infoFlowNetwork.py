@@ -28,8 +28,8 @@ class InformationFlowNetwork:
         self.minT = {}
         self.maxT = {}
         #inLayer[graphIndex][A][B] = (minT, maxT)
-        #crossLayerIn[graphIndex][A][B] = maxL
-        #crossLayerOut[graphIndex][A][B] = minL
+        #crossLayerIn[graphIndex][A][B] = (minT, maxT)
+        #crossLayerOut[graphIndex][A][B] = minT
         self.inLayer = {}
         self.crossLayerIn = {}
         self.crossLayerOut = {}
@@ -97,29 +97,31 @@ class InformationFlowNetwork:
         # u is a reply to v, b is the sender of u, a is the sender of v.
         if (self.msgDict[u][1].timestamp() < self.msgDict[v][1].timestamp()):
             u, v = v, u
-        assert (self.msgDict[u][1].timestamp() >= self.msgDict[v][1].timestamp())
+        timeU = self.msgDict[u][1].timestamp()
+        timeV = self.msgDict[v][1].timestamp()
+        assert (timeU >= timeV)
         if ((u, v) in self.replyDict):
             # The reply u to message v was already processed.
             return nrNodes
 
         self.replyDict[(u, v)] = True
         b = self.msgDict[u][0]
-        timeU = self.msgDict[u][1].timestamp()
-        timeV = self.msgDict[v][1].timestamp()
         a = self.msgDict[v][0]
         nrNodes = self.addHuman(a, nrNodes)
         nrNodes = self.addHuman(b, nrNodes)
         if a == b:
+            # Do not include self replies
             return nrNodes
         A = self.humanDict[a]
         B = self.humanDict[b]
-        # Compute the index of the network which contains the point in time when message u was sent.
+        # Compute the TIME index of the network which contains the point in time when message u was sent.
         tIntervalIdU = self.getTimeRange(timeU)
+        # Compute the TIME index of the network which contains the point in time when message v was sent.
         tIntervalIdV = self.getTimeRange(timeV)
         assert tIntervalIdV <= tIntervalIdU
 
         if tIntervalIdU - tIntervalIdV > parameters.kLayer:
-            # Ignore cross edges for layer distance > kLayer
+            # Ignore cross edges for layer distance > kLayer.
             return nrNodes
 
         if not (tIntervalIdU in self.timeDict):
@@ -133,20 +135,20 @@ class InformationFlowNetwork:
         if tIntervalIdU != tIntervalIdV:
             self.crossLayerEdges.append(((A, timeV), (B, timeU)))
             Tv = self.timeDict[tIntervalIdV]
-            # Add cross-layer edge outgoing from A
+            # Add cross-layer edge outgoing from A.
             if (not A in self.crossLayerOut[Tv]):
                 self.crossLayerOut[Tv][A] = {}
             if (not B in self.crossLayerOut[Tv][A]):
                 self.crossLayerOut[Tv][A][B] = timeU
             else:
                 self.crossLayerOut[Tv][A][B] = min(self.crossLayerOut[Tv][A][B], timeU)
-            #Add cross-layer edge ingoing to B
+            # Add cross-layer edge ingoing to B.
             if (not B in self.crossLayerIn[T]):
                 self.crossLayerIn[T][B] = {}
             if (not A in self.crossLayerIn[T][B]):
-                self.crossLayerIn[T][B][A] = timeV
+                self.crossLayerIn[T][B][A] = (timeV, timeU)
             else:
-                self.crossLayerIn[T][B][A] = max(self.crossLayerIn[T][B][A], timeV)
+                self.crossLayerIn[T][B][A] = getMinMax(self.crossLayerIn[T][B][A], timeV)
         else:
             if not(A in self.inLayer[T]):
                 self.inLayer[T][A] = {}
@@ -205,6 +207,19 @@ class InformationFlowNetwork:
     def getTFaultMonoplex(self, a, b, c, netw, netwType, optimisticCount, pesimisticCount):
         # If there is no edge a->b with time smaller than an edge b->c, then a->b->c is
         # a transitive-fault.
+        if self.inLayer[netw][a][b][0] > self.inLayer[netw][b][c][1]:
+            optimisticCount += 1
+            self.nr2paths[netwType][1][netw][a] -= 1
+        # If there is an edge a->b with time bigger than b->c, then a->b->c is a
+        # transitive fault in the pessimistic model.
+        if self.inLayer[netw][a][b][1] > self.inLayer[netw][b][c][0]:
+            pesimisticCount += 1
+            self.nr2paths[netwType][2][netw][a] -= 1
+        return optimisticCount, pesimisticCount
+
+    def getTFaultMonoplexV2(self, a, b, c, netw, netwType, optimisticCount, pesimisticCount):
+        # If there is no edge a->b with time smaller than an edge b->c, then a->b->c is
+        # a transitive-fault.
         if self.minT[netw][(a, b)] > self.maxT[netw][(b, c)]:
             optimisticCount += 1
             self.nr2paths[netwType][1][netw][a] -= 1
@@ -232,6 +247,30 @@ class InformationFlowNetwork:
             self.nr2paths[netwType][2][netw][a] -= 1
         return optimisticCount, pesimisticCount
 
+    def addCLEPath(self, netw, netwType, a, b, optimisticCount, pesimisticCount):
+        assert netwType == 'MLN'
+        if b in self.crossLayerOut[netw]:
+            for c in self.crossLayerOut[netw][b]:
+                if not (b in self.inLayer[netw] and c in self.inLayer[netw][b][c]):
+                    # Cross-edges b->c where there is also an in-layer edge b->c are treated in getTFaultMLN.
+                    assert (self.crossLayerOut[netw][b][c] > self.inLayer[netw][a][b])
+                    for ty in range(3):
+                        self.nr2paths[netw][a][ty] += 1
+        if a in self.crossLayerIn[netw]:
+            for c in self.crossLayerIn[netw][a]:
+                if not (c in self.inLayer[netw] and a in self.inLayer[netw][c]):
+                    for ty in range(3):
+                        self.nr2paths[netw][c][ty] += 1
+                    # Cross-edges c->a where there is also an in-layer edge c->a are treated in getTFaultMLN.
+                    if self.crossLayerIn[netw][a][c][0] > self.inLayer[netw][a][b][1]:
+                        optimisticCount += 1
+                        self.nr2paths[netwType][1][netw][c] -= 1
+                    if self.crossLayerIn[netw][a][c][1] > self.inLayer[netw][a][b][0]:
+                        pesimisticCount += 1
+                        self.nr2paths[netwType][2][netw][c] -= 1
+        return optimisticCount, pesimisticCount
+
+
     '''
         Computes the number of 2-paths(with or without transitive faults) for each node. The number of
         seconds aggregated in each network is delta_t.
@@ -256,10 +295,12 @@ class InformationFlowNetwork:
             self.nr2paths[netwType][0][netw] = {}
             self.nr2paths[netwType][1][netw] = {}
             self.nr2paths[netwType][2][netw] = {}
-            if (netwType == "MLN"):
-                netwEdges = self.inLayer[netw]
-            else:
-                netwEdges = self.Adj[netw]
+            netwEdges = self.inLayer[netw]
+            # Uncomment this part if the CP network adds CLE as inLayer parallel edges.
+            # if (netwType == "MLN"):
+            #     netwEdges = self.inLayer[netw]
+            # else:
+            #     netwEdges = self.Adj[netw]
             for a in netwEdges:
                 self.nr2paths[netwType][0][netw][a] = 0
                 self.nr2paths[netwType][1][netw][a] = 0
@@ -267,6 +308,8 @@ class InformationFlowNetwork:
                 optimisticCount = 0
                 pesimisticCount = 0
                 for b in netwEdges[a]:
+                    if netwType == 'MLN':
+                        optimisticCount, pesimisticCount = addCLEPath(netw, netwType, a, b, optimisticCount, pesimisticCount)
                     if not (b in netwEdges):
                         # Ignore a's neighbours with out-degree = 0.
                         continue

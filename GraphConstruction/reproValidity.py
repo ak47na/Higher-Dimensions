@@ -56,6 +56,12 @@ def createInfoFlowNetwork(t, delta_t, minTime, maxTime, msgDict):
     nrNodes = infoFlowNetwork.readMsgEdges(0, msgEdgesFilePath)
     return infoFlowNetwork
 
+import advMultilayeredNetwork
+def createAdvInfoFlowNetwork(t, delta_t, minTime, maxTime, msgDict):
+    infoFlowNetwork = advMultilayeredNetwork.AdvMultilayeredNetwork(msgDict, delta_t, t, minTime)
+    msgEdgesFilePath = "Data\\msgEdges.txt"
+    nrNodes = infoFlowNetwork.readMsgEdges(0, msgEdgesFilePath)
+    return infoFlowNetwork
 '''
     Method that computes the number of transitive faults and the Spearman correlation of
     the 2-path rankings between the (aggregate) network with transitive faults and the one without.
@@ -72,5 +78,15 @@ def getValues(t, delta_t, minTime, maxTime, msgDict, netwType):
         print("The MLN network for ", t, " has ", infoFlowNetwork.getMLNEdgeCount(), " edges")
         print("The monoplex network for ", t, " has ", infoFlowNetwork.getEdgeCount(), " edges")
         return infoFlowNetwork.crtResult[netwType]
+
+def getSpecialCases(t, delta_t, minTime, maxTime, msgDict):
+    infoFlowNetwork = createAdvInfoFlowNetwork(t, delta_t, minTime, maxTime, msgDict)
+    infoFlowNetwork.countSpCases()
+    # print('Count of special cases for MLN with delta_t ', t)
+    # for i in range(5):
+    #     print('Case', i, infoFlowNetwork.case[i])
+    return infoFlowNetwork
+
+
 
 

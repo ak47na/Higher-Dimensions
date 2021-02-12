@@ -31,18 +31,48 @@ mailID.init()
 msgDetailsFilePath = "Data\\msgDetails.txt"
 minTime, maxTime, msgDict = reproValidity.readMsgDetails(msgDetailsFilePath)
 t1Rows = [[] for k in range(6)]
-
 parameters.setLayerDistance(1)
 
-for (t, delta_t) in timeIntWithResults:
-    MLNcrtResult = reproValidity.getValues(t, delta_t, minTime, maxTime, msgDict, 'MLN')
-    t1Times.append(t)
-    t1Rows[0].append(MLNcrtResult[0][0])
-    t1Rows[2].append(MLNcrtResult[0][1])
-    crtResult, cleCount = reproValidity.getValues(t, delta_t, minTime, maxTime, msgDict, 'monoplex')
-    t1Rows[1].append(crtResult[0][0])
-    t1Rows[3].append(crtResult[0][1])
-    t1Rows[4].append(MLNcrtResult[0][0] / MLNcrtResult[0][1])
-    t1Rows[5].append(crtResult[0][0] / crtResult[0][1])
+def getResults():
+    for (t, delta_t) in timeIntWithResults:
+        MLNcrtResult = reproValidity.getValues(t, delta_t, minTime, maxTime, msgDict, 'MLN')
+        t1Times.append(t)
+        t1Rows[0].append(MLNcrtResult[0][0])
+        t1Rows[2].append(MLNcrtResult[0][1])
+        crtResult, cleCount = reproValidity.getValues(t, delta_t, minTime, maxTime, msgDict, 'monoplex')
+        t1Rows[1].append(crtResult[0][0])
+        t1Rows[3].append(crtResult[0][1])
+        t1Rows[4].append(MLNcrtResult[0][0] / MLNcrtResult[0][1])
+        t1Rows[5].append(crtResult[0][0] / crtResult[0][1])
 
-plotTableOPBounds(t1Times, t1Rows)
+    plotTableOPBounds(t1Times, t1Rows)
+
+def plotTableSpcases(t2Times, t2Rows):
+    t2Data = [t2Times]
+    t2ColumnNames = ['time interval']
+    for i in range(5):
+        t2ColumnNames.append('case' + str(i) + ' restricted')
+        t2ColumnNames.append('case' + str(i))
+
+    for col in t2Rows:
+        t2Data.append(col)
+    t2 = go.Figure(data=[go.Table(header=dict(values=t2ColumnNames),
+                                  cells=dict(values=t2Data))
+                         ])
+    t2.show()
+
+def getSpecialResults(id, layerD, t2Rows):
+    parameters.setLayerDistance(layerD)
+    netw = 0
+    for (t, delta_t) in timeIntWithResults:
+        flowNetw = reproValidity.getSpecialCases(t, delta_t, minTime, maxTime, msgDict)
+        for i in range(5):
+            t2Rows[id + i * 2].append(flowNetw.case[i])
+        if id == 0:
+            t2Times.append(t)
+
+t2Times = []
+t2Rows = [[] for kr in range(11)]
+getSpecialResults(0, 1, t2Rows)
+getSpecialResults(1, 10000000000, t2Rows)
+plotTableSpcases(t2Times, t2Rows)
