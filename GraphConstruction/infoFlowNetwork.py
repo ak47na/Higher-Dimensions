@@ -239,6 +239,7 @@ class InformationFlowNetwork:
         cleAtoBup = a in self.crossLayerOut[netw] and b in self.crossLayerOut[netw][a]
         cleBtoupC = b in self.crossLayerOut[netw] and c in self.crossLayerOut[netw][b]
         cleBdowntoC = c in self.crossLayerIn[netw] and b in self.crossLayerIn[netw][c]
+
         # If there is no edge a->b with time smaller than an edge b->c, then a->b->c is
         # a transitive-fault.
         if (self.inLayer[netw][a][b][0] > self.inLayer[netw][b][c][1]) and (not (cleAdowntoB or cleBtoupC)):
@@ -251,7 +252,7 @@ class InformationFlowNetwork:
             self.nr2paths[netwType][2][netw][a] -= 1
         return optimisticCount, pesimisticCount
 
-    def addCLEPathAB(self, netw, netwType, a, b, optimisticCount, pesimisticCount):
+    def addCLEPathAB(self, netw, netwType, a, b):
         assert netwType == 'MLN'
         if b in self.crossLayerOut[netw]:
             for c in self.crossLayerOut[netw][b]:
@@ -260,7 +261,6 @@ class InformationFlowNetwork:
                     assert (self.crossLayerOut[netw][b][c] > self.inLayer[netw][a][b][1])
                     for ty in range(3):
                         self.nr2paths[netwType][ty][netw][a] += 1
-        return optimisticCount, pesimisticCount
 
     def addCLEPathA(self, netw, netwType, a, optimisticCount, pesimisticCount):
         for b in self.crossLayerOut[netw][a]:
@@ -307,10 +307,7 @@ class InformationFlowNetwork:
         upperBound = 0
         lowerBound = 1
         for netw in range(1, self.nrGraphs + 1):
-            if netwType == 'MLN':
-                N = len(self.inLayer[netw])
-            else:
-                N = self.tGraphs[netw].number_of_nodes()
+            N = self.tGraphs[netw].number_of_nodes()
             if N == 0:
                 self.TFperNetw[netwType][netw] = [0, 0]
                 continue
@@ -343,7 +340,8 @@ class InformationFlowNetwork:
                 pesimisticCount = 0
                 for b in netwEdges[a]:
                     if netwType == 'MLN':
-                        optimisticCount, pesimisticCount = self.addCLEPathAB(netw, netwType, a, b, optimisticCount, pesimisticCount)
+                        self.addCLEPathAB(netw, netwType, a, b)
+
                     if not (b in netwEdges):
                         # Ignore a's neighbours with out-degree = 0.
                         continue

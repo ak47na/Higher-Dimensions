@@ -70,12 +70,12 @@ def getValues(t, delta_t, minTime, maxTime, msgDict, netwType):
     infoFlowNetwork = createInfoFlowNetwork(t, delta_t, minTime, maxTime, msgDict)
     infoFlowNetwork.getTransitiveFault(netwType)
     # print(nrNodes, infoFlowNetwork.nrEdges)
-    if netwType == 'monoplex':
-        infoFlowNetwork.getRanginkCorrelationAggregate()
-        print("The number of edges is ", infoFlowNetwork.nrEdges)
-    else:
-        print("The MLN network for ", t, " has ", infoFlowNetwork.getMLNEdgeCount(), " edges")
-        print("The monoplex network for ", t, " has ", infoFlowNetwork.getEdgeCount(), " edges")
+    # if netwType == 'monoplex':
+    #     infoFlowNetwork.getRanginkCorrelationAggregate()
+    #     print("The number of edges is ", infoFlowNetwork.nrEdges)
+    # else:
+    #     print("The MLN network for ", t, " has ", infoFlowNetwork.getMLNEdgeCount(), " edges")
+    #     print("The monoplex network for ", t, " has ", infoFlowNetwork.getEdgeCount(), " edges")
     return infoFlowNetwork
 
 def getSpecialCases(t, delta_t, minTime, maxTime, msgDict):

@@ -2,6 +2,7 @@ import reproValidity
 import mailID
 import Settings
 import parameters
+import constants
 import plotly.graph_objects as go
 
 # the number of seconds in a year
@@ -16,6 +17,18 @@ timeIntWithResults = [('1 hour', 3600), ('1 day', 3600 * 24), ('5 days', 3600 * 
 
 t1Times = []
 
+def plotTableOPChanges(tTimes, tRows):
+    tData = [tTimes]
+    tColumnNames = ['time interval', 'Optimistic Fault Change', 'Optimistic Fault Mean Change',
+                    'Optimistic Fault Median Change', 'Pessimistic Fault Change',
+                    'Pessimistic Fault Mean Change', 'Pessimistic Fault Median Change',
+                    'U-L for MLN', 'U-L for monoplex']
+    for col in tRows:
+        tData.append(col)
+    t1 = go.Figure(data=[go.Table(header=dict(values=tColumnNames),
+                                  cells=dict(values=tData))
+                         ])
+    t1.show()
 def plotTableOPBounds(t1Times, t1Rows):
     t1Data = [t1Times]
     t1ColumnNames = ['time interval', 'TFR lowerbound for MLN', 'TFR lowerbound',
@@ -36,6 +49,7 @@ parameters.setLayerDistance(1)
 # Computes using InfoFlowNetwork class, the upper&lower bounds for the TFR for the MLN and the
 # monoplex, and displays a table that compares them.
 def getResults():
+    tRows = [[] for k in range(8)]
     for (t, delta_t) in timeIntWithResults:
         t1Times.append(t)
         MLN = reproValidity.getValues(t, delta_t, minTime, maxTime, msgDict, 'MLN')
@@ -52,15 +66,39 @@ def getResults():
         t1Rows[5].append(crtResult[0][0] / crtResult[0][1])
         assert(monoplex.nrGraphs == MLN.nrGraphs)
         # Compare OP bounds for all interval networks for MLN with monoplex.
-        diff = [0]
-        for netw in range(1, monoplex.nrGraphs + 1):
-            diffNetw = []
-            for i in range(2):
-                diffNetw.append(MLN.TFperNetw['MLN'][netw][i] - monoplex.TFperNetw['monoplex'][netw][i])
-            diff.append(diffNetw)
-        print('For time ', t, ' and delta_t ', delta_t, ' diff array is ', diff)
+        diffBounds = [[constants.INF, -constants.INF], [constants.INF, -constants.INF]]
 
+        diff = [[], []]
+        diffSum = [0, 0]
+        for netw in range(1, monoplex.nrGraphs + 1):
+            for i in range(2):
+                crtDiff = MLN.TFperNetw['MLN'][netw][i] - monoplex.TFperNetw['monoplex'][netw][i]
+                diffBounds[i][0] = min(diffBounds[i][0], crtDiff)
+                diffBounds[i][1] = max(diffBounds[i][1], crtDiff)
+                diff[i].append(crtDiff)
+                diffSum[i] += crtDiff
+
+        diff[0].sort()
+        diff[1].sort()
+        tRows[0].append((round(diffBounds[0][0], 4), round(diffBounds[0][1], 4)))
+        tRows[1].append(round(diffSum[0] / monoplex.nrGraphs, 4))
+        if monoplex.nrGraphs % 2 == 0:
+            tRows[2].append(round(0.5 * (diff[0][monoplex.nrGraphs // 2] + diff[0][monoplex.nrGraphs // 2 - 1]), 4))
+            tRows[5].append(round(0.5 * (diff[1][monoplex.nrGraphs // 2] + diff[1][monoplex.nrGraphs // 2 - 1]), 4))
+        else:
+            tRows[2].append(round(diff[0][monoplex.nrGraphs // 2], 4))
+            tRows[5].append(round(diff[1][monoplex.nrGraphs // 2], 4))
+
+        tRows[3].append((round(diffBounds[1][0], 4), round(diffBounds[1][1], 4)))
+        tRows[4].append(round(diffSum[1] / monoplex.nrGraphs, 4))
+
+        tRows[6].append(round(MLNcrtResult[0][1] - MLNcrtResult[0][0], 4))
+        tRows[7].append(round(crtResult[0][1] - crtResult[0][0], 4))
+        diff.sort()
+        # print('For time ', t, ' and delta_t ', delta_t, 'diff bounds are ', diffBounds)
+        # print('and diff array is ', diff)
     plotTableOPBounds(t1Times, t1Rows)
+    plotTableOPChanges(t1Times, tRows)
 
 def plotTableSpcases(t2Times, t2Rows):
     t2Data = [t2Times]
