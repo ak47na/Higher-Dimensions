@@ -5,6 +5,8 @@ import infoFlowNetwork
 from scipy.stats import spearmanr
 from math import *
 
+# InformationFlowNetwork which computes the correlation for the 2path rankings of nodes for the
+# network with and without transitive faults.
 class OrderInfoFlowNetwork(infoFlowNetwork.InformationFlowNetwork):
     '''
             Returns the list of nodes in the netw-th network, sorted in increasing order by the number of

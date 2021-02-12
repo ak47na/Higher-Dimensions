@@ -33,6 +33,8 @@ minTime, maxTime, msgDict = reproValidity.readMsgDetails(msgDetailsFilePath)
 t1Rows = [[] for k in range(6)]
 parameters.setLayerDistance(1)
 
+# Computes using InfoFlowNetwork class, the upper&lower bounds for the TFR for the MLN and the
+# monoplex, and displays a table that compares them.
 def getResults():
     for (t, delta_t) in timeIntWithResults:
         MLNcrtResult = reproValidity.getValues(t, delta_t, minTime, maxTime, msgDict, 'MLN')
@@ -61,7 +63,7 @@ def plotTableSpcases(t2Times, t2Rows):
                          ])
     t2.show()
 
-def getSpecialResults(id, layerD, t2Rows):
+def getSpCasesCount(id, layerD, t2Rows):
     parameters.setLayerDistance(layerD)
     netw = 0
     for (t, delta_t) in timeIntWithResults:
@@ -71,8 +73,14 @@ def getSpecialResults(id, layerD, t2Rows):
         if id == 0:
             t2Times.append(t)
 
+# Counts the number of special cases and display table.
+def getSpecialCasesResults():
+    getSpCasesCount(0, 1, t2Rows)
+    getSpCasesCount(1, 10000000000, t2Rows)
+    plotTableSpcases(t2Times, t2Rows)
+
+
 t2Times = []
-t2Rows = [[] for kr in range(11)]
-getSpecialResults(0, 1, t2Rows)
-getSpecialResults(1, 10000000000, t2Rows)
-plotTableSpcases(t2Times, t2Rows)
+t2Rows = [[] for elem in range(11)]
+
+

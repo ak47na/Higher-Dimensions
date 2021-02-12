@@ -7,6 +7,7 @@ from networkx import *
 from scipy.stats import spearmanr
 from math import *
 
+# infoFlowNetwork which counts the number of special cases.
 class AdvMultilayeredNetwork(infoFlowNetwork.InformationFlowNetwork):
     def countCase1(self, netw, a, b, c, cleAtoBup):
         if (self.inLayer[netw][a][b][0] < self.inLayer[netw][b][c][1]) and cleAtoBup:
