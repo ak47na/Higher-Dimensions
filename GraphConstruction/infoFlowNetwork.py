@@ -54,7 +54,7 @@ class InformationFlowNetwork:
 
         # nr2p[t][node] = the number of 2-paths of node in aggregate network, i.e
         #               = sum(network in networks, nr2p[t][network][node])
-        self.nr2p = [{}, {}, {}]
+        self.nr2p = {'MLN': [{}, {}, {}], 'monoplex' : [{}, {}, {}]}
         self.nrGraphs = 0
         self.delta_t = delta_t
         self.analysedT = t
