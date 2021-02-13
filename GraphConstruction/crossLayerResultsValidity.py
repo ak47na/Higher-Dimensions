@@ -12,6 +12,30 @@ mailID.init()
 msgDetailsFilePath = "Data\\msgDetails.txt"
 minTime, maxTime, msgDict = reproValidity.readMsgDetails(msgDetailsFilePath)
 
+def plotGraphForRelevantCLE(startTimeSec, endTimeSec, step):
+    cleCount = []
+    deltaT = []
+    minCLE = LIM
+    maxCLE = 0
+    for delta_t in range(startTimeSec, endTimeSec, step):
+        t = str(delta_t) + 'seconds'
+        infoFlowNetwork = reproValidity.createInfoFlowNetwork(t, delta_t, minTime, maxTime, msgDict)
+        edgesCount = infoFlowNetwork.getMLNEdgeCount()
+        crossLayerEdgesCount = edgesCount[1]
+        cleCount.append(crossLayerEdgesCount)
+        deltaT.append(delta_t)
+        minCLE = min(minCLE, crossLayerEdgesCount)
+        maxCLE = max(maxCLE, crossLayerEdgesCount)
+        print("The number of relevant cross-layer edges for ", delta_t, "is ", crossLayerEdgesCount)
+
+    plt.plot(deltaT, cleCount, 'ro')
+    plt.axis([startTimeSec, endTimeSec, minCLE, maxCLE])
+    plt.xlabel('number of seconds')
+    plt.ylabel('number of cross-layer edges')
+    fileName = 'R_CLE_Count' + str(step) + '.png'
+    plt.savefig('D:\AKwork2020-2021\Higher-Dimensions\CLE Visualizations\RelevantCLECount_Plots\\' + fileName)
+    plt.show()
+
 def plotGraph(startTimeSec, endTimeSec, step):
     cleCount = []
     deltaT = []
@@ -26,12 +50,14 @@ def plotGraph(startTimeSec, endTimeSec, step):
         deltaT.append(delta_t)
         minCLE = min(minCLE, crossLayerEdgesCount)
         maxCLE = max(maxCLE, crossLayerEdgesCount)
-        #print("The number of cross-layer edge for ", delta_t, "is ", crossLayerEdgesCount)
+        print("The number of cross-layer edges for ", delta_t, "is ", crossLayerEdgesCount)
 
     plt.plot(deltaT, cleCount, 'ro')
     plt.axis([startTimeSec, endTimeSec, minCLE, maxCLE])
     plt.xlabel('number of seconds')
     plt.ylabel('number of cross-layer edges')
+    fileName = 'CLE_Count' + str(step) + '.png'
+    plt.savefig('D:\AKwork2020-2021\Higher-Dimensions\CLE Visualizations\CLECount_Plots\\' + fileName)
     plt.show()
 
 def plotCLEGraphs():
@@ -40,6 +66,13 @@ def plotCLEGraphs():
     plotGraph(3600 * 30 * 24, Y, 3600 * 24)
     plotGraph(Y, Y * 10, 3600 * 24 * 30)
     plotGraph(Y * 10, Y * 20, 3600 * 24 * 30 * 2)
+
+def plotRelevantCLEGraphs():
+    plotGraphForRelevantCLE(60, 3600 * 24, 10)
+    plotGraphForRelevantCLE(3600 * 24, 3600 * 30 * 24, 3600)
+    plotGraphForRelevantCLE(3600 * 30 * 24, Y, 3600 * 24)
+    plotGraphForRelevantCLE(Y, Y * 10, 3600 * 24 * 30)
+    plotGraphForRelevantCLE(Y * 10, Y * 20, 3600 * 24 * 30 * 2)
 
 def createHistogramForTime(t, timeDist):
     for i, binsCount in enumerate([25, 50, 75, 100]):
@@ -74,7 +107,7 @@ def createBasicHistogramForLayer(t, layerDist):
     plt.tight_layout()
     plt.show()
 
-def creteHistogramsWithTimeDistanceForCLE():
+def creteHistogramsWithDistanceForCLE():
     times = [3600, 3600 * 24, 3600 * 24 * 30, Y, Y * 2, Y * 3]
     for delta_t in times:
         t = str(delta_t) + 'seconds'
@@ -88,15 +121,12 @@ def creteHistogramsWithTimeDistanceForCLE():
             timeDist.append(edge[0][1] - edge[1][1])
             t1 = trunc((edge[0][1] - minTime) / delta_t)
             t2 = trunc((edge[1][1] - minTime) / delta_t)
-            layerDist.append(t1 - t2)
+            assert t1 < t2
+            layerDist.append(t2 - t1)
         #createBasicHistogramForTime(t, timeDist)
         #createHistogramForTime(t, timeDist)
         createBasicHistogramForLayer(t, layerDist)
 
-def crossLayerVsInLayerEdges():
-    times = []
-    for delta_t in times:
-        t = str(delta_t) + 'seconds'
-        infoFlowNetwork = reproValidity.createInfoFlowNetwork(t, delta_t, minTime, maxTime, msgDict)
-
-#creteHistogramsWithTimeDistanceForCLE()
+#creteHistogramsWithDistanceForCLE()
+#plotCLEGraphs()
+plotRelevantCLEGraphs()
