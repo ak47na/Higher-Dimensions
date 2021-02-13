@@ -40,6 +40,19 @@ def plotTableOPBounds(t1Times, t1Rows):
                          ])
     t1.show()
 
+def plotTableCorrelation(tTimes, tRows):
+    tData = [tTimes]
+    tColumnNames = ['time interval', 'MLN #2path ranking Spearman correlation O',
+                    'MLN #2path ranking Spearman correlation P',
+                    'monoplex #2path ranking Spearman correlation O',
+                    'monoplex #2path ranking Spearman correlation P']
+    for col in tRows:
+        tData.append(col)
+    t = go.Figure(data=[go.Table(header=dict(values=tColumnNames),
+                                  cells=dict(values=tData))
+                         ])
+    t.show()
+
 mailID.init()
 msgDetailsFilePath = "Data\\msgDetails.txt"
 minTime, maxTime, msgDict = reproValidity.readMsgDetails(msgDetailsFilePath)
@@ -49,18 +62,23 @@ parameters.setLayerDistance(1)
 # Computes using InfoFlowNetwork class, the upper&lower bounds for the TFR for the MLN and the
 # monoplex, and displays a table that compares them.
 def getResults():
-    tRows = [[] for k in range(8)]
+    tCorrRows = [[] for x in range(4)]
+    tRows = [[] for x in range(8)]
     for (t, delta_t) in timeIntWithResults:
         t1Times.append(t)
         MLN = reproValidity.getValues(t, delta_t, minTime, maxTime, msgDict, 'MLN')
         MLNcrtResult = MLN.crtResult['MLN']
         cleCount = len(MLN.crossLayerEdges)
+        tCorrRows[0].append(MLNcrtResult[1][0])
+        tCorrRows[1].append(MLNcrtResult[2][0])
         t1Rows[0].append(MLNcrtResult[0][0])
         t1Rows[2].append(MLNcrtResult[0][1])
         t1Rows[4].append(MLNcrtResult[0][0] / MLNcrtResult[0][1])
         monoplex = reproValidity.getValues(t, delta_t, minTime, maxTime, msgDict, 'monoplex')
         crtResult = monoplex.crtResult['monoplex']
         assert(cleCount == len(monoplex.crossLayerEdges))
+        tCorrRows[2].append(crtResult[1][0])
+        tCorrRows[3].append(crtResult[2][0])
         t1Rows[1].append(crtResult[0][0])
         t1Rows[3].append(crtResult[0][1])
         t1Rows[5].append(crtResult[0][0] / crtResult[0][1])
@@ -97,8 +115,9 @@ def getResults():
         diff.sort()
         # print('For time ', t, ' and delta_t ', delta_t, 'diff bounds are ', diffBounds)
         # print('and diff array is ', diff)
-    plotTableOPBounds(t1Times, t1Rows)
-    plotTableOPChanges(t1Times, tRows)
+    # plotTableOPBounds(t1Times, t1Rows)
+    # plotTableOPChanges(t1Times, tRows)
+    plotTableCorrelation(t1Times, tCorrRows)
 
 def plotTableSpcases(t2Times, t2Rows):
     t2Data = [t2Times]

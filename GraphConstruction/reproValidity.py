@@ -69,6 +69,7 @@ def createAdvInfoFlowNetwork(t, delta_t, minTime, maxTime, msgDict):
 def getValues(t, delta_t, minTime, maxTime, msgDict, netwType):
     infoFlowNetwork = createInfoFlowNetwork(t, delta_t, minTime, maxTime, msgDict)
     infoFlowNetwork.getTransitiveFault(netwType)
+    infoFlowNetwork.getRanginkCorrelationAggregate(netwType)
     # print(nrNodes, infoFlowNetwork.nrEdges)
     # if netwType == 'monoplex':
     #     infoFlowNetwork.getRanginkCorrelationAggregate()
