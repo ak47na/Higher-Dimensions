@@ -146,9 +146,9 @@ class InformationFlowNetwork:
             if (not B in self.crossLayerIn[T]):
                 self.crossLayerIn[T][B] = {}
             if (not A in self.crossLayerIn[T][B]):
-                self.crossLayerIn[T][B][A] = (timeV, timeU)
+                self.crossLayerIn[T][B][A] = (timeU, timeU)
             else:
-                self.crossLayerIn[T][B][A] = getMinMax(self.crossLayerIn[T][B][A], timeV)
+                self.crossLayerIn[T][B][A] = getMinMax(self.crossLayerIn[T][B][A], timeU)
         else:
             if not(A in self.inLayer[T]):
                 self.inLayer[T][A] = {}
