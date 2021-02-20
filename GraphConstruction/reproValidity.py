@@ -70,6 +70,9 @@ def getValues(t, delta_t, minTime, maxTime, msgDict, netwType):
     infoFlowNetwork = createInfoFlowNetwork(t, delta_t, minTime, maxTime, msgDict)
     infoFlowNetwork.getTransitiveFault(netwType)
     infoFlowNetwork.getRanginkCorrelationAggregate(netwType)
+    if netwType == 'MLN':
+        print("The MLN network for", t, "has (inLayer, restrCrossLayer, sum)", infoFlowNetwork.getMLNEdgeCount(), " edges")
+        print("The MLN network for", t, "has", len(infoFlowNetwork.crossLayerEdges), "cross-layer edges")
     # if netwType == 'MLN':
     #     print("The MLN network for ", t, " has ", infoFlowNetwork.getMLNEdgeCount(), " edges")
     #     print("And it has CLE ", len(infoFlowNetwork.crossLayerEdges))

@@ -17,6 +17,17 @@ timeIntWithResults = [('1 hour', 3600), ('1 day', 3600 * 24), ('5 days', 3600 * 
 
 t1Times = []
 
+def plotTableCLECount(tTimes, tRows):
+    tData = [tTimes]
+    tColumnNames = ['time interval', '# In-layer edges', '# Min/Max Cross-layer edges', 'Sum',
+                    '#Cross-layer edges']
+    for col in tRows:
+        tData.append(col)
+    t = go.Figure(data=[go.Table(header=dict(values=tColumnNames),
+                                  cells=dict(values=tData))
+                         ])
+    t.show()
+
 def plotTableOPChanges(tTimes, tRows):
     tData = [tTimes]
     tColumnNames = ['time interval', 'Optimistic Fault Change', 'Optimistic Fault Mean Change',
@@ -64,6 +75,7 @@ parameters.setLayerDistance(1)
 def getResults():
     tCorrRows = [[] for x in range(4)]
     tRows = [[] for x in range(8)]
+    cleRows = [[] for x in range(4)]
     for (t, delta_t) in timeIntWithResults:
         t1Times.append(t)
         MLN = reproValidity.getValues(t, delta_t, minTime, maxTime, msgDict, 'MLN')
@@ -74,6 +86,11 @@ def getResults():
         t1Rows[0].append(MLNcrtResult[0][0])
         t1Rows[2].append(MLNcrtResult[0][1])
         t1Rows[4].append(MLNcrtResult[0][0] / MLNcrtResult[0][1])
+        MLNEdgeCount = MLN.getMLNEdgeCount()
+        for col in range(3):
+            cleRows[col].append(MLNEdgeCount[col])
+        cleRows[3].append(len(MLN.crossLayerEdges))
+
         monoplex = reproValidity.getValues(t, delta_t, minTime, maxTime, msgDict, 'monoplex')
         crtResult = monoplex.crtResult['monoplex']
         assert(cleCount == len(monoplex.crossLayerEdges))
@@ -117,7 +134,8 @@ def getResults():
         # print('and diff array is ', diff)
     # plotTableOPBounds(t1Times, t1Rows)
     # plotTableOPChanges(t1Times, tRows)
-    plotTableCorrelation(t1Times, tCorrRows)
+    # plotTableCorrelation(t1Times, tCorrRows)
+    plotTableCLECount(t1Times, cleRows)
 
 def plotTableSpcases(t2Times, t2Rows):
     t2Data = [t2Times]
