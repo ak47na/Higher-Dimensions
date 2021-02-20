@@ -30,6 +30,7 @@ class InformationFlowNetwork:
         #inLayer[graphIndex][A][B] = (minT, maxT)
         #crossLayerIn[graphIndex][A][B] = (minT, maxT)
         #crossLayerOut[graphIndex][A][B] = minT
+        self.netwNodes = {}
         self.inLayer = {}
         self.crossLayerIn = {}
         self.crossLayerOut = {}
@@ -83,10 +84,14 @@ class InformationFlowNetwork:
         self.minT[self.nrGraphs] = {}
         self.maxT[self.nrGraphs] = {}
         self.tGraphs.append(networkx.MultiDiGraph())
+        self.netwNodes[self.nrGraphs] = {}
         self.timeDict[tIntervalId] = self.nrGraphs
         self.inLayer[self.nrGraphs] = {}
         self.crossLayerIn[self.nrGraphs] = {}
         self.crossLayerOut[self.nrGraphs] = {}
+
+    def addNodeToNetw(self, A, netw):
+        self.netwNodes[netw][A] = True
 
     '''
         Adds an edge between the sender of message v and the sender of message u. delta_t represents the
@@ -130,6 +135,11 @@ class InformationFlowNetwork:
         if not (tIntervalIdV in self.timeDict):
             # Create the graph for tIntervalIdV
             self.createTGraphForT(tIntervalIdV)
+
+        self.addNodeToNetw(A, self.timeDict[tIntervalIdU])
+        self.addNodeToNetw(A, self.timeDict[tIntervalIdV])
+        self.addNodeToNetw(B, self.timeDict[tIntervalIdU])
+        self.addNodeToNetw(B, self.timeDict[tIntervalIdV])
 
         T = self.timeDict[tIntervalIdU]
         if tIntervalIdU != tIntervalIdV:
@@ -307,7 +317,7 @@ class InformationFlowNetwork:
         upperBound = 0
         lowerBound = 1
         for netw in range(1, self.nrGraphs + 1):
-            N = self.tGraphs[netw].number_of_nodes()
+            N = len(self.netwNodes[netw])
             if N == 0:
                 self.TFperNetw[netwType][netw] = [0, 0]
                 continue
