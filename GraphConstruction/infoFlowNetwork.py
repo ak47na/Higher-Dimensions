@@ -18,7 +18,7 @@ def getMinMax(timePair, t):
     return (min(timePair[0], t), max(timePair[1], t))
 
 class InformationFlowNetwork:
-    def __init__(self, msgDict, delta_t, t, minTime):
+    def __init__(self, msgDict, delta_t, t, minTime, useGT = False):
         self.minTime = minTime
         self.nrEdges = 0
         self.replyDict = {}
@@ -62,6 +62,8 @@ class InformationFlowNetwork:
         self.TFperNetw = {"monoplex" : {}, "MLN": {}}
         self.crtResult = {"monoplex" : [(0, 0), (0, 0), (0, 0)], "MLN": [(0, 0), (0, 0), (0, 0)]}
         self.meanRes = {}
+        if useGT:
+            parameters.setLayerDistance(1 + (parameters.T - 1) // delta_t)
 
     '''
         Add the human with name to humanDict and as a graph node with index nrNodes + 1 and label
@@ -117,6 +119,7 @@ class InformationFlowNetwork:
         if a == b:
             # Do not include self replies
             return nrNodes
+        self.nrEdges += 1
         A = self.humanDict[a]
         B = self.humanDict[b]
         # Compute the TIME index of the network which contains the point in time when message u was sent.
@@ -149,9 +152,9 @@ class InformationFlowNetwork:
             if (not A in self.crossLayerOut[Tv]):
                 self.crossLayerOut[Tv][A] = {}
             if (not B in self.crossLayerOut[Tv][A]):
-                self.crossLayerOut[Tv][A][B] = timeU
+                self.crossLayerOut[Tv][A][B] = (timeU, timeU)
             else:
-                self.crossLayerOut[Tv][A][B] = min(self.crossLayerOut[Tv][A][B], timeU)
+                self.crossLayerOut[Tv][A][B] = getMinMax(self.crossLayerOut[Tv][A][B], timeU)
             # Add cross-layer edge ingoing to B.
             if (not B in self.crossLayerIn[T]):
                 self.crossLayerIn[T][B] = {}
@@ -186,7 +189,6 @@ class InformationFlowNetwork:
         if not (B in self.Adj[T][A]):
             self.tGraphs[T].add_edge(self.humanDict[a], self.humanDict[b], time=self.msgDict[u][1])
             self.Adj[T][A][B] = self.msgDict[u][1]
-            self.nrEdges += 1
         return nrNodes
 
     '''
@@ -231,6 +233,26 @@ class InformationFlowNetwork:
             self.nr2paths[netwType][2][netw][a] -= 1
         return optimisticCount, pesimisticCount
 
+    def getTFaultMonoplexLimitingPrevReply(self, a, b, c, netw, netwType, optimisticCount, pesimisticCount):
+        # If there is no edge a->b with time smaller than an edge b->c, then a->b->c is
+        # a transitive-fault.
+        if self.inLayer[netw][a][b][0] > self.inLayer[netw][b][c][1]:
+            if self.inLayer[netw][a][b][0] - self.inLayer[netw][b][c][1] <= parameters.T:
+                # Only consider 2paths where the distance between replies is <= T
+                optimisticCount += 1
+            self.nr2paths[netwType][1][netw][a] -= 1
+        # If there is an edge a->b with time bigger than b->c, then a->b->c is a
+        # transitive fault in the pessimistic model.
+        if self.inLayer[netw][a][b][1] > self.inLayer[netw][b][c][0]:
+            d = min(abs(self.inLayer[netw][a][b][1] - self.inLayer[netw][b][c][0]),
+                    abs(self.inLayer[netw][a][b][1] - self.inLayer[netw][b][c][1]),
+                    abs(self.inLayer[netw][a][b][0] - self.inLayer[netw][b][c][0]),
+                    abs(self.inLayer[netw][a][b][0] - self.inLayer[netw][b][c][1]))
+            if d <= parameters.T:
+                pesimisticCount += 1
+            self.nr2paths[netwType][2][netw][a] -= 1
+        return optimisticCount, pesimisticCount
+
     def getTFaultMonoplexV2(self, a, b, c, netw, netwType, optimisticCount, pesimisticCount):
         # If there is no edge a->b with time smaller than an edge b->c, then a->b->c is
         # a transitive-fault.
@@ -268,27 +290,32 @@ class InformationFlowNetwork:
             for c in self.crossLayerOut[netw][b]:
                 if not (b in self.inLayer[netw] and c in self.inLayer[netw][b]):
                     # Cross-edges b->c where there is also an in-layer edge b->c are treated in getTFaultMLN.
-                    assert (self.crossLayerOut[netw][b][c] > self.inLayer[netw][a][b][1])
+                    assert (self.crossLayerOut[netw][b][c][0] > self.inLayer[netw][a][b][1])
                     for ty in range(3):
                         self.nr2paths[netwType][ty][netw][a] += 1
 
     def addCLEPathA(self, netw, netwType, a, optimisticCount, pesimisticCount):
         for b in self.crossLayerOut[netw][a]:
-            netwb = self.timeDict[self.getTimeRange(self.crossLayerOut[netw][a][b])]
-            if not (b in self.inLayer[netwb]):
-                # Ignore bs with no inLayer edge b->c
-                continue
-            if not (a in self.inLayer[netwb] and b in self.inLayer[netwb][a]):
-                for c in self.inLayer[netwb][b]:
-                    for ty in range(3):
-                        self.nr2paths[netwType][ty][netw][a] += 1
-                    # Cross-edges c->a where there is also an in-layer edge c->a are treated in getTFaultMLN.
-                    if self.crossLayerOut[netw][a][b] > self.inLayer[netwb][b][c][1]:
-                        optimisticCount += 1
-                        self.nr2paths[netwType][1][netw][a] -= 1
-                    if self.crossLayerOut[netw][a][b] > self.inLayer[netwb][b][c][0]:
-                        pesimisticCount += 1
-                        self.nr2paths[netwType][2][netw][a] -= 1
+            for id in range(0, 2):
+                if id == 1 and self.timeDict[self.getTimeRange(self.crossLayerOut[netw][a][b][0])] \
+                        == self.timeDict[self.getTimeRange(self.crossLayerOut[netw][a][b][1])]:
+                    continue
+                netwb = self.timeDict[self.getTimeRange(self.crossLayerOut[netw][a][b][id])]
+                if not (b in self.inLayer[netwb]):
+                    # Ignore bs with no inLayer edge b->c
+                    continue
+                if not (a in self.inLayer[netwb] and b in self.inLayer[netwb][a]):
+                    for c in self.inLayer[netwb][b]:
+                        for ty in range(3):
+                            self.nr2paths[netwType][ty][netw][a] += 1
+                        # Cross-edges c->a where there is also an in-layer edge c->a are treated in getTFaultMLN.
+                        if self.crossLayerOut[netw][a][b][0] > self.inLayer[netwb][b][c][1]:
+                            optimisticCount += 1
+                            self.nr2paths[netwType][1][netw][a] -= 1
+                        if self.crossLayerOut[netw][a][b][1] > self.inLayer[netwb][b][c][0]:
+                            pesimisticCount += 1
+                            self.nr2paths[netwType][2][netw][a] -= 1
+
         return optimisticCount, pesimisticCount
 
     def initTFRForNode(self, netw, netwType, a):
@@ -302,9 +329,10 @@ class InformationFlowNetwork:
     def addTFRForNode(self, netw, netwType, transFaultSum, a, optimisticCount, pesimisticCount):
         if self.nr2paths[netwType][0][netw][a] == 0:
             # When computing the transitive fault rate, ignore the nodes without 2-paths.
-            return
+            return transFaultSum
         transFaultSum[0] += (optimisticCount / self.nr2paths[netwType][0][netw][a])
         transFaultSum[1] += (pesimisticCount / self.nr2paths[netwType][0][netw][a])
+        return transFaultSum
 
     '''
         Computes the number of 2-paths(with or without transitive faults) for each node. The number of
@@ -334,7 +362,7 @@ class InformationFlowNetwork:
                         optimisticCount, pesimisticCount = self.initTFRForNode(netw, netwType, a)
                         N += 1
                         optimisticCount, pesimisticCount = self.addCLEPathA(netw, netwType, a, optimisticCount, pesimisticCount)
-                        self.addTFRForNode(netw, netwType, transFaultSum, a, optimisticCount, pesimisticCount)
+                        transFaultSum = self.addTFRForNode(netw, netwType, transFaultSum, a, optimisticCount, pesimisticCount)
 
             netwEdges = self.inLayer[netw]
             # Uncomment this part if the CP network adds CLE as inLayer parallel edges.
@@ -366,44 +394,63 @@ class InformationFlowNetwork:
                         else:
                             optimisticCount, pesimisticCount = \
                                 self.getTFaultMonoplex(a, b, c, netw, netwType, optimisticCount, pesimisticCount)
-                self.addTFRForNode(netw, netwType, transFaultSum, a, optimisticCount, pesimisticCount)
+                transFaultSum = self.addTFRForNode(netw, netwType, transFaultSum, a, optimisticCount, pesimisticCount)
 
+            self.TFperNetw[netwType][netw] = (transFaultSum[0], transFaultSum[1])
             # The network transitive fault rate is the sum of the node transitive fault rates over all
             # nodes, divided by the number of nodes in the network.
             transFaultSum[0] /= N
             transFaultSum[1] /= N
-            self.TFperNetw[netwType][netw] = (transFaultSum[0], transFaultSum[1])
+
             # optimistic model should have at most pessimistic model transitive faults.
             assert transFaultSum[0] <= transFaultSum[1]
+
             upperBound = max(transFaultSum[1], upperBound)
             lowerBound = min(transFaultSum[0], lowerBound)
 
         self.crtResult[netwType][0] = (lowerBound, upperBound)
 
     def getMLNEdgeCount(self):
-        inLayerEdgeCount = 0
+        inLayerEdgeCount = self.getMonoplexEdgeCount()
         crossLayerEdgeCount = 0
+        for netw in range(1, self.nrGraphs + 1):
+            for a in self.crossLayerIn[netw]:
+                for b in self.crossLayerIn[netw][a]:
+                    crossLayerEdgeCount += 1
+                    if self.crossLayerIn[netw][a][b][0] != self.crossLayerIn[netw][a][b][1]:
+                        crossLayerEdgeCount += 1
+            for a in self.crossLayerOut[netw]:
+                for b in self.crossLayerOut[netw][a]:
+                    for id in range(2):
+                        if id == 1 and self.timeDict[self.getTimeRange(self.crossLayerOut[netw][a][b][0])] \
+                                == self.timeDict[self.getTimeRange(self.crossLayerOut[netw][a][b][1])]:
+                            continue
+                        netwb = self.timeDict[self.getTimeRange(self.crossLayerOut[netw][a][b][id])]
+                        if b in self.crossLayerIn[netwb]:
+                            if self.crossLayerIn[netwb][b][a][0] != self.crossLayerOut[netw][a][b][id] and \
+                                    self.crossLayerIn[netwb][b][a][1] != self.crossLayerOut[netw][a][b][id]:
+                                crossLayerEdgeCount += 1
+
+        return (inLayerEdgeCount, crossLayerEdgeCount, crossLayerEdgeCount + inLayerEdgeCount)
+
+    def getMonoplexEdgeCount(self):
+        inLayerEdgeCount = 0
         for netw in range(1, self.nrGraphs + 1):
             for a in self.inLayer[netw]:
                 inLayerEdgeCount += len(self.inLayer[netw][a])
                 for b in self.inLayer[netw][a]:
                     if (self.inLayer[netw][a][b][0] != self.inLayer[netw][a][b][1]):
                         inLayerEdgeCount += 1
+        return inLayerEdgeCount
 
-            for a in self.crossLayerIn[netw]:
-                for b in self.crossLayerIn[netw][a]:
-                    crossLayerEdgeCount += 1
-                    if self.crossLayerIn[netw][a][b][0] != self.crossLayerIn[netw][a][b][1]:
-                        crossLayerEdgeCount += 1
+    def getTFSum(self, netwType):
+        res = [0, 0]
+        for netw in range(1, self.nrGraphs + 1):
+            for modelId in range(2):
+                res[modelId] += self.TFperNetw[netwType][netw][modelId]
+        return res
 
-            for a in self.crossLayerOut[netw]:
-                for b in self.crossLayerOut[netw][a]:
-                    netwb = self.timeDict[self.getTimeRange(self.crossLayerOut[netw][a][b])]
-                    if b in self.crossLayerIn[netwb]:
-                        if self.crossLayerIn[netwb][b][a][0] != self.crossLayerOut[netw][a][b] and self.crossLayerIn[netwb][b][a][1] != self.crossLayerOut[netw][a][b]:
-                            crossLayerEdgeCount += 1
 
-        return (inLayerEdgeCount, crossLayerEdgeCount, crossLayerEdgeCount + inLayerEdgeCount)
 
     def getEdgeCount(self):
         edgeCount = 0

@@ -1,6 +1,8 @@
 import reproValidity
 import mailID
 import parameters
+import random
+import math
 import matplotlib.pyplot as plt
 
 def getTimeBetweenMsgs(msgDict, u, v):
@@ -31,7 +33,7 @@ def getReplyTimesFromMsgEdges(filePath, msgDict):
     edgeFile.close()
     return replyTimes
 
-def compReplyTimesHist(replyTimes, x):
+def compReplyTimesHist(replyTimes):
     plt.hist(replyTimes,
              color='blue', edgecolor='black', bins=100)
     plt.title('Histogram for Eclipse ', size=10)
@@ -63,16 +65,60 @@ def getSmallerThanXReplyTimes(replyTimes, x):
             res.append(t)
     return res
 
+def getIQR(arr):
+    n = len(arr)
+    n4 = n // 4
+    Q1 = 0
+    Q3 = 0
+    if n % 4 == 0:
+        Q1 = 0.5 * (arr[n4 - 1] + arr[n4])
+        Q3 = 0.5 * (arr[n - n4] + arr[n - n4 - 1])
+    else:
+        Q1 = arr[n4]
+        Q3 = arr[n - n4 - 1]
+    return Q1, Q3, Q3 - Q1
+
+def getMeanAndStdev(arr):
+    n = len(arr)
+    mean = sum(arr) / n
+    var = 0
+    for x in arr:
+        var += (x - mean) ** 2
+    var /= n
+    stdev = math.sqrt(var)
+    return mean, stdev
+
+def getStats(arr):
+    arr = sorted(arr)
+    mean, stdev = getMeanAndStdev(arr)
+    Q1, Q3, iqr = getIQR(arr)
+    print(mean, stdev, Q1, Q3, iqr)
+    print(getPropFromFirstXH(arr, mean + stdev), getPropFromFirstXH(arr, mean + iqr))
+
+def getPropFromFirstXH(arr, x):
+    n = len(arr)
+    cntSmaller = 0
+    for i in arr:
+        if i <= x:
+            cntSmaller += 1
+    return (cntSmaller / n) * 100
 
 mailID.init()
 msgDetailsFilePath = "Data\\msgDetails.txt"
 minTime, maxTime, msgDict = reproValidity.readMsgDetails(msgDetailsFilePath)
 
 msgEdgesFilePath = "Data\\msgEdges.txt"
-replyTimes = sorted(getReplyTimesFromMsgEdges(msgEdgesFilePath, msgDict))
 
+replyTimes = getReplyTimesFromMsgEdges(msgEdgesFilePath, msgDict)
+getStats(replyTimes)
+N = len(replyTimes)
+randIDx = random.sample(range(0, N), N // 10)
+randReplT = []
+for i in randIDx:
+    randReplT.append(replyTimes[i])
 for x in range(100, 1 + int(replyTimes[-1]), 100):
     smallRempyTimes = getSmallerThanXReplyTimes(replyTimes, x)
     print(((len(replyTimes) - len(smallRempyTimes)) / len(replyTimes)) * 100)
 # compReplyTimesHist(replyTimes)
 # compReplyTimesHist(smallRempyTimes, 100)
+# compReplyTimesHist(randReplT)

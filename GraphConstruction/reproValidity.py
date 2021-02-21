@@ -50,8 +50,8 @@ def readMsgDetails(filePath):
     network is delta_t.
 '''
 import correlationValidity
-def createInfoFlowNetwork(t, delta_t, minTime, maxTime, msgDict):
-    infoFlowNetwork = correlationValidity.OrderInfoFlowNetwork(msgDict, delta_t, t, minTime)
+def createInfoFlowNetwork(t, delta_t, minTime, maxTime, msgDict, useGT = False):
+    infoFlowNetwork = correlationValidity.OrderInfoFlowNetwork(msgDict, delta_t, t, minTime, useGT)
     msgEdgesFilePath = "Data\\msgEdges.txt"
     nrNodes = infoFlowNetwork.readMsgEdges(0, msgEdgesFilePath)
     return infoFlowNetwork
@@ -66,8 +66,8 @@ def createAdvInfoFlowNetwork(t, delta_t, minTime, maxTime, msgDict):
     Method that computes the number of transitive faults and the Spearman correlation of
     the 2-path rankings between the (aggregate) network with transitive faults and the one without.
 '''
-def getValues(t, delta_t, minTime, maxTime, msgDict, netwType):
-    infoFlowNetwork = createInfoFlowNetwork(t, delta_t, minTime, maxTime, msgDict)
+def getValues(t, delta_t, minTime, maxTime, msgDict, netwType, useGT = False):
+    infoFlowNetwork = createInfoFlowNetwork(t, delta_t, minTime, maxTime, msgDict, useGT)
     infoFlowNetwork.getTransitiveFault(netwType)
     infoFlowNetwork.getRanginkCorrelationAggregate(netwType)
     if netwType == 'MLN':
