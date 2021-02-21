@@ -59,6 +59,7 @@ class InformationFlowNetwork:
         self.nrGraphs = 0
         self.delta_t = delta_t
         self.analysedT = t
+        self.TFSum = {"monoplex" : [0, 0], "MLN": [0, 0]}
         self.TFperNetw = {"monoplex" : {}, "MLN": {}}
         self.crtResult = {"monoplex" : [(0, 0), (0, 0), (0, 0)], "MLN": [(0, 0), (0, 0), (0, 0)]}
         self.meanRes = {}
@@ -152,9 +153,9 @@ class InformationFlowNetwork:
             if (not A in self.crossLayerOut[Tv]):
                 self.crossLayerOut[Tv][A] = {}
             if (not B in self.crossLayerOut[Tv][A]):
-                self.crossLayerOut[Tv][A][B] = (timeU, timeU)
+                self.crossLayerOut[Tv][A][B] = timeU
             else:
-                self.crossLayerOut[Tv][A][B] = getMinMax(self.crossLayerOut[Tv][A][B], timeU)
+                self.crossLayerOut[Tv][A][B] = min(self.crossLayerOut[Tv][A][B], timeU)
             # Add cross-layer edge ingoing to B.
             if (not B in self.crossLayerIn[T]):
                 self.crossLayerIn[T][B] = {}
@@ -225,11 +226,13 @@ class InformationFlowNetwork:
         # a transitive-fault.
         if self.inLayer[netw][a][b][0] > self.inLayer[netw][b][c][1]:
             optimisticCount += 1
+            self.TFSum[netwType][0] += 1
             self.nr2paths[netwType][1][netw][a] -= 1
         # If there is an edge a->b with time bigger than b->c, then a->b->c is a
         # transitive fault in the pessimistic model.
         if self.inLayer[netw][a][b][1] > self.inLayer[netw][b][c][0]:
             pesimisticCount += 1
+            self.TFSum[netwType][1] += 1
             self.nr2paths[netwType][2][netw][a] -= 1
         return optimisticCount, pesimisticCount
 
@@ -240,6 +243,7 @@ class InformationFlowNetwork:
             if self.inLayer[netw][a][b][0] - self.inLayer[netw][b][c][1] <= parameters.T:
                 # Only consider 2paths where the distance between replies is <= T
                 optimisticCount += 1
+                self.TFSum[netwType][0] += 1
             self.nr2paths[netwType][1][netw][a] -= 1
         # If there is an edge a->b with time bigger than b->c, then a->b->c is a
         # transitive fault in the pessimistic model.
@@ -250,6 +254,7 @@ class InformationFlowNetwork:
                     abs(self.inLayer[netw][a][b][0] - self.inLayer[netw][b][c][1]))
             if d <= parameters.T:
                 pesimisticCount += 1
+                self.TFSum[netwType][1] += 1
             self.nr2paths[netwType][2][netw][a] -= 1
         return optimisticCount, pesimisticCount
 
@@ -258,11 +263,13 @@ class InformationFlowNetwork:
         # a transitive-fault.
         if self.minT[netw][(a, b)] > self.maxT[netw][(b, c)]:
             optimisticCount += 1
+            self.TFSum[netwType][0] += 1
             self.nr2paths[netwType][1][netw][a] -= 1
         # If there is an edge a->b with time bigger than b->c, then a->b->c is a
         # transitive fault in the pessimistic model.
         if self.maxT[netw][(a, b)] > self.minT[netw][(b, c)]:
             pesimisticCount += 1
+            self.TFSum[netwType][1] += 1
             self.nr2paths[netwType][2][netw][a] -= 1
         return optimisticCount, pesimisticCount
 
@@ -276,11 +283,13 @@ class InformationFlowNetwork:
         # a transitive-fault.
         if (self.inLayer[netw][a][b][0] > self.inLayer[netw][b][c][1]) and (not (cleAdowntoB or cleBtoupC)):
             optimisticCount += 1
+            self.TFSum[netwType][0] += 1
             self.nr2paths[netwType][1][netw][a] -= 1
         # If there is an edge a->b with time bigger than b->c, then a->b->c is a
         # transitive fault in the pessimistic model.
         if self.inLayer[netw][a][b][1] > self.inLayer[netw][b][c][0] or cleBdowntoC or cleAtoBup:
             pesimisticCount += 1
+            self.TFSum[netwType][1] += 1
             self.nr2paths[netwType][2][netw][a] -= 1
         return optimisticCount, pesimisticCount
 
@@ -290,32 +299,29 @@ class InformationFlowNetwork:
             for c in self.crossLayerOut[netw][b]:
                 if not (b in self.inLayer[netw] and c in self.inLayer[netw][b]):
                     # Cross-edges b->c where there is also an in-layer edge b->c are treated in getTFaultMLN.
-                    assert (self.crossLayerOut[netw][b][c][0] > self.inLayer[netw][a][b][1])
+                    assert (self.crossLayerOut[netw][b][c] > self.inLayer[netw][a][b][1])
                     for ty in range(3):
                         self.nr2paths[netwType][ty][netw][a] += 1
 
     def addCLEPathA(self, netw, netwType, a, optimisticCount, pesimisticCount):
         for b in self.crossLayerOut[netw][a]:
-            for id in range(0, 2):
-                if id == 1 and self.timeDict[self.getTimeRange(self.crossLayerOut[netw][a][b][0])] \
-                        == self.timeDict[self.getTimeRange(self.crossLayerOut[netw][a][b][1])]:
-                    continue
-                netwb = self.timeDict[self.getTimeRange(self.crossLayerOut[netw][a][b][id])]
-                if not (b in self.inLayer[netwb]):
-                    # Ignore bs with no inLayer edge b->c
-                    continue
-                if not (a in self.inLayer[netwb] and b in self.inLayer[netwb][a]):
-                    for c in self.inLayer[netwb][b]:
-                        for ty in range(3):
-                            self.nr2paths[netwType][ty][netw][a] += 1
-                        # Cross-edges c->a where there is also an in-layer edge c->a are treated in getTFaultMLN.
-                        if self.crossLayerOut[netw][a][b][0] > self.inLayer[netwb][b][c][1]:
-                            optimisticCount += 1
-                            self.nr2paths[netwType][1][netw][a] -= 1
-                        if self.crossLayerOut[netw][a][b][1] > self.inLayer[netwb][b][c][0]:
-                            pesimisticCount += 1
-                            self.nr2paths[netwType][2][netw][a] -= 1
-
+            netwb = self.timeDict[self.getTimeRange(self.crossLayerOut[netw][a][b])]
+            if not (b in self.inLayer[netwb]):
+                # Ignore bs with no inLayer edge b->c
+                continue
+            if not (a in self.inLayer[netwb] and b in self.inLayer[netwb][a]):
+                for c in self.inLayer[netwb][b]:
+                    for ty in range(3):
+                        self.nr2paths[netwType][ty][netw][a] += 1
+                    # Cross-edges c->a where there is also an in-layer edge c->a are treated in getTFaultMLN.
+                    if self.crossLayerOut[netw][a][b] > self.inLayer[netwb][b][c][1]:
+                        optimisticCount += 1
+                        self.TFSum[netwType][0] += 1
+                        self.nr2paths[netwType][1][netw][a] -= 1
+                    if self.crossLayerOut[netw][a][b] > self.inLayer[netwb][b][c][0]:
+                        pesimisticCount += 1
+                        self.TFSum[netwType][1] += 1
+                        self.nr2paths[netwType][2][netw][a] -= 1
         return optimisticCount, pesimisticCount
 
     def initTFRForNode(self, netw, netwType, a):
@@ -421,15 +427,10 @@ class InformationFlowNetwork:
                         crossLayerEdgeCount += 1
             for a in self.crossLayerOut[netw]:
                 for b in self.crossLayerOut[netw][a]:
-                    for id in range(2):
-                        if id == 1 and self.timeDict[self.getTimeRange(self.crossLayerOut[netw][a][b][0])] \
-                                == self.timeDict[self.getTimeRange(self.crossLayerOut[netw][a][b][1])]:
-                            continue
-                        netwb = self.timeDict[self.getTimeRange(self.crossLayerOut[netw][a][b][id])]
-                        if b in self.crossLayerIn[netwb]:
-                            if self.crossLayerIn[netwb][b][a][0] != self.crossLayerOut[netw][a][b][id] and \
-                                    self.crossLayerIn[netwb][b][a][1] != self.crossLayerOut[netw][a][b][id]:
-                                crossLayerEdgeCount += 1
+                    netwb = self.timeDict[self.getTimeRange(self.crossLayerOut[netw][a][b])]
+                    if b in self.crossLayerIn[netwb]:
+                        if self.crossLayerIn[netwb][b][a][0] != self.crossLayerOut[netw][a][b] and self.crossLayerIn[netwb][b][a][1] != self.crossLayerOut[netw][a][b]:
+                            crossLayerEdgeCount += 1
 
         return (inLayerEdgeCount, crossLayerEdgeCount, crossLayerEdgeCount + inLayerEdgeCount)
 
@@ -444,11 +445,7 @@ class InformationFlowNetwork:
         return inLayerEdgeCount
 
     def getTFSum(self, netwType):
-        res = [0, 0]
-        for netw in range(1, self.nrGraphs + 1):
-            for modelId in range(2):
-                res[modelId] += self.TFperNetw[netwType][netw][modelId]
-        return res
+        return self.TFSum[netwType]
 
 
 
