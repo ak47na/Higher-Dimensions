@@ -31,8 +31,9 @@ def dataSetUp():
 def plotTable(tTimes, tRows):
     tData = [tTimes]
     tColumnNames = ['time interval', 'TF_O under Bird', 'TF_P under Bird', '#edges',
-                    'TF_O under adjacent', 'TF_P under adjacent', '#edges',
-                     'TF_O under hist', 'TF_P under hist', '#edges']
+                    'TF_O under adjacent', 'TF_P under adjacent', 'P gain', '#edges', 'edge % addition',
+                     'TF_O under hist', 'TF_P under hist', 'P gain', '#edges',
+                    'edge % addition']
     for col in tRows:
         tData.append(col)
     t = go.Figure(data=[go.Table(header=dict(values=tColumnNames),
@@ -42,7 +43,7 @@ def plotTable(tTimes, tRows):
 
 def getResults():
     # tCorrRows = [[] for x in range(4)]
-    tRows = [[] for x in range(9)]
+    tRows = [[] for x in range(13)]
     t1Times = []
     for (t, delta_t) in timeIntWithResults:
         t1Times.append(t)
@@ -56,16 +57,23 @@ def getResults():
         # Add O/P TF for each network.
         tRows = addOPResult(tRows, [0, 1], monoplex.getTFSum('monoplex'))
         tRows = addOPResult(tRows, [3, 4], adjMLN.getTFSum('MLN'))
-        tRows = addOPResult(tRows, [6, 7], MLN.getTFSum('MLN'))
+        tRows = addOPResult(tRows, [8, 9], MLN.getTFSum('MLN'))
+        # Add P gain
+        tRows[5].append(round((tRows[4][-1] - tRows[1][-1]) / tRows[1][-1], 4))
+        tRows[10].append(round((tRows[9][-1] - tRows[1][-1]) / tRows[1][-1], 4))
         # Add the number of edges used by each network.
         monoplexEdgeCount = monoplex.getMonoplexEdgeCount()
         MLNEdgeCount = MLN.getMLNEdgeCount()
         adjMLNEdgeCount = adjMLN.getMLNEdgeCount()
         tRows[2].append((monoplexEdgeCount, round((monoplexEdgeCount / monoplex.nrEdges) * 100, 4)))
-        tRows[5].append((adjMLNEdgeCount[2], round((adjMLNEdgeCount[2] / adjMLN.nrEdges) * 100, 4)))
-        tRows[8].append((MLNEdgeCount[2], round((MLNEdgeCount[2] / MLN.nrEdges) * 100, 4)))
+        tRows[6].append((adjMLNEdgeCount[2], round((adjMLNEdgeCount[2] / adjMLN.nrEdges) * 100, 4)))
+        tRows[11].append((MLNEdgeCount[2], round((MLNEdgeCount[2] / MLN.nrEdges) * 100, 4)))
+        # Add edge gain.
+        tRows[7].append(round(tRows[6][-1][0] / tRows[2][-1][0], 4))
+        tRows[12].append(round(tRows[11][-1][0] / tRows[2][-1][0], 4))
         assert (monoplex.nrEdges == MLN.nrEdges and MLN.nrEdges == adjMLN.nrEdges)
         assert (monoplexEdgeCount == MLNEdgeCount[0] and MLNEdgeCount[0] == adjMLNEdgeCount[0])
+
     plotTable(t1Times, tRows)
 
 minTime, maxTime, msgDict = dataSetUp()
