@@ -11,6 +11,7 @@ import Issue
 from networkx import *
 import Settings
 import SNAMeasures
+import plotly.graph_objects as go
 
 '''
     Class that represents a code change using its node value in the ContributionNetwork (if it's a
@@ -712,7 +713,6 @@ class ContributionNetwork:
     # Measures: ['Degree Centrality', 'Betweenness Centrality', 'Closeness Centrality',
     # 'Reachability', 'Effective Size', 'Constraint']
 
-Settings.setNetworkType('Minor')
 network = ContributionNetwork(8)
 network.readDataForHumans()
 network.readDataForFiles()
@@ -730,6 +730,26 @@ def createNetworkByType(Ntype):
     network.createMonoplex(Edge.getEdgeSample(Edge.filterEdges(network.Edges, [1, NtypeEdgeCol]), 100), Ntype)
     print(len(network.monoplex[Ntype].G.nodes), len(network.monoplex[Ntype].G.edges))
 
+def createComparisonTable(issueType_, networkType_):
+    columnNames = ['Measure', 'Windows Vista Spearman', 'Windows 7 Spearman', 'Repro Spearman', 'Dissimilarity Vista', 'Dissimilarity 7']
+    data = [[] for k in range(6)]
+    for name in reproMeasureCorrelation:
+        data[0].append(name)
+        paperRes = Settings.getMeasureCorrelation(name, issueType_, networkType_)
+        data[1].append(paperRes[0])
+        data[2].append(paperRes[1])
+        reproRes = reproMeasureCorrelation[name][issueType_][networkType_][0]
+        data[3].append(reproRes)
+        for i in range(2):
+            data[4 + i].append(abs(Settings.dissimilarity(paperRes[i], reproRes)))
+
+    fig = go.Figure(data=[go.Table(header=dict(values=columnNames),
+                                  cells=dict(values=data))])
+    print(columnNames)
+    print(data)
+    fig.show()
+
+
 def compareSNAResult(name):
     # check if w in (wResult + 1/4 * wResult, wResult - 1/4*wResult)
     wResultMaj = Settings.getMeasureCorrelation(name, 'Major')
@@ -743,15 +763,15 @@ def compareSNAResult(name):
     print(wReproDelta, wResultDelta, diff)
 
 measures = Settings.getMeasureNames()
+print(Settings.getNetworkType())
+createNetworkByType(Settings.getNetworkType())
+print(Settings.getNetworkType())
 reproMeasureCorrelation = Settings.getReproMeasureCorrelation()
 createNetworkByType(Settings.getNetworkType())
 Settings.getPastPaperResult()
 print(Settings.getNetworkType())
 network.getResultsFromSNAMeasures(measures)#, 'Constraint'])
-Settings.setNetworkType('Major')
-createNetworkByType(Settings.getNetworkType())
-network.getResultsFromSNAMeasures(measures)#, 'Constraint'])
-
-for measure in measures:
-    compareSNAResult(measure)
+createComparisonTable(Settings.getIssueType(),Settings.getNetworkType())
+# for measure in measures:
+#     compareSNAResult(measure)
 

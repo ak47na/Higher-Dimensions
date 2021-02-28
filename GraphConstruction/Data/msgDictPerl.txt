@@ -1,0 +1,774 @@
+msg305/\Tom Christiansen/\ August 31, 1999 17:16
+msg56206/\Michael G Schwern/\ April  4, 2002 21:05
+msg56207/\Ken Williams/\ April  4, 2002 23:26
+msg56240/\Michael G Schwern/\ April  5, 2002 07:57
+msg310/\Ilya Zakharevich/\ August 31, 1999 17:42
+msg309/\Gurusamy Sarathy/\ August 31, 1999 17:31
+msg303/\Rob Cunningham/\ August 31, 1999 16:27
+msg311/\Dan Sugalski/\ August 31, 1999 18:20
+msg302/\Hans Mulder/\ August 31, 1999 15:47
+msg78907/\Autrijus Tang/\ July 29, 2003 00:04
+msg19134/\Peter Prymmer/\ October  9, 2000 17:32
+msg19147/\Philip Newton/\ October 10, 2000 05:14
+msg19174/\Peter Prymmer/\ October 10, 2000 10:24
+msg297/\Tod Irwin/\ August 31, 1999 13:27
+msg2133/\M.J.T. Guy/\ October 11, 1999 10:59
+msg2138/\Gurusamy Sarathy/\ October 11, 1999 11:41
+msg2137/\Brent B. Powers/\ October 11, 1999 11:30
+msg2149/\Nick Ing-Simmons/\ October 11, 1999 13:04
+msg2150/\Brent B. Powers/\ October 11, 1999 13:12
+msg2152/\Nick Ing-Simmons/\ October 11, 1999 13:57
+msg2157/\Brent B. Powers/\ October 11, 1999 15:03
+msg2129/\M.J.T. Guy/\ October 11, 1999 09:46
+msg2131/\Gurusamy Sarathy/\ October 11, 1999 09:59
+msg2136/\Nick Ing-Simmons/\ October 11, 1999 11:29
+msg2141/\Gurusamy Sarathy/\ October 11, 1999 12:00
+msg2166/\Hugo/\ October 11, 1999 16:34
+msg2140/\Gurusamy Sarathy/\ October 11, 1999 11:57
+msg2090/\Gurusamy Sarathy/\ October  9, 1999 19:41
+msg2261/\Adam Krolnik/\ October 13, 1999 11:54
+msg296/\David Harris/\ August 31, 1999 13:13
+msg276/\M.J.T. Guy/\ August 31, 1999 07:26
+msg47817/\mikael gudmundsson/\ November 28, 2001 02:01
+msg284/\Barrie Slaymaker/\ August 31, 1999 08:24
+msg275/\JVromans/\ August 31, 1999 07:08
+msg400/\Turoff, Adam/\ September  2, 1999 16:49
+msg421/\JVromans/\ September  3, 1999 05:25
+msg376/\Turoff, Adam/\ September  2, 1999 10:20
+msg377/\Dan Sugalski/\ September  2, 1999 10:27
+msg378/\Turoff, Adam/\ September  2, 1999 10:42
+msg380/\Brad Appleton/\ September  2, 1999 11:05
+msg379/\Dan Sugalski/\ September  2, 1999 10:55
+msg406/\Tom Christiansen/\ September  2, 1999 19:19
+msg381/\Turoff, Adam/\ September  2, 1999 11:12
+msg382/\Dan Sugalski/\ September  2, 1999 11:20
+msg372/\Brad Appleton/\ September  2, 1999 08:31
+msg388/\Nick Ing-Simmons/\ September  2, 1999 12:41
+msg392/\Brad Appleton/\ September  2, 1999 13:58
+msg399/\Brad Appleton/\ September  2, 1999 16:40
+msg411/\Brad Appleton/\ September  2, 1999 22:23
+msg450/\Brad Appleton/\ September  3, 1999 08:15
+msg422/\Simply Hao/\ September  3, 1999 05:43
+msg405/\Larry Wall/\ September  2, 1999 17:53
+msg407/\Tom Christiansen/\ September  2, 1999 19:37
+msg398/\Larry Wall/\ September  2, 1999 16:28
+msg417/\Nick Ing-Simmons/\ September  3, 1999 02:32
+msg444/\Larry Wall/\ September  3, 1999 07:44
+msg414/\JVromans/\ September  3, 1999 00:36
+msg447/\Larry Wall/\ September  3, 1999 07:54
+msg462/\JVromans/\ September  3, 1999 12:37
+msg404/\Dan Sugalski/\ September  2, 1999 17:39
+msg440/\Larry Wall/\ September  3, 1999 07:22
+msg472/\Benjamin Holzman/\ September  3, 1999 16:40
+msg442/\Dan Sugalski/\ September  3, 1999 07:27
+msg391/\JVromans/\ September  2, 1999 13:47
+msg360/\Tom Christiansen/\ September  2, 1999 04:56
+msg386/\Nick Ing-Simmons/\ September  2, 1999 12:36
+msg389/\Joshua N Pritikin/\ September  2, 1999 12:45
+msg338/\Brad Appleton/\ September  1, 1999 11:47
+msg337/\Larry Wall/\ September  1, 1999 10:48
+msg304/\Tom Christiansen/\ August 31, 1999 17:15
+msg322/\JVromans/\ September  1, 1999 00:43
+msg324/\Tom Christiansen/\ September  1, 1999 04:27
+msg47816/\Daniel/\ November 28, 2001 02:01
+msg272/\Barrie Slaymaker/\ August 31, 1999 05:56
+msg56672/\=?ISO-8859-1?Q?Kay_R=F6pke?=/\ April 11, 2002 07:54
+msg312/\Mark Mielke/\ August 31, 1999 19:55
+msg274/\Hugo/\ August 31, 1999 06:39
+msg271/\Bob Gustafson/\ August 31, 1999 05:45
+msg255/\Johan Vromans/\ August 30, 1999 23:14
+msg258/\Ilya Zakharevich/\ August 30, 1999 23:42
+msg263/\Johan Vromans/\ August 31, 1999 01:46
+msg292/\Ilya Zakharevich/\ August 31, 1999 12:10
+msg293/\JVromans/\ August 31, 1999 12:28
+msg295/\Ilya Zakharevich/\ August 31, 1999 12:41
+msg248/\Tom Christiansen/\ August 30, 1999 19:20
+msg626/\paul.marquess/\ September  6, 1999 05:46
+msg291/\spider-perl/\ August 31, 1999 11:51
+msg308/\Tom Christiansen/\ August 31, 1999 17:22
+msg259/\Colin Kuskie/\ August 30, 1999 23:44
+msg257/\Ilya Zakharevich/\ August 30, 1999 23:37
+msg283/\M.J.T. Guy/\ August 31, 1999 08:14
+msg287/\Colin Kuskie/\ August 31, 1999 10:35
+msg288/\Ronald J Kimball/\ August 31, 1999 10:42
+msg298/\Ilya Zakharevich/\ August 31, 1999 13:27
+msg307/\Tom Christiansen/\ August 31, 1999 17:21
+msg290/\Colin Kuskie/\ August 31, 1999 11:24
+msg245/\Anding Bi/\ August 30, 1999 16:39
+msg286/\Andy Dougherty/\ August 31, 1999 10:22
+msg55401/\PPrymmer/\ March 26, 2002 10:23
+msg55404/\Michael G Schwern/\ March 26, 2002 10:59
+msg55407/\Craig A. Berry/\ March 26, 2002 12:06
+msg55413/\Michael G Schwern/\ March 26, 2002 12:36
+msg55442/\Craig A. Berry/\ March 26, 2002 19:49
+msg55445/\Michael G Schwern/\ March 26, 2002 21:46
+msg55447/\Craig A. Berry/\ March 26, 2002 22:36
+msg55475/\Michael G Schwern/\ March 27, 2002 08:25
+msg55410/\PPrymmer/\ March 26, 2002 12:24
+msg55402/\PPrymmer/\ March 26, 2002 10:41
+msg55415/\LBOHAN/\ March 26, 2002 12:38
+msg62038/\Chris Nandor/\ June 22, 2002 14:45
+msg241/\Tom Christiansen/\ August 30, 1999 15:49
+msg62036/\Chris Nandor/\ June 22, 2002 14:44
+msg63512/\Michael G Schwern/\ July 16, 2002 17:02
+msg63516/\Jarkko Hietaniemi/\ July 16, 2002 17:16
+msg280/\M.J.T. Guy/\ August 31, 1999 08:06
+msg281/\M.J.T. Guy/\ August 31, 1999 08:10
+msg266/\Chris Nandor/\ August 31, 1999 04:34
+msg267/\Tom Christiansen/\ August 31, 1999 04:38
+msg253/\Johan Vromans/\ August 30, 1999 23:04
+msg268/\Tom Christiansen/\ August 31, 1999 04:54
+msg299/\Ilya Zakharevich/\ August 31, 1999 13:33
+msg306/\Tom Christiansen/\ August 31, 1999 17:19
+msg313/\Ilya Zakharevich/\ August 31, 1999 20:15
+msg294/\Matthias Neeracher/\ August 31, 1999 12:34
+msg270/\Chris Nandor/\ August 31, 1999 05:03
+msg234/\James H. Cloos Jr./\ August 30, 1999 14:18
+msg289/\Nick Ing-Simmons/\ August 31, 1999 11:19
+msg254/\Ilya Zakharevich/\ August 30, 1999 23:13
+msg320/\Ilya Zakharevich/\ August 31, 1999 23:35
+msg321/\Ilya Zakharevich/\ August 31, 1999 23:56
+msg227/\Jeff Okamoto/\ August 30, 1999 13:15
+msg228/\Jarkko Hietaniemi/\ August 30, 1999 13:18
+msg230/\Chris Nandor/\ August 30, 1999 13:27
+msg233/\Dan Sugalski/\ August 30, 1999 13:53
+msg231/\William Setzer/\ August 30, 1999 13:48
+msg225/\Joshua N Pritikin/\ August 30, 1999 12:50
+msg242/\Ask Bjoern Hansen/\ August 30, 1999 15:54
+msg218/\Majordomo/\ August 30, 1999 11:37
+msg32416/\Chris Nandor/\ March 10, 2001 11:27
+msg217/\Larry Wall/\ August 30, 1999 11:35
+msg32415/\Chris Nandor/\ March 10, 2001 11:27
+msg32458/\Philip Newton/\ March 12, 2001 08:19
+msg32465/\Chris Nandor/\ March 12, 2001 10:16
+msg32468/\H . Merijn Brand/\ March 12, 2001 10:30
+msg32469/\Chris Nandor/\ March 12, 2001 10:37
+msg32467/\Philip Newton/\ March 12, 2001 10:23
+msg209/\Tim Schmitz/\ August 30, 1999 08:44
+msg198/\JVromans/\ August 30, 1999 07:10
+msg54486/\Robin Barker/\ March 13, 2002 03:27
+msg278/\Andy Dougherty/\ August 31, 1999 07:43
+msg222/\Jarkko Hietaniemi/\ August 30, 1999 12:21
+msg201/\Joshua N Pritikin/\ August 30, 1999 07:38
+msg219/\JVromans/\ August 30, 1999 11:43
+msg194/\jarausch/\ August 30, 1999 06:49
+msg206/\merlyn/\ August 30, 1999 08:23
+msg196/\Dan Sugalski/\ August 30, 1999 07:07
+msg199/\jarausch/\ August 30, 1999 07:19
+msg200/\Dan Sugalski/\ August 30, 1999 07:31
+msg204/\jarausch/\ August 30, 1999 07:52
+msg207/\Dan Sugalski/\ August 30, 1999 08:24
+msg184/\Randy J. Ray/\ August 29, 1999 20:02
+msg175/\Ryan/\ August 29, 1999 19:00
+msg197/\Ian Phillipps/\ August 30, 1999 07:07
+msg173/\Benjamin Stuhl/\ August 29, 1999 18:53
+msg166/\Spider Boardman/\ August 29, 1999 16:06
+msg160/\James H. Cloos Jr./\ August 29, 1999 15:47
+msg119819/\Nicholas Clark/\ January 10, 2007 03:47
+msg247/\James H. Cloos Jr./\ August 30, 1999 18:49
+msg162/\Dan Sugalski/\ August 29, 1999 15:53
+msg211/\James H. Cloos Jr./\ August 30, 1999 09:02
+msg169/\Tom Hughes/\ August 29, 1999 16:56
+msg170/\Dan Sugalski/\ August 29, 1999 17:17
+msg174/\Ask Bjoern Hansen/\ August 29, 1999 18:54
+msg192/\Tom Hughes/\ August 30, 1999 04:35
+msg145/\Kurt D. Starsinic/\ August 29, 1999 13:46
+msg138/\Chip Salzenberg/\ August 29, 1999 13:33
+msg261/\paul.marquess/\ August 31, 1999 01:01
+msg171/\Michael Alan Dorman/\ August 29, 1999 17:35
+msg153/\Kurt D. Starsinic/\ August 29, 1999 14:48
+msg250/\thospel/\ August 30, 1999 20:19
+msg256/\Ilya Zakharevich/\ August 30, 1999 23:20
+msg44688/\Casey West/\ October  2, 2001 17:28
+msg44694/\Jeff 'japhy' Pinyan/\ October  2, 2001 18:57
+msg44695/\Jarkko Hietaniemi/\ October  2, 2001 19:29
+msg44714/\Jarkko Hietaniemi/\ October  3, 2001 06:18
+msg132/\Jarkko Hietaniemi/\ August 29, 1999 12:20
+msg279/\M.J.T. Guy/\ August 31, 1999 08:01
+msg332/\Larry Wall/\ September  1, 1999 07:38
+msg355/\Ilya Zakharevich/\ September  1, 1999 17:47
+msg148/\Ilya Zakharevich/\ August 29, 1999 14:02
+msg149/\Jarkko Hietaniemi/\ August 29, 1999 14:10
+msg165/\Ilya Zakharevich/\ August 29, 1999 16:05
+msg260/\Stephen McCamant/\ August 31, 1999 00:22
+msg269/\Tom Christiansen/\ August 31, 1999 04:57
+msg277/\Jarkko Hietaniemi/\ August 31, 1999 07:40
+msg282/\Kurt D. Starsinic/\ August 31, 1999 08:10
+msg333/\Barrie Slaymaker/\ September  1, 1999 08:12
+msg168/\Benjamin Franz/\ August 29, 1999 16:29
+msg131/\Danny Aldham/\ August 29, 1999 12:03
+msg111/\Bi Anding/\ August 29, 1999 07:26
+msg35720/\Jarkko Hietaniemi/\ May  4, 2001 13:49
+msg35735/\Chris Stith/\ May  4, 2001 15:16
+msg35736/\Nicholas Clark/\ May  4, 2001 15:35
+msg35751/\Nicholas Clark/\ May  5, 2001 04:07
+msg35755/\Jarkko Hietaniemi/\ May  5, 2001 07:16
+msg35761/\Nicholas Clark/\ May  5, 2001 09:36
+msg35757/\Nicholas Clark/\ May  5, 2001 08:18
+msg35766/\Jarkko Hietaniemi/\ May  5, 2001 10:20
+msg35871/\Nicholas Clark/\ May  6, 2001 17:57
+msg36609/\Nicholas Clark/\ May 16, 2001 15:34
+msg36611/\Jarkko Hietaniemi/\ May 16, 2001 16:15
+msg36724/\Nicholas Clark/\ May 17, 2001 16:07
+msg36732/\Doug MacEachern/\ May 17, 2001 18:38
+msg36726/\Jarkko Hietaniemi/\ May 17, 2001 16:14
+msg36727/\Nicholas Clark/\ May 17, 2001 16:27
+msg36728/\Jarkko Hietaniemi/\ May 17, 2001 16:29
+msg36808/\Nicholas Clark/\ May 20, 2001 11:24
+msg37121/\Jarkko Hietaniemi/\ May 26, 2001 07:27
+msg37138/\Nicholas Clark/\ May 26, 2001 13:44
+msg37151/\Jarkko Hietaniemi/\ May 26, 2001 16:24
+msg37162/\andreas.koenig/\ May 27, 2001 00:32
+msg37163/\Michael G Schwern/\ May 27, 2001 01:02
+msg37166/\Michael G Schwern/\ May 27, 2001 01:30
+msg37172/\Nick Ing-Simmons/\ May 27, 2001 02:56
+msg37174/\Michael G Schwern/\ May 27, 2001 04:45
+msg37176/\Jarkko Hietaniemi/\ May 27, 2001 06:34
+msg37182/\Michael G Schwern/\ May 27, 2001 08:25
+msg37184/\Jarkko Hietaniemi/\ May 27, 2001 08:29
+msg37185/\Michael G Schwern/\ May 27, 2001 09:04
+msg37201/\Nicholas Clark/\ May 27, 2001 14:15
+msg37276/\Michael G Schwern/\ May 28, 2001 17:09
+msg37279/\Jarkko Hietaniemi/\ May 28, 2001 18:20
+msg37384/\Nicholas Clark/\ May 29, 2001 15:07
+msg37391/\Andy Dougherty/\ May 29, 2001 17:50
+msg37644/\Nicholas Clark/\ May 31, 2001 15:56
+msg37694/\Jarkko Hietaniemi/\ June  1, 2001 10:21
+msg37235/\Nicholas Clark/\ May 28, 2001 05:23
+msg37268/\Nicholas Clark/\ May 28, 2001 14:46
+msg37345/\Jarkko Hietaniemi/\ May 29, 2001 07:34
+msg37202/\Jarkko Hietaniemi/\ May 27, 2001 14:22
+msg37186/\Michael G Schwern/\ May 27, 2001 09:12
+msg37175/\Nick Ing-Simmons/\ May 27, 2001 06:15
+msg37178/\Michael G Schwern/\ May 27, 2001 07:52
+msg37170/\Michael G Schwern/\ May 27, 2001 02:15
+msg37146/\Jarkko Hietaniemi/\ May 26, 2001 16:04
+msg37158/\Jarkko Hietaniemi/\ May 26, 2001 19:01
+msg36623/\H . Merijn Brand/\ May 16, 2001 23:46
+msg35855/\Nicholas Clark/\ May  6, 2001 12:31
+msg35782/\Nicholas Clark/\ May  5, 2001 16:09
+msg35753/\Nicholas Clark/\ May  5, 2001 06:46
+msg35756/\Jarkko Hietaniemi/\ May  5, 2001 07:27
+msg35853/\Nicholas Clark/\ May  6, 2001 12:24
+msg35740/\Chris Stith/\ May  4, 2001 16:10
+msg35743/\Alan Burlison/\ May  4, 2001 16:29
+msg35741/\Alan Burlison/\ May  4, 2001 16:17
+msg35725/\Gurusamy Sarathy/\ May  4, 2001 14:08
+msg35727/\Jarkko Hietaniemi/\ May  4, 2001 14:18
+msg35729/\Chris Nandor/\ May  4, 2001 14:25
+msg35724/\Benjamin Sugars/\ May  4, 2001 14:02
+msg35726/\Jarkko Hietaniemi/\ May  4, 2001 14:15
+msg35721/\Alan Burlison/\ May  4, 2001 13:53
+msg195/\Ian Phillipps/\ August 30, 1999 06:56
+msg8145/\Nathan Torkington/\ March  1, 2000 13:38
+msg8183/\David Dyck/\ March  2, 2000 01:43
+msg8194/\David Dyck/\ March  2, 2000 04:23
+msg8258/\Ilya Zakharevich/\ March  2, 2000 12:19
+msg8195/\Nathan Torkington/\ March  2, 2000 04:31
+msg108/\Jarkko Hietaniemi/\ August 29, 1999 04:24
+msg141/\Ilya Zakharevich/\ August 29, 1999 13:41
+msg146/\Ilya Zakharevich/\ August 29, 1999 13:46
+msg147/\Jarkko Hietaniemi/\ August 29, 1999 13:58
+msg43893/\H.M. Brand/\ September 18, 2001 09:31
+msg43895/\Jarkko Hietaniemi/\ September 18, 2001 10:20
+msg43896/\H . Merijn Brand/\ September 18, 2001 11:01
+msg43931/\H . Merijn Brand/\ September 19, 2001 02:46
+msg43934/\Jarkko Hietaniemi/\ September 19, 2001 05:43
+msg106/\Jarkko Hietaniemi/\ August 29, 1999 04:04
+msg115/\Jarkko Hietaniemi/\ August 29, 1999 08:09
+msg107/\Jarkko Hietaniemi/\ August 29, 1999 04:08
+msg104/\Russ Allbery/\ August 29, 1999 03:45
+msg51086/\Michael G Schwern/\ January 16, 2002 12:24
+msg51119/\Nicholas Clark/\ January 17, 2002 06:36
+msg51151/\Michael G Schwern/\ January 17, 2002 11:32
+msg51152/\chromatic/\ January 17, 2002 12:00
+msg51184/\Jarkko Hietaniemi/\ January 17, 2002 15:49
+msg51154/\Michael G Schwern/\ January 17, 2002 12:40
+msg103/\paul.marquess/\ August 29, 1999 02:48
+msg51077/\Michael G Schwern/\ January 16, 2002 10:00
+msg51098/\andreas.koenig/\ January 16, 2002 20:37
+msg51118/\Jarkko Hietaniemi/\ January 17, 2002 06:22
+msg88566/\Nicholas Clark/\ February 16, 2004 03:44
+msg88581/\Marcus Holland-Moritz/\ February 16, 2004 15:22
+msg88604/\Nicholas Clark/\ February 17, 2004 15:01
+msg161/\Dan Sugalski/\ August 29, 1999 15:53
+msg172/\Ask Bjoern Hansen/\ August 29, 1999 18:35
+msg182/\Ilya Zakharevich/\ August 29, 1999 19:46
+msg158/\Ask Bjoern Hansen/\ August 29, 1999 15:25
+msg243/\jan.dubois/\ August 30, 1999 16:25
+msg246/\Ask Bjoern Hansen/\ August 30, 1999 16:43
+msg262/\Achim Bohnet/\ August 31, 1999 01:12
+msg202/\Nick Ing-Simmons/\ August 30, 1999 07:43
+msg183/\Russ Allbery/\ August 29, 1999 19:50
+msg188/\Ask Bjoern Hansen/\ August 29, 1999 22:45
+msg159/\Ian Phillipps/\ August 29, 1999 15:47
+msg154/\Ian Phillipps/\ August 29, 1999 14:50
+msg189/\paul.marquess/\ August 30, 1999 01:27
+msg101/\paul.marquess/\ August 29, 1999 02:07
+msg129/\paul.marquess/\ August 29, 1999 11:26
+msg119344/\vkonovalov/\ December 21, 2006 05:21
+msg114/\Mark-Jason Dominus/\ August 29, 1999 08:08
+msg116/\Mark-Jason Dominus/\ August 29, 1999 08:16
+msg109/\paul.marquess/\ August 29, 1999 05:34
+msg102/\paul.marquess/\ August 29, 1999 02:08
+msg100/\Martin Lichtin/\ August 29, 1999 02:07
+msg105/\Tom Hughes/\ August 29, 1999 03:58
+msg124441/\Jan Dubois/\ May 15, 2007 18:21
+msg124454/\Steve Hay/\ May 16, 2007 03:12
+msg124493/\Jan Dubois/\ May 16, 2007 13:00
+msg124533/\Steve Hay/\ May 17, 2007 10:15
+msg124535/\Jan Dubois/\ May 17, 2007 11:21
+msg124549/\Steve Hay/\ May 18, 2007 03:48
+msg124577/\Jan Dubois/\ May 18, 2007 16:37
+msg99/\Martin Lichtin/\ August 29, 1999 02:03
+msg119280/\Sudhanshu Saxena/\ December 19, 2006 02:27
+msg331/\Foley, Richard/\ September  1, 1999 07:13
+msg325/\Jarkko Hietaniemi/\ September  1, 1999 05:16
+msg329/\Martin Lichtin/\ September  1, 1999 06:50
+msg330/\Jarkko Hietaniemi/\ September  1, 1999 06:55
+msg97/\spider-perl/\ August 29, 1999 00:03
+msg150/\Gurusamy Sarathy/\ August 29, 1999 14:22
+msg98/\spider-perl/\ August 29, 1999 00:41
+msg96/\Jeff Okamoto/\ August 28, 1999 16:56
+msg86/\Jarkko Hietaniemi/\ August 28, 1999 14:27
+msg93/\Jarkko Hietaniemi/\ August 28, 1999 15:18
+msg143/\Kurt D. Starsinic/\ August 29, 1999 13:46
+msg94/\Jarkko Hietaniemi/\ August 28, 1999 15:32
+msg91/\Tom Christiansen/\ August 28, 1999 14:44
+msg92/\Tom Christiansen/\ August 28, 1999 14:49
+msg90/\jan.dubois/\ August 28, 1999 14:44
+msg87/\Jarkko Hietaniemi/\ August 28, 1999 14:37
+msg78/\Tom Christiansen/\ August 28, 1999 13:08
+msg109194/\Linda W/\ January 31, 2006 19:27
+msg109193/\Linda W/\ January 31, 2006 18:48
+msg109195/\Glenn Linderman/\ January 31, 2006 19:41
+msg73/\Matt Sergeant/\ August 28, 1999 12:20
+msg71/\Johan Vromans/\ August 28, 1999 09:41
+msg121/\Brad Appleton/\ August 29, 1999 09:53
+msg157/\Gurusamy Sarathy/\ August 29, 1999 15:24
+msg180/\Russ Allbery/\ August 29, 1999 19:38
+msg72/\Nathan Torkington/\ August 28, 1999 11:25
+msg84/\Ilya Zakharevich/\ August 28, 1999 14:16
+msg144/\Kurt D. Starsinic/\ August 29, 1999 13:46
+msg123/\JVromans/\ August 29, 1999 10:03
+msg128/\Nathan Torkington/\ August 29, 1999 10:49
+msg139/\Ilya Zakharevich/\ August 29, 1999 13:36
+msg167/\Chip Salzenberg/\ August 29, 1999 16:23
+msg176/\Ilya Zakharevich/\ August 29, 1999 19:26
+msg151/\Nathan Torkington/\ August 29, 1999 14:25
+msg178/\Ilya Zakharevich/\ August 29, 1999 19:37
+msg185/\Nathan Torkington/\ August 29, 1999 21:10
+msg187/\Ilya Zakharevich/\ August 29, 1999 22:01
+msg186/\Jarkko Hietaniemi/\ August 29, 1999 21:12
+msg205/\Nick Ing-Simmons/\ August 30, 1999 07:56
+msg181/\Russ Allbery/\ August 29, 1999 19:42
+msg76/\Gurusamy Sarathy/\ August 28, 1999 12:58
+msg122/\Dan Sugalski/\ August 29, 1999 10:01
+msg216/\Larry Wall/\ August 30, 1999 11:33
+msg220/\Dan Sugalski/\ August 30, 1999 11:48
+msg124/\Nathan Torkington/\ August 29, 1999 10:21
+msg215/\Larry Wall/\ August 30, 1999 10:39
+msg235/\Nathan Torkington/\ August 30, 1999 14:49
+msg125/\Dan Sugalski/\ August 29, 1999 10:28
+msg126/\Nathan Torkington/\ August 29, 1999 10:42
+msg127/\Dan Sugalski/\ August 29, 1999 10:44
+msg136/\Ilya Zakharevich/\ August 29, 1999 13:31
+msg120/\Dan Sugalski/\ August 29, 1999 09:48
+msg118/\Dan Sugalski/\ August 29, 1999 09:33
+msg155/\Gurusamy Sarathy/\ August 29, 1999 15:12
+msg156/\Dan Sugalski/\ August 29, 1999 15:23
+msg163/\Gurusamy Sarathy/\ August 29, 1999 15:56
+msg164/\Dan Sugalski/\ August 29, 1999 15:58
+msg95/\andreas.koenig/\ August 28, 1999 16:46
+msg110/\Dan Sugalski/\ August 29, 1999 07:22
+msg113/\Dan Sugalski/\ August 29, 1999 08:07
+msg152/\Gurusamy Sarathy/\ August 29, 1999 14:39
+msg112/\Benjamin Franz/\ August 29, 1999 07:41
+msg134/\Chip Salzenberg/\ August 29, 1999 12:54
+msg135/\Benjamin Franz/\ August 29, 1999 13:28
+msg140/\Chip Salzenberg/\ August 29, 1999 13:38
+msg137/\Bart Schuller/\ August 29, 1999 13:32
+msg142/\Chip Salzenberg/\ August 29, 1999 13:42
+msg191/\Philip 'Yes, that's my address' Newton/\ August 30, 1999 02:27
+msg77/\Tom Christiansen/\ August 28, 1999 13:04
+msg190/\paul.marquess/\ August 30, 1999 01:27
+msg60/\Ilya Zakharevich/\ August 28, 1999 04:02
+msg213/\Gurusamy Sarathy/\ August 30, 1999 09:13
+msg251/\thospel/\ August 30, 1999 20:48
+msg249/\thospel/\ August 30, 1999 20:19
+msg285/\Nick Ing-Simmons/\ August 31, 1999 08:33
+msg314/\Larry Wall/\ August 31, 1999 20:18
+msg343/\Ilya Zakharevich/\ September  1, 1999 12:49
+msg416/\Nick Ing-Simmons/\ September  3, 1999 02:18
+msg466/\Ilya Zakharevich/\ September  3, 1999 14:00
+msg318/\Ilya Zakharevich/\ August 31, 1999 22:58
+msg701/\Larry Wall/\ September  7, 1999 16:35
+msg716/\Nick Ing-Simmons/\ September  8, 1999 01:55
+msg704/\Ilya Zakharevich/\ September  7, 1999 18:37
+msg849/\Nick Ing-Simmons/\ September  9, 1999 05:42
+msg902/\Ilya Zakharevich/\ September  9, 1999 13:22
+msg870/\Gurusamy Sarathy/\ September  9, 1999 10:08
+msg892/\Ilya Zakharevich/\ September  9, 1999 12:58
+msg896/\Gurusamy Sarathy/\ September  9, 1999 13:07
+msg1058/\Nick Ing-Simmons/\ September 12, 1999 17:54
+msg899/\Ilya Zakharevich/\ September  9, 1999 13:14
+msg905/\Gurusamy Sarathy/\ September  9, 1999 14:19
+msg913/\Larry Wall/\ September  9, 1999 14:57
+msg916/\Gurusamy Sarathy/\ September  9, 1999 15:19
+msg876/\Larry Wall/\ September  9, 1999 10:32
+msg1053/\Nick Ing-Simmons/\ September 12, 1999 16:59
+msg912/\Larry Wall/\ September  9, 1999 14:52
+msg906/\Gurusamy Sarathy/\ September  9, 1999 14:32
+msg886/\Gurusamy Sarathy/\ September  9, 1999 12:36
+msg1020/\Nick Ing-Simmons/\ September 11, 1999 00:55
+msg910/\Gurusamy Sarathy/\ September  9, 1999 14:46
+msg1019/\Nick Ing-Simmons/\ September 11, 1999 00:55
+msg921/\Gurusamy Sarathy/\ September  9, 1999 15:46
+msg894/\Ilya Zakharevich/\ September  9, 1999 13:05
+msg898/\Gurusamy Sarathy/\ September  9, 1999 13:13
+msg1051/\Nick Ing-Simmons/\ September 12, 1999 16:59
+msg915/\Gurusamy Sarathy/\ September  9, 1999 15:12
+msg923/\Larry Wall/\ September  9, 1999 15:58
+msg927/\Gurusamy Sarathy/\ September  9, 1999 16:16
+msg928/\Ilya Zakharevich/\ September  9, 1999 16:23
+msg936/\Gurusamy Sarathy/\ September  9, 1999 16:35
+msg938/\Ilya Zakharevich/\ September  9, 1999 16:42
+msg941/\Gurusamy Sarathy/\ September  9, 1999 16:54
+msg944/\Ilya Zakharevich/\ September  9, 1999 17:24
+msg901/\Ilya Zakharevich/\ September  9, 1999 13:19
+msg891/\Gurusamy Sarathy/\ September  9, 1999 12:57
+msg897/\Ilya Zakharevich/\ September  9, 1999 13:11
+msg903/\Gurusamy Sarathy/\ September  9, 1999 13:23
+msg904/\Ilya Zakharevich/\ September  9, 1999 13:36
+msg909/\Gurusamy Sarathy/\ September  9, 1999 14:41
+msg914/\Larry Wall/\ September  9, 1999 15:07
+msg919/\Gurusamy Sarathy/\ September  9, 1999 15:33
+msg1024/\Gisle Aas/\ September 11, 1999 08:38
+msg1026/\Gurusamy Sarathy/\ September 11, 1999 11:05
+msg926/\Ilya Zakharevich/\ September  9, 1999 16:06
+msg929/\Gurusamy Sarathy/\ September  9, 1999 16:24
+msg933/\Ilya Zakharevich/\ September  9, 1999 16:28
+msg939/\Gurusamy Sarathy/\ September  9, 1999 16:51
+msg945/\Larry Wall/\ September  9, 1999 17:27
+msg942/\Ilya Zakharevich/\ September  9, 1999 17:19
+msg934/\Graham Barr/\ September  9, 1999 16:29
+msg930/\Ilya Zakharevich/\ September  9, 1999 16:24
+msg964/\Nick Ing-Simmons/\ September 10, 1999 03:32
+msg965/\Ilya Zakharevich/\ September 10, 1999 03:44
+msg974/\Nick Ing-Simmons/\ September 10, 1999 05:44
+msg978/\Ilya Zakharevich/\ September 10, 1999 06:09
+msg988/\Nick Ing-Simmons/\ September 10, 1999 07:19
+msg940/\Graham Barr/\ September  9, 1999 16:52
+msg946/\Ilya Zakharevich/\ September  9, 1999 17:33
+msg966/\Nick Ing-Simmons/\ September 10, 1999 03:48
+msg979/\Ilya Zakharevich/\ September 10, 1999 06:15
+msg982/\Graham Barr/\ September 10, 1999 06:31
+msg986/\Ilya Zakharevich/\ September 10, 1999 07:07
+msg991/\Graham Barr/\ September 10, 1999 08:27
+msg995/\Mark Mielke/\ September 10, 1999 09:08
+msg1050/\Nick Ing-Simmons/\ September 12, 1999 16:59
+msg1005/\Mark Mielke/\ September 10, 1999 12:37
+msg1001/\Larry Wall/\ September 10, 1999 10:38
+msg947/\Graham Barr/\ September  9, 1999 17:58
+msg948/\Ilya Zakharevich/\ September  9, 1999 18:07
+msg949/\Graham Barr/\ September  9, 1999 18:28
+msg967/\Nick Ing-Simmons/\ September 10, 1999 04:14
+msg976/\Ilya Zakharevich/\ September 10, 1999 06:01
+msg981/\Graham Barr/\ September 10, 1999 06:29
+msg984/\Ilya Zakharevich/\ September 10, 1999 07:04
+msg990/\Graham Barr/\ September 10, 1999 08:25
+msg971/\Graham Barr/\ September 10, 1999 05:13
+msg952/\Larry Wall/\ September  9, 1999 19:22
+msg955/\Graham Barr/\ September  9, 1999 19:43
+msg969/\Nick Ing-Simmons/\ September 10, 1999 04:55
+msg973/\Graham Barr/\ September 10, 1999 05:20
+msg975/\Nick Ing-Simmons/\ September 10, 1999 05:55
+msg980/\Graham Barr/\ September 10, 1999 06:27
+msg956/\Larry Wall/\ September  9, 1999 19:53
+msg957/\Graham Barr/\ September  9, 1999 20:02
+msg950/\Ilya Zakharevich/\ September  9, 1999 19:11
+msg953/\Graham Barr/\ September  9, 1999 19:38
+msg958/\Ilya Zakharevich/\ September  9, 1999 21:23
+msg968/\Nick Ing-Simmons/\ September 10, 1999 04:49
+msg972/\Graham Barr/\ September 10, 1999 05:19
+msg987/\Nick Ing-Simmons/\ September 10, 1999 07:08
+msg992/\Graham Barr/\ September 10, 1999 08:34
+msg1054/\Nick Ing-Simmons/\ September 12, 1999 17:24
+msg1003/\Graham Barr/\ September 10, 1999 11:38
+msg1017/\Nick Ing-Simmons/\ September 11, 1999 00:54
+msg1008/\Ilya Zakharevich/\ September 10, 1999 14:45
+msg1012/\Graham Barr/\ September 10, 1999 17:34
+msg1015/\Ilya Zakharevich/\ September 11, 1999 00:50
+msg1022/\Graham Barr/\ September 11, 1999 06:27
+msg1027/\Mark Mielke/\ September 11, 1999 12:03
+msg998/\Graham Barr/\ September 10, 1999 09:58
+msg1016/\Nick Ing-Simmons/\ September 11, 1999 00:54
+msg908/\Larry Wall/\ September  9, 1999 14:37
+msg1049/\Nick Ing-Simmons/\ September 12, 1999 16:59
+msg922/\Ilya Zakharevich/\ September  9, 1999 15:58
+msg932/\Larry Wall/\ September  9, 1999 16:27
+msg937/\Ilya Zakharevich/\ September  9, 1999 16:39
+msg866/\Larry Wall/\ September  9, 1999 09:44
+msg1048/\Nick Ing-Simmons/\ September 12, 1999 16:12
+msg1031/\Ilya Zakharevich/\ September 11, 1999 13:48
+msg1034/\Nick Ing-Simmons/\ September 12, 1999 02:51
+msg1040/\Ilya Zakharevich/\ September 12, 1999 13:11
+msg1085/\Mark Mielke/\ September 13, 1999 11:00
+msg1086/\Dan Sugalski/\ September 13, 1999 11:08
+msg1087/\Nick Ing-Simmons/\ September 13, 1999 11:15
+msg1093/\Dan Sugalski/\ September 13, 1999 12:54
+msg1119/\Graham Barr/\ September 13, 1999 17:15
+msg1094/\Dan Sugalski/\ September 13, 1999 13:32
+msg1117/\Graham Barr/\ September 13, 1999 17:15
+msg1149/\Nick Ing-Simmons/\ September 14, 1999 02:24
+msg1169/\Larry Wall/\ September 14, 1999 08:58
+msg1185/\Mark Mielke/\ September 14, 1999 11:20
+msg1201/\Nick Ing-Simmons/\ September 14, 1999 13:42
+msg1206/\Larry Wall/\ September 14, 1999 14:02
+msg1208/\Ilya Zakharevich/\ September 14, 1999 16:20
+msg1209/\Larry Wall/\ September 14, 1999 17:42
+msg1243/\Mark Mielke/\ September 15, 1999 11:26
+msg1244/\Larry Wall/\ September 15, 1999 11:59
+msg1245/\Mark Mielke/\ September 15, 1999 12:21
+msg1231/\Nick Ing-Simmons/\ September 15, 1999 06:46
+msg1210/\Ilya Zakharevich/\ September 14, 1999 18:21
+msg1212/\Larry Wall/\ September 14, 1999 18:27
+msg1222/\Ilya Zakharevich/\ September 15, 1999 00:40
+msg1205/\Mark Mielke/\ September 14, 1999 13:57
+msg1289/\Stephen Zander/\ September 17, 1999 09:19
+msg1099/\Dan Sugalski/\ September 13, 1999 14:03
+msg1116/\Graham Barr/\ September 13, 1999 17:15
+msg1150/\Nick Ing-Simmons/\ September 14, 1999 02:44
+msg1196/\Ilya Zakharevich/\ September 14, 1999 13:14
+msg1200/\Nick Ing-Simmons/\ September 14, 1999 13:35
+msg1204/\Mark Mielke/\ September 14, 1999 13:57
+msg1202/\Ilya Zakharevich/\ September 14, 1999 13:44
+msg1095/\Nick Ing-Simmons/\ September 13, 1999 13:33
+msg1090/\Mark Mielke/\ September 13, 1999 12:10
+msg1120/\Graham Barr/\ September 13, 1999 17:15
+msg1092/\Nick Ing-Simmons/\ September 13, 1999 12:43
+msg1097/\Ilya Zakharevich/\ September 13, 1999 13:47
+msg1107/\Tim Bunce/\ September 13, 1999 14:57
+msg1109/\Mark Mielke/\ September 13, 1999 15:32
+msg1112/\Ilya Zakharevich/\ September 13, 1999 16:28
+msg1115/\Mark Mielke/\ September 13, 1999 17:13
+msg1124/\Ilya Zakharevich/\ September 13, 1999 17:55
+msg1125/\Mark Mielke/\ September 13, 1999 18:26
+msg1131/\Ilya Zakharevich/\ September 13, 1999 20:42
+msg1135/\Mark Mielke/\ September 13, 1999 21:37
+msg1156/\Nick Ing-Simmons/\ September 14, 1999 03:58
+msg1184/\Mark Mielke/\ September 14, 1999 11:08
+msg1190/\Nick Ing-Simmons/\ September 14, 1999 12:02
+msg1198/\Mark Mielke/\ September 14, 1999 13:30
+msg1203/\Larry Wall/\ September 14, 1999 13:55
+msg1194/\Ilya Zakharevich/\ September 14, 1999 13:12
+msg1134/\Mark Mielke/\ September 13, 1999 21:27
+msg1140/\Ilya Zakharevich/\ September 13, 1999 23:07
+msg1183/\Mark Mielke/\ September 14, 1999 10:53
+msg1288/\Chaim Frenkel/\ September 17, 1999 08:42
+msg1292/\Ilya Zakharevich/\ September 17, 1999 11:02
+msg1293/\Mark Mielke/\ September 17, 1999 11:58
+msg1118/\Graham Barr/\ September 13, 1999 17:15
+msg1148/\Nick Ing-Simmons/\ September 14, 1999 02:20
+msg1127/\Stephen Zander/\ September 13, 1999 19:59
+msg1155/\Nick Ing-Simmons/\ September 14, 1999 03:35
+msg1130/\Ilya Zakharevich/\ September 13, 1999 20:31
+msg1162/\Stephen Zander/\ September 14, 1999 07:50
+msg1171/\Nick Ing-Simmons/\ September 14, 1999 09:13
+msg1102/\Mark Mielke/\ September 13, 1999 14:30
+msg1110/\Larry Wall/\ September 13, 1999 15:57
+msg1111/\Ilya Zakharevich/\ September 13, 1999 16:24
+msg1104/\Mark-Jason Dominus/\ September 13, 1999 14:47
+msg1103/\Tom Christiansen/\ September 13, 1999 14:40
+msg1108/\Mark Mielke/\ September 13, 1999 15:11
+msg1145/\Nick Ing-Simmons/\ September 14, 1999 01:06
+msg878/\Nick Ing-Simmons/\ September  9, 1999 10:55
+msg883/\Larry Wall/\ September  9, 1999 12:22
+msg1052/\Nick Ing-Simmons/\ September 12, 1999 16:59
+msg907/\Larry Wall/\ September  9, 1999 14:33
+msg1055/\Nick Ing-Simmons/\ September 12, 1999 17:24
+msg917/\Larry Wall/\ September  9, 1999 15:22
+msg889/\Gurusamy Sarathy/\ September  9, 1999 12:51
+msg1056/\Nick Ing-Simmons/\ September 12, 1999 17:25
+msg911/\Gurusamy Sarathy/\ September  9, 1999 14:51
+msg1018/\Nick Ing-Simmons/\ September 11, 1999 00:55
+msg924/\Gurusamy Sarathy/\ September  9, 1999 15:58
+msg962/\Nick Ing-Simmons/\ September 10, 1999 02:00
+msg963/\Ilya Zakharevich/\ September 10, 1999 02:39
+msg970/\Nick Ing-Simmons/\ September 10, 1999 05:05
+msg1025/\Gisle Aas/\ September 11, 1999 08:38
+msg869/\Larry Wall/\ September  9, 1999 10:02
+msg705/\Gurusamy Sarathy/\ September  7, 1999 19:29
+msg702/\Gurusamy Sarathy/\ September  7, 1999 17:15
+msg316/\thospel/\ August 31, 1999 21:07
+msg319/\Ilya Zakharevich/\ August 31, 1999 23:33
+msg341/\thospel/\ September  1, 1999 12:34
+msg346/\Ilya Zakharevich/\ September  1, 1999 13:40
+msg402/\Larry Wall/\ September  2, 1999 17:18
+msg264/\Raphael Manfredi/\ August 31, 1999 02:10
+msg252/\Russ Allbery/\ August 30, 1999 22:06
+msg300/\thospel/\ August 31, 1999 13:35
+msg301/\thospel/\ August 31, 1999 14:12
+msg223/\Ilya Zakharevich/\ August 30, 1999 12:46
+msg214/\Nick Ing-Simmons/\ August 30, 1999 10:10
+msg224/\Ilya Zakharevich/\ August 30, 1999 12:49
+msg236/\Nick Ing-Simmons/\ August 30, 1999 14:59
+msg244/\Ilya Zakharevich/\ August 30, 1999 16:36
+msg130/\andreas.koenig/\ August 29, 1999 11:54
+msg133/\Ilya Zakharevich/\ August 29, 1999 12:45
+msg208/\Gurusamy Sarathy/\ August 30, 1999 08:30
+msg221/\Ilya Zakharevich/\ August 30, 1999 11:51
+msg177/\Ilya Zakharevich/\ August 29, 1999 19:31
+msg46/\Ask Bjoern Hansen/\ August 27, 1999 22:40
+msg49/\pvhp/\ August 27, 1999 22:56
+msg44/\Ilya Zakharevich/\ August 27, 1999 22:26
+msg45/\Tom Christiansen/\ August 27, 1999 22:36
+msg54/\Ilya Zakharevich/\ August 28, 1999 01:11
+msg62/\Tom Christiansen/\ August 28, 1999 07:43
+msg117/\Rick Delaney/\ August 29, 1999 08:58
+msg70/\Tom Christiansen/\ August 28, 1999 08:31
+msg1335/\Gurusamy Sarathy/\ September 20, 1999 09:46
+msg1336/\Tom Christiansen/\ September 20, 1999 09:50
+msg98997/\Nicholas Clark/\ March 17, 2005 08:27
+msg33/\pvhp/\ August 27, 1999 18:51
+msg50/\pvhp/\ August 27, 1999 22:56
+msg51/\pvhp/\ August 27, 1999 23:03
+msg232/\Jarkko Hietaniemi/\ August 30, 1999 13:52
+msg42/\Ilya Zakharevich/\ August 27, 1999 22:18
+msg20/\Russ Allbery/\ August 27, 1999 16:53
+msg212/\mengel/\ August 30, 1999 09:08
+msg85/\Tuomas J. Lukka/\ August 28, 1999 14:19
+msg15/\Tom Christiansen/\ August 27, 1999 16:13
+msg28349/\fhirsch/\ January  5, 2001 07:46
+msg28363/\Alan Burlison/\ January  5, 2001 09:10
+msg14869/\Hugo/\ July 18, 2000 12:10
+msg59/\Matt Sergeant/\ August 28, 1999 03:40
+msg21/\Adam Turoff/\ August 27, 1999 17:02
+msg58/\JVromans/\ August 28, 1999 02:38
+msg65/\Tom Christiansen/\ August 28, 1999 07:48
+msg23/\Adam Turoff/\ August 27, 1999 17:46
+msg36/\Tom Christiansen/\ August 27, 1999 20:27
+msg25/\Tom Christiansen/\ August 27, 1999 17:51
+msg27/\Adam Turoff/\ August 27, 1999 18:06
+msg12/\Ilya Zakharevich/\ August 27, 1999 16:04
+msg39/\Ilya Zakharevich/\ August 27, 1999 21:31
+msg38/\Tom Christiansen/\ August 27, 1999 21:26
+msg41/\Ilya Zakharevich/\ August 27, 1999 22:04
+msg43/\Tom Christiansen/\ August 27, 1999 22:20
+msg47/\Ilya Zakharevich/\ August 27, 1999 22:45
+msg48/\Tom Christiansen/\ August 27, 1999 22:51
+msg53/\Ilya Zakharevich/\ August 28, 1999 01:09
+msg83/\Tom Christiansen/\ August 28, 1999 14:03
+msg79/\Tom Christiansen/\ August 28, 1999 13:46
+msg80/\Ilya Zakharevich/\ August 28, 1999 13:58
+msg82/\Tom Christiansen/\ August 28, 1999 14:01
+msg81/\Tom Christiansen/\ August 28, 1999 14:00
+msg61/\Tom Christiansen/\ August 28, 1999 07:40
+msg14/\Tom Christiansen/\ August 27, 1999 16:09
+msg10/\Russ Allbery/\ August 27, 1999 16:02
+msg19/\Russ Allbery/\ August 27, 1999 16:41
+msg11/\Tom Christiansen/\ August 27, 1999 16:04
+msg16/\Russ Allbery/\ August 27, 1999 16:15
+msg17/\Tom Christiansen/\ August 27, 1999 16:16
+msg9/\Gurusamy Sarathy/\ August 27, 1999 15:54
+msg18/\Graham Barr/\ August 27, 1999 16:22
+msg32/\Graham Barr/\ August 27, 1999 18:31
+msg22/\Graham Barr/\ August 27, 1999 17:28
+msg28/\Gurusamy Sarathy/\ August 27, 1999 18:07
+msg30/\Graham Barr/\ August 27, 1999 18:22
+msg31/\Graham Barr/\ August 27, 1999 18:28
+msg58601/\Johan Vromans/\ May  6, 2002 01:50
+msg7/\Ed Peschko/\ August 27, 1999 15:22
+msg13/\Ilya Zakharevich/\ August 27, 1999 16:06
+msg34/\Ed Peschko/\ August 27, 1999 19:47
+msg40/\Ilya Zakharevich/\ August 27, 1999 21:31
+msg37/\Ed Peschko/\ August 27, 1999 21:13
+msg8/\Tom Christiansen/\ August 27, 1999 15:51
+msg35/\Ed Peschko/\ August 27, 1999 19:55
+msg315/\Steve Fink/\ August 31, 1999 20:29
+msg317/\Ilya Zakharevich/\ August 31, 1999 22:23
+msg339/\Steve Fink/\ September  1, 1999 12:20
+msg342/\Ilya Zakharevich/\ September  1, 1999 12:45
+msg344/\Larry Wall/\ September  1, 1999 13:03
+msg383/\Steve Fink/\ September  2, 1999 11:59
+msg408/\Tom Christiansen/\ September  2, 1999 20:07
+msg461/\Steve Fink/\ September  3, 1999 12:35
+msg465/\Ilya Zakharevich/\ September  3, 1999 13:53
+msg384/\Joshua N Pritikin/\ September  2, 1999 12:10
+msg393/\Steve Fink/\ September  2, 1999 14:46
+msg427/\Rujith de Silva/\ September  3, 1999 06:14
+msg347/\Ilya Zakharevich/\ September  1, 1999 14:27
+msg375/\Raphael Manfredi/\ September  2, 1999 10:15
+msg401/\Tom Hughes/\ September  2, 1999 16:56
+msg529/\Benjamin Stuhl/\ September  4, 1999 19:20
+msg615/\Larry Wall/\ September  5, 1999 21:59
+msg328/\Redford, John/\ September  1, 1999 05:50
+msg6/\Adam Turoff/\ August 27, 1999 15:08
+msg55/\Mark Mielke/\ August 28, 1999 01:21
+msg67/\Tom Christiansen/\ August 28, 1999 08:08
+msg63/\Tom Christiansen/\ August 28, 1999 07:44
+msg57/\Russ Allbery/\ August 28, 1999 01:44
+msg52/\Matt Sergeant/\ August 28, 1999 00:56
+msg66/\Tom Christiansen/\ August 28, 1999 08:04
+msg74/\Matt Sergeant/\ August 28, 1999 12:22
+msg75/\Tom Christiansen/\ August 28, 1999 12:41
+msg56/\Mark Mielke/\ August 28, 1999 01:21
+msg68/\Chris Nandor/\ August 28, 1999 08:14
+msg69/\Tom Christiansen/\ August 28, 1999 08:21
+msg64/\Tom Christiansen/\ August 28, 1999 07:47
+msg88/\Tuomas J. Lukka/\ August 28, 1999 14:38
+msg89/\Tom Christiansen/\ August 28, 1999 14:43
+msg119/\Tuomas J. Lukka/\ August 29, 1999 09:44
+msg179/\Russ Allbery/\ August 29, 1999 19:37
+msg5/\Larry Wall/\ August 27, 1999 15:04
+msg26/\Nick Ing-Simmons/\ August 27, 1999 18:04
+msg226/\Mark Mielke/\ August 30, 1999 13:11
+msg238/\Tom Christiansen/\ August 30, 1999 15:16
+msg240/\Nick Ing-Simmons/\ August 30, 1999 15:26
+msg265/\Tom Horsley/\ August 31, 1999 04:14
+msg239/\Mark Mielke/\ August 30, 1999 15:22
+msg237/\Nick Ing-Simmons/\ August 30, 1999 15:10
+msg229/\Chris Nandor/\ August 30, 1999 13:20
+msg193/\Tom Horsley/\ August 30, 1999 04:53
+msg273/\Robin Berjon/\ August 31, 1999 06:10
+msg210/\Chris Nandor/\ August 30, 1999 08:52
+msg203/\Russ Allbery/\ August 30, 1999 07:46
+msg29/\Nick Ing-Simmons/\ August 27, 1999 18:12
+msg98286/\Yitzchak Scott-Thoennes/\ February  8, 2005 13:46
+msg98361/\Mike Giroux/\ February 14, 2005 07:34
+msg98297/\Reini Urban/\ February  9, 2005 09:38
+msg98288/\Yitzchak Scott-Thoennes/\ February  8, 2005 14:08
+msg98328/\Yitzchak Scott-Thoennes/\ February 10, 2005 20:05
+msg98330/\H.Merijn Brand/\ February 11, 2005 02:00
+msg98393/\Yitzchak Scott-Thoennes/\ February 15, 2005 20:45
+msg98408/\Rafael Garcia-Suarez/\ February 16, 2005 05:47
+msg98338/\Reini Urban/\ February 11, 2005 11:09
+msg98339/\Yitzchak Scott-Thoennes/\ February 11, 2005 11:21
+msg98346/\Rafael Garcia-Suarez/\ February 12, 2005 08:54
+msg7720/\Alan Burlison/\ February 21, 2000 15:44
+msg75018/\KeepOutBytez/\ May  1, 2003 08:07
+msg7721/\Ilya Zakharevich/\ February 21, 2000 15:59
+msg7747/\Alan Burlison/\ February 22, 2000 04:35
+msg7776/\Ilya Zakharevich/\ February 22, 2000 12:00
+msg7786/\Alan Burlison/\ February 22, 2000 13:33
+msg7788/\Ilya Zakharevich/\ February 22, 2000 13:39
+msg7795/\Ilya Zakharevich/\ February 22, 2000 19:36
+msg7791/\Alan Burlison/\ February 22, 2000 15:29
+msg7782/\Alan Burlison/\ February 22, 2000 12:30
+msg7783/\Alan Burlison/\ February 22, 2000 12:43
+msg7779/\Alan Burlison/\ February 22, 2000 12:04
+msg4/\Bart Serto/\ August 27, 1999 15:00
+msg3/\Larry Wall/\ August 27, 1999 14:59
+msg2/\Ask Bjoern Hansen/\ August 19, 1999 20:38
+msg31118/\David Grove/\ February 19, 2001 18:14
+msg5474/\richard_and_joy/\ January 12, 2000 11:59
+msg5506/\Larry Wall/\ January 12, 2000 15:30
+msg5534/\Andy Dougherty/\ January 13, 2000 06:34
+msg5525/\Richard Foley/\ January 13, 2000 00:18
+msg24/\Ask Bjoern Hansen/\ August 27, 1999 17:47
+msg1/\perlmail/\ August 19, 1999 19:23
+msg5071/\andreas.koenig/\ January  3, 2000 01:19
+msg5082/\Gurusamy Sarathy/\ January  3, 2000 10:38
+msg5091/\andreas.koenig/\ January  4, 2000 02:20
+msg2530/\Jarkko Hietaniemi/\ October 19, 1999 02:51
+msg2595/\Stephen Zander/\ October 19, 1999 21:11

@@ -1,0 +1,55 @@
+RQ1:  How many cross layer edges are there?
+RQ1.1:  How does the number of cross layer edges vary with layer granularity?
+Considering all cross-layer edges:
+The number of cross-layer edges for  1 hour is  1782
+The number of cross-layer edges for  1 day is  1139
+The number of cross-layer edges for  5 days is  716
+The number of cross-layer edges for  30 days is  403
+The number of cross-layer edges for  1 year is  43
+The number of cross-layer edges for  20 years is  0
+
+RQ2:  How much do cross-edges tighten the O/P bounds?
+
+RQ3:  C&P question:  are social network measures robust as a function of layer granularity on our MLN?
+	Do we scale as well?  Or is our greater traversal cost offset by a big improvement in performance?
+
+Question: If they have to consider all edges, and in particular those that we can
+represent as cross edges and they must discard, then we scale as efficiently as they do.
+1. For deciding (in any layer) if a 2-path A->B->C is a transitive fault using the O/P models,
+only the maximum and minimum time edges should be considered, thus there are at most 2 parallel
+edges between any 2 nodes.
+2. For cross-layer edges, for deciding transitive faults, for each pair of nodes (A, B) and a layer l2,
+s.t. B has sent a reply in layer l2, if there are multiple cross-layer edges (A, l0)->(B, l2) and
+(A, l1)->(B, l2), for the "node-layer" tuple (B, l2), it only makes sense to store edge (A, l)->(B, l2)
+s.t l is the maximum layer.
+Similarly, for each pair of nodes (A, B) and a layer l0, s.t. A has received a reply to a message sent in layer l0,
+if there are multiple cross-layer edges (A, l0)->(B, l1) and (A, l0)->(B, l2), for the "node-layer" tuple (A, l0),
+it only makes sense to store the edge (A, l0)->(B, l) s.t l is the minimum layer.
+
+Question_1: Why would cross layer edges decide the transitive fault?
+possibly bc:
+a. layers can be created s.t it's reasonable to assume that all participants
+have read messages from the previous x layers? This leads to only considering CLE that
+are not too far apart
+b. as in example 2, they might reveal previous edges, resulting in deciding
+between O/P
+"First we check for cross layer paths.  If there is one, we decide;
+if not, we fall back on their optimistic/pessimistic classification."
+
+Question_2: What are the implications of representing a cross layer edge (a, l1) -t1> (b, l2) as (a, l2) -t1> (b, l2)?
+
+Question: How to test RQ3?
+
+Hypothesis: O/P is still needed if for e.g. a->b is a cross layer edge i.e. b replies
+at t2 to a's "xlayers-old" message. If b sends a message at t0 and c replies to b's message
+at t1, and t0 < t1 < t2, it's not necessary that there is information flowing from a to c.
+
+Maximum #cross-layer edges = #edges <= #messages (a message is a reply to at most
+1 message)
+
+
+
+RQ2:  How much do cross-edges tighten the O/P bounds?
+
+
+

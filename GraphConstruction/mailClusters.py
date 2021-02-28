@@ -5,9 +5,13 @@ from pyjarowinkler.distance import get_jaro_distance
 nameLim = [[-4, 0.60], [-3, 0.80], [-1, 0.95]]
 emailLim = [[-4, 0.60], [-3, 0.80], [-1, 0.95]]
 lim = 10
+# emailNamesFile = "GraphConstruction/Data/emailName2020B.txt" #File with email names for eclipse
+emailNamesFile = '\\emailNamesApache.txt'
+#File with names and emails in format name/\email
+nameEmails = open(emailNamesFile)
 
-nameEmails = open("\\emailNames.txt")
-removeStr = ['eclipse', 'jdt', 'admin', 'support', '.']
+#removeStr = ['eclipse', 'jdt', 'admin', 'support', '.']
+removeStr = ['admin', 'support', '.', 'apache']
 def isLetter(a):
   return (ord(a) <= ord('z') and ord(a) >= ord('a')) or (ord(a) <= ord('Z') and ord(a) >= ord('A'))
 

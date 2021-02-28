@@ -31,9 +31,9 @@ def dataSetUp():
 def plotTable(tTimes, tRows):
     tData = [tTimes]
     tColumnNames = ['time interval', 'TF_O under Bird', 'TF_P under Bird', '#edges',
-                    'TF_O under adjacent', 'TF_P under adjacent', 'P gain', '#edges', 'edge % addition',
+                    'TF_O under adjacent', 'TF_P under adjacent', 'P gain', '#edges', 'edge addition',
                      'TF_O under hist', 'TF_P under hist', 'P gain', '#edges',
-                    'edge % addition']
+                    'edge addition']
     for col in tRows:
         tData.append(col)
     t = go.Figure(data=[go.Table(header=dict(values=tColumnNames),
@@ -45,6 +45,7 @@ def getResults():
     # tCorrRows = [[] for x in range(4)]
     tRows = [[] for x in range(13)]
     t1Times = []
+    tfType = 'TFRate'
     for (t, delta_t) in timeIntWithResults:
         t1Times.append(t)
         # Create the 3 networks
@@ -55,9 +56,9 @@ def getResults():
         parameters.setLayerDistance(1)
         monoplex = reproValidity.getValues(t, delta_t, minTime, maxTime, msgDict, 'monoplex', False)
         # Add O/P TF for each network.
-        tRows = addOPResult(tRows, [0, 1], monoplex.getTFSum('monoplex'))
-        tRows = addOPResult(tRows, [3, 4], adjMLN.getTFSum('MLN'))
-        tRows = addOPResult(tRows, [8, 9], MLN.getTFSum('MLN'))
+        tRows = addOPResult(tRows, [0, 1], monoplex.getTFSum('monoplex', tfType))
+        tRows = addOPResult(tRows, [3, 4], adjMLN.getTFSum('MLN', tfType))
+        tRows = addOPResult(tRows, [8, 9], MLN.getTFSum('MLN', tfType))
         # Add P gain
         tRows[5].append(round((tRows[4][-1] - tRows[1][-1]) / tRows[1][-1], 4))
         tRows[10].append(round((tRows[9][-1] - tRows[1][-1]) / tRows[1][-1], 4))
@@ -65,9 +66,9 @@ def getResults():
         monoplexEdgeCount = monoplex.getMonoplexEdgeCount()
         MLNEdgeCount = MLN.getMLNEdgeCount()
         adjMLNEdgeCount = adjMLN.getMLNEdgeCount()
-        tRows[2].append((monoplexEdgeCount, round((monoplexEdgeCount / monoplex.nrEdges) * 100, 4)))
-        tRows[6].append((adjMLNEdgeCount[2], round((adjMLNEdgeCount[2] / adjMLN.nrEdges) * 100, 4)))
-        tRows[11].append((MLNEdgeCount[2], round((MLNEdgeCount[2] / MLN.nrEdges) * 100, 4)))
+        tRows[2].append((monoplexEdgeCount, round((monoplexEdgeCount / monoplex.nrEdges) * 100, 2)))
+        tRows[6].append((adjMLNEdgeCount[2], round((adjMLNEdgeCount[2] / adjMLN.nrEdges) * 100, 2)))
+        tRows[11].append((MLNEdgeCount[2], round((MLNEdgeCount[2] / MLN.nrEdges) * 100, 2)))
         # Add edge gain.
         tRows[7].append(round(tRows[6][-1][0] / tRows[2][-1][0], 4))
         tRows[12].append(round(tRows[11][-1][0] / tRows[2][-1][0], 4))

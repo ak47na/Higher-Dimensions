@@ -366,7 +366,6 @@ class InformationFlowNetwork:
                 for a in self.crossLayerOut[netw]:
                     if not (a in self.inLayer[netw]):
                         optimisticCount, pesimisticCount = self.initTFRForNode(netw, netwType, a)
-                        N += 1
                         optimisticCount, pesimisticCount = self.addCLEPathA(netw, netwType, a, optimisticCount, pesimisticCount)
                         transFaultSum = self.addTFRForNode(netw, netwType, transFaultSum, a, optimisticCount, pesimisticCount)
 
@@ -402,11 +401,11 @@ class InformationFlowNetwork:
                                 self.getTFaultMonoplex(a, b, c, netw, netwType, optimisticCount, pesimisticCount)
                 transFaultSum = self.addTFRForNode(netw, netwType, transFaultSum, a, optimisticCount, pesimisticCount)
 
-            self.TFperNetw[netwType][netw] = (transFaultSum[0], transFaultSum[1])
             # The network transitive fault rate is the sum of the node transitive fault rates over all
             # nodes, divided by the number of nodes in the network.
             transFaultSum[0] /= N
             transFaultSum[1] /= N
+            self.TFperNetw[netwType][netw] = (transFaultSum[0], transFaultSum[1])
 
             # optimistic model should have at most pessimistic model transitive faults.
             assert transFaultSum[0] <= transFaultSum[1]
@@ -444,9 +443,15 @@ class InformationFlowNetwork:
                         inLayerEdgeCount += 1
         return inLayerEdgeCount
 
-    def getTFSum(self, netwType):
-        return self.TFSum[netwType]
-
+    def getTFSum(self, netwType, tfType):
+        if tfType == 'TF':
+            return self.TFSum[netwType]
+        else:
+            res = [0, 0]
+            for netw in range(1, self.nrGraphs + 1):
+                for ty in range(2):
+                    res[ty] += self.TFperNetw[netwType][netw][ty]
+            return res
 
 
     def getEdgeCount(self):

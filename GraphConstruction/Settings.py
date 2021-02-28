@@ -4,12 +4,17 @@ import datetime as dt
 
 projectID = 0
 networkType = "Major"
-issueType = "pre-release"
+issueType = "post-release"
 projectName = 'jdt'
 timeInterval = timedelta(hours = 1)
 measureCorrelation = {}
 reproMeasureCorrelation = {}
 measureNames = ['Degree Centrality', 'Closeness Centrality', 'Betweenness Centrality', 'Reachability', 'Effective Size']
+
+
+def dissimilarity(actual, expected):
+    diff = abs(actual - expected)
+    return (diff / expected) * 100
 
 def setNetworkType(networkType_):
     global networkType
@@ -39,6 +44,8 @@ def getMeasureCorrelation(measureName):
     return measureCorrelation[measureName][issueType][networkType]
 def getMeasureCorrelation(measureName, networkType_):
     return measureCorrelation[measureName][issueType][networkType_]
+def getMeasureCorrelation(measureName, issueType_, networkType_):
+    return measureCorrelation[measureName][issueType_][networkType_]
 
 def getPastPaperResult():
     initMeasureCorrelation()
