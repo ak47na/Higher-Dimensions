@@ -1,0 +1,2 @@
+{'first': ['Atanas'], 'last': 'Bakalov', 'full': 'atanasbakalov'}/\atanasdb
+{'first': ['Nasko'], 'last': 'Nasko', 'full': 'nasko'}/\atanasdb

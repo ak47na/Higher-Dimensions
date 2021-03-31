@@ -1,0 +1,2 @@
+{'first': ['Daniel', 'L'], 'last': 'Rall', 'full': 'daniellrall'}/\dlr
+{'first': ['Daniel'], 'last': 'Rall', 'full': 'danielrall'}/\dlr

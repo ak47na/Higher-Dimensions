@@ -1,0 +1,2 @@
+{'first': ['Magnus'], 'last': 'Stenman', 'full': 'magnusstenman'}/\stone
+{'first': ['WebmasterBOfH'], 'last': 'WebmasterBOfH', 'full': 'webmasterbofh'}/\stone

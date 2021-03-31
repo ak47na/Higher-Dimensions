@@ -1,0 +1,2 @@
+{'first': ['itojun'], 'last': 'itojun', 'full': 'itojun'}/\itojun
+{'first': ['Jun-ichiro', 'itojun'], 'last': 'Hagino', 'full': 'jun-ichiroitojunhagino'}/\itojun

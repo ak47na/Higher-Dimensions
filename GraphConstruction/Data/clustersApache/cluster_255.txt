@@ -1,0 +1,4 @@
+{'first': ['Arg', 'Un'], 'last': 'bisho', 'full': 'argunbisho'}/\bisho
+{'first': ['Guille'], 'last': '-bisho-', 'full': 'guille-bisho-'}/\bisho
+{'first': ['Guille'], 'last': 'Bisho', 'full': 'guillebisho'}/\bisho
+{'first': ['Guille'], 'last': 'Bisho', 'full': 'guillebisho'}/\guille

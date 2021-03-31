@@ -1,0 +1,2 @@
+{'first': ['Serge', 'E'], 'last': 'Hallyn', 'full': 'sergeehallyn'}/\serue
+{'first': ['Serge'], 'last': 'Hallyn', 'full': 'sergehallyn'}/\serue

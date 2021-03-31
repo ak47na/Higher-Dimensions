@@ -1,0 +1,3 @@
+{'first': ['Theo', 'E'], 'last': 'Schlossnagle', 'full': 'theoeschlossnagle'}/\jesus
+{'first': ['Theo', 'E'], 'last': 'Schlossnagle', 'full': 'theoeschlossnagle'}/\theo
+{'first': ['Theo'], 'last': 'Schlossnagle', 'full': 'theoschlossnagle'}/\jesus

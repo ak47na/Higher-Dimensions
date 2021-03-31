@@ -1,0 +1,5 @@
+{'first': ['Min'], 'last': 'Xu', 'full': 'minxu'}/\mxu
+{'first': ['Min'], 'last': 'Xu', 'full': 'minxu'}/\xu
+{'first': ['Min', 'Xu'], 'last': 'Hsu', 'full': 'minxuhsu'}/\xu
+{'first': ['Min'], 'last': 'XuHsu', 'full': 'minxuhsu'}/\mxu
+{'first': ['Teng'], 'last': 'Xu', 'full': 'tengxu'}/\txu

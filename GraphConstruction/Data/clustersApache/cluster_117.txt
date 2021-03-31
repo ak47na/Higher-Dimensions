@@ -1,0 +1,3 @@
+{'first': ['rbb'], 'last': 'rbb', 'full': 'rbb'}/\rbb
+{'first': ['Ryan'], 'last': 'Bloom', 'full': 'ryanbloom'}/\rbb
+{'first': ['Ryan'], 'last': 'Bloom', 'full': 'ryanbloom'}/\rbloom

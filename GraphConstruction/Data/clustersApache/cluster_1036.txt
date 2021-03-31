@@ -1,0 +1,3 @@
+{'first': ['Nick', 'De'], 'last': 'Decker', 'full': 'nickdedecker'}/\nick
+{'first': ['Nick'], 'last': 'Hill', 'full': 'nickhill'}/\nick
+{'first': ['Nick'], 'last': 'Kew', 'full': 'nickkew'}/\nick

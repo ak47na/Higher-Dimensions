@@ -40,11 +40,35 @@ def joinNames(pairs):
     nrEmailAdd = len(pairs)
     for i in range(nrEmailAdd):
         par.append(i)
+    print(nrEmailAdd)
     for i in range(nrEmailAdd):
         for j in range(i + 1, nrEmailAdd):
-            if mailClusters.equalPairs(pairs[i], pairs[j]):
+            if mailClusters.similarPairs(pairs[i], pairs[j]):
                 mailClusters.joinRoots(par, mailClusters.root(par, i), mailClusters.root(par, j))
     return par
+
+def createCheckedIdentities(filename):
+    eqPeople = open(filename, 'r')
+    while True:
+        crtL = eqPeople.readline()
+        if not crtL or crtL == '\n':
+            break
+        crtL = crtL.replace('\n', '')
+        crtL = crtL.split('/\\')
+        if crtL == ['']:
+            break
+        assert len(crtL) == 4
+        alias1 = crtL[1] + crtL[0]
+        alias2 = crtL[3] + crtL[2]
+        if alias1 in Identity:
+            assert not(alias2 in Identity)
+            Identity[alias2] = Identity[alias1]
+        elif alias2 in Identity:
+            Identity[alias1] = Identity[alias2]
+        else:
+            Identity[alias1] = alias1
+            Identity[alias2] = Identity[alias1]
+
 
 '''
     For each component of joined names, update the details(Identity, fullName, humanID, email) for
@@ -54,7 +78,8 @@ def joinNames(pairs):
 def createClusters(par, pairs):
     # List with the cluster ids of false positives (groups of email addresses that don't actually
     # correspond to the same person.
-    fakeList = [364, 476, 1672, 168, 88, 1541, 79, 96, 1377, 779, 109, 162, 78]
+    fakeList = [8, 60, 77, 4, 47, 209, 57, 56, 38, 98, 126, 68, 83, 703, 44, 154, 402, 749, 85, 118]
+    #364, 476, 1672, 168, 88, 1541, 79, 96, 1377, 779, 109, 162, 78]
     emailsOfFullName = mailClusters.getEmailsOfFullName()
     nrHumans = 0
     cluster = {}
@@ -67,17 +92,24 @@ def createClusters(par, pairs):
         else:
             cluster[mailClusters.root(par, i)].append(i)
 
+    createCheckedIdentities('D:\AKwork2020-2021\Higher-Dimensions\GraphConstruction\Data\clustersApache\equalNames.txt')
     for i in range(nrEmailAdd):
         if mailClusters.root(par, i) == i:
             nrC += 1
             clusterSize = len(cluster[i])
             if clusterSize > 1 and (not (nrC in fakeList)):
+                iFull = pairs[i][1] + pairs[i][0]['full']
+                assert not(iFull in Identity)
                 #Aliases in cluster correspond to same person.
                 nrHumans += 1
                 fullNames[nrHumans] = []
 
                 for j in cluster[i]:
                     jFull = pairs[j][1] + pairs[j][0]['full']
+                    if jFull in Identity:
+                        if Identity[jFull] != pairs[i][1] + pairs[i][0]['full']:
+                            print('Err', Identity[jFull], pairs[i][1] + pairs[i][0]['full'])
+
                     Identity[jFull] = pairs[i][1] + pairs[i][0]['full']
                     humanID[jFull] = nrHumans
                     fullNames[nrHumans].append(pairs[j][0]['full'])
@@ -85,6 +117,8 @@ def createClusters(par, pairs):
             else:
                 for j in cluster[i]:
                     jFull = pairs[j][1] + pairs[j][0]['full']
+                    if jFull in Identity:
+                        continue
                     if pairs[j][0]['full'] in email:
                         Identity[jFull] = Identity[emailsOfFullName[pairs[j][0]['full']][0] + pairs[j][0]['full']]
                         humanID[jFull] = humanID[Identity[jFull]]
@@ -95,6 +129,7 @@ def createClusters(par, pairs):
                         humanID[jFull] = nrHumans
                         fullNames[nrHumans] = [pairs[j][0]['full']]
                         email[pairs[j][0]['full']] = pairs[j][1]
+    print('#humans is', nrHumans)
 
 def cachedInit():
     f = open("D:\\AKwork2020-2021\\Higher-Dimensions\\ApacheData\\identityFile.txt", 'r')
@@ -136,7 +171,9 @@ def getFullNames():
     return fullNames
 
 def fullInit():
+    print('Reading names')
     pairs = readNames()
+    print('Joining names')
     par = joinNames(pairs)
     createClusters(par, pairs)
     createIdentityFile()

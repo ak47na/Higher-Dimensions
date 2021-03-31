@@ -1,0 +1,2 @@
+{'first': ['Nathan'], 'last': 'Neulinger', 'full': 'nathanneulinger'}/\nneul
+{'first': ['Neulinger,', 'Nathan'], 'last': 'R', 'full': 'neulinger,nathanr'}/\nneul

@@ -1,0 +1,4 @@
+{'first': ['Dana'], 'last': 'Carson', 'full': 'danacarson'}/\dcarson
+{'first': ['Dario'], 'last': 'Dario', 'full': 'dario'}/\dario
+{'first': ['Dark'], 'last': 'Archon', 'full': 'darkarchon'}/\darchon
+{'first': ['David'], 'last': 'Harris', 'full': 'davidharris'}/\dharris

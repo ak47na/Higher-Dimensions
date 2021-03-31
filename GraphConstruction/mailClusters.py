@@ -150,9 +150,8 @@ def joinRoots(par, rx, ry):
     else:
         par[ry] = rx
 
-pairs = []
-
 def readNames(f):
+    pairs = []
     while True:
         crtL = f.readline().encode("utf-8", 'ignore').decode("utf-8", 'ignore')
         if not crtL:
@@ -186,8 +185,6 @@ def readNames(f):
 def getEmailsOfFullName():
     return emailsOfFullName
 
-readNames(nameEmails)
-N = len(pairs)
 # name_i1 = {'first': 'thom', 'last': 'thom', 'full': 'thom'}
 # name_i2 = {'first': 'ben', 'last': 'ben', 'full': 'ben'}
 # p1 =(name_i1, 'thom')
@@ -195,14 +192,14 @@ N = len(pairs)
 # print(similarPairs(p1, p2))
 # exit()
 
-def createClusters(par):
+def createClusters(par, N, pairs):
     print('creating clusters')
     for i in range(N):
         par.append(i)
 
     for i in range(N):
         for j in range(i + 1, N):
-            if equalPairs(pairs[i], pairs[j]):
+            if similarPairs(pairs[i], pairs[j]):
                 joinRoots(par, root(par, i), root(par, j))
 
     nrC = 0
@@ -225,4 +222,8 @@ def createClusters(par):
                 f.close()
 
 par = []
-createClusters(par)
+
+if __name__ == "__main__":
+    pairs = readNames(nameEmails)
+    N = len(pairs)
+    createClusters(par, N, pairs)

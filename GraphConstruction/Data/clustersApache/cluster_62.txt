@@ -1,0 +1,5 @@
+{'first': ['fitz'], 'last': 'fitz', 'full': 'fitz'}/\fitz
+{'first': ['B', 'W'], 'last': 'Fitzpatrick', 'full': 'bwfitzpatrick'}/\fitz
+{'first': ['Brad'], 'last': 'Fitzpatrick', 'full': 'bradfitzpatrick'}/\bradfitz
+{'first': ['Brian', 'W'], 'last': 'Fitzpatrick', 'full': 'brianwfitzpatrick'}/\fitz
+{'first': ['Brian', 'W'], 'last': 'Fitzpatrick', 'full': 'brianwfitzpatrick'}/\fitz

@@ -1,0 +1,3 @@
+{'first': ['Andrew'], 'last': 'Finkenstadt', 'full': 'andrewfinkenstadt'}/\andyf
+{'first': ['Andrew'], 'last': 'Finkenstadt', 'full': 'andrewfinkenstadt'}/\kahuna
+{'first': ['Andy'], 'last': 'Finkenstadt', 'full': 'andyfinkenstadt'}/\andyf

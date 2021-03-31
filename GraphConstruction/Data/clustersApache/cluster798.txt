@@ -1,0 +1,2 @@
+{'first': ['Kai'], 'last': 'Risku', 'full': 'kairisku'}/\kairisku
+{'first': ['Kai'], 'last': 'Risku', 'full': 'kairisku'}/\krisku

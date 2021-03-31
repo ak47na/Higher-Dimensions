@@ -1,0 +1,2 @@
+{'first': ['harald'], 'last': 'harald', 'full': 'harald'}/\harald
+{'first': ['harald'], 'last': 'deppeler', 'full': 'haralddeppeler'}/\harald

@@ -1,0 +1,3 @@
+{'first': ['khera'], 'last': 'khera', 'full': 'khera'}/\khera
+{'first': ['Vikram'], 'last': 'Khare', 'full': 'vikramkhare'}/\vkhare
+{'first': ['Vivek'], 'last': 'Khera', 'full': 'vivekkhera'}/\khera

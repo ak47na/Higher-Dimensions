@@ -1,0 +1,12 @@
+{'first': ['jrw'], 'last': 'jrw', 'full': 'jrw'}/\jrw
+{'first': ['jwb'], 'last': 'jwb', 'full': 'jwb'}/\jwb
+{'first': ['J', 'W'], 'last': 'Ballantine', 'full': 'jwballantine'}/\jwb
+{'first': ['Jeff'], 'last': 'Bailey', 'full': 'jeffbailey'}/\jbailey
+{'first': ['Jeff'], 'last': 'Baker', 'full': 'jeffbaker'}/\jwb
+{'first': ['Jeffrey'], 'last': 'Baker', 'full': 'jeffreybaker'}/\jwb
+{'first': ['Jeffrey', 'W'], 'last': 'Baker', 'full': 'jeffreywbaker'}/\jwb
+{'first': ['Jeffrey', 'W'], 'last': 'Baker', 'full': 'jeffreywbaker'}/\jwbaker
+{'first': ['Jerry'], 'last': 'Baker', 'full': 'jerrybaker'}/\jerrybaker
+{'first': ['Joel'], 'last': 'Stanley', 'full': 'joelstanley'}/\jstanley
+{'first': ['John'], 'last': 'Bley', 'full': 'johnbley'}/\jbb6
+{'first': ['John'], 'last': 'Bley', 'full': 'johnbley'}/\jbley

@@ -1,0 +1,12 @@
+{'first': ['magnus'], 'last': 'magnus', 'full': 'magnus'}/\magnus
+{'first': ['Daniel'], 'last': 'Risacher', 'full': 'danielrisacher'}/\magnus
+{'first': ['Emanuel', 'Corthay'], 'last': 'ABB', 'full': 'emanuelcorthayabb'}/\emanuelabb
+{'first': ['Magnus', ''], 'last': 'M0', 'full': 'magnusm0'}/\magnus
+{'first': ['Magnus'], 'last': 'Bodin', 'full': 'magnusbodin'}/\magnus
+{'first': ['Magnus'], 'last': 'S', 'full': 'magnuss'}/\soderman
+{'first': ['Manoj'], 'last': 'Jain', 'full': 'manojjain'}/\manoj_jain
+{'first': ['Manoj', 'Kumar'], 'last': 'Jain', 'full': 'manojkumarjain'}/\manojkumarjain
+{'first': ['Sam'], 'last': 'Magnuson', 'full': 'sammagnuson'}/\smagnuson
+{'first': ['man'], 'last': 'man', 'full': 'man'}/\man
+{'first': ['pradeep'], 'last': 'kumar', 'full': 'pradeepkumar'}/\pradeepsmani
+{'first': ['szymanski_j'], 'last': 'szymanski_j', 'full': 'szymanski_j'}/\szymanski_j

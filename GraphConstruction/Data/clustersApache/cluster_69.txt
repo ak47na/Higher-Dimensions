@@ -1,0 +1,3 @@
+{'first': ['grisha'], 'last': 'grisha', 'full': 'grisha'}/\grisha
+{'first': ['Gregory', 'Grisha'], 'last': 'Trubetskoy', 'full': 'gregorygrishatrubetskoy'}/\grisha
+{'first': ['Grisha'], 'last': 'Trubetskoy', 'full': 'grishatrubetskoy'}/\grisha

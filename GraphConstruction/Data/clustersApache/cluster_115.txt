@@ -1,0 +1,4 @@
+{'first': ['rpluem'], 'last': 'rpluem', 'full': 'rpluem'}/\rpluem
+{'first': ['Plum,', 'Rudiger,'], 'last': 'VIS', 'full': 'plum,rudiger,vis'}/\ruedigerpluem
+{'first': ['Ruediger'], 'last': 'Pluem', 'full': 'ruedigerpluem'}/\rpluem
+{'first': ['Rudiger'], 'last': 'Plum', 'full': 'rudigerplum'}/\rpluem

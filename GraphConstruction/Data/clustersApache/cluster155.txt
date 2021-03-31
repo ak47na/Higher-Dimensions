@@ -1,0 +1,2 @@
+{'first': ['weigelt'], 'last': 'weigelt', 'full': 'weigelt'}/\weigelt
+{'first': ['Enrico'], 'last': 'Weigelt', 'full': 'enricoweigelt'}/\weigelt

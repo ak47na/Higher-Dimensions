@@ -1,0 +1,5 @@
+{'first': ['lars'], 'last': 'lars', 'full': 'lars'}/\lars
+{'first': ['Lars'], 'last': 'Eilebrecht', 'full': 'larseilebrecht'}/\larseilebrecht
+{'first': ['Lars'], 'last': 'Eilebrecht', 'full': 'larseilebrecht'}/\lars
+{'first': ['Lars'], 'last': 'Oppermann', 'full': 'larsoppermann'}/\larsoppermann
+{'first': ['Laura', 'La'], 'last': 'Gassa', 'full': 'lauralagassa'}/\laura

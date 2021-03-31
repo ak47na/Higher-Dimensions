@@ -1,0 +1,2 @@
+{'first': ['Bret'], 'last': 'Bret', 'full': 'bret'}/\mersault
+{'first': ['Bret'], 'last': 'McGuire', 'full': 'bretmcguire'}/\mersault

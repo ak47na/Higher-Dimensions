@@ -1,0 +1,6 @@
+{'first': ['Pier'], 'last': 'Fumagalli', 'full': 'pierfumagalli'}/\pier
+{'first': ['Pier', 'P'], 'last': 'Fumagalli', 'full': 'pierpfumagalli'}/\pier
+{'first': ['Pierpaolo'], 'last': 'Fumagalli', 'full': 'pierpaolofumagalli'}/\ianosh
+{'first': ['Pierpaolo'], 'last': 'Fumagalli', 'full': 'pierpaolofumagalli'}/\pfumagalli
+{'first': ['Pierpaolo'], 'last': 'Fumagalli', 'full': 'pierpaolofumagalli'}/\p_fumagalli
+{'first': ['Pierpaolo'], 'last': 'Fumagalli', 'full': 'pierpaolofumagalli'}/\pier

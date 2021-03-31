@@ -1,0 +1,2 @@
+{'first': ['Alan'], 'last': 'Post', 'full': 'alanpost'}/\apost
+{'first': ['Alexei'], 'last': 'Kosut', 'full': 'alexeikosut'}/\akosut

@@ -1,0 +1,2 @@
+{'first': ['Stanislaw'], 'last': 'Stanislaw', 'full': 'stanislaw'}/\stas
+{'first': ['Stas'], 'last': 'Bekman', 'full': 'stasbekman'}/\stas

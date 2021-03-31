@@ -1,0 +1,4 @@
+{'first': ['Ken', 'A', 'L'], 'last': 'Coar', 'full': 'kenalcoar'}/\coar
+{'first': ['Rodent', 'of', 'Unusual'], 'last': 'Size', 'full': 'rodentofunusualsize'}/\coar
+{'first': ['Rodent', 'of', 'Unusual'], 'last': 'Size', 'full': 'rodentofunusualsize'}/\kencoar
+{'first': ['Rodent', 'of', 'Unusual'], 'last': 'Size', 'full': 'rodentofunusualsize'}/\coar

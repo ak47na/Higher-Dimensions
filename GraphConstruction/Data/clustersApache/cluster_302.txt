@@ -1,0 +1,3 @@
+{'first': ['Bishop'], 'last': 'Bishop', 'full': 'bishop'}/\bishop
+{'first': ['Bishop'], 'last': 'Bishop', 'full': 'bishop'}/\bishopc
+{'first': ['bishop'], 'last': 'bishop', 'full': 'bishop'}/\bishop

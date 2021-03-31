@@ -1,0 +1,2 @@
+{'first': ['Richard'], 'last': 'Stallman', 'full': 'richardstallman'}/\rms
+{'first': ['michael'], 'last': 'salmon', 'full': 'michaelsalmon'}/\ms

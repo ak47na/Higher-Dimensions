@@ -1,0 +1,2 @@
+{'first': ['Michael'], 'last': 'Parker', 'full': 'michaelparker'}/\parker
+{'first': ['Michael'], 'last': 'Parker', 'full': 'michaelparker'}/\parkerm

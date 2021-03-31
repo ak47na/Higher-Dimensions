@@ -1,0 +1,3 @@
+{'first': ['rasmus'], 'last': 'rasmus', 'full': 'rasmus'}/\rasmus
+{'first': ['Morten', 'Egelund'], 'last': 'Rasmussen', 'full': 'mortenegelundrasmussen'}/\mortenegelundrasmussen
+{'first': ['Rasmus'], 'last': 'Lerdorf', 'full': 'rasmuslerdorf'}/\rasmus

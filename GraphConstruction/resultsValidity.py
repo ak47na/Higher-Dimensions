@@ -73,14 +73,16 @@ def runResults():
                 t1Times.append(t)
                 # Add paper name.
                 t1Rows[0].append(paperProjects[projectId])
-                #meanRes = getMeanResults(monoplexNetwork)
-                meanRes = crtResult[0]
+                meanRes = getMeanResults(monoplexNetwork)
+                #meanRes = crtResult[0]
                 for i in range(2):
                     # Compare both the optimistic and pessimistic models.
                     t1Rows[1 + i * 3].append(projResult[i])
                     t1Rows[2 + i * 3].append(meanRes[i])
                     t1Rows[3 + i * 3].append(Settings.dissimilarity(meanRes[i], projResult[i]))
                 projectId += 1
+                #Only check results for first project, i.e. Apache
+                break
 
         if (delta_t in twoPathCorrelations_paperRes):
             projectId = 0
@@ -98,17 +100,18 @@ def runResults():
                     # Dissimilarity between paper result and our result.
                     t2Rows[i][5].append(Settings.dissimilarity(crtResult[i + 1][0], projResult[0]))
                 projectId += 1
+                #Only check for first project, i.e Apache
+                break
 
 paperProjects = ['Apache', 'MySQL', 'Perl']
-
+print('Running')
 t1Times = []
 t1Rows = [[] for k in range(7)]
 
 
 t2Times = []
 t2Rows = [[[] for i in range(6)], [[] for j in range(6)]]
-
-runResults()
-
-plotTable1(t1Times, t1Rows)
-plotTable2(t2Times, t2Rows)
+if __name__ == "__main__":
+    runResults()
+    plotTable1(t1Times, t1Rows)
+    plotTable2(t2Times, t2Rows)

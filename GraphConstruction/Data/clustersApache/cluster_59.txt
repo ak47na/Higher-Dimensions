@@ -1,0 +1,3 @@
+{'first': ['ed'], 'last': 'ed', 'full': 'ed'}/\ed
+{'first': ['Ed'], 'last': 'Korthof', 'full': 'edkorthof'}/\ed
+{'first': ['Eldad'], 'last': 'Eldad', 'full': 'eldad'}/\eldad

@@ -1,0 +1,3 @@
+{'first': ['TimCostello'], 'last': 'TimCostello', 'full': 'timcostello'}/\timcostello
+{'first': ['Tim', ''], 'last': 'Costello', 'full': 'timcostello'}/\timcostello
+{'first': ['Tim'], 'last': 'Costello', 'full': 'timcostello'}/\timcostello

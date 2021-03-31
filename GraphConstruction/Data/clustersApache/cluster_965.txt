@@ -1,0 +1,3 @@
+{'first': ['Michael'], 'last': 'Clark', 'full': 'michaelclark'}/\michael
+{'first': ['Michael'], 'last': 'Hall', 'full': 'michaelhall'}/\mhall
+{'first': ['Mohamed'], 'last': 'Aly', 'full': 'mohamedaly'}/\maly

@@ -1,0 +1,2 @@
+{'first': ['Sergey'], 'last': 'Trofimov', 'full': 'sergeytrofimov'}/\st
+{'first': ['Sonke', ''], 'last': 'Tesch', 'full': 'sonketesch'}/\st

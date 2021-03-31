@@ -1,0 +1,3 @@
+{'first': ['djm'], 'last': 'djm', 'full': 'djm'}/\djm
+{'first': ['David', 'J'], 'last': 'MacKenzie', 'full': 'davidjmackenzie'}/\djm
+{'first': ['David'], 'last': 'McMahon', 'full': 'davidmcmahon'}/\djm

@@ -1,0 +1,2 @@
+{'first': ['Juergen'], 'last': 'Heckel', 'full': 'juergenheckel'}/\jheckel
+{'first': ['Jurgen', ''], 'last': 'Heckel', 'full': 'jurgenheckel'}/\jheckel

@@ -1,0 +1,2 @@
+{'first': ['Eric', 'C'], 'last': 'Hagberg', 'full': 'ericchagberg'}/\hagberg
+{'first': ['Eric'], 'last': 'Hagberg', 'full': 'erichagberg'}/\hagberg

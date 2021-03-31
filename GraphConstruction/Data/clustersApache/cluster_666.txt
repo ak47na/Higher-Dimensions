@@ -1,0 +1,3 @@
+{'first': ['Igor'], 'last': 'Kovalenko', 'full': 'igorkovalenko'}/\igorkovalenko
+{'first': ['Igor'], 'last': 'Kovalenko', 'full': 'igorkovalenko'}/\igorkovalenko
+{'first': ['Igor'], 'last': 'Kovalenko', 'full': 'igorkovalenko'}/\kovalenk

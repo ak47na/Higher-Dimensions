@@ -1,0 +1,5 @@
+{'first': ['Colm', ''], 'last': 'MacCrthaigh', 'full': 'colmmaccrthaigh'}/\colm
+{'first': ['Colm'], 'last': 'MacCarthaigh', 'full': 'colmmaccarthaigh'}/\colmmaccarthaigh
+{'first': ['Colm'], 'last': 'MacCarthaigh', 'full': 'colmmaccarthaigh'}/\colm
+{'first': ['Colm'], 'last': 'MacCarthaigh,,,', 'full': 'colmmaccarthaigh,,,'}/\colmmacc
+{'first': ['Colm'], 'last': 'MacCarthaigh', 'full': 'colmmaccarthaigh'}/\colmmacc

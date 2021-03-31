@@ -1,0 +1,4 @@
+{'first': ['Jeremy'], 'last': 'Devenport', 'full': 'jeremydevenport'}/\jeremy
+{'first': ['Jeremy'], 'last': 'Hansen', 'full': 'jeremyhansen'}/\jeremy
+{'first': ['Jeroen'], 'last': 'Massar', 'full': 'jeroenmassar'}/\jeroen
+{'first': ['Jerry'], 'last': 'Asher', 'full': 'jerryasher'}/\jerry-

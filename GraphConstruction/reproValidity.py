@@ -42,10 +42,11 @@ def readMsgDetails(filePath):
         crtLine = crtLine.replace('\n', '').lower()
         # msgKey/\name/\email/\date
         lst = crtLine.split('/\\')
-        lst[1] = lst[1].split('<')[0]
-        lst[2] = lst[2].split('<')[0]
+        # lst[1] = lst[1].split('<')[0]
+        # lst[2] = lst[2].split('<')[0]
         assert not ('@' in lst[2])
-        lst[1] = lst[1].split('@')[0]
+        assert not ('@' in lst[1])
+        # lst[1] = lst[1].split('@')[0]
         if 'MAILER-DAEMON' in lst[2]:
             continue
         assert len(lst) == 4

@@ -1,0 +1,7 @@
+{'first': ['rchapach'], 'last': 'rchapach', 'full': 'rchapach'}/\rchapach
+{'first': ['simo'], 'last': 'simo', 'full': 'simo'}/\simo
+{'first': ['simos'], 'last': 'simos', 'full': 'simos'}/\simos
+{'first': ['RCHAPACH'], 'last': 'Rochester', 'full': 'rchapachrochester'}/\rchapach
+{'first': ['RCHAPACH'], 'last': 'Rochester', 'full': 'rchapachrochester'}/\simo
+{'first': ['Robert'], 'last': 'Simonson', 'full': 'robertsimonson'}/\simo
+{'first': ['Simon'], 'last': 'Kirby', 'full': 'simonkirby'}/\sim

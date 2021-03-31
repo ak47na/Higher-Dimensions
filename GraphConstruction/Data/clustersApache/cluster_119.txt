@@ -1,0 +1,3 @@
+{'first': ['rfi'], 'last': 'rfi', 'full': 'rfi'}/\rfi
+{'first': ['Arnauld'], 'last': 'Dravet', 'full': 'arnaulddravet'}/\smurfie
+{'first': ['rfi', 'from', 'Rich'], 'last': 'Roth', 'full': 'rfifromrichroth'}/\rfi

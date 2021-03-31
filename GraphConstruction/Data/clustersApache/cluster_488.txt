@@ -1,0 +1,3 @@
+{'first': ['Dwayne'], 'last': 'Miller', 'full': 'dwaynemiller'}/\dmiller
+{'first': ['Dwayne'], 'last': 'Miller', 'full': 'dwaynemiller'}/\dwayne-miller
+{'first': ['P', 'Dwayne'], 'last': 'Miller', 'full': 'pdwaynemiller'}/\dmiller

@@ -1,0 +1,3 @@
+{'first': ['Andreas', 'S'], 'last': 'Kerber', 'full': 'andreasskerber'}/\ask
+{'first': ['Ask', 'Bjoern'], 'last': 'Hansen', 'full': 'askbjoernhansen'}/\ask
+{'first': ['Ask', 'Bjrn'], 'last': 'Hansen', 'full': 'askbjrnhansen'}/\ask

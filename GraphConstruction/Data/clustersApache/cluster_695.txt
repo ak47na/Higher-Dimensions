@@ -1,0 +1,5 @@
+{'first': ['James', 'H', 'Cloos'], 'last': 'Jr', 'full': 'jameshcloosjr'}/\cloos
+{'first': ['James', 'H', 'Cloos'], 'last': 'Jr', 'full': 'jameshcloosjr'}/\cloos
+{'first': ['James', 'H', 'Cloos'], 'last': 'Jr', 'full': 'jameshcloosjr'}/\cloos
+{'first': ['James', 'H', 'Cloos,'], 'last': 'Jr', 'full': 'jameshcloos,jr'}/\cloos
+{'first': ['James', 'HCloos'], 'last': 'Jr', 'full': 'jameshcloosjr'}/\cloos

@@ -1,0 +1,3 @@
+{'first': ['Justin'], 'last': 'Seiferth', 'full': 'justinseiferth'}/\seiferth
+{'first': ['Maj', 'Justin'], 'last': 'Seiferth', 'full': 'majjustinseiferth'}/\seiferth
+{'first': ['Maj', 'Justin'], 'last': 'Seiferth', 'full': 'majjustinseiferth'}/\seifertj

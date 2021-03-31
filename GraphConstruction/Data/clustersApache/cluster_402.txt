@@ -1,0 +1,9 @@
+{'first': ['Corporate', 'Performance'], 'last': 'Institute', 'full': 'corporateperformanceinstitute'}/\info
+{'first': ['Eserio'], 'last': 'Eserio', 'full': 'eserio'}/\info
+{'first': ['Jorge'], 'last': 'Schrauwen', 'full': 'jorgeschrauwen'}/\info
+{'first': ['Jorge'], 'last': 'Schrauwen', 'full': 'jorgeschrauwen'}/\jorgeschrauwen
+{'first': ['Jorge'], 'last': 'Schrauwen', 'full': 'jorgeschrauwen'}/\jorge_schrauwen
+{'first': ['Sander', 'Holthaus', '-', 'Orange'], 'last': 'XL', 'full': 'sanderholthaus-orangexl'}/\info
+{'first': ['Steffen'], 'last': 'Steffen', 'full': 'steffen'}/\info
+{'first': ['Th'], 'last': 'Budich', 'full': 'thbudich'}/\info
+{'first': ['info'], 'last': 'info', 'full': 'info'}/\info

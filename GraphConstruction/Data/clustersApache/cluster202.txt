@@ -1,0 +1,2 @@
+{'first': ['Amaury'], 'last': 'Jacquot', 'full': 'amauryjacquot'}/\sxpert
+{'first': ['Raphael', 'Amaury'], 'last': 'Jacquot', 'full': 'raphaelamauryjacquot'}/\sxpert

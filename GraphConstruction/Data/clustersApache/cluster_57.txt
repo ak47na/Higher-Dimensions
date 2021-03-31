@@ -1,0 +1,18 @@
+{'first': ['doug'], 'last': 'doug', 'full': 'doug'}/\doug
+{'first': ['douglas'], 'last': 'douglas', 'full': 'douglas'}/\douglas
+{'first': ['dougm'], 'last': 'dougm', 'full': 'dougm'}/\dougm
+{'first': ['Blue'], 'last': 'Blue', 'full': 'blue'}/\blue
+{'first': ['Blue'], 'last': 'Lang', 'full': 'bluelang'}/\blue
+{'first': ['Bruce'], 'last': 'Bruce', 'full': 'bruce'}/\bruce
+{'first': ['Doug'], 'last': 'Doug', 'full': 'doug'}/\doug
+{'first': ['Doug'], 'last': 'Cutting', 'full': 'dougcutting'}/\doug
+{'first': ['Doug'], 'last': 'Luce', 'full': 'dougluce'}/\doug
+{'first': ['Doug'], 'last': 'MacEachern', 'full': 'dougmaceachern'}/\dougm
+{'first': ['Doug'], 'last': 'Wellington', 'full': 'dougwellington'}/\doug
+{'first': ['Ian'], 'last': 'Davies', 'full': 'iandavies'}/\daviesdougd
+{'first': ['Ivan', 'Barrera'], 'last': 'A', 'full': 'ivanbarreraa'}/\bruce
+{'first': ['Michael'], 'last': 'Douglass', 'full': 'michaeldouglass'}/\mikedoug
+{'first': ['blue'], 'last': 'blue', 'full': 'blue'}/\blue
+{'first': ['blue'], 'last': 'lang', 'full': 'bluelang'}/\blue
+{'first': ['bruce'], 'last': 'bruce', 'full': 'bruce'}/\bedouglas
+{'first': ['fredric'], 'last': 'greene', 'full': 'fredricgreene'}/\bluegreene1

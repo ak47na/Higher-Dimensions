@@ -1,0 +1,3 @@
+{'first': ['Philip', 'M'], 'last': 'Gollucci', 'full': 'philipmgollucci'}/\gollucci
+{'first': ['Philip', 'M'], 'last': 'Gollucci', 'full': 'philipmgollucci'}/\pgollucci
+{'first': ['Philip', 'M'], 'last': 'Gollucci', 'full': 'philipmgollucci'}/\philip

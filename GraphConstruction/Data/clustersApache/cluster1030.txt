@@ -1,0 +1,2 @@
+{'first': ['Nedelcho'], 'last': 'Stanev', 'full': 'nedelchostanev'}/\decho
+{'first': ['Nedelcho'], 'last': 'Stanev', 'full': 'nedelchostanev'}/\nedelchostanev

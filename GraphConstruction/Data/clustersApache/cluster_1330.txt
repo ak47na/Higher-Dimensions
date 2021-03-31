@@ -1,0 +1,3 @@
+{'first': ['Terry'], 'last': 'Chung', 'full': 'terrychung'}/\tchung
+{'first': ['Trung'], 'last': 'Dung', 'full': 'trungdung'}/\tdung
+{'first': ['Tung', 'Nguyen'], 'last': 'Thanh', 'full': 'tungnguyenthanh'}/\tungnt

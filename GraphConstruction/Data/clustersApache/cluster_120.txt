@@ -1,0 +1,5 @@
+{'first': ['ricilake'], 'last': 'ricilake', 'full': 'ricilake'}/\ricilake
+{'first': ['Richard'], 'last': 'Gooch', 'full': 'richardgooch'}/\rgooch
+{'first': ['Richard'], 'last': 'Jones', 'full': 'richardjones'}/\rich
+{'first': ['Rici'], 'last': 'Lake', 'full': 'ricilake'}/\rici
+{'first': ['Rici'], 'last': 'Lake', 'full': 'ricilake'}/\ricilake

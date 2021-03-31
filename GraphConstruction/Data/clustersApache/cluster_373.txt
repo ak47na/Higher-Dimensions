@@ -1,0 +1,4 @@
+{'first': ['Chris'], 'last': 'Mason', 'full': 'chrismason'}/\clmsys
+{'first': ['Chris'], 'last': 'Mason', 'full': 'chrismason'}/\cmason
+{'first': ['Curt'], 'last': 'Sampson', 'full': 'curtsampson'}/\curtsampson
+{'first': ['Curt'], 'last': 'Sampson', 'full': 'curtsampson'}/\cjs

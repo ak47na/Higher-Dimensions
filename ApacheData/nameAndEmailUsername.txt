@@ -2562,7 +2562,7 @@ lists/\list
 lsanders/\lsanders
 luca regini/\luca.regini
 lurker above/\ix
-manaay <mlampret/\mlampret
+manaay/\mlampret
 mark/\mark
 matt/\rogers
 matt whiteley/\mattwhiteley

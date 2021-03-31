@@ -1,0 +1,2 @@
+{'first': ['Michal'], 'last': 'Szymaniak', 'full': 'michalszymaniak'}/\michal
+{'first': ['Michal'], 'last': 'Szymaniak', 'full': 'michalszymaniak'}/\mszyman

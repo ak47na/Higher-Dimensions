@@ -1,0 +1,16 @@
+{'first': ['dot'], 'last': 'dot', 'full': 'dot'}/\dot
+{'first': ['fanf'], 'last': 'fanf', 'full': 'fanf'}/\fanf
+{'first': ['kfranken'], 'last': 'kfranken', 'full': 'kfranken'}/\kfranken
+{'first': ['Dot'], 'last': 'Dot', 'full': 'dot'}/\dot
+{'first': ['Emek'], 'last': 'Sadot', 'full': 'emeksadot'}/\esadot
+{'first': ['Francis'], 'last': 'Daly', 'full': 'francisdaly'}/\deva
+{'first': ['Francis'], 'last': 'Daly', 'full': 'francisdaly'}/\francis
+{'first': ['Frank'], 'last': 'Frank', 'full': 'frank'}/\frank
+{'first': ['Frank'], 'last': 'Faubert', 'full': 'frankfaubert'}/\frank
+{'first': ['Frank', 'J', 'Faubert'], 'last': 'Jr', 'full': 'frankjfaubertjr'}/\frank
+{'first': ['Frank', 'J', 'Faubert,'], 'last': 'Jr', 'full': 'frankjfaubert,jr'}/\frank
+{'first': ['Timo'], 'last': 'Dotzauer', 'full': 'timodotzauer'}/\tdotzauer
+{'first': ['Tony'], 'last': 'Finch', 'full': 'tonyfinch'}/\dot
+{'first': ['Tony'], 'last': 'Finch', 'full': 'tonyfinch'}/\fanf
+{'first': ['joanna'], 'last': 'joanna', 'full': 'joanna'}/\dot
+{'first': ['sindy'], 'last': 'sindy', 'full': 'sindy'}/\dot

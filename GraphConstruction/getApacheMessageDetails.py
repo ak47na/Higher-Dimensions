@@ -1,8 +1,12 @@
 from datetime import timedelta
-
+import warnings
 from dateutil.parser import parse
+import tzInfo
 
 invalidCh = ['\\', '/', '+', '!', '{', '}', '(', ')', ':', '[', ']']
+warnings.filterwarnings("error")
+
+#Removes any occurence of an invalid ch (from invalidCh) from the name.
 def purify(name):
   newName = ''
   for ch in name:
@@ -10,6 +14,7 @@ def purify(name):
       newName += ch
   return newName
 
+#Return the name and emailUsername from the From input. Format: name/\emailUsername.
 def getNameAndEmail(From):
     From = From.replace('\n', '')
     if '<' in From:
@@ -30,6 +35,9 @@ def getNameAndEmail(From):
     From[0] = From[0].replace('\'', '')
     From[0] = From[0].replace('\"', '')
     From[0] = purify(From[0])
+    From[0] = From[0].split('@')[0]
+    From[0] = From[0].split('<')[0]
+    From[1] = From[1].split('<')[0]
     return From[0] + '/\\' + From[1].split('@')[0]
 
 f = open('D:\AKwork2020-2021\Higher-Dimensions\ApacheData\msgDetailsRawFull.txt', 'r', encoding="utf-8")
@@ -40,15 +48,16 @@ nonUniqueMsgIds = 0
 badCnt = 0
 badRepliesFormat = 0
 badMsgId = 0
+
+#Read all lines from the file containing all message details.
+tzInfo = tzInfo.getTZInfo()
+
 while True:
-    # The line contains information of current msg in format msgID/\repliedtID/\name+email/\date
+    # The line contains information of current msg in format msgID/\repliedtoID/\name+email/\date
     crtLine = f.readline()
     if not crtLine:
         break
-    if (len(crtLine.split('/\\')) < 4):
-        print(crtLine, 'was incomplete')
-        crtLine += f.readline()
-        print(crtLine, 'now')
+    assert (len(crtLine.split('/\\')) == 4)
 
     crtLine = crtLine.replace('\n', '')
     crtLine = crtLine.split('/\\')
@@ -76,7 +85,7 @@ while True:
     else:
         sec = 0
         try:
-            dt = parse(date)
+            dt = parse(date, tzinfos = tzInfo)
             if dt.tzinfo and dt.tzinfo.utcoffset(dt):
                 sec = dt.utcoffset().total_seconds()
 
@@ -84,9 +93,9 @@ while True:
             msgDict[msgId] = (name, msgRepliedTo, utcdate.timestamp())
             nrM += 1
             msgIds[msgId] = nrM
-        except:
+        except :
             badCnt += 1
-            # print(date, 'is a bad date')
+            #print(date, 'is a wrongly formatted date')
 
 f2 = open("D:\AKwork2020-2021\Higher-Dimensions\ApacheData\\apacheMsgDetails.txt", "w", encoding="utf-8")
 f3 = open("D:\AKwork2020-2021\Higher-Dimensions\ApacheData\\apacheMsgEdges.txt", "w", encoding="utf-8")
@@ -104,3 +113,4 @@ for msgId in msgDict:
 print(badReplyCnt)
 f2.close()
 f3.close()
+f.close()

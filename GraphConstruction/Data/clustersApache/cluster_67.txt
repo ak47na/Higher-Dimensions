@@ -1,0 +1,3 @@
+{'first': ['gozer'], 'last': 'gozer', 'full': 'gozer'}/\gozer
+{'first': ['Philippe', 'M', ''], 'last': 'Chiasson', 'full': 'philippemchiasson'}/\gozer
+{'first': ['Philippe', 'M'], 'last': 'Chiasson', 'full': 'philippemchiasson'}/\gozer

@@ -1,0 +1,10 @@
+{'first': ['carl'], 'last': 'carl', 'full': 'carl'}/\carl
+{'first': ['Carla'], 'last': 'Schroder', 'full': 'carlaschroder'}/\carla
+{'first': ['Carlo'], 'last': 'Perassi', 'full': 'carloperassi'}/\carlo
+{'first': ['Carlos', 'A'], 'last': 'Varela', 'full': 'carlosavarela'}/\cvarela
+{'first': ['Carlos'], 'last': 'Vazquez', 'full': 'carlosvazquez'}/\carlos
+{'first': ['Christian'], 'last': 'Zweig', 'full': 'christianzweig'}/\carltonyu
+{'first': ['Jim'], 'last': 'Carlson', 'full': 'jimcarlson'}/\jcarlson
+{'first': ['Marcin'], 'last': 'Orlowski', 'full': 'marcinorlowski'}/\carlos
+{'first': ['Torbjorn', ''], 'last': 'Carlsson', 'full': 'torbjorncarlsson'}/\torbjorncarlsson
+{'first': ['carlos'], 'last': 'carlos', 'full': 'carlos'}/\carlos

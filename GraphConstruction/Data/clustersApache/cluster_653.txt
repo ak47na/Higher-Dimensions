@@ -1,0 +1,4 @@
+{'first': ['Hiroaki'], 'last': 'KAWAI', 'full': 'hiroakikawai'}/\kawai
+{'first': ['Hiroyuki', '-', 'SPIKY', '-'], 'last': 'Hanai', 'full': 'hiroyuki-spiky-hanai'}/\hanai
+{'first': ['Hiroyuki'], 'last': 'Hanai', 'full': 'hiroyukihanai'}/\hanai
+{'first': ['hiroyuki'], 'last': 'hanai', 'full': 'hiroyukihanai'}/\hanai

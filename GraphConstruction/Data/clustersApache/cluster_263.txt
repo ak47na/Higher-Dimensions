@@ -1,0 +1,3 @@
+{'first': ['Artem'], 'last': 'L', 'full': 'arteml'}/\art
+{'first': ['Artem'], 'last': 'Lantsev', 'full': 'artemlantsev'}/\art
+{'first': ['artem'], 'last': 'artem', 'full': 'artem'}/\artem

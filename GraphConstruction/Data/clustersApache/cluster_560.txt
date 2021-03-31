@@ -1,0 +1,5 @@
+{'first': ['Fred'], 'last': 'Sanchez', 'full': 'fredsanchez'}/\wsanchez
+{'first': ['Wilfredo', 'S', 'a'], 'last': 'nchez', 'full': 'wilfredosanchez'}/\wsanchez
+{'first': ['Wilfredo'], 'last': 'Sanchez', 'full': 'wilfredosanchez'}/\wsanchez
+{'first': ['Wilfredo'], 'last': 'Sanchez', 'full': 'wilfredosanchez'}/\wsanchez
+{'first': ['Wilfredo', 'Sanchez'], 'last': 'Vega', 'full': 'wilfredosanchezvega'}/\wsanchez

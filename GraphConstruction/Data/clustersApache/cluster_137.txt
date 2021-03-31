@@ -1,0 +1,3 @@
+{'first': ['striker'], 'last': 'striker', 'full': 'striker'}/\striker
+{'first': ['Sander'], 'last': 'Striker', 'full': 'sanderstriker'}/\sstriker
+{'first': ['Sander'], 'last': 'Striker', 'full': 'sanderstriker'}/\striker

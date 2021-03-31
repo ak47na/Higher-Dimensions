@@ -1,0 +1,7 @@
+{'first': ['keith'], 'last': 'keith', 'full': 'keith'}/\keith
+{'first': ['wannamak'], 'last': 'wannamak', 'full': 'wannamak'}/\wannamak
+{'first': ['Keith', 'G'], 'last': 'Murphy', 'full': 'keithgmurphy'}/\keithmur
+{'first': ['Keith'], 'last': 'Wannamaker', 'full': 'keithwannamaker'}/\keith
+{'first': ['Keith'], 'last': 'Wannamaker', 'full': 'keithwannamaker'}/\krw
+{'first': ['Keith'], 'last': 'Wannamaker', 'full': 'keithwannamaker'}/\wannamak
+{'first': ['Kent'], 'last': 'Fitch', 'full': 'kentfitch'}/\kfitch

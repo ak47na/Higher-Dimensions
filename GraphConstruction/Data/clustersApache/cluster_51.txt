@@ -1,0 +1,5 @@
+{'first': ['costin'], 'last': 'costin', 'full': 'costin'}/\costin
+{'first': ['costinm'], 'last': 'costinm', 'full': 'costinm'}/\costinm
+{'first': ['Costin'], 'last': 'Manolache', 'full': 'costinmanolache'}/\costinmanolache
+{'first': ['Costin'], 'last': 'Manolache', 'full': 'costinmanolache'}/\cmanolache
+{'first': ['Costin'], 'last': 'Manolache', 'full': 'costinmanolache'}/\costin
