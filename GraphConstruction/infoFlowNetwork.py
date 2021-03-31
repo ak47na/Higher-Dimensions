@@ -208,7 +208,11 @@ class InformationFlowNetwork:
             if not crtLine:
                 break
             crtLine = crtLine.replace('\n', '')
-            lst = crtLine.split(' ')
+            if '/\\' in crtLine:
+                lst = crtLine.split('/\\')
+            else:
+                lst = crtLine.split(' ')
+
             assert len(lst) == 2
             if not (lst[0] in self.msgDict) and not (lst[0] in invalidMsg):
                 invalidMsg[lst[0]] = True
@@ -370,7 +374,7 @@ class InformationFlowNetwork:
                         transFaultSum = self.addTFRForNode(netw, netwType, transFaultSum, a, optimisticCount, pesimisticCount)
 
             netwEdges = self.inLayer[netw]
-            # Uncomment this part if the CP network adds CLE as inLayer parallel edges.
+            # #Uncomment this part if the CP network adds CLE as inLayer parallel edges.
             # if (netwType == "MLN"):
             #     netwEdges = self.inLayer[netw]
             # else:
@@ -463,3 +467,13 @@ class InformationFlowNetwork:
                     if (self.minT[netw][(a, b)] != self.maxT[netw][(a, b)]):
                         edgeCount += 1
         return edgeCount
+
+    def printNetworkDetails(self):
+        print('#graphs is', self.nrGraphs, 'and # total edges is', self.nrEdges)
+        for netw in range(1, self.nrGraphs + 1):
+            print('Network', netw, 'has #non isolated nodes', len(self.Adj[netw]))
+            edgeCount = 0
+            for a in self.Adj[netw]:
+                for b in self.Adj[netw][a]:
+                    edgeCount += 1
+            print('Network', netw, 'has #edges', edgeCount)

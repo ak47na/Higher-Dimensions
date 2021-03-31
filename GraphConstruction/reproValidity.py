@@ -1,5 +1,7 @@
 import mailID
+import mailClusters
 import parameters
+import unicodedata
 
 from datetime import datetime
 from networkx import *
@@ -20,29 +22,86 @@ def updateTimeBorders(minTime, maxTime, t):
     message key, the email of the sender and the date of the message as a tuple.
 '''
 def readMsgDetails(filePath):
+    emptyFullName = open("emptyFullNames.txt", "wb")
+    invalidDates =  open("invalidDates.txt", "wb")
+    notfoundNames =  open("notFoundNames.txt", "wb")
+    notFoundDict = {}
+    emptyDict = {}
     msgDict = {}
     # read the file with the details of all messages in format :
     # msgKey/\senderName/\senderEmail/\date(%Y-%m-%d %H:%M:%S)
-    detailsFile = open(filePath, "r")
+    detailsFile = open(filePath, "r", encoding='utf8')
     # Initialise time borders.
     minTime = datetime.now().timestamp()
     maxTime = 0
     while True:
         crtLine = detailsFile.readline()
+        crtLine = unicodedata.normalize('NFD', crtLine).encode('ascii', 'ignore').decode('ascii')
         if not crtLine:
             break
-        crtLine = crtLine.replace('\n', '')
+        crtLine = crtLine.replace('\n', '').lower()
         # msgKey/\name/\email/\date
         lst = crtLine.split('/\\')
+        lst[1] = lst[1].split('<')[0]
+        lst[2] = lst[2].split('<')[0]
+        assert not ('@' in lst[2])
+        lst[1] = lst[1].split('@')[0]
+        if 'MAILER-DAEMON' in lst[2]:
+            continue
         assert len(lst) == 4
         # increment the number of messages
         # nrM += 1
-        msgEmail = mailID.purifyEmail(lst[2].replace(' ', ''))
+        first_i, last_i, full_i = mailClusters.purifyName(lst[1])
+        msgEmail = mailClusters.purifyEmail(lst[2].replace(' ', ''))
+        if msgEmail == '':
+            msgEmail = full_i
+        if full_i == '':
+            full_i = msgEmail
+            if msgEmail in emptyDict:
+                continue
+            emptyDict[msgEmail] = True
+            emptyFullName.write(full_i.encode("utf-8"))
+            emptyFullName.write('\n'.encode("utf-8"))
+        try:
+            if not '-' in lst[3]:
+                lst[3] = str(datetime.fromtimestamp(int(float(lst[3]))))
+        except:
+            invalidDates.write(lst[3].encode("utf-8"))
+            invalidDates.write('\n'.encode("utf-8"))
+            continue
         msgDate = datetime.strptime(lst[3], '%Y-%m-%d %H:%M:%S')
         # store the message with key lst[0]
-        msgDict[lst[0]] = (msgEmail, msgDate)
-        minTime, maxTime = updateTimeBorders(minTime, maxTime, msgDate.timestamp())
+        if len(full_i) == 0:
+            full_i = msgEmail
+        elif len(msgEmail) == 0:
+            msgEmail = full_i
+        try:
+            identity = mailID.getIdentity(msgEmail+full_i)
+            msgDict[lst[0]] = (identity, msgDate)
+            minTime, maxTime = updateTimeBorders(minTime, maxTime, msgDate.timestamp())
+        except:
+            try:
+                identity = mailID.getIdentity(msgEmail)
+                msgDict[lst[0]] = (identity, msgDate)
+                minTime, maxTime = updateTimeBorders(minTime, maxTime, msgDate.timestamp())
+            except:
+                try:
+                    identity = mailID.getIdentity(full_i)
+                    msgDict[lst[0]] = (identity, msgDate)
+                    minTime, maxTime = updateTimeBorders(minTime, maxTime, msgDate.timestamp())
+                except:
+                    msgEmailAndName = msgEmail + ' and full ' + full_i
+                    if msgEmailAndName in notFoundDict:
+                        continue
+                    notFoundDict[msgEmailAndName] = True
+                    notfoundNames.write(msgEmailAndName.encode("utf-8"))
+                    notfoundNames.write('\n'.encode("utf-8"))
+
+
     detailsFile.close()
+    emptyFullName.close()
+    invalidDates.close()
+    notfoundNames.close()
     return minTime, maxTime, msgDict
 
 '''
@@ -52,14 +111,14 @@ def readMsgDetails(filePath):
 import correlationValidity
 def createInfoFlowNetwork(t, delta_t, minTime, maxTime, msgDict, useGT = False):
     infoFlowNetwork = correlationValidity.OrderInfoFlowNetwork(msgDict, delta_t, t, minTime, useGT)
-    msgEdgesFilePath = "Data\\msgEdges.txt"
+    msgEdgesFilePath = 'D:\AKwork2020-2021\Higher-Dimensions\ApacheData\\apacheMsgEdges.txt'#"Data\\msgEdges.txt"
     nrNodes = infoFlowNetwork.readMsgEdges(0, msgEdgesFilePath)
     return infoFlowNetwork
 
 import advMultilayeredNetwork
 def createAdvInfoFlowNetwork(t, delta_t, minTime, maxTime, msgDict):
     infoFlowNetwork = advMultilayeredNetwork.AdvMultilayeredNetwork(msgDict, delta_t, t, minTime)
-    msgEdgesFilePath = "Data\\msgEdges.txt"
+    msgEdgesFilePath = 'D:\AKwork2020-2021\Higher-Dimensions\ApacheData\\apacheMsgEdges.txt'#"Data\\msgEdges.txt"
     nrNodes = infoFlowNetwork.readMsgEdges(0, msgEdgesFilePath)
     return infoFlowNetwork
 '''
@@ -67,7 +126,9 @@ def createAdvInfoFlowNetwork(t, delta_t, minTime, maxTime, msgDict):
     the 2-path rankings between the (aggregate) network with transitive faults and the one without.
 '''
 def getValues(t, delta_t, minTime, maxTime, msgDict, netwType, useGT = False):
+    print('Creating network')
     infoFlowNetwork = createInfoFlowNetwork(t, delta_t, minTime, maxTime, msgDict, useGT)
+    # infoFlowNetwork.printNetworkDetails()
     infoFlowNetwork.getTransitiveFault(netwType)
     infoFlowNetwork.getRanginkCorrelationAggregate(netwType)
     if netwType == 'MLN':

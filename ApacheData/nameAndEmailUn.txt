@@ -1,0 +1,2914 @@
+fielding/\"Roy T. Fielding"
+rst/\Robert S. Thau)
+andrew/\Andrew Wilson)
+cliffs/\Cliff Skolnick)
+hartill/\Rob Hartill 
+pioch/\Nicolas Pioch 
+pioch/\Nicolas Pioch 
+brian/\Brian Behlendorf 
+drtr/\David Robinson)
+andrew/\Andrew Wilson 
+hartill/\Rob Hartill)
+www/\Web Admin 
+cliffs/\Cliff Skolnick 
+randy/\Randy Terbush 
+sanner/\David J. Sanner)
+fwp/\Frank Peters 
+randy/\Randy Terbush 
+hagberg/\Eric C Hagberg 
+robm/\Rob McCool 
+blong/\Brandon Long 
+altis/\Kevin Altis)
+nobody/\Unprivileged user 
+ses/\Simon E Spero 
+paul/\Paul Richards 
+efrank/\Elizabeth Frank)
+hagberg/\Eric Hagberg)
+pitkow/\James Pitkow)
+appro/\Andy Polyakov)
+appro/\Andy Polyakov 
+cvarela/\Carlos A. Varela)
+kshafer/\
+M.J.Cox/\Mark J Cox 
+junga/\Achim Jung 
+hartill/\Rob Hartill 
+brian/\Brian Behlendorf 
+falcon/\jon r. luini)
+brian/\Brian Behlendorf 
+rdaniel/\"Ronald E. Daniel" 
+chris/\Christian Bartholdsson  
+cliffs/\Cliff Skolnick)
+
+MAILER-DAEMON/\Mail Router (smail 2.9  dl,da,fa,tu,po,qf,lo,dbm  03/21/95 42) 
+postmaster/\
+murchiso/\"Roderick Murchison, Jr." 
+randy/\Randy Terbush 
+J.S.Peatfield/\Jon Peatfield 
+hartill/\Rob Hartill 
+taob/\Brian Tao 
+guillory/\Stan Guillory)
+
+murchiso/\"Roderick Murchison, Jr." 
+rhooper/\Roy Hooper)
+
+mkgray/\Matthew Gray 
+vamp/\Ryan Watkins 
+bambi/\"David J. Hughes" 
+welch/\"Sean N. Welch" 
+chuck/\Chuck Murcko 
+cliffs/\Cliff Skolnick 
+paul/\Paul Richards 
+buff/\William Denton 
+David/\
+cliff/\Cliff Skolnick 
+mkgray/\Matthew Gray 
+paul/\Paul Richards 
+fielding/\Roy Fielding 
+guillaum/\Florent Guillaume)
+
+akosut/\Alexei Kosut 
+vamp/\Ryan Watkins)
+
+jim/\Jim Jagielski 
+Dirk.vanGulik/\Dirk vanGulik 
+ogd/\ozymandias G desiderata 
+cloos/\"James H. Cloos Jr." 
+awm/\Aram Mirzadeh 
+delph/\Max Levchin 
+awm/\Aram Mirzadeh 
+kevinh/\Kevin Hughes)
+dave/\"David M. Oliver" 
+cloos/\"James H. Cloos Jr." 
+andrew/\Andrew Wilson 
+andrew/\Andrew Wilson 
+andrew/\Andrew Wilson 
+ben/\Ben Laurie 
+sanders/\Tony Sanders 
+rst/\"Robert S. Thau" 
+yandros/\chad brown 
+garey/\Garey Smiley)
+owner-new-httpd/\
+paul/\Paul Richards 
+lenny/\
+pete/\Pete Kruckenberg 
+geoffw/\Geoff White)
+Erlend.Midttun/\Erlend Midttun 
+awm/\Aram W. Mirzadeh)
+dgaudet/\Dean Gaudet 
+taob/\Brian Tao 
+myddryn/\Adam Sussman 
+sameer/\sameer 
+Ross.Anderson/\Ross Anderson 
+mark/\"Rev. Mark Grant" 
+rfreilic/\Richard Freilich 
+aba/\
+chris/\
+randy/\Randy Terbush)
+paul/\Paul Richards 
+kevinh/\Kevin Hughes 
+dgaudet/\Dean Gaudet 
+therond/\Laurent THEROND 
+jmiller/\Jeremie Miller)
+cloos/\"James H Cloos Jr <James H. Cloos Jr." 
+p.richards/\Paul Richards 
+nschrenk/\"Nathan W. Schrenk" 
+brycer/\Bryce Ryan 
+jj/\Jakub Jelinek)
+sam/\Samuel Tardieu 
+fielding/\"Roy T. Fielding"
+scott/\
+awilson/\Andrew Wilson 
+bmc/\Brian Clapper 
+paul/\Paul Richards 
+isdmill/\David Miller 
+paul/\Paul Richards 
+a-petesk/\Peter Skelly (Hall Kinion) 
+ben/\"Ben Laurie" 
+jj/\Jakub Jelinek 
+mark/\Mark J Cox 
+dgaudet/\Dean Gaudet)
+rasmus/\
+jmiller/\"Jeremie Miller" 
+chris/\Chris Rosebrugh 
+mkgray/\Matthew K Gray 
+sameer/\
+bmc/\Brian Clapper 
+sameer/\sameer 
+sameer/\
+hibma/\Nick Hibma)
+
+mkgray/\
+dirkx/\
+thomas/\Thomas Conte 
+syadasti/\Mike Gogulski)
+
+sameer/\
+robh/\Rob Hartill 
+robh/\Rob Hartill 
+djm/\"David J. MacKenzie" 
+mkl/\
+hikida/\Yoshirou Hikida 
+ben/\Ben Laurie 
+grant/\"M. L. Grant" 
+drtr/\David Robinson)
+
+tromey/\Tom Tromey 
+matthews/\Brian Matthews 
+SBERNSTEIN/\Scott Bernstein 
+billr/\Bill Radcliffe 
+laura/\Laura La Gassa 
+garey/\"Garey Smiley" 
+jmyers/\Jennifer Myers 
+laura/\Laura La Gassa)
+
+joachim/\"Joachim Vance" 
+johnh/\John Heidemann 
+mbrown/\Mark Brown 
+tromey/\Tom Tromey 
+mjs/\Michael Smith 
+dougm/\Doug MacEachern)
+dougm/\Doug MacEachern 
+gordoni/\Gordon Irlam)
+jadour01/\"Jason A. Dour" 
+aas/\Gisle Aas 
+rse/\Ralf S. Engelschall)
+dsmk/\David King 
+drtr/\David Robinson 
+drtr/\David Robinson 
+hsf/\Howard Fear 
+rse/\"Ralf S. Engelschall" 
+jad/\"Jason A. Dour" 
+khera/\
+tdung/\Trung Dung 
+nneul/\"Nathan Neulinger" 
+toettli/\Mailing Oettli 
+paul/\Paul Sutton 
+spiffnet/\Troy Morrison 
+mark/\"Mark A. Imbriaco" 
+rst/\"Robert S. Thau" 
+rst/\"Robert S. Thau" 
+robh/\Rob Hartill)
+akosut/\Alexei Kosut 
+lucid/\Lucid 
+bnewton/\Byron Newton 
+mikedoug/\Michael Douglass 
+dirkx/\Dirk-Willem van Gulik 
+khera/\Vivek Khera 
+dhm/\dave madden 
+cklaus/\Christopher Klaus 
+hughw/\hugh winkler 
+jlapin/\
+sameer/\Sameer Parekh 
+patrick.taylor/\Patrick Taylor 
+claudio.nieder/\Claudio Nieder 
+claudio.nieder/\
+malyshki/\Vladislav Malyshkin)
+cgross/\"Christian Gross" 
+lucid/\Lucid 
+marks/\Mark Shuttleworth 
+rse/\Ralf S. Engelschall)
+murphy/\
+mhp/\Mike Prettejohn 
+sjg/\"Simon J. Gerraty" 
+lafraia/\
+gsk/\"Geoffrey S. Knauth" 
+bill/\
+admin/\
+bobv/\Bob Vance 
+douglas/\
+ivan/\Ivan Pulleyn 
+yeb.havinga/\Yeb Havinga 
+dvk/\Dmitry Kryukov 
+dwb/\
+andrew/\Andrew Daviel 
+takaaki/\
+bryan/\
+takahashi/\"TAKAHASHI, Akihiko" 
+ivan/\Ivan Fabian 
+m.koster/\Martijn Koster)
+nneul/\Nathan Neulinger 
+lyonsm/\Mike A Lyons 
+brianl/\
+foner/\Lenny Foner 
+rasmus/\
+knudsen/\
+webmaster/\
+admin/\System Administrator 
+patrick/\Patrick Tsui 
+danisch/\
+djm/\
+vinzenz/\Vinzenz Franz 
+karres/\
+milun/\Davin Milun 
+Juha.Laiho/\
+scottm/\Scott Michel)
+
+asah/\Adam Sah)
+
+tjh/\Tim Hudson 
+chuck/\Chuck Murcko 
+casey/\Casey Palowitch 
+chuck/\Chuck Murcko 
+jonathan/\
+cliff/\"Cliff Skolnick" 
+harrie.hazewinkel/\Harrie Hazewinkel 
+rasmus/\
+sameer/\sameer 
+dhuff/\
+yulpgi/\
+rasmus/\Rasmus Lerdorf 
+fielding/\"Roy T. Fielding"
+sameer/\
+blong/\Brandon Long)
+
+gordoni/\Gordon Irlam)
+
+sameer/\
+chuck/\Chuck Murcko 
+fielding/\"Roy T. Fielding" 
+jmiller/\Jeremie Miller 
+sameer/\sameer 
+ed/\Ed Korthof 
+rasmus/\
+rse/\Ralf S. Engelschall)
+
+andrew/\Andrew Ford 
+Dirk.vanGulik/\
+mbrown/\Mark Brown 
+fielding/\"Roy T. Fielding" 
+doug/\Doug Wellington 
+darchon/\Dark Archon 
+root/\Lucid 
+marcs/\Slarc Memko 
+modus/\Patrick Michael Kane 
+marcs/\Marc Slemko 
+dave/\"David H. Bennett" 
+randy/\Randy Terbush 
+efrank/\Beth Frank 
+ldl/\"Lou D. Langholtz" 
+Martin.Kraemer/\Martin Kraemer 
+G.Lachac/\Gerry Lachac 
+rfreilic/\Richard Freilich 
+root/\Leif Neland 
+randy/\Randy Terbush)
+
+ginsparg/\Paul Ginsparg 505-667-7353 
+k/\Andreas Koenig 
+bmorris/\Bill Morris 
+asah/\Adam Sah 
+ingram/\Ingram Leedy 
+sevo/\
+shadow/\Shadow 
+Bartley_Troyan/\Bartley Troyan 
+jake/\jake buchholz 
+coar/\Rodent of Unusual Size)
+
+map/\"Miguel A.L. Paraz" 
+dgaudet/\dean gaudet 
+rasmus/\
+jclary/\Jason Clary 
+paul/\Paul Richards 
+root/\"Jason S. Clary" 
+marcs/\Marc Slemko 
+gambarin/\Stanley Gambarin 
+rosea/\Rose Aguilar 
+brunnock/\Sean Brunnock 
+rasmus/\Rasmus Lerdorf)
+
+chuck/\Chuck Murcko 
+maciek/\Maciej Kozinski 
+dougm/\Doug MacEachern 
+markb/\Mark Bixby 
+montulli/\Lou Montulli)
+
+mikep/\Michael Pelletier 
+nate/\Nathan J Kurz 
+tjh/\Tim Hudson 
+Ray.W.Hiltbrand/\"Ray W. Hiltbrand" 
+lampa/\Petr Lampa 
+talbion/\
+kevinh/\"Kevin 'Kev' Hughes" 
+vrsiler/\"Siler, Vernon R." 
+webmaster/\Jared 
+dave/\Dave Llopis 
+marcs/\Marc Slemko 
+kjamieson/\Keith Jamieson 
+jake/\
+wildfire/\Anand Kumria 
+graham/\Graham Bignell 
+taob/\Brian Tao 
+terrym/\
+valgy/\Valgamon 
+ikluft/\Ian Kluft 
+ler/\Larry Rosenman 
+james/\"James W. Truher" 
+bmorris/\
+maruzz/\Giovanni Maruzzelli 
+Jr.)/\cloos@jhcloos.com (James H. Cloos
+a.wilson/\Andrew Wilson 
+paulp/\Paul Phillips 
+kent/\Kent Landfield 
+cmason/\Chris Mason 
+ambarish/\Ambarish Malpani 
+seiferth/\Justin Seiferth 
+garyw/\Gary Wisniewski 
+mikhelz/\Terry Mikhelzon 
+anita/\Anita Holmgren)
+
+Gurinder.Johar/\Gurinder Johar 
+webadm/\WWW server manager 
+coar/\Rodent of Unusual Size)
+
+mikes/\Michael Smith 
+stanleyg/\Stanley Gambarin 
+George_Carrette/\George Carrette 
+brian/\Ian Kluft <ikluft@cisco.com> (by way of Brian Behlendorf 
+sean/\Sean McDermott 
+Lars.Eilebrecht/\"Lars Eilebrecht" 
+ingo/\"Ingo L�tkebohle" 
+sysldl/\"Lou D. Langholtz" 
+brian/\Brian Behlendorf 
+ldl/\"Lou D. Langholtz" 
+Sambo/\Sam Rasins 
+parker/\Michael Parker 
+pieter.nagel/\Pieter Nagel 
+fielding/\"Roy T. Fielding" 
+jcox/\Jayme Cox 
+ache/\Andrey Chernov
+vkhare/\Vikram Khare 
+srobb/\Sam Robb 
+mak/\Martijn Koster 
+gander/\"Gerald D. Anderson" 
+rotenberg/\Marc Rotenberg 
+nate/\Nate Kurz)
+
+philipp/\"Philip A. Prindeville" 
+davidb/\David Birnbaum 
+mikeba/\"Mike Barnosky" 
+eesselin/\"Eric Esselink" 
+FBorg/\Francois Beauregard 
+allison/\"Tyler J. Allison" 
+nate/\Nate Kurz)
+
+Pierre-Yves.Kerembellec/\Pierre-Yves Kerembellec 
+rse/\Ralf S. Engelschall)
+
+crandall/\Charles Randall 
+peterd/\Peter Davis)
+
+obrien/\"John R. O'Brien" 
+chris/\Chris Tacy 
+venters/\Jeff Venters)
+
+liz/\Elizabeth Mattijsen 
+dgregg/\"David W. Gregg" 
+mark/\"Mark A. Imbriaco" 
+amarkel/\Arieh Markel)
+
+sborrill/\Stephen Borrill 
+isyoo/\Yoo In_Seon)
+
+sambo/\Sam Rasins 
+damian/\Christof Damian 
+jmorris/\James Morris 
+Mike.Barcroft/\"Mike Barcroft" 
+Steven.Kaufman/\"Kaufman, Steven E" 
+Lars.Eilebrecht/\Lars Eilebrecht 
+mc0982/\Marco PINNA 
+sam/\Samuel Tardieu 
+manojk/\Manoj Kasichainula 
+wsanchez/\Fred Sanchez 
+brianh/\"Brian Havard" 
+garey/\"Garey Smiley" 
+dfogarty/\"Daniel E. Fogarty" 
+pcs/\Paul Sutton 
+dda/\"David D'Antonio" 
+seifertj/\Maj Justin Seiferth 
+rrognlie/\Richard Rognlie 
+rrognlie/\Richard Rognlie 
+joachim/\Joachim Vance)
+
+randy/\"Randy Terbush" 
+rasmus/\Rasmus Lerdorf 
+mjs/\"Michael Smith" 
+bhyde/\Ben Hyde)
+
+bhyde/\Ben Hyde 
+david.taylor/\"David G Taylor" 
+blong/\Brandon Long 
+lars/\"Lars Eilebrecht" 
+dima/\Dmitry Khrustalev 
+dima/\Dmitry Khrustalev 
+bhyde/\Ben Hyde 
+deng/\Deng Jing 
+mark/\Mark Cox 
+COAR/\Rodent of Unusual Size)
+
+dirkx/\"Dirk-Willem van Gulik <dirkx@freebsd.jrc.it>" 
+lundberg/\Gregory A Lundberg 
+roy/\Jonathan Roy 
+mag/\Marius Groeger 
+swaldron/\Stuart Waldron 
+paul/\Paul Sutton 
+tatarino/\Igor Tatarinov 
+liz/\Elizabeth Mattijsen 
+frank/\"Frank J. Faubert Jr." 
+paul/\Paul Sutton 
+akosut/\Alexei Kosut 
+carlos/\carlos 
+Philippe.Locatelli/\Philippe Locatelli 
+james/\James Dornan 
+shane/\"Shane Caraveo" 
+hanson/\Andrew Hanson 
+dda/\
+jsd/\Random Junk 
+Ken.Coar/\Rodent of Unusual Size 
+hari/\Hariharan 
+George_Carrette/\
+rakesh/\rakesh saha 
+ingo/\Ingo Luetkebohle 
+jeremie/\Jeremie Miller 
+tony/\Tony Wells 
+mcox/\Mark J Cox 
+Daniel.Veillard/\
+brian/\Brian Atkins 
+dougm/\Doug MacEachern 
+aland/\Alan DeKok 
+frystyk/\Henrik Frystyk Nielsen 
+alvaro-httpd/\Alvaro Martinez Echevarria 
+smilie/\Anthony Rumble 
+ingo/\Ingo Luetkebohle 
+veillard/\Daniel Veillard 
+apache/\
+kevinh/\Kevin Hughes 
+solar/\Solar Designer 
+rono/\"Ron O'Hara" 
+dirk.vangulik/\Dirk-Willem van Gulik 
+mka/\Michael Anderson 
+David.Cure/\David Cure 
+mat/\Mathieu Guillaume 
+dwd/\
+a2790289/\Stipe Tolj 
+paul/\Paul Sutton 
+pbrophy/\"Paul Brophy" 
+dirkx/\"Dirk-Willem van Gulik\(mda00\)" 
+chris/\chris tacy)
+
+ridruejo/\Daniel Lopez Ridruejo 
+gafton/\Cristian Gafton 
+clkao/\Chia-liang Kao 
+alvaro/\Alvaro Martinez Echevarria 
+clkao/\Chia-liang Kao 
+Ronald.Tschalaer/\Life is hard... and then you die.)
+
+chet/\Chet Murthy 
+kaan/\Attila Kaan Salci 
+randy/\Randy Terbush 
+fleck/\Markus Fleck 
+asmodai/\Jeroen Ruigrok 
+dda/\"David D'Antonio" 
+priebe/\"Jason S. Priebe" 
+stefan.arentz/\Stefan Arentz 
+root/\System Owner)
+
+moenich/\Joe Moenich 
+ix/\Brian Moseley 
+agulbra/\Arnt Gulbrandsen 
+jamesholmes/\James Holmes 
+mersault/\Bret McGuire 
+eldad/\Eldad 
+ian/\Ian Kallen 
+mikedoug/\Michael Douglass 
+rse/\"Ralf S. Engelschall" 
+webmaster/\Dima Dorfman 
+andyf/\Andy Finkenstadt 
+wsanchez/\Wilfredo Sanchez 
+mdpc/\"M. D. Parker" 
+kahuna/\Andrew Finkenstadt 
+jum/\Jens-Uwe Mager 
+stemm/\Mark Stemm 
+wtc/\Wan-Teh Chang)
+
+mbelshe/\Mike Belshe)
+
+snyland/\snyland@workfire.com)
+
+brian/\
+aland/\
+ivan/\Ivan Richwalski 
+doug/\Doug Luce 
+andyf/\"Andrew Finkenstadt" 
+dcouch/\Dale Couch 
+wtc/\Wan-Teh Chang 
+jconsidi/\Jeffrey Considine 
+jason/\"Jason A. Dour" 
+withers/\John Withers 
+mitja/\Mitja Sharp 
+wgstodda/\Bill Stoddard 
+coar/\Rodent of Unusual Size)
+
+doug/\Doug Luce 
+soderman/\Magnus S 
+byeger/\Boaz Yeger 
+ldl/\Lou Langholtz 
+ldl/\Lou Langholtz 
+clkao/\Chia-liang Kao 
+martin/\Martin Kraemer 
+bpaul/\Baino Paul 
+mtr/\Markku Rossi 
+reddrum/\Bill Stoddard 
+sxw/\Simon Wilkinson 
+ronald/\"Life is hard, and then you die" 
+apache/\"Kristian K. Nielsen" 
+Jim_Rapoza/\Jim Rapoza 
+singlyd/\Singly Bertrand de 
+S.J.Hogeveen/\Sake Hogeveen 
+jont/\Jon Teichrow)
+
+jaearick/\"Jeff A. Earickson" 
+bhyde/\
+johnie/\Johnie Ingram 
+asharp/\Andy Sharp 
+ianosh/\"Pierpaolo Fumagalli" 
+jamesholmes/\
+drow/\Dan Jacobowitz 
+mjd/\Mark-Jason Dominus 
+josh/\josh rotenberg 
+jum/\Jens-Uwe Mager)
+
+dougm/\Doug MacEachern 
+brian/\Brian Behlendorf 
+christian/\"Christian Allen" 
+dan/\Dan Haskovec 
+taob/\Brian Tao 
+Dan_Kearns-LDK001/\Dan Kearns-LDK001 
+wesf/\"Wesley Felter" 
+marcs/\Marc Slemko 
+magnus/\Magnus Bodin 
+magnus/\Magnus Bodin 
+gorgo/\Gergely Madarasz 
+adelton/\Honza Pazdziora 
+jg/\Jim Gettys)
+
+ask/\Ask Bjoern Hansen 
+g.mcaleese/\Gareth McAleese 
+manojk/\Manoj Kasichainula 
+ses/\ses 
+gjehoward/\Geoff Howard 
+greg/\"Greg Ross" 
+dan/\"Daniel J. Cody" 
+bs/\"Singly Bertrand de \(X1995\)" 
+lars/\Lars Eilebrecht 
+rv33100/\"Voglmaier, Reinhard Erich" 
+david/\David Southwell 
+jredrado/\"Jesus Redrado" 
+hal/\Hal Snyder 
+stoddard/\"Bill Stoddard" 
+petrovsk/\Michele Petrovsky 
+dmo/\"Dave O'Neill" 
+ed/\Ed Korthof 
+lawrie/\"Lawrie Scovell" 
+MROSTRON/\"Mark Rostron" 
+slive/\Joshua Slive 
+johnie/\Johnie Ingram 
+alaric/\Mystic Zen Biker Twigboy 
+ses/\Simon Spero 
+tony/\Tony Wells 
+stevek/\Steve Kann 
+david/\David Goeke 
+martin.kraemer/\Martin Kraemer 
+shaneo/\Shane Owenby 
+Martin.Kraemer/\Martin Kraemer 
+doug/\
+coar/\Rodent of Unusual Size 
+emerson/\Steve Emerson 
+phate1/\"Mike S." 
+scott/\"Scott Rowe" 
+buczek/\Donald Buczek 
+ed/\Ed Korthof 
+dcarson/\Dana Carson 
+shahriar/\Hamid Reza Shahriari 
+Daniel.Veillard/\Daniel Veillard 
+tvaughan/\Tom Vaughan 
+pedward/\
+ph/\Philipp Hoschka 
+Philipp.Hoschka/\Philipp Hoschka 
+blabes/\Doug Bloebaum 
+kparz/\"Ken Parzygnat" 
+bourbon/\Zeev Suraski 
+nitinv/\"nitin" 
+Janos.Farkas-lists+priv-#OUsI0bJx2zG*-apache-dev/\Janos Farkas 
+sit/\"Mike" 
+wojtowij/\John Wojtowicz 
+mccreedy/\"David McCreedy/Denver/IBM" 
+chris/\Chris Wedgwood 
+amd0978/\Adam M Donahue 
+joy/\Konstantin Chuguev 
+sklar/\David Sklar 
+srobb/\
+eric/\"Eric Prud'hommeaux" 
+suprag/\Supra Genius 
+paula/\Paula Zaporojescu 
+dwightk/\"Dwight Krossa \(Exchange\)" 
+mda/\"Mark D. Anderson" 
+p.fumagalli/\Pierpaolo Fumagalli 
+gstein/\"Greg Stein" 
+jmbarry/\James Barry 
+apache-devel/\"Khimenko Victor" 
+AAGRAWAL/\"Alok Agrawal" 
+aagrawal/\Alok 
+sdybiec/\Scott Dybiec 
+kesim-apache/\Oezguer Kesim 
+shea/\Gary Shea 
+webmaster/\"Bill Jones, FCCJ Webmaster" 
+bill/\"Bill Jones" 
+dot/\'Tony Finch' 
+cg/\"gang cao" 
+yogesh/\Yogesh Patil 
+Matthias.Hopf/\Matthias Hopf 
+kesim/\Oezguer Kesim 
+ssb/\Stig Bakken 
+chet/\
+aidan/\Aidan Cully 
+jrw/\
+Joseph/\Joseph Bridgewater)
+
+paula/\Paul Ausbeck 
+TOKILEY/\
+Apaci1/\
+mvoase/\"Michael H. Voase" 
+stone/\Webmaster+BOfH 
+Koen.Holtman/\Koen Holtman 
+clmsys/\Chris Mason 
+grisha/\
+robs/\"RobS" 
+coelho/\Fabien COELHO 
+aarong/\Aaron 
+Joseph/\Joseph 
+coelho/\Fabien COELHO)
+
+mbp/\Martin Pool 
+marmor/\Eli Marmor 
+jcmichot/\Jean-Claude MICHOT 
+deacon/\Philip Deacon 
+koen/\Koen Holtman)
+
+shane/\
+joshco/\Josh Cohen 
+chaz/\"Charles Sliger" 
+jason.thomson/\Jason Thomson 
+shaneo/\
+magnus/\
+iain/\"Iain Brown" 
+shane/\Shane Owenby 
+cooke/\Kevin Cooke 
+itojun/\Jun-ichiro itojun Hagino 
+J.Gao/\Jie Gao 
+itojun/\Jun-ichiro itojun Hagino 
+henrik/\"Henrik Schmiediche" 
+dwightk/\Dwight Krossa 
+mdewjone/\Malcolm Dew-Jones 
+cholet/\"Eric Cholet" 
+beckett/\
+PEDietz/\"Dietz, Phil E." 
+colsen/\Carl Olsen 
+Cranstone1/\
+brian/\Brian Behlendorf 
+rbb/\Ryan Bloom 
+vjanelle/\Vincent Janelle 
+renaud/\Renaud Bruyeron 
+eta/\"Eric Anderson" 
+davidw/\"David N. Welton" 
+ake/\Allan Edwards 
+mill/\Olof Oberg 
+terdudio/\tser 
+radio_1/\Chris Ewert 
+jbb6/\John Bley 
+reliant/\
+dirkx/\Dirk-Willem van Gulik 
+Brian/\Brian Lloyd 
+lars/\Lars Eilebrecht 
+abb37/\"David Reid" 
+rasmus/\Rasmus Lerdorf 
+XNOVAKJ3/\Novak Jiri 
+treilly/\
+Alan_Poindexter/\"Poindexter, Alan" 
+saegesser/\"Marc A. Saegesser" 
+David.DAntonio/\"David D'Antonio" 
+bazavan/\"Valentin Bazavan" 
+bradfitz/\Brad Fitzpatrick 
+jim/\Jim Jagielski 
+stone/\Magnus Stenman 
+fanf/\Tony Finch 
+martin/\Martin Kraemer 
+Lars.Eilebrecht/\Lars Eilebrecht 
+spreitze/\"Mike Spreitzer" 
+costin/\Costin Manolache 
+yanfeng-zhang/\"Yanfeng Zhang" 
+bsc/\Brian Schau 
+dharris/\"David Harris" 
+fdc/\Frank D. Cringle)
+
+david.whitmarsh/\David Whitmarsh)
+
+dima/\Dmitry Khrustalev 
+wannamak/\
+peter/\"Peter 'Luna' Altberg" 
+srfrog/\SrfRoG 
+tvaughan/\
+info/\Eserio 
+sct/\"Stephen C. Tweedie" 
+marty+apache/\Marty Bower 
+krw/\"Keith Wannamaker" 
+christof/\Christof Damian 
+pwilt/\"Wilt, Paul" 
+treilly/\"Thomas Reilly" 
+vince/\Vince Bonfanti 
+carlos/\Carlos Vazquez 
+ryan/\Ryan Mooney 
+unknown/\Tani Hosokawa 
+dougm/\Doug MacEachern 
+sopel/\Wojtek 
+js/\Jacob Schroeder 
+dcody/\"Daniel J. Cody" 
+graham.leggett/\Graham Leggett 
+peter.altberg/\"Peter Altberg \(ECA\)" 
+p_fumagalli/\Pierpaolo Fumagalli 
+ridruejo/\
+moenich/\
+rederpj/\"Paul J. Reder" 
+michel.debar/\Michel Debar 
+nsonawane/\Nitin Sonawane 
+minfrin/\"Graham Leggett" 
+sthoenna/\Yitzchak Scott-Thoennes)
+
+mccreedy/\
+costin/\
+rsbx/\Raymond S Brand 
+sog/\Salvador Ortiz Garcia 
+ask/\Ask Bjoern Hansen 
+dank/\Dan Kegel 
+parkerm/\Michael Parker 
+mark/\Mark Mills 
+liste/\Philip Gwyn 
+rms/\Richard Stallman 
+vivek/\Vivek Sadananda Pai 
+chris/\Chris Costello 
+papageorgio/\papageorgio 
+andrew.day/\Andrew Gilfrid Day 
+bdubbert/\bdubbert 
+mka/\Michael Anderson 
+achim/\Achim Bangert 
+ju/\Juergen Schmidt 
+provos/\Niels Provos 
+stas/\Stanislaw 
+tolj/\Stipe Tolj 
+emarshal/\"Edward S. Marshall" 
+yerkan/\Yagiz ERKAN 
+joshr/\Joshua Rabinowitz 
+A.Champion/\Alan Champion 
+makler/\Piotr Klaban 
+joshco/\"Josh Cohen \(Exchange\)" 
+cdamian/\Christof Damian 
+jeo101/\Joe Orton 
+wannamak/\Keith Wannamaker 
+rgooch/\Richard Gooch 
+drepper/\Ulrich Drepper 
+scott/\Scott Hess 
+jens/\Jens Hjalmarsson 
+rasmus/\Rasmus Lerdorf 
+hac/\Pavel Yakovlev 
+mathijs/\Mathijs Maassen 
+Chris.Schmechel/\Chris Schmechel 
+itojun/\
+pier/\"Pier P. Fumagalli" 
+zab/\Zach Brown 
+ccsanady/\Chris Csanady 
+zeev/\Zeev Suraski 
+Peter.Galbavy/\Peter Galbavy 
+jnix/\Jean-Luc Rochat 
+mikeee/\Mikael Vidstedt 
+michaelm/\"Michael McCaffery" 
+fabien/\Fabien COELHO 
+duredhel/\Laurent Sinitambirivoutin 
+spidaman/\Spidaman The Defenestrator 
+mfw/\Mitch Wyle 
+eugene/\Eugene Lee 
+mja/\Mike Abbott)
+
+minfrin/\Graham Leggett 
+tve/\Thorsten von Eicken 
+jayaram/\Jayaram A 
+mdsherer/\Matt Sherer 
+thornton/\
+JONESD/\Dave Jones 
+mreimer/\Matthew Reimer 
+lundberg+apache/\Gregory A Lundberg 
+dovid/\"Dovid Zirkind" 
+peterw/\Peter Windle 
+dilip_khandekar/\Dilip Khandekar 
+aris/\Aris Stathakis 
+joe/\Joe Orton 
+jimw/\Jim Winstead 
+Benjamin.Ritcey/\"Ritcey, Benjamin" 
+dsngrle/\Graham Leggett 
+jbp/\Jay B Parker 
+jwb/\
+tv/\Tom Vogt 
+gregm/\"Greg Marr" 
+pandr/\Peter Andreasen 
+McCreedy/\David McCreedy 
+paul.wilt/\"Wilt, Paul" 
+dneuer/\"Dave Neuer" 
+jordy/\Jordan Mendelson 
+michael.ottati/\"Ottati, Michael" 
+iant/\"Turner, Ian (iant)" 
+raghu/\Raghuram Kudaravalli 
+rfi/\
+calt/\"Christian ALT" 
+jmchale/\
+kovalenk/\Igor Kovalenko 
+jayaram/\Jayaram A 
+mthed/\Joshua Sarro 
+Cranstone/\"Peter J. Cranstone" 
+aspa/\Marko Asplund 
+abrown/\"Albert Brown" 
+archiver/\"Andrew Julian" 
+willer/\Steve Willer 
+apache/\Ragnar Kjørstad  
+sander/\Sander van Zoest 
+Tim.Costello/\
+cag/\
+ap/\
+rasmus/\Rasmus Lerdorf 
+rbb/\Ryan Bloom 
+saeedt/\
+brian/\Brian Behlendorf 
+Doug/\Doug 
+fielding/\
+lundberg+apache.d/\Gregory A Lundberg 
+anand/\Anand Ranganathan 
+mark_bixby/\"BIXBY,MARK \(HP-Cupertino,ex1\)" 
+marcusb/\Marcus Butler 
+syam/\Gudipudi Radhesyam 
+kuzela/\Martin Kuzela 
+hcphenry/\Henry Caballero 
+lord/\Vadim Zaliva 
+costin/\Costin Manolache 
+david.whitmarsh/\David Whitmarsh 
+guille/\"Guille \(Bisho\)" 
+sklar/\David Sklar)
+
+peterw/\Peter W 
+mgardiner/\"Mike Gardiner" 
+bunch/\Benoit GARNIER 
+brian/\Brian Behlendorf 
+R.Kraaij/\"Kraaij, Reinder " 
+MGARDINER/\"Mike Gardiner" 
+manoj/\Manoj Kasichainula 
+KEIJSERJJ/\"Keijser, Jan Just" 
+wil/\Wil Harris 
+dilip/\Dilip Khandekar 
+os/\WOL - Odinn Sorensen)
+
+sascha/\Sascha Schumann 
+pratik.patel/\Pratik Patel 
+duncan/\"James Davidson" 
+james.todd/\James Todd 
+stefano/\Stefano Mazzocchi 
+hauk/\Jan-Henrik Haukeland 
+jwb/\Jeffrey Baker 
+rowe/\
+jeff/\Jeff Johnson)
+
+hvendelbo/\"Henrik Vendelbo" 
+ehr/\Eric Robibaro 
+srfrog/\
+ragnar/\Ragnar Kurm 
+gregames/\"Gregory Ames" 
+keller/\Ted Keller 
+ed/\Ed Korthof 
+vsolve_apache/\vsolve apache 
+jbley/\John Bley 
+zedlwski/\John Zedlewski 
+burton/\burtonator 
+apache/\Ian Holsman 
+dwilli/\"David Williams" 
+gmaxwell/\Greg Maxwell 
+jeff/\Jeff Johnson 
+vinod.mehra/\Vinod Mehra)
+
+jeremy/\Jeremy Hansen 
+mhall/\Michael Hall 
+steve.misel/\Stephen Andrew Misel 
+tph/\Tom Harrington 
+oviesb/\Ovies Brabson 
+pg/\
+bisho/\Guille -bisho- 
+saeedt/\Sam Talebbeik 
+awm/\Aram Mirzadeh 
+dumas/\Eric Dumas 
+minde/\"Mindaugas Riauba" 
+rasmus/\
+mark_bixby/\"BIXBY,MARK (HP-Cupertino,ex1)" 
+gary/\"Gary Carroll" 
+vjanelle/\"Vincent Janelle" 
+cairnsc/\Cade Cairns 
+brianwilliams/\
+arni/\"Arni Raghu" 
+kholtman/\Koen Holtman 
+rasmus/\
+mbixby/\Mark Bixby 
+rbb/\
+eugene/\Eugene Lee 
+martin/\Martin Kraemer 
+greg/\"Gregory P. Smith" 
+dreid/\David Reid 
+pg/\Paul Gilmartin 
+jwoolley/\"Cliff Woolley" 
+rasmus/\
+jbailey/\Jeff Bailey 
+slangenj/\Jerome Slangen 
+doug/\Doug Luce 
+lod/\"David Tulloh" 
+daniel.padwa/\"Padwa, Daniel" 
+JWOOLLEY/\"Cliff Woolley" 
+harrie/\Harrie Hazewinkel 
+ramos/\"Hugo Ramos" 
+mge/\"Matthias G. Eckermann" 
+rmorgan/\Ryan Morgan 
+sean/\Sean 
+mikeg/\"Mike Gray" 
+gregames/\
+chip/\Chip Turner 
+costin/\
+roger/\Roger McCalman 
+mbp/\Martin Pool 
+byerly/\Bryan Byerly 
+8642643383279502884/\"ywei" 
+daleg/\Dale Ghent 
+DLange/\Daniel Lange 
+benson/\Benson Margulies 
+dz/\"Dovid Zirkind" 
+gregames/\greg 
+huggie/\Simon Huggins 
+hawk/\Hawk 
+jread/\Justin Wells 
+tim/\"Tim O'Reilly" 
+brent/\Brent Holland 
+trawick/\"Jeff Trawick \(httpd\)" 
+Anil.Vijendran/\"Anil K. Vijendran" 
+wrowe/\"William A. Rowe, Jr." 
+ghallmar/\"Gary Hallmark" 
+jwbaker/\"Jeffrey W. Baker" 
+gstrock/\greg strockbine 
+sander-new-httpd/\Sander van Zoest 
+jas88/\"J.A. Sutherland" 
+pstepp/\"Patrick Stepp" 
+peter+new-httpd/\"Peter 'Luna' Runestig" 
+ylafon/\Yves Lafon 
+mbp/\Martin Pool 
+blue/\Blue 
+dean/\dean gaudet 
+Anupam.Shekhawat/\"Shekhawat, Anupam" 
+jc/\jim cox 
+Lee.Tibbert/\Lee Tibbert 
+akosut/\Alexei Kosut 
+clkao/\Chia-liang Kao 
+keithmur/\"Keith G. Murphy" 
+trawick/\
+jmejia/\
+jim/\Jim Winstead 
+lownokc/\PuPpEt 
+kenneth.reeves/\"Kenneth Reeves" 
+stoddard/\Bill Stoddard 
+lod/\David Tulloh 
+bryan_2000_95131/\bryan 
+willem.vanpelt/\
+jeremy/\Jeremy Devenport 
+dgaudet-list-new-httpd/\dean gaudet 
+scott/\Scott Hess 
+dgaudet-list-linux-kernel/\Dean Gaudet 
+chuck.murcko/\Chuck Murcko at work 
+hugo/\Hugo Haas 
+est/\
+swaldron/\
+abraund/\"Andrew Braund" 
+Curt.Sampson/\Curt Sampson 
+simo/\
+craig/\Craig Sebenik 
+carlos/\Marcin Orlowski 
+rbowen/\"Rich Bowen" 
+jgsmith/\James G Smith 
+JGSmith/\James G Smith 
+jmilan/\John Milan 
+gozer/\"Philippe M. Chiasson" 
+brian/\"Brian Moon" 
+evan715/\Evan Klinger 
+jlt/\jl
+trawickj/\Red Hat Linux User 
+mark/\
+brianm/\"Brian Moon" 
+paul/\Paul Richards 
+jlwpc1/\"Jeff White" 
+david/\David Reid 
+burton/\"Kevin A. Burton" 
+JGSmith/\James G Smith 
+mbp/\Martin Pool 
+darmnik/\Nikolaos Ntarmos 
+gstein/\Greg Stein 
+jtravis/\Jon Travis 
+reddrum/\"Bill Stoddard" 
+siae0080/\Iniaki Fernandez Villanueva  
+jtravis/\
+bmartin/\
+dredd/\"Derek J. Balling" 
+jstuart/\"Jeff Stuart" 
+dougm/\Doug MacEachern 
+pikei/\"Joon H. Park" 
+ivolynet/\Ilya Volynets 
+Scott.Lepage/\"Lepage, Scott" 
+andre_beaud/\"Andre Beaud" 
+spjovita/\Stanis  Jovita Pancras 
+Tim.Costello/\
+tolj/\Stipe Tolj 
+Costin.Manolache/\Costin Manolache 
+rbb/\
+sam/\Sam Tregar 
+btarver/\Brad Tarver 
+rasmus/\Rasmus Lerdorf 
+fanf/\Tony Finch 
+yanni/\yanni 
+timcostello/\"Tim Costello" 
+smagnuson/\Sam Magnuson 
+costin/\Costin Manolache 
+mgaida/\Michael Gaida 
+espel/\Roger Espel Llima 
+alan/\Alan Olsen 
+kov/\Weber Sylvia 
+vizion/\"Southwell" 
+shane/\
+manoj/\Manoj Kasichainula 
+shane-fltk/\
+marco.kleefman/\Marco Kleefman 
+hramos/\"Hugo Ramos" 
+vmehra/\Vinod Mehra 
+kmills/\"Kevin Mills" 
+richter/\"Gerald Richter" 
+kenji/\Kenji Miyake 
+dirkx/\Dirk-Willem van Gulik 
+liz/\Elizabeth Mattijsen 
+oles/\octave klaba 
+andrew_g_hanson/\"Andy Hanson" 
+lpassey/\"Lee Passey" 
+vbrasseur/\valery brasseur 
+pedward/\Perry Harrington 
+cizaire_liste/\cizaire_liste 
+Rommel/\"Kai-Uwe Rommel" 
+sam/\Sam Xie 
+panos/\"Panagiotis 'Panos' Kougiouris \(Personal\)" 
+lwiltban/\Lee R. Wiltbank)
+
+romain.berrendonner/\
+jbarrett/\"John Barrett" 
+ljubas/\Aleksandar Ljubojevic 
+acurro/\Alberto Curro  
+Teemu.Vesala/\Teemu Vesala 
+JoshNarins/\
+scott/\"Scott Sanders" 
+bjl2000/\bjl 
+kevin/\Kevin van Blerk 
+abraund_news/\"Andrew Braund" 
+dsr/\"Daniel S. Reichenbach" 
+edumas/\Eric Dumas 
+vjo/\"Victor J. Orlikowski" 
+yi_zhou/\"choudes" 
+Alastair.McDermott/\"McDermott, Alastair" 
+tylerjbrooks/\"Tyler J. Brooks" 
+gnicholls/\Gregory Nicholls 
+DavidABryan/\
+vjo/\"Victor J. Orlikowski" 
+trawick/\"Jeff Trawick \(httpd\)" 
+hollywar/\JunSeon Oh 
+GLEdwards/\Glen Lee Edwards 
+charles/\"Charles Cutler" 
+coopercc/\"Coopercc" 
+mads/\Mads Toftum 
+urgenc/\Ozgur Urgenc 
+feyrer/\Hubert Feyrer 
+jros/\"Jordi Ros" 
+johntomp/\
+PowellJF/\"Powell, Jim (EER)" 
+mingo/\Molnar Ingo)
+
+fielding/\"Fielding, Roy" 
+Keith/\"Keith Wannamaker" 
+dirkers/\
+v.j.orlikowski/\"Victor J. Orlikowski" 
+ddhill/\Dave Hill 
+jlwpc1/\"jlwpc1" 
+rchapach/\
+DKrizic/\Darko Krizic 
+ddhill/\Dave Hill  
+larryl/\Larry Leszczynski 
+jeff/\Jeff Trout 
+jwb/\Jeff Baker 
+shaun/\Shaun Savage 
+mlh/\
+perlinux/\Jet Li 
+dougm/\
+paul/\Paul Saab 
+bright/\Alfred Perlstein 
+pmarquis/\Paul Marquis 
+odie/\Osmo Paananen 
+erikm/\Erik Meyer 
+brad/\Brad 
+roques/\Christian von Roques 
+sander/\Sander van Zoest 
+harrie/\Harrie Hazewinkel 
+haosun/\Hao Sun 
+panther/\panther 
+smc/\Steven M Cherry 
+hanai/\Hiroyuki - SPIKY - Hanai 
+delgarde/\Simon Geard 
+kuriyama/\Jun Kuriyama 
+mhaines/\"Mike Haines" 
+mikeost/\Mike Ostenberg 
+austin/\Austin Gonyou 
+sistem4/\"Sistem4" 
+mailing/\Christian Gross 
+Paul.Hooper/\Paul Hooper 
+ask/\Ask Bjoern Hansen 
+wrowe/\"William A. Rowe, Jr." 
+sterling/\"sterling@covalent.net" 
+abdulrahman/\"Abdul Rahman" 
+webcool100/\Anthony Gabriel 
+bishopc/\Bishop 
+yw/\"ye, wei" 
+dcowart/\Donald Cowart 
+Mark.Nelson/\Mark Nelson 
+lynn/\Lynn Winebarger 
+Gaitan.Dantoni/\"D'Antoni, Gaitan" 
+Jonathan.Bates/\"Bates, Jonathan" 
+jahluwal/\"Jaswinder S. Ahluwalia" 
+BNICHOLES/\"Brad Nicholes" 
+gunnar.ahlberg/\Gunnar Ahlberg 
+bishop/\bishop 
+lee/\Lee Passey 
+jstuart-apache/\"Jeff Stuart" 
+daniel/\Dan Sully 
+joe/\Joe Orton 
+jorton/\Joe Orton 
+AngusM/\Angus Marshall 
+olivier.cahagne/\"Olivier Cahagne" 
+houstobc/\"Ben C. Houston" 
+wmperry/\William M. Perry)
+
+mlong/\
+fielding/\"Roy T. Fielding" 
+gregames/\Greg Ames 
+spstarr/\Shawn Starr 
+karimlakhani/\Karim Lakhani 
+mlong/\Michael Long 
+thomas/\Thomas Wouters 
+gordon/\Gordon Henriksen 
+dmcmahon/\Doug McMahon 
+cliffwoolley/\Cliff Woolley 
+kfogel/\Karl Fogel 
+matt/\Matthew Braithwaite 
+wrowe/\"William A. Rowe, Jr." 
+fielding/\
+tolj/\Stipe Tolj 
+subhomoy/\"subhomoy dass" 
+koen/\Koen Holtman 
+Martin.Kraemer/\Martin Kraemer 
+dean/\"Thomas R. Dean" 
+Martin.Kraemer/\"Martin.Kraemer" 
+designrw/\Roy Wilson 
+monte/\Monte Ohrt 
+ahosey/\Galvanick Lucipher 
+tobias.strasser/\"Tobias Strasser" 
+pepper/\Chris Pepper 
+bill/\Bill Stoddard 
+Alexandra_Mirman/\"Mirman, Alexandra" 
+prachi/\"Prachi N. Thakar" 
+jonsmirl/\"Jon Smirl" 
+blue/\blue lang 
+mcasile/\"Michael Casile" 
+Kai-Uwe.Rommel/\"Kai-Uwe Rommel" 
+mikehaines/\"Mike Haines" 
+autarch/\Dave Rolsky 
+wrowe/\"William A. Rowe, Jr." 
+eisen/\"Thomas Eisengarten" 
+usrgre/\"Jason Greene" 
+komplexbrigade/\"Thomas Eisengarten" 
+usrgre-php/\"Jason Greene" 
+brane/\Branko Čibej  
+Jim_Cardell/\"Cardell, Jim" 
+Frank.Schafer/\Frank Schafer 
+joes/\"Joe Smargie" 
+st/\Sergey Trofimov 
+charles4xxx/\Charles Peters 
+yfaktoro/\"Yury Faktorovich" 
+xavier.jeannin/\Xavier Jeannin 
+simos/\
+ake/\"Allan" 
+junji/\"Junji Yamaguchi" 
+dan/\"Daniel Quellhorst" 
+thornton/\Thornton Prime 
+ncaruso/\Nick Caruso 
+fwunderlich/\Florian Wunderlich 
+jesus/\"Theo E. Schlossnagle" 
+jstuart-apache/\Jeff Stuart 
+et/\Eric Tchepannou 
+jon/\Jon Scott Stevens 
+harrsch/\Don Harrsch)
+
+jesus/\Theo Schlossnagle 
+dushy/\"Dushyanth Harinath" 
+cranstone/\"Peter J. Cranstone" 
+GregS/\Greg Strange 
+maurizio/\"Maurizio" 
+jupu/\"jupu" 
+sanjay.gowda/\"Gowda, Sanjay" 
+minduim/\Carlos Eduardo de Andrade Brasileiro 
+rurban/\Reini Urban 
+JGSmith/\James G Smith 
+spidaman/\Ian Kallen 
+djm/\"David McMahon" 
+gyoung/\Geoffrey Young 
+jbkang/\" JONGBaek KANG [강종백] " 
+jiri.schindler/\"George Schindler" 
+sps/\Stephan Seyboth 
+cynic/\Cynic 
+cristiano.brighi/\"Cristiano" 
+f.valli/\Florian VALLI 
+new-httpd/\"Gomez Henri" 
+jum/\Julien Mabillard 
+ms/\michael salmon 
+cranstone/\"Peter J. Cranstone" 
+pmarquis/\Paul Marquis 
+horape/\
+sb/\Sebastian Bergmann 
+Bjoern.Brauel/\"Brauel, Bjoern" 
+Ken.Coar/\Rodent of Unusual Size 
+pmoore/\
+guille/\"Guille (Bisho)" 
+sulc/\Radek Sulc 
+justin/\"Justin C. Sherrill" 
+ben.peter/\Ben Peter 
+peter/\Peter Moore 
+jfrederic.clere/\jean-frederic clere 
+jfrederic.clere/\jean-frederic clere 
+nick/\Nick Kew 
+satan/\"Scott Sanders" 
+zak/\"Zak Greant" 
+cwatfi/\"A.U.S Carlos Watfi" 
+aorsini/\"Aldo Luis Orsini" 
+cab/\Christopher A Bongaarts 
+Cranstone/\"Peter J. Cranstone" 
+marmor/\Eli Marmor 
+Paul_Maguire/\Paul Maguire 
+jeanphil/\Jean-Philippe Bouchard 
+v-apache/\Vern Hart 
+apost/\Alan Post 
+greg/\Greg Cope 
+bmd/\Brian Degenhardt 
+algomez/\Angel Gomez 
+cschumann/\"Chris Schumann" 
+bisho/\Guille -bisho- 
+dcowart/\Donald Cowart 
+wsanchez/\Wilfredo Sanchez 
+cwlee/\"Lee Choon Wooi" 
+jerenkrantz/\"'Justin Erenkrantz '" 
+olivier.michiels/\Olivier Michiels 
+Martin.Kraemer/\Martin Kraemer 
+gozer/\"Philippe M \. Chiasson" 
+g.russell/\Gabriel Russell 
+gdlxn/\"Geoff Alexander" 
+mgleissn/\Michael Gleissner 
+daniel/\Daniel Stenberg 
+apache_dev/\"Dave Oxley" 
+new-httpd/\
+tom.bates/\
+andrew/\Andrew Ho 
+Christian.Couder/\Christian Couder 
+AdrianScharaf/\
+ftg/\Frank Griffin 
+rasmus/\Rasmus Lerdorf 
+gregames/\Greg Ames 
+theo/\"Theo E. Schlossnagle" 
+ask/\Ask Bjørn Hansen  
+edwardp/\Edward Peschko 
+guan/\Guan Yang 
+rogers/\matt 
+ams/\Abhijit Menon-Sen 
+dean-list-new-httpd/\dean gaudet 
+awm/\"Aram Mirzadeh" 
+jwoolley/\Cliff Woolley 
+rbb/\Ryan Bloom 
+forestc/\Forest Come-Peace 
+lars.oppermann/\Lars Oppermann 
+Arved_37/\Arved Sandstrom 
+tnguon/\Taing Nguon 
+suresh/\"suresh" 
+colin/\Colin Anderson 
+jd9812/\"Jonathan Day" 
+jmd/\"Jeremy M. Dolan" 
+jcw5q/\Cliff Woolley 
+gwingerde/\Gertjan van Wingerde 
+cliffwoolley/\
+bruce/\Bruce 
+thum97/\Irmund Thum 
+yoshiki/\Yoshiki Hayashi 
+clyras/\"Constantinos Lyras" 
+f.bonjour/\"Frederic Bonjour"
+IanHolsman/\Ian Holsman)
+hgomez/\Gomez Henri 
+admin/\"William A. Rowe, Jr." 
+johntomp/\"John Thompson" 
+joshua/\
+sim/\Simon Kirby 
+lvg65/\"Luis" 
+lkcl/\Luke Kenneth Casson Leighton 
+tomn/\Tom Nichols 
+jeroen/\Jeroen Massar 
+aparaak/\"aparaak" 
+root/\"Ryan Coulombe" 
+andrew/\Andrew Tulloch 
+prgrssor/\Stanislav Rost 
+wmperry/\"William M. Perry" 
+ava/\"Alexei V. Alexandrov" 
+ookhoi/\Ookhoi 
+andy/\Andy Gardner 
+ed/\
+priovolo/\Jim Priovolos 301-435-6137 
+cheekean/\"Lee Chee Kean" 
+arun/\"Arun Shrimali" 
+Barrie.Jarman/\Barrie Jarman 
+dnkumar/\Nalini Kumar Danda 
+sctemme/\Sander Temme 
+awm/\Aram Mirzadeh 
+rendhalver/\Peter Brown 
+deva/\Francis Daly 
+ml/\"alexus" 
+info.jelmar/\Jerker Bäck  
+keefeg/\"Gregory Keefe" 
+IanH/\Ian Holsman 
+solrac/\"Frank Carlos" 
+josep/\"Jose Arqued" 
+iedara/\"Edara, Indira" 
+Bennett.Tony/\"Bennett, Tony - CNF" 
+dave/\David Crooke 
+olcay54/\olcay ergun 
+jon/\Jon Niola 
+davidw/\David N. Welton)
+ritinmathur/\"Ritin" 
+simo/\"RCHAPACH Rochester" 
+marc.miller/\
+rchapach/\"RCHAPACH Rochester" 
+jordg/\Grahame Jordan 
+thiemo/\Thiemo Voigt 
+DaviesDougD/\Ian Davies 
+ianh/\"Ian Holsman" 
+Jacob.Rief/\"Rief, Jacob" 
+sean-apache-new-httpd/\Sean Chittenden 
+mccurry/\"Mike C" 
+mohan_gummalam/\"GUMMALAM,MOHAN (HP-Cupertino,ex2)" 
+skgupta/\
+dduvall/\Danek Duvall 
+kaeng/\Karsten Engelke 
+dt/\"Dido" 
+lists/\"William A. Rowe, Jr." 
+gdambrosio/\"Giuseppe D'Ambrosio" 
+barries/\Barrie Slaymaker 
+DanielS/\Daniel Stone 
+ChristianGross/\Christian Gross 
+edejanu/\"Emanuel Dejanu" 
+em/\"Enzo Michelangeli" 
+ydok/\
+dirkx/\Dirk-Willem van Gulik 
+stas/\Stas Bekman 
+penso/\Fabien Penso 
+chiu05us/\eric ng 
+dziegler/\"David Ziegler" 
+frank.schafer/\
+hroi/\Hroi Sigurdsson 
+Mark_DiBattista/\
+imran.badr/\"imran badr" 
+joberreu/\Jessie Oberreuter 
+alasry/\ITT INC. Montréal  
+jordan/\Jordan Hayes 
+kwindla/\Kwindla Hultman Kramer 
+pkjoshi/\
+mes/\Mark Sutton 
+LeydenJ/\"Leyden, Joseph" 
+nandini.sawant/\"Nandini Savant" 
+mes/\Mark Sutton 
+simpsonbrett/\"Brett Simpson" 
+ekobono/\"Eko Bono S" 
+admin/\System Administrator 
+abrouguiapache/\Raouf Abroufui 
+thomas/\Thomas Eibner 
+mladen.turk/\"Mladen Turk" 
+techzeus/\Zeus 
+jern/\Bob Jernigan 
+octavian/\Peter Friend 
+pjmorgan/\Phillip Morgan 
+jerrybaker/\Jerry Baker 
+erik/\Erik Barke 
+striker/\"Sander Striker" 
+Daniel.Veillard/\Daniel Veillard 
+dario/\"Dario" 
+slive/\"Joshua Slive" 
+apache/\
+svelez/\Steven Velez 
+harrie/\Harrie Hazewinkel 
+dkarpati/\"Danny Karpati" 
+drmccreedy/\"David McCreedy" 
+trawick/\Jeff Trawick 
+trawick/\Jeff Trawick 
+sapan/\"Sapan Bhatia" 
+Sapan.Bhatia/\
+mailgate/\"Henning P. Schmiedehausen" 
+aaron/\Aaron Bannert 
+bpane/\Brian Pane 
+david/\David Campbell 
+kristoffer.andsten/\"Kristoffer Andsten" 
+elixer/\"Sean R. Bright" 
+Paula_Stankus/\
+madhusudan_mathihalli/\"MATHIHALLI,MADHUSUDAN (HP-Cupertino,ex1)" 
+eytan/\"Eytan Heidingsfeld" 
+striker/\Sander Striker 
+plabee/\"Philip Labee" 
+shark/\"Greg Gimler" 
+daniel/\Daniel Stone 
+EitanB/\Eitan Ben Noach 
+bm/\"Bjoern Metzdorf" 
+johnmayorga/\"John E. Mayorga" 
+daniel/\Daniel Veillard 
+rhooper/\"Roy M. Hooper" 
+anders/\Anders Nordby 
+ccosta/\Carlos Costa Portela 
+gostl/\Jack Gostl 
+ravim22/\Ravi Mittal 
+RJENSEN/\"Rich Jensen Jr." 
+rivium/\"Rivium" 
+csherr/\Cody Sherr 
+dooleyr/\"Dooley, Ryan" 
+ben/\"Benjamin W. Ritcey" 
+john.buwa/\"John Buwa" 
+hfarag/\"Farag, Hany M (Hany)" 
+bojan/\Bojan Smojver 
+trawick/\Jeff Trawick 
+trawick/\Jeff Trawick 
+wmperry/\William M. Perry)
+
+rfox/\"Ryan Fox" 
+manimbul_dev/\Manimbul Simorangkir 
+julius_gawlas/\"GAWLAS,JULIUS (HP-Cupertino,ex1)" 
+satana/\"Satana" 
+MAILER-DAEMON/\Mail System Internal Data 
+novy/\Pavel Novy 
+chuck/\Chuck Pierce 
+bilal/\"bilal" 
+san/\san 
+amit_athavale/\"Amit Athavale" 
+dsandroy/\"Doron Sandroy" 
+eboyd/\Eric Boyd 
+sunithak/\Sunitha Kumar 
+pkapakos/\Peter Kapakos 
+shbhatna/\Shail Bhatnagar 
+craigmcc/\"Craig R. McClanahan" 
+david/\"David Wartell" 
+jiten/\Jiten Goel 
+bayleyp/\Paul Bayley 
+blyakh/\"Yulya Blyakh" 
+tarun/\"Tarun Upadhyay" 
+tarun/\"Tarun Upadhyay" 
+PMoore/\
+jeremie/\Jeremie 
+vinay/\"vinaay bansal" 
+tgenty/\Tony Genty 
+jsachs/\john sachs 
+harpo/\
+aaron/\"'Aaron Bannert'" 
+bluegreene1/\"fredric greene" 
+atif/\"Atif umar" 
+harpo/\Will Lowe 
+dentizen/\"kitty" 
+sterling/\Sterling Hughes 
+iank/\"Ian Kallen <iank@covalent.net>" 
+slive/\"Joshua Slive" 
+esadot/\Emek Sadot 
+health/\"Health@drpradhan.com" 
+pwilt/\"Wilt, Paul" 
+lenar/\Lenar Lohmus 
+jason/\"Jason Burns/DHD" 
+atur/\"Atur Shah" 
+j.alberti/\"Johannes Alberti" 
+bsingh/\"bsingh" 
+vipin.aravind/\"vipin aravind" 
+rederpj/\"Paul J. Reder" 
+joe/\Joe Orton 
+dougm/\
+thom/\Thom May 
+george/\George Schlossnagle 
+bert/\Bertrand 
+stinger/\"Chris Simmons" 
+gk/\Günter Knauf  
+kevinm/\"Kevin McCarty" 
+pch/\"Pablo Chepalich" 
+alex/\Alex Stewart 
+lists/\"Ian Holsman" 
+neuhauser/\Roman Neuhauser 
+millburn/\"William A. Rowe, Jr." 
+cranstone/\"Peter J. Cranstone" 
+radhikar/\Radhika R 
+tobias.kremer/\"Tobias Kremer :: IT" 
+pier/\Pier Fumagalli 
+shaun_smoot/\"Shaun Smoot" 
+uli/\"Ulrich Schneider" 
+hajek/\David Hajek 
+gbenson/\Gary Benson 
+margol/\"Issac Goldstand" 
+admin/\"Brandon Caudle" 
+dinoklein/\"dino klein" 
+grisha/\"Gregory (Grisha) Trubetskoy" 
+lars/\
+joshua.slive/\"Slive, Joshua" 
+sander/\Sander van Zoest 
+ask/\Ask Bjoern Hansen 
+pavel/\Pavel Zaitsev 
+randy/\"Randolf Richardson" 
+zethix/\zethix or something 
+ssamant/\"Shrinivas Samant" 
+dabad/\Daniel Abad 
+human-response/\Apache Software Foundation 
+mturk/\"Mladen Turk" 
+imorgan/\Ian Morgan 
+scott/\Scott Manley 
+ianh/\"Ian Holsman" 
+jpbox/\"J. Phul" 
+boulat/\boulat 
+zanelc/\"Christopher Zanelli/NYT/NYTIMES" 
+maly/\Mohamed Aly 
+rpn/\Rodrigo Parra Novo 
+madhu_dasu/\Madhu Dasu 
+josh/\"Josh Goldberg" 
+joaquin/\Joaquín Menchaca  
+darknerd/\Darth Darknerd 
+arun/\"Arun" 
+dmiller/\"Dwayne Miller" 
+ianh/\
+rl/\"Zvi Har'El" 
+jroque/\Jorge Roque 
+cmpilato/\
+eric.hubert/\"Eric Hubert" 
+vjo/\"Victor J. Orlikowski" 
+florian/\Florian George 
+martin/\Martin Kraemer 
+dwayne-miller/\Dwayne Miller 
+daniel/\daniel 
+Dick.Streefland/\Dick Streefland 
+rod/\"Rod Roark" 
+pmak/\Philip Mak 
+m_j_thomas/\"Michael" 
+dmblevins/\"David Blevins" 
+MPeterso/\"Mary Peterson" 
+windex/\"Justin C. Darby" 
+tom/\Tom Gilbert 
+awdhesh/\"awdhesh" 
+obaranes/\Ofer Baranes 
+tph/\Tom Harrington 
+doctor/\The Doctor 
+navin_dhanuka/\"Navin Dhanuka" 
+rnandode/\Rohan Nandode 
+Igor.Kovalenko/\Igor Kovalenko 
+Brian.Pane/\Brian Pane 
+brian.pane/\Brian Pane 
+feliciano.vc/\"Voltaire C. Feliciano" 
+jacek.prucia/\Jacek Prucia 
+rsbrand/\Raymond S Brand 
+kmallory/\"Kevin Mallory" 
+Joeymoses1/\
+httpd/\"httpd user" 
+jobarr/\"Jobarr" 
+ragent/\Liu Wen 
+kingofjava/\
+eric.hubert/\"Eric Hubert" 
+josb/\Jos Backus 
+Ckharidehal/\Chandramouli Kharidehal 
+A.Marshall/\Angus Marshall 
+cshobe/\Casey Allen Shobe 
+mszyman/\Michal Szymaniak 
+ggnet/\"Gigi Sebastian Alapatt" 
+rolando/\"Rolando Michan" 
+rjmooney/\"Robert Mooney" 
+elisand2001/\"Eli Sand" 
+ganesh.tirtur/\"Ganesh Tirtur" 
+victork/\
+cjs/\Curt Sampson 
+pavel/\"Pavel S. Vasilets" 
+jdelima/\"Jesse.linux" 
+kfogel/\Karl Fogel 
+jum/\Jens-Uwe Mager 
+pal.baltzersen/\Pål  Baltzersen 
+DAS6804/\
+dave/\"Dave Seidel" 
+tungntapache/\Tung Nguyen Thanh 
+liza_harada/\"HARADA,LIZA (HP-Cupertino,ex1)" 
+jinh/\Jin Hong 
+sebastian/\Sebastian Bergmann 
+lindner/\Paul Lindner 
+carl/\
+myddryn/\Adam Sussman 
+is/\Igor Sysoev 
+daniel/\Daniel Lopez 
+crieger/\"Chaim Rieger" 
+sussman/\Ben Collins-Sussman 
+bnicholes/\"Brad Nicholes" 
+support/\"Don Hughes" 
+vampmaster/\"Vampmaster V....V" 
+cturner/\Chip Turner 
+bkorb/\Bruce Korb 
+handler/\Michael Handler 
+handler-list-new-httpd/\Michael Handler 
+new-httpd/\Albert Chin 
+christiangross/\Christian Gross 
+i.arabaci/\"ilker ARABACI" 
+jdarby/\"Justin C. Darby" 
+geoff/\Geoffrey Young 
+scrappy/\"Marc G. Fournier" 
+y-koga/\Koga Youichirou 
+chriwill/\"Chris Williams" 
+kesov/\"ks" 
+excalibur/\Chris Bowlby 
+t.dotzauer/\"Timo Dotzauer" 
+bakins/\Brian Akins 
+robert.collins/\"Robert Collins" 
+agwiii/\"Grayson Walker" 
+Udcsweb2/\"Udcsweb2" 
+cweiss/\"Carolyn Weiss" 
+devik/\Martin Devera 
+david+cert/\David Ford 
+isaac.castinger/\Isaac Castinger Vizcaíno  
+rtitle/\
+jimw/\Jim Winstead 
+valentinar/\Valentina Rozov 
+bsdforumen/\"Klypin Kirill" 
+norton/\Joseph Wayne Norton 
+jerry-apache/\Jerry Asher 
+lists/\Sebastian Bergmann 
+esm/\"Edward S. Marshall" 
+tom/\tom stuart 
+tomj/\"Thomas Jarosch" 
+dave-ml/\Dave Dribin 
+Allan.Horgan/\"Horgan, Allan" 
+Jacob.Rief/\"Rief, Jacob" 
+dweekly/\"David E. Weekly" 
+httpd/\"Andrew Braund" 
+jarecsni.janos/\Jarecsni János  
+chris/\Chris Hardie 
+philip/\"Philip M. Gollucci" 
+jcg/\Jonathan Gripshover 
+thom/\"Thom May" 
+David.D.Hill/\Dave Hill 
+dirkx/\
+FowlerB/\"Fowler, Brian" 
+Christoph/\Christoph Schneegans 
+PRUSTE/\"pruste.teleline.es" 
+ycheng/\ycheng 
+roshan_naik/\"NAIK,ROSHAN (HP-Cupertino,ex1)" 
+sander/\Sander van Zoest 
+jwoolley/\Cliff Woolley 
+moloney/\Tim Moloney 
+lbelen/\"Leonardo Javier Belen"
+jstuart/\Jeff Stuart 
+fielding/\"Roy T. Fielding" 
+jerenk/\Justin Erenkrantz 
+ben.evans/\Ben Evans 
+cranstone1/\"Peter J. Cranstone" 
+Michael.Gerdts/\Mike  Gerdts 
+poeml/\"Dr. Peter Poeml" 
+eduardo/\"Eduardo D Piovesam" 
+tobli45/\"Tobias Lind" 
+muralivemuri/\"Murali K. Vemuri" 
+sxpert/\Raphael Amaury Jacquot 
+Tony.Toyofuku/\Tony Toyofuku 
+wweng/\"Wei Weng" 
+jerrybaker/\Jerry Baker 
+sander/\Sander van Zoest 
+WicksteedC/\"Wicksteed, Charles" 
+artiom/\Artiom Morozov 
+mramshaw/\"Martin Ramshaw" 
+binary_runner/\Binary Runner  
+alex/\"Alexander Tereschenko" 
+jerenkrantz/\Justin Erenkrantz 
+dclute/\"Darrel Clute" 
+lauriancuzma/\"Laurian Cuzma" 
+lkovacs/\" László Kovács " 
+dyoung/\David Young 
+bugzilla/\
+mache/\Nicolae Mihalache 
+mbest/\Michael Best 
+tai/\Taisuke Yamada 
+sweazle/\"Sleazy Weazle" 
+gs-apache-dev/\
+rasmus/\Rasmus Lerdorf 
+daniel/\Daniel Lorch 
+mbracale/\Mauricio Bracale 
+davidw/\David N. Welton)
+
+hunkim/\Sung Kim 
+hunkim/\"Sung Kim" 
+gstein/\Greg Stein 
+yusufg/\Yusuf Goolamabbas 
+rederpj/\"Paul Reder" 
+blair/\Blair Zajac 
+nick/\"Nick De Decker" 
+andreas/\Andreas Hasenack 
+gollucci/\"Philip M. Gollucci" 
+wrose/\"Rose, Billy" 
+Calderan_Andre_L/\"Andre L. Calderan" 
+pascal.barbedor/\"pascal barbedor" 
+barbee/\"barbee@covalent.net" 
+fitz/\"Brian W. Fitzpatrick" 
+n0v3ll/\Magnus M 
+ahmad/\Ahmad Anvari 
+thc/\Tom Howell-Cintron 
+apache2/\"Thomas.mathes@tmnd.de" 
+dyoung/\David Young 
+jos/\Jos Backus 
+grisha/\"Gregory (Grisha) Trubetskoy" 
+Serguey.Kavafian/\"Kavafian, Serguey" 
+Smn/\"Sameer Nigade" 
+toyofuku/\
+narayana/\"Adinarayana Kadiyam" 
+vogt/\
+gregames/\Greg Ames 
+slamb/\Scott Lamb 
+guidavalos/\Guilherme Dávalos  
+IGOR/\"Igor Leturia" 
+wra_eng/\Wratmoko hadi Handoko SW 
+egarcia/\Eduardo Garcia Lopez 
+colmmacc/\Colm MacCárthaigh  
+lehmann/\Marten Lehmann 
+rcoleman/\Richard Coleman)
+
+dbishop/\David Bishop 
+nomentsoa/\"Tahiry Ramanamampanoharana" 
+anthony/\"Anthony W. Marino" 
+Martin.T.Kutschker/\Martin Kutschker 
+sachi/\Sabyasachi Chakrabarty 
+bbenfiel/\"Bruce Benfield" 
+natmanz/\Nathan Friess 
+antonenk/\Leonid Antonenkov 
+scottmackay/\Scott MacKay 
+john/\John Von Essen 
+bfr/\"Bertrand Fritsch" 
+burritob/\Zac Stevens 
+migapache/\"Miguel Camargo" 
+amann/\Andrew Mann 
+jim/\Jim Jagielski 
+santos/\"Tacio A.G. Santos" 
+dberti777/\Davide Berti 
+JTait/\James Tait 
+acutright/\Andy Cutright 
+robert/\Robert Nicholson 
+JHeckel/\ Jürgen  Heckel)
+
+webmaster33/\"Webmaster33" 
+sascha/\Sascha Schumann 
+vinod/\"Vinod Panicker" 
+rfg/\"Ronald F. Guilmette" 
+zts/\Zac Stevens 
+matt.kern/\Matt Kern 
+allard/\Allard Hoeve 
+lsanders/\"lsanders" 
+goetzger/\Heinrich Götzger  
+JJCLAR/\"Jean-Jacques Clar" 
+smileyjonathan/\Smiley Jonathan  
+rje/\"Rob Emanuele" 
+14188654/\Jorge 
+JoergBudi/\Joerg Budischewski 
+andi/\Andi Gutmans 
+gstein/\
+aaron_luo2001/\Aaron Luo 
+sbonnegent/\S�bastien Bonnegent 
+smurfie/\"Arnauld Dravet" 
+costinm/\
+apache-dev/\"Rick Kukiela" 
+aryeh/\"Aryeh Katz" 
+imajes/\"James Cox" 
+naqvik/\"naqvik" 
+lgauliardon/\"Lionel Gauliardon" 
+dmitri/\Dmitri 
+per.einar/\Per Einar Ellefsen 
+twilde/\Tim Wilde 
+pedward/\Perry Harrington 
+harald/\harald deppeler 
+narliss/\"Arliss, Noah" 
+trevor/\"Trevor Tregoweth" 
+ler/\Larry Rosenman 
+maumar/\Maurizio Marini 
+Richard.Barry/\"Barry, Richard" 
+dwayne-miller/\Dwayne Miller 
+Jira.Novak/\"Novak, Jira (CAP, GCF)" 
+Martin.Kutschker/\Martin Kutschker 
+estrade-m/\"Estrade Matthieu" 
+ycheng/\Yuchung Cheng 
+sakane/\Shoichi Sakane 
+jimmy.lantz/\Jimmy Lantz 
+werner_schalk/\Werner Schalk 
+tbm/\"T.B. van der Molen" 
+chris/\"Chris Taylor" 
+gmills/\Garey Mills 
+brianp/\Brian Pane 
+randy/\"Randy Terbush" 
+archeron/\Waldo Van Cleef 
+Helge/\Helge Laurisch 
+andre.powroznik/\
+dburry/\"David Burry" 
+dpejesh/\David Shane Holden 
+webmaster/\Erik Abele 
+fulvio.bille/\Fulvio Bille` 
+jaju/\Ravindra Jaju 
+harrie/\Harrie Hazewinkel 
+zybi/\Artur Zaprzala 
+rahul_katariya_2k/\rahul katariya 
+nazonazo/\Tsuyoshi SASAMOTO 
+bdesmeules/\Benoît  Desmeules 
+hb-apache-dev/\Henning Brauer 
+mark.nelson/\Mark Nelson 
+sylbert/\"Sylbert L" 
+josv/\
+Ian.Holsman/\"Ian Holsman" 
+robs/\"Rob Saccoccio" 
+adriang0/\"Adrian Grajdeanu" 
+johannes_richter/\"johannes m. richter" 
+nd/\André Malo  
+john/\
+bojan/\Bojan Smojver 
+gwiseman/\
+mailing_lists/\Dev Zero G Ltd 
+rjones/\Russell Jones 
+wsanchez/\Wilfredo Sanchez 
+jonas/\"Jonas Eriksson" 
+Thomas.Delaet/\"Thomas Delaet" 
+wsanchez/\Wilfredo Sánchez  
+heffler/\"Marvin Heffler" 
+jacob.rief/\Jacob Rief 
+BEidelman/\"Eidelman, Brian" 
+gege/\"Ares Liu" 
+oden.eriksson/\Oden Eriksson 
+robertlaferla/\Robert La Ferla 
+thom/\
+A.Schild/\"Andre Schild" 
+mjc/\Mark J Cox 
+skea/\Alan Skea 
+hhazewinkel/\Harrie Hazewinkel 
+eplx2002/\"Esteban Pizzini" 
+jen/\"JAKE&JEN MCGRATH" 
+mevk21/\Phil Stoneman 
+mweiser/\Michael Weiser 
+carlo/\Carlo Perassi 
+pingl/\Ping Liu 
+gaml/\Gabriel Ambuehl 
+Kris.Verbeeck/\
+chris/\Chris Taylor 
+blaise.tarr/\Blaise Tarr 
+helmet/\Denis Karavayev 
+bohdan/\Bohdan Vlasyuk 
+jamni/\"Jamni" 
+joes/\Joe Schaefer 
+joe/\Joe Schaefer 
+greg/\RapidFX 
+james/\James Ponder 
+jflemer/\"James E. Flemer" 
+joe+apache/\Joe Schaefer 
+peter.vanbiesen/\Peter Van Biesen 
+frouni/\"E. FROUNI" 
+erik/\Erik Abele 
+Nikola.Milutinovic/\"Nikola Milutinovic" 
+Kris.Verbeeck/\Kris Verbeeck 
+john/\"John K. Sterling" 
+jessh/\Jess Holle 
+clay.webster/\"Clay Webster" 
+acme/\Leon Brocard 
+alex/\
+jlk/\Jason Kissinger 
+lists/\Brian Doyle 
+jb2002/\"jb2002@pc9.org" 
+justin/\Justin Clift 
+gregames/\
+twanger/\Markus Bertheau 
+aaron/\Aaron Bannert 
+henning/\Henning Brauer 
+cartho/\Cyrille Artho 
+me/\Matthieu Estrade 
+kspinka/\"Spinka, Kristofer" 
+emanuel.abb/\"Emanuel Corthay ABB" 
+listabb/\"Emanuel" 
+ed_fair/\"Ed Fair" 
+ssen/\Shantonu Sen 
+david.e.jenkins/\"Jenkins, David" 
+gregw/\Greg Wilkins 
+neel/\"Michael C. Neel" 
+vmilitaru/\vio 
+yassars/\"Yassar S" 
+smoot/\Stephen R Smoot 
+josef.zellner/\
+Amund.Elstad/\Amund Elstad 
+rreiner/\Richard Reiner 
+Cmagen/\"Magen, Carmel" 
+rtitle/\"Title, Richard" 
+yalcin/\"Mustafa Y. Acikyildiz" 
+jkj/\Kean Johnston 
+kevino/\Kevin O'Donnell 
+eparker/\Erik Parker 
+creitzel/\Charles Reitzel 
+eparker/\Erik Parker 
+kess/\Astrid  Keßler  
+willh/\Will Hartung)
+
+richard.beton/\Rick Beton 
+rostich77/\fabio rohrich  
+christian.kruse/\Christian Kruse 
+ml-daniel/\Daniel Lorch 
+thomas.bennett/\Thomas Bennett 
+hgomez/\Henri Gomez 
+ISARKAR/\"Indraneel Sarkar" 
+RShankar/\Ramesh Shankar 
+helink/\"Link, Hamilton" 
+bhines/\Ben Hines 
+manek/\"Sameer R. Manek" 
+skx/\Steve Kemp 
+ake1/\Allan Edwards 
+gkoru/\Gunes Koru)
+
+Ivo.Bloechliger/\Ivo Bloechliger 
+robin.blanchard/\"Robin P. Blanchard" 
+njriley/\Nicholas Riley 
+fabrizio.morbini/\Fabrizio Morbini 
+cups/\Benjamin Ritcey 
+justin/\"Justin Erenkrantz" 
+randall/\Randall Stewart 
+k.fitch/\"Kent Fitch" 
+neil/\"Neil Aggarwal" 
+gs-apache-dev/\Glenn Strauss 
+takasima/\"Takashima, Makoto" 
+Juan.Rivera/\Juan Rivera 
+bj/\Benjamin Kuit 
+xavier.machenaud/\Xavier MACHENAUD 
+johannes/\Johannes Erdfelt 
+oliver.wulff/\"Oliver Wulff" 
+Dave/\"Dave" 
+jaa/\Jani Averbach 
+Lukasz.Engel/\Lukasz Engel 
+jonas2/\"Jonas Eriksson" 
+dank/\Dan Kegel 
+krisku/\"Kai Risku" 
+CK1/\Christian Kruse 
+al-apachedev/\Alexander Lazic 
+frederic.donnat/\"Frederic DONNAT" 
+Kai.Risku/\Kai Risku 
+nyh/\"Nadav Har'El" 
+cgupt/\"Chandragupt" 
+carla/\Carla Schroder 
+vernon/\"Vernon Webb" 
+terje.molle/\
+sm00ay/\"Alistair Young" 
+ajehanne/\Aymerick Jéhanne  
+karthikeya9/\"pavankumar karthikeya bulusu" 
+brian.foddy/\Brian Foddy 
+andrei/\Andrei Zmievski 
+james/\"James Cox" 
+naaman/\"Naaman Musawwir" 
+eoliveira/\Eider Silva de Oliveira 
+pdeolasee/\"Prajakt Deolasee" 
+joe/\Joe Oppegaard 
+ayang_ml3/\Andy Yang 
+wsanchez/\Wilfredo Sánchez Vega  
+weigelt/\Enrico Weigelt 
+herve.leterrier/\LETERRIER Hervé  
+tjewell/\Anthony Jewell 
+william/\"William N. Zanatta" 
+varju/\Alex Varju 
+grisha/\"Gregory (Grisha) Trubetskoy" 
+andrei/\Andrei Zmievski 
+epg/\Eric Gillespie 
+colm.maccarthaigh/\Colm MacCarthaigh 
+cramer/\Mike Cramer 
+mmontero/\Michael Montero 
+sami.tikka/\"Sami Tikka" 
+Sami.Tikka/\"Tikka, Sami" 
+andrei.zmievski/\Andrei Zmievski 
+jk/\Jochen Kächelin  
+ovidiu/\Ovidiu Egyed 
+thom/\Thom May 
+ctindel/\"Chad N. Tindel" 
+philip/\"Philip M. Gollucci" 
+keramida/\Giorgos Keramidas 
+k_dorji/\"Karma Dorji" 
+mouimet/\"Martin Ouimet" 
+laxmikanth.ms/\"Laxmikanth M.S." 
+dnehring/\Dirk Nehring 
+hurricane79/\"Paolo Romano" 
+info/\"Th Budich" 
+rbb/\
+i/\emf 
+nitinshukla/\"Nitin Shukla" 
+EKUNT/\"EMRE KUNT (Ebi Bsk. - Sistem Prog)" 
+udayini/\"Udayini" 
+sergeyli/\Sergey 
+PEDietz/\"Dietz, Phil E." 
+xiaodong.shen/\Xiaodong Shen 
+naaman_m/\"Naaman Musawwir" 
+aditya/\Aditya 
+ji/\ji 
+sroussey/\"Steven Roussey" 
+t-sudou/\Tadasuke SUDO 
+igor_nazarenko/\"Igor Nazarenko" 
+stefan/\Stefan Görling  
+pjones/\Peter Jones 
+ask/\"Andreas S. Kerber" 
+iyengar/\Janardhan Iyengar 
+rbb/\
+starman7/\"Mooky Mooksgill" 
+dmitri/\Dmitri Tikhonov 
+mlampret/\"manaay <mlampret@email.si>" 
+mcorcoran/\"Michael Corcoran" 
+leen/\Leen Besselink 
+yuriy_pasichnyk/\"Yuriy Pasichnyk" 
+jason/\jason andrade 
+soloturn99/\solo turn 
+santhi.guntupalli/\"Guntupalli, Santhi" 
+tcastelle/\CASTELLE Thomas 
+support/\"support@webmastersguide.com" 
+Michael.Johnson/\"Johnson, Michael" 
+eibner/\Thomas Eibner 
+torinford/\"T Ford" 
+josef.zellner/\Josef Zellner 
+midhun_chandran/\Midhun Chandran 
+josef.zellner/\
+svanegmond/\Stephen van Egmond 
+bobbell/\Bob Bell 
+bzbarsky/\Boris Zbarsky 
+Seema.Alevoor/\Seema Alevoor 
+achowe/\Anthony Howe 
+Sudhir.Kelappan/\
+frederic.vissault/\Frédéric Vissault  
+zaunere/\Hans Zaunere 
+Brandon_Bell/\"Brandon Bell" 
+roshan.naik/\"Naik, Roshan" 
+gunnjo/\"Joseph J. Gunn" 
+info/\"Sander Holthaus - Orange XL" 
+vinod/\"Vinod Panicker" 
+fraenkel/\Michael Fraenkel 
+postmaster/\"postmaster" 
+neo/\"Anaru Hartley" 
+rasmus/\Rasmus Lerdorf 
+mxu/\"Min Xu(Hsu)" 
+chip/\"Paul Querna" 
+maiklst/\Maik Mueller 
+josephferner/\"Joseph Ferner" 
+hackeratlarge/\Hacker at Large 
+maik.mueller/\Maik Mueller 
+jinwu999/\Wu Jin 
+andrew/\Andrew Eland 
+federico.mennite/\Federico Mennite 
+david.tunkrans/\David Tunkrans 
+colm/\Colm MacCarthaigh 
+chris/\Chris Monson 
+Casey.Chan/\Chan Casey 
+mwood/\"Manni Wood" 
+roy.fielding/\"Roy T. Fielding" 
+trev/\Trevor Hurst 
+sebastian.tusk/\Sebastian Tusk 
+geoff/\Geoff Thorpe 
+magnus/\Magnus  M0  
+kenwood/\
+erikabele/\Erik Abele 
+andreb/\Andre Breiler 
+hulya.gurer/\Hulya Gurer 
+bzeeb-lists/\"Bjoern A. Zeeb" 
+gaf/\"Gary Feldman" 
+trapkov/\Yavor Trapkov 
+hchs/\Cody Harris 
+steve/\Stephan Doliov 
+jcarlson/\Jim Carlson 
+trapkov/\Yavor Trapkov)
+
+kelly/\"support@webmastersguide.com" 
+jreyes/\"Jorge Reyes" 
+Christopher.D.Knight/\Chris Knight 
+keith/\
+ted/\Ted Rolle 
+nathan/\Nathan Ollerenshaw 
+tim/\"Tim Nagel" 
+steve.sabljak/\"Steve Sabljak" 
+bz/\"Bjoern A. Zeeb" 
+NOMENTSOA-TAHIRY.RAMANAMPANOHARANA.1/\Nomentsoa-Tahiry Ramanampanoharana 
+philip/\"Philip M. Gollucci" 
+williamhamilton/\"Kyle Hamilton" 
+ori/\"Ori Tend" 
+B.Candler/\Brian Candler 
+bgd/\Bogdan TARU 
+henkp/\"Henk P. Penning" 
+PBrass/\"Brass, Phil (ISS Atlanta)" 
+gwiseman/\Graham Wiseman)
+
+a.schild/\André Schild  
+sac19432/\Chia-Hsin Huang 
+tcarter/\Travers Carter 
+S.I.Warhurst/\"Warhurst, SI (Spencer) " 
+rw/\Richard Whitney 
+jeff_hamann/\"Jeff D. Hamann" 
+stephen/\Stephen Pierzchala 
+jerenkra/\Justin Erenkrantz 
+markus.welsch/\Markus Welsch 
+Eddy.COLLART/\
+bcatarsys/\"Jose Gutierrez" 
+sebastian.wolfgarten/\Sebastian Wolfgarten 
+igor/\"Igor Vinokurov" 
+madhusudan_mathihalli/\"MATHIHALLI,MADHUSUDAN (HP-Cupertino,ex1)" 
+skot5/\Scott Becker 
+dimitri.rebrikov/\Dimitri Rebrikov 
+rahul_kohli/\"Rahul Kohli" 
+el/\"Eugen Leitl" 
+gs/\Glenn Strauss 
+madhum/\"Mathihalli, Madhusudan" 
+clabouisse/\Christophe Labouisse 
+jason/\"Jason Burns" 
+bas/\Bastiaan van der Put 
+ssmeenk/\Sander Smeenk 
+chb/\Christian Brunner 
+aeyakovenko/\anatoly yakovenko 
+tantum2/\LUIS ALBERTO GÓMEZ CELIS  
+noel/\"Noel J. Bergman" 
+prit_sharma/\pritesh sharma 
+christopher_justin/\"christopher justin" 
+jez/\"jez humble" 
+Manoj.Kumar.Jain/\Manoj Kumar Jain 
+frank/\Frank 
+jim/\Jim Jagielski 
+MMEX_SA_SBSSRV2000/\
+Chris.Conti/\"Conti, Chris" 
+petr/\"Petr Stetina" 
+rocker/\Rocke Robertson 
+David.Deaves/\David Deaves 
+brian/\"Brian A. Chase" 
+thomas.jarosch/\"Thomas Jarosch" 
+imran/\"Imran S. Patel" 
+torbjorn.carlsson/\Torbjörn  Carlsson 
+francis/\Francis Daly 
+BoivinP/\"Boivin, Patrice J" 
+pprasad_75/\p prasad 
+pmbas/\Pedro Bastos 
+mmadki/\"Marc M. Adkins" 
+GLNRama_Tagore/\"GLNRama Tagore" 
+nedelcho.stanev/\"Nedelcho Stanev" 
+apache/\Alasdair Lumsden 
+alasdair/\"Alasdair Lumsden" 
+weigelt/\
+atli/\"Atli Thorbjornsson" 
+ryan.eberhard/\Ryan Eberhard 
+joe+gmane/\Joe Schaefer 
+albert.yu/\"Albert Yu" 
+khan_asad/\"Asad Khan" 
+felix/\felix zaslavskiy 
+kris.verbeeck/\Kris Verbeeck 
+prlw1/\Patrick Welche 
+matthew/\Matthew Hagerty 
+pyaggi/\Pablo Yaggi 
+lothar/\Lothar  M�rkle  
+mcorcoran/\"Michael Corcoran" 
+shankar/\"Shankar Unni" 
+sabt/\Sebastian Abt 
+jwb/\"J. W. Ballantine" 
+aviv/\"Aviv Eliezer" 
+Survey/\"Survey" 
+patrickl/\"Patrick Lam" 
+kibble/\"kibble" 
+jstanley/\Joel Stanley 
+philipp.reisner/\Philipp Reisner 
+glenn/\Glenn Nielsen 
+nashastr/\"Neethi Shastry" 
+elias/\Elias Sinderson 
+glasgow/\Michael Glasgow 
+arvind_gopalan/\Arvind Gopalan 
+kash/\Ken Ashcraft 
+s.striker/\Sander Striker 
+objectworld6/\john smith 
+minimalist/\Minimalist Manager 
+lothar.maerkle/\Lothar  Märkle  
+bill/\Bill Marrs 
+mark/\"Mark W. Webb" 
+cwirawan/\Cahya Wirawan 
+ronald.park/\Ron Park 
+ranier/\"Ranier" 
+jahuong/\John Huong 
+ronp/\Ronald Park 
+eduardo.franco/\Eduardo Franco  
+michal/\Michal Szymaniak 
+IanH/\Ian Holsman 
+thommay/\Thom May 
+John.Fortin/\"Fortin, John {PBG}" 
+lists/\Adam Warner 
+haskellboy/\"Haskell Curry" 
+Robert.Siemer/\
+Sebastien.Le_Van/\
+puntomaupunto/\"Maurizio Codogno" 
+jon.soong/\jonathan soong 
+dein_metzger/\"dein_metzger" 
+junyer/\Paul Wankadia 
+AlexBe/\Alex Bereznyi 
+eflash/\Guenter Knauf 
+wizard/\Dima Vidmich 
+support/\Pennywize Support 
+aryeh/\Aryeh Katz 
+TimAlderfer/\"Alderfer, Tim" 
+leandro/\"L. Karam" 
+Mahadevan.R/\Mahadevan R 
+tetsuya/\Tetsuya Kitahata 
+sujay/\Sujay Parekh 
+todd/\Todd Weaver 
+bert.radke/\Bert Radke 
+jeremy/\Jeremy Hansen 
+colmmacc/\"Colm MacCarthaigh,,," 
+jafrif/\Farheen Jafri 
+truk/\"Kurt Miller" 
+pmilon/\"Pascal MILON" 
+dash/\David Ashley 
+decho/\"Nedelcho Stanev" 
+decho/\"Nedelcho Stanev" 
+german/\
+ejw/\"Jim Whitehead" 
+httpd-dev/\Albert Chin 
+chip/\Paul Querna 
+txu/\Teng Xu 
+decho/\"Nedelcho Stanev" 
+gaganpuri/\"Gagan Puri" 
+ivanr/\Ivan Ristic 
+zigzuri/\"Zuri" 
+szymanski_j/\"szymanski_j" 
+steve.bannerman/\"Steve Bannerman" 
+Stefano.Zanasco/\
+brian/\Brian Aker 
+IanH/\Ian Holsman 
+resume/\"Resume" 
+gregames/\
+friedo/\Mike Friedman 
+apache/\Matthieu Estrade 
+mturk/\Mladen Turk 
+st/\Sönke  Tesch 
+st/\Sönke  Tesch 
+A.Ford/\Andrew Ford 
+todd_643/\"Todd" 
+hs/\Henri  Schomäcker  
+apachelist/\andrea rossignoli 
+philipp.leusmann/\"Philipp Leusmann" 
+CustomerCare/\
+dreday1003/\
+pher1757/\
+K_Lee/\"K Lee" 
+johnmillaway/\John Millaway 
+swapan_gupta/\"Swapan Gupta" 
+aputta/\Abhijith Putta 
+davidmcc/\David McCreedy 
+be/\Bernhard Erdmann 
+andres/\"Andres L. Figari" 
+ernestolinhares/\"Ernesto Linhares" 
+piras/\Piras Velandai Thiyagarajan 
+tair-shian_chou/\"CHOU,TAIR-SHIAN (HP-Cupertino,ex1)" 
+jgold/\Jonathan Gold 
+5.2.0.9.2.20031002204156.030d20a8>/\Amy
+mosix_21/\"Pedro Picapiedra" 
+palehaole/\joe user 
+ipsign123/\Sergey Ignatchenko 
+daviher4/\"David Herrero" 
+atanasdb/\"Atanas Bakalov" 
+ace/\Ace Suares 
+chris.elving/\Chris Elving 
+sussman/\Ben Collins-Sussman 
+david/\
+igor.kovalenko/\"Igor Kovalenko" 
+triddle_1999/\Tyler Riddle 
+arodland/\Andrew Rodland 
+Shanon.Loveridge/\"Loveridge, Shanon" 
+robertlaferla/\Robert La Ferla 
+lhecking/\Lars Hecking 
+lhecking/\Lars Hecking 
+Eric.R.Johnson/\Eric R Johnson 
+cej/\Christopher Jastram 
+mujeer/\"Abdul Mujeer Kapadia" 
+joeangth/\joe angth 
+sergey/\"Sergey A. Lipnevich" 
+mattyml/\
+qhwt+apache/\YONETANI Tomokazu 
+larry.toppi/\Larry Toppi 
+morpheus/\Mark Woon 
+LCLDesigns/\Lewis Lorenz 
+xwang_tech/\Kevin Wang 
+gigerstyle/\Marc Giger 
+Paul.Wilt/\"Wilt, Paul" 
+ekcheu/\"ERIC K. CHEU" 
+dblake/\"BLAKE,DAVID (HP-Boise,ex1)" 
+fielding/\Roy T. Fielding 
+rramanan/\"Ramanan" 
+sander/\Sander Temme 
+sreedhar.badi/\
+xmb/\xmb)
+
+bedouglas/\"bruce" 
+eddie/\Edward Rudd 
+daniel.koerner/\
+rich/\Richard Jones 
+mailings/\Lubo 
+sauls/\"Saul, Sherwyn" 
+pawan/\Pawan Deshpande 
+jessica/\"Jessica Wei" 
+ahwkong/\"A. H. W. Kong" 
+rreiner/\Richard Reiner)
+
+jkj/\Kean Johnston 
+chipster/\Chip Cuccio 
+ahaas/\"Art Haas" 
+jj_drworthiest/\"Apmail-apr-dev-archive" 
+julian.reschke/\Julian Reschke 
+christina18foray/\"Klb" 
+tyron22shoal/\"Dba" 
+gerardor/\Gerardo Reynaga 
+roger37champion/\"Apmail-perl-asp-archive" 
+brettspamacct/\"Brett E." 
+kurt.gjerde/\Kurt George Gjerde 
+clean_acthelpless/\"V-archive" 
+minticim/\"Mihai Mintici" 
+pwhite/\"Paul White" 
+nextstepn/\"NeXTstep" 
+cleanactproinvitation/\"Apmail-license-archive" 
+miss_nok13/\"PENPRAPA MUNKID" 
+e_querci/\Enrico Querci 
+bmacmunn/\Bob MacMunn 
+zardoz/\Matthew Gress 
+benedict.dsilva/\Benedict DSilva 
+olivier/\Olivier Poitrey 
+hunkim/\"Sung Kim" 
+morecmenbrawler/\"Dev-unsubscribe" 
+cd/\Cemil Degirmenci 
+mark/\Chand 
+david.pope/\David Pope 
+drbrian66creature/\"Dev-unsubscribe" 
+zardoz/\
+leogeorgereg/\GEORGE JOSEPH 
+hercules.de/\
+magdi/\"Magdi Ahmed" 
+jacek.prucia/\Jacek Prucia 
+uhiswdev/\"UHISWdev UHISWdev" 
+greearb/\Ben Greear 
+cyril/\Cyril Bouthors 
+ag/\Axel Grossklaus 
+dirkx/\Dirk-Willem van Gulik 
+serue/\"Serge E. Hallyn" 
+yoder1/\Kent E Yoder 
+wt18zrfm/\"Bianca Kincaid" 
+ahuxley/\Alexis Huxley 
+vqejqonzqrh/\"byron charrette" 
+krhuk/\"Juan Hutton" 
+bxqcwwlfwytj/\"goldie robertucci" 
+ciegywd/\"duffy plant" 
+steve.hay/\Steve Hay 
+clyslrqzcgcran/\"selma sudhir" 
+Benedict.DSilva/\
+xu/\"Min Xu (Hsu)" 
+gutwin/\Carl Gutwin 
+efri.nattel/\"Efri Nattel-Shay" 
+dilinger/\Andres Salomon 
+Bose.Ghanta/\"Ghanta, Bose" 
+Andy.Cutright/\"Andy Cutright" 
+garana/\
+sumeet.singh/\Sumeet Singh 
+rowe/\Mark Rowe 
+Owen.Boyle/\"Boyle Owen" 
+mark.bixby/\"Bixby, Mark D (TCSD-MISL-Cupertino)" 
+mark/\mark 
+cej/\
+apache/\"Steve Rieger \(Apache\)" 
+cmpilato/\"C. Michael Pilato" 
+nrbussa2004/\Naga Bussa 
+dot/\
+sk/\"Sascha Kersken" 
+mahajjh/\
+lektu/\Juanma Barranquero 
+noreply/\
+hannes/\Hannes Wallnoefer 
+gags12004/\g g 
+apache/\apache 
+chickenlove55/\"Eric Horner" 
+sander/\Sander Temme 
+vincent/\"Vincent Deffontaines" 
+jas/\Julien ALLANOS 
+tolj/\
+ben.wyckoff/\Ben Wyckoff 
+odin/\John Kolvereid 
+striker/\
+indestructable0001/\"dumass " 
+management/\
+pgladstone/\Philip Gladstone 
+aaraines/\"Andrew A. Raines" 
+rowe/\John Rowe 
+neil/\Neil Gunton 
+stelios/\Stelios Sidiroglou-Douskos 
+noah/\Noah Misch 
+cjcollier/\C.J. Collier 
+amit_athavale/\Amit Athavale 
+minimalist/\Minimalist Manager 
+satya.kotla/\"Kotla, Satya \(Corporate, consultant\)" 
+bprasad/\Prasad Venkata Boddupalli 
+mark/\Mark Wolgemuth 
+swaltner/\Steve Waltner 
+apache/\"apache" 
+chuck_short/\Chuck Short 
+sternmarc/\"Marc Stern" 
+dge/\Denis Gervalle 
+atlunde/\Albert Lunde 
+info/\"info" 
+tchung/\"Terry Chung" 
+correy.edmed/\"Correy" 
+agt/\Adam Tilghman 
+maxb/\"Max Bowsher" 
+jn/\John Newbigin 
+xset/\"xset" 
+sonam.singh/\
+listman/\listman 
+jdane/\Joseph Dane 
+Jesse.Binam/\"Binam, Jesse" 
+mahajjh/\"Mahajjh" 
+BYRON.GUERNSEY/\"Guernsey, Byron \(GE Consumer & Industrial\)" 
+dtynan/\Dermot Tynan 
+floeff/\Florian Effenberger 
+kjha/\"Kaushal Jha ZEDO" 
+andre.guimaraes/\Andre Luís Quintaes Guimarães  
+jake/\"Jake" 
+aboyce/\Andrew Boyce-Lewis 
+zarko_coklin/\"Zarko Coklin" 
+wojtowij/\John Wojtowicz 
+apache_dev/\
+administration/\
+al-httpddev/\Alexander Lazic 
+Mathias.Herberts/\Mathias Herberts 
+ricilake/\
+ricilake/\Rici Lake 
+rooneg/\Garrett Rooney 
+ben.home/\"ben" 
+ken.avery/\"Avery, Ken" 
+johnwoj/\John 
+mestrade/\Matthieu Estrade 
+tair-shian.chou/\"Tair-Shian Chou" 
+kornelpal/\"Korn�l P�l" 
+mh/\Marc Heckmann 
+munikuntla/\Rajesh Munikuntla 
+julien.allanos/\Julien ALLANOS 
+fanf/\
+alsbergt/\Tom Alsberg 
+burgoyne/\Jeffrey Burgoyne 
+dirkx/\
+daniel/\
+gmane-apache/\"Matthew Lloyd" 
+akhandel/\Abhishek Khandelwal 
+wfrazee/\"Wayne S. Frazee" 
+jkielthy/\Jesse Kielthy 
+yakker/\"Lex Yakker" 
+nveber/\Norbert Veber 
+Grzegorz.Mlonek/\Grzegorz Mlonek 
+gmane/\"Charlie Gordon" 
+deengert/\"Douglas E. Engert" 
+apache-dev/\Albert Chin 
+art/\"Artem Lantsev" 
+ken/\Kenneth Simpson 
+sadaf/\"Sadaf Alvi" 
+info/\"Corporate Performance Institute" 
+JPry565/\"Jeffrey K Pry" 
+joon_yang/\joon yang 
+yshen_uwo/\Yaqian Shen 
+cwoodf02/\"Craig Woodford" 
+trawick/\Jeff Trawick 
+jfl/\Jacob Friis Larsen 
+php-general/\Curt Zirzow 
+ian/\Ian Holsman 
+staff/\
+devlists/\"Filip Hanik - Dev" 
+cmanolache/\Costin Manolache 
+remm/\Remy Maucherat 
+jfrederic.clere/\jean-frederic clere 
+dmitry/\Dmitry Koteroff 
+dwilga/\Dan Wilga 
+rbloom/\Ryan Bloom 
+maheshext3/\M K 
+lehmann/\Marten Lehmann 
+mammal/\
+dnicklay/\David Nicklay 
+rcpt-dev.AT.httpd.apache.org/\Jan Kratochvil 
+frauke.lehmann/\Frauke Lehmann 
+jos.dehaes/\Jos Dehaes 
+normw/\NormW 
+narliss/\Noah Arliss 
+shaun/\"Shaun Evans" 
+mailinglists/\Florian Lindner 
+kfanyo_subs/\"KFanyo_Subs@Digiflex Systems" 
+r01/\"Morten Due Jorgensen" 
+wallacebs/\"Wallace, Brian S." 
+moschous/\Manos Moschous 
+henri.gomez/\Henri Gomez 
+siba.dora/\
+v.t.mueller/\"V. T. Mueller, Continum" 
+sirjasonr/\Jason Rigby 
+soloturn/\solo turn 
+sockerguy07/\brian richardson 
+narayana.nayak/\"Nayak, Narayana" 
+mikecck/\"Mike Chan" 
+jaa/\Jani Averbach 
+zhiqing69/\Zhi Qing Wu 
+McCreedyTPF/\"David McCreedy" 
+rici/\Rici Lake 
+MarcoGlatz/\Marco Glatz 
+fp-axiliance/\Francois PESCE 
+apache-dev/\
+netnews/\Andreas Krennmair 
+r.pluem/\ Rüdiger Plüm )
+
+liamfoy/\"Liam J. Foy" 
+uk_info/\cindybrett7 
+ast/\Andreas Steinmetz 
+scottu/\"Scott A. Undercofler" 
+gozer/\"Philippe M. Chiasson" 
+eckert/\Timo Eckert 
+ggrewal/\Gurpreet Grewal 
+mamath/\Madhusudan Mathihalli 
+craigs_email_box/\Craig S 
+Mathias.Herberts/\Mathias Herberts 
+kawai/\Hiroaki KAWAI 
+lucp/\Luc Pardon 
+peter.cranstone/\"Peter J. Cranstone" 
+romio/\Roman Gavrilov 
+torsten.foertsch/\Torsten Foertsch 
+nathanael/\"Nathanael D. Noblet" 
+chip/\Paul Querna 
+rmorgan/\Ryan Morgan 
+hps/\Henning Schmiedehausen 
+list/\lists 
+tobias/\"Tobias Skytte" 
+keith/\
+przemekc/\"Przemek Czerkas" 
+warp-9.9/\Leif W 
+sergb/\"Serg Belokamen" 
+a.d.stribblehill/\Andrew Stribblehill 
+a-blentz/\"Brett Lentz \(Excell Data Corporation\)" 
+klaus/\Klaus Wagner 
+matthew/\Matthew Hodgson 
+trapni/\Christian Parpart 
+andya/\Andy Armstrong 
+gbaratto/\"Gustavo A. Baratto" 
+randy/\Randy Kobes 
+sjungels/\"Stephen Jungels" 
+lists/\Antonin Karasek 
+rathamahata/\"Sergey S. Kostyliov" 
+elihusmails2000/\Mark 
+dbb/\Duncan Brannen 
+gdilem/\"gdilem\@libero\.it" 
+andy/\Andy Armstrong 
+scottm/\Scott MacVicar 
+kclair/\Kristina Clair 
+dohair/\"Dave O'Hair" 
+hutuworm/\hutuworm 
+TIM.TAYLOR/\"TAYLOR, TIM \(CONTRACTOR\)" 
+marcs/\
+ads/\Andrew Stribblehill 
+nd/\André  Malo 
+paviira/\Calvin 
+fitz/\
+rstrahl/\"Rick Strahl" 
+coar/\Rodent of Unusual Size 
+ravriel/\"Ron Avriel" 
+nick.maynard/\Nick Maynard 
+nian.li/\ nian li
+Dick.Snippe/\Dick Snippe 
+kiwi/\Xavier Beaudouin 
+alexander/\
+mfbscs/\
+ozone/\André Pang  
+graf.laszlo/\Laszlo 
+prashant_shetty/\Prashant Shetty 
+shu/\Stefan Hueneburg 
+apngss/\Joe Smith 
+new-apache/\"Pawel Niewiadomski" 
+NYY96/\
+claco/\"Christopher H. Laco" 
+dean_maslic/\dean 
+apachegeek/\Sarat S 
+speeves/\Shannon Eric Peevey 
+oeriksson/\Oden Eriksson 
+david/\David Lichteblau 
+qing.li/\"Li, Qing" 
+covener/\Eric Covener 
+kiranm/\Kiran Mendonce 
+ph18/\"Paul A Houle" 
+m.panichi/\Massimiliano Panichi 
+dbadmin/\Christopher Sagayam 
+programing/\Damir Dezeljin 
+william/\William McKee 
+arne/\Arne Thomassen 
+manoj_jain/\"Manoj Jain" 
+a1131622/\
+darryl/\"Darryl L. Miles" 
+frederic.bor/\Frédéric Bor  
+r.pluem/\
+arkadi/\Arkadi Shishlov 
+maxim/\Maxim 
+sean/\Sean Mehan 
+luca.regini/\luca regini 
+jfenlason/\"Fenlason, Josh" 
+asoksamy/\"P. Asokan" 
+mmitchell/\Matt Mitchell 
+jsmith/\"Joel J. Smith" 
+nitesh/\"Nitesh Naik" 
+lars/\Lars Eilebrecht 
+apache-dev/\
+hshaik/\Hassan shaik 
+justin/\justin 
+maxime/\Maxime Zakharov 
+freedman/\Daniel Freedman 
+henri.schomaecker/\Henri Schomäcker  
+vgray/\"Sergey Velikanov [UzPAK]" 
+stutte/\Jens Stutte 
+mas.lists/\"Marco Schinkel" 
+mime/\Michal Mertl 
+michal.mertl/\Michal Mertl 
+lglyahoo-misc/\
+t0/\Nick 
+nick/\Nick Hill 
+venky_naganathan/\"venky_naganathan" 
+dev-httpd/\"Kaspar Brand" 
+sitz/\Noah 
+sheep.killer/\Clement Laforet 
+sheepkiller/\Clement Laforet 
+danudey/\Dan Udey 
+philip.lello/\"Phil Lello" 
+OpenMacNews/\OpenMacNews 
+"Krishnamurthy,/\
+Srinivasamurthy.Krishnamurthy/\	Srinivasamurthy" 
+opm/\"Maity, Omprakash" 
+pradeep.smani/\pradeep kumar 
+oeriksson/\Oden Eriksson 
+olafvdspek/\Olaf van der Spek 
+startrack79/\leo 
+spierzchala/\"Stephen" 
+fmartinez/\"Francisco Martinez Espadas" 
+mcnab_p/\Peter McNab 
+chrisd/\Chris Darroch 
+ldapmaster/\james 
+Bruce/\"Ivan Barrera A." 
+morten.egelund.rasmussen/\Morten Egelund Rasmussen 
+jonb/\"Jon Bjarnason" 
+ds/\Devendra Singh 
+ph10/\Philip Hazel 
+sbailliez/\Stephane Bailliez 
+sternmarc/\
+yma/\"Yanbin Ma" 
+spam-admin/\"spam-admin" 
+sergey/\"Sergey Ten" 
+list/\
+rbalaji/\"Balaji" 
+twh/\Tom Hoefakker 
+psusi/\Phillip Susi 
+masaoki/\Masaoki Kobayashi 
+jim/\Jim Albert 
+rehman.adil/\"Rehman Adil \(KI/EAB\)" 
+aaron/\
+jim/\
+kuriyama/\
+dduvall/\
+bakins/\
+gozer/\
+stoddard/\
+ronald/\
+kfranken/\
+vengal/\"VENGAL, THOMAS" 
+wbarker/\"Bill Barker" 
+NicoleHairston/\"Fran Rivas" 
+viipuri/\
+bdolez/\Benoit DOLEZ 
+spam_from_apache_dev/\Phil Endecott 
+russell_howe/\Russell Howe 
+ssinghi/\Surendra Singhi 
+apathy/\"Alaka Pathy \(apathy\)" 
+eddiearmeen/\ed elliott 
+andreas_bauer/\"Andreas Bauer" 
+dhay/\
+greg/\Gregory Steuck 
+timo.viipuri/\"Viipuri, Timo" 
+elihusmails/\Mark 
+mihir.mohan/\Mihir Mohan 
+nmueller/\Nate Mueller 
+dlr/\"Daniel L. Rall" 
+jcekstrom/\Joey Ekstrom 
+kitzkikz.11819583/\
+chip/\Paul Querna 
+jorge_schrauwen/\"Jorge Schrauwen" 
+info/\Jorge Schrauwen 
+Brian.Akins/\"Akins, Brian" 
+brian.akins/\Brian Akins 
+ben/\
+service/\"service@paypal.com" 
+ivan/\
+arnaulists/\arebassa arebassa 
+luogang/\"Luo Gang" 
+FeliciaGuerrero/\"Calvin Cunningham" 
+davidnwelton/\David Welton 
+Narasimha.Sridhar/\
+kaushal/\"Kaushal Jha - ZEDO" 
+service/\
+niv/\Nivedita Singhvi 
+Graham.Collinson/\"Collinson, Graham" 
+GonzaloRagland/\"Isabelle Judd" 
+ivan.ristic/\Ivan Ristic 
+mv/\Michael Vergoz 
+rian/\Rian Hunter 
+jb-httpd/\Jem Berkes 
+maxime.petazzoni/\Maxime Petazzoni 
+sleonardi/\"sleonardi@etnoteam.it" 
+jb-httpd/\Jem Berkes 
+SarahBurr/\"Cathy Cantu" 
+phjmxzsu/\"Patti Goldstein" 
+CarltonYu/\"Christian Zweig" 
+gvz/\"Georg v. Zezschwitz" 
+gvz/\Georg von Zezschwitz 
+hansjoerg.pehofer/\Hansjoerg Pehofer 
+jorge.schrauwen/\"Jorge Schrauwen" 
+jpeqhlwvyiwffe/\"PayPal" 
+wbtxmk/\"PayPal" 
+ffaestpzdde/\"PayPal" 
+jeffm/\Jeff McAdams 
+parin.soc/\Parin Shah 
+zuzwoboxix/\"service@paypal.com" 
+bowman/\"Finkel"
+rajesh.r2/\"R, Rajesh (STSD)" 
+bvchaosinc/\russell johnson 
+uuwhok/\"service@paypal.com" 
+tcurdt/\Torsten Curdt 
+michauhttpd/\Michal Kosek 
+hyc/\Howard Chu 
+noma/\Hideki Noma 
+aces4me/\steve johnson 
+gs33/\Gopikrishnan Sidhardhan 
+mail_kb/\KB Sriram 
+mail/\"- Barry -" 
+guptavi/\"Vishal Gupta" 
+rcritten/\Rob Crittenden 
+mattwhiteley/\matt whiteley 
+michael/\Michael Clark 
+jsnow27/\Jon Snow 
+bfoz/\"Brandon Fosdick" 
+hotarea99/\Tom Hewitt 
+doug/\Doug Cutting 
+joost/\Joost de Heer 
+Zhenxiao.liu/\Zhenxiao Liu 
+neale/\Neale Ranns 
+nimit_virgo/\ nimit suri
+magnus/\Daniel Risacher 
+lace/\Jan Kratochvil 
+robersonja/\robersonja 
+russell_kliese/\"russell_kliese" 
+satinders/\
+rwillmer/\Rachel Willmer 
+ruediger.pluem/\Plüm, Rüdiger, VIS  
+iamstever/\steve roussey 
+xuekun.hu/\"Hu, Xuekun" 
+fmarshall/\"Fields Marshall" 
+paul4352/\Paul Rhodes 
+xuekun.hu/\Xuekun Hu 
+opensrc888/\Christine Ho 
+fuankg/\Günter Knauf  
+Jim/\Jim Jagielski 
+jay-news/\Jay Levitt 
+cybton/\"Alexander Windbichler" 
+rian/\Rian Hunter 
+list/\"Brian J. France" 
+firingme/\"firingme" 
+russel/\
+efuzzyone/\Surendra Singhi 
+weiss/\Weiss 
+PhilDietz/\"phildietz" 
+rmiller/\Russell Miller 
+caustin/\Calvin Austin 
+sgurubar/\"Sai Jai Ganesh Gurubaran" 
+ryanmorgan/\Ryan Morgan 
+sctemme/\Sander Temme 
+pgollucci/\"Philip M. Gollucci" 
+rscheckelhoff/\"rscheckelhoff" 
+pquerna/\Paul Querna 
+arobcorp/\Andrew Robertson 
+ondrej/\Ondrej Sury 
+kai.engels/\Kai Engels 
+lists/\Robert L Mathews 
+hugo/\
+peterdj/\"Peter Djalaliev" 
+prisenhoover/\"Paul Risenhoover" 
+gregor/\"Gregor J. Rothfuss" 
+rpluem/\Ruediger Pluem 
+r.pluem/\Rüdiger Plüm  
+jmkogut/\Joshua Kogut 
+yulindong/\Yulin Dong 
+shiva/\Shiva Shivakumar 
+cmurtaugh/\Colin Murtaugh 
+shivak/\Shiva Shivakumar 
+rubys/\Sam Ruby 
+chemodax/\Ivan Zhakov 
+andreas.konrad/\
+francis.andre/\"Francis ANDRE" 
+paulat/\"Paul Smedley" 
+nicola.flucke/\Nicola Flucke 
+stuart/\Stuart Children 
+artem/\artem 
+cthibault/\chris 
+sascha/\Sascha Schnitzler 
+kot.begemot/\Vadim Chekan 
+nataraja/\Preethi Natarajan 
+amistry/\Anish Mistry 
+kenevel/\"Michael Harrison" 
+SGaffga/\"Gaffga, Stefan" 
+spamtrap/\Martin Knoblauch 
+peter.djalaliev/\Peter Djalaliev 
+hendrik.harms/\Hendrik Harms 
+anteln/\Andreas Lindström  
+christophe.jaillet/\"Christophe Jaillet" 
+florz/\Florian Zumbiehl 
+ebenze/\"Eric B." 
+marc.stern/\"Marc Stern" 
+ghassanm/\Ghassan Misherghi 
+maillist/\shenanigans 
+cranstone1/\"Peter J. Cranstone" 
+awang/\Andy Wang 
+corentincj/\Corentin CHARY 
+shankarunni/\Shankar Unni 
+maxb1/\Max Bowsher 
+lists/\Christophe Yayon 
+info/\"Steffen" 
+Joerg-Cyril.Hoehle/\"Hoehle, Joerg-Cyril" 
+pgquiles/\Pau Garcia i Quiles 
+matthias.behrens/\"Matthias Behrens" 
+scollyer/\Stephen Collyer 
+JayS128/\
+stanley/\"Stanley W" 
+ccyflai/\Lai Yiu Fai 
+wilfelipe/\Wilson Felipe 
+alexeyt/\Alexey Toptygin 
+christian.folini/\Christian Folini 
+Mukesh_Kumar02/\"Mukesh_Kumar02" 
+Vinay.Kumar/\
+sanganakal.Kote/\
+lardcanoe/\Steve Frank 
+orders/\"Sales" 
+brianm/\Brian McCallister 
+matty91/\Matty 
