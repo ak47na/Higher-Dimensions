@@ -10,9 +10,9 @@ timeInt = [('1 hour', 3600), ('1 day', 3600 * 24), ('5 days', 3600 * 24 * 5),
            ('30 days', 3600 * 24 * 30), ('1 year', Y), ('2 years', Y * 2),
            ('5 years', Y * 5), ('10 years', Y * 10), ('20 years', Y * 20)]
 timeIntWithResults = [('1 hour', 3600), ('1 day', 3600 * 24), ('5 days', 3600 * 24 * 5),
-                      ('30 days', 3600 * 24 * 30), ('1 year', Y), ('5 years', Y * 5)]
+                      ('30 days', 3600 * 24 * 30), ('1 year', Y), ('12 years', Y * 12)]
 
-mailID.fullInit()
+mailID.cachedInit()
 
 msgDetailsFilePath = 'D:\AKwork2020-2021\Higher-Dimensions\ApacheData\\apacheMsgDetails.txt'
 #"Data\\msgDetails.txt"
@@ -73,8 +73,8 @@ def runResults():
                 t1Times.append(t)
                 # Add paper name.
                 t1Rows[0].append(paperProjects[projectId])
-                meanRes = getMeanResults(monoplexNetwork)
-                #meanRes = crtResult[0]
+                #meanRes = getMeanResults(monoplexNetwork)
+                meanRes = crtResult[0]
                 for i in range(2):
                     # Compare both the optimistic and pessimistic models.
                     t1Rows[1 + i * 3].append(projResult[i])
