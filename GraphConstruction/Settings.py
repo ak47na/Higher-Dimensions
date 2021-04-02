@@ -42,10 +42,10 @@ def getMeasureNames():
 
 def getMeasureCorrelation(measureName):
     return measureCorrelation[measureName][issueType][networkType]
-def getMeasureCorrelation(measureName, networkType_):
-    return measureCorrelation[measureName][issueType][networkType_]
-def getMeasureCorrelation(measureName, issueType_, networkType_):
-    return measureCorrelation[measureName][issueType_][networkType_]
+# def getMeasureCorrelation(measureName, networkType_):
+#     return measureCorrelation[measureName][issueType][networkType_]
+# def getMeasureCorrelation(measureName, issueType_, networkType_):
+#     return measureCorrelation[measureName][issueType_][networkType_]
 
 def getPastPaperResult():
     initMeasureCorrelation()
@@ -147,5 +147,5 @@ def getPaper7UpperLowerTransitiveFaultRate():
     results[oneDay] = [(0.43, 0.55), (0.41, 0.53), (0.44, 0.55)]
     results[oneDay * 30] = [(0.21, 0.50), (0.38, 0.51), (0.27, 0.51)]
     results[oneDay * 365] = [(0.11, 0.49), (0.37, 0.50), (0.17, 0.50)]
-    results[oneDay * 365 * 11] = [(0.15, 0.50), (0.41, 0.51), (0.17, 0.51)]
+    results[oneDay * 365 * 10] = [(0.15, 0.50), (0.41, 0.51), (0.17, 0.51)]
     return results

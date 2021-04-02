@@ -34,12 +34,16 @@ class OrderInfoFlowNetwork(infoFlowNetwork.InformationFlowNetwork):
         centralityList = []
         for nod in self.nr2p[netwType][id]:
             centralityList.append((self.nr2p[netwType][id][nod], nod))
-        centralityList = sorted(centralityList)
+        centralityList = sorted(centralityList, reverse=True)
         order = []
+        top10P = len(centralityList) // 10
         for p in centralityList:
+            top10P -= 1
+            # if top10P < 0:
+            #     break
             order.append(p[1])
             if len(order) > 1:
-                assert (self.nr2p[netwType][id][order[-1]] >= self.nr2p[netwType][id][order[-2]])
+                assert (self.nr2p[netwType][id][order[-1]] <= self.nr2p[netwType][id][order[-2]])
 
         return order
 
@@ -51,13 +55,17 @@ class OrderInfoFlowNetwork(infoFlowNetwork.InformationFlowNetwork):
         for netw in range(1, self.nrGraphs + 1):
             if not (netw in self.nr2paths[netwType][0]):
                 continue
+            atLeastOne2P = False
             for nod in self.nr2paths[netwType][0][netw]:
-                if not (nod in self.nr2p[netwType][0]):
-                    for i in range(3):
-                        self.nr2p[netwType][0][nod] = 0
-                        self.nr2p[netwType][1][nod] = 0
-                        self.nr2p[netwType][2][nod] = 0
+                if self.nr2paths[netwType][0][netw][nod] > 0:
+                    atLeastOne2P = True
+                    break
+            if atLeastOne2P == False:
+                continue
+            for nod in self.nr2paths[netwType][0][netw]:
                 for i in range(3):
+                    if not (nod in self.nr2p[netwType][i]):
+                        self.nr2p[netwType][i][nod] = 0
                     self.nr2p[netwType][i][nod] += self.nr2paths[netwType][i][netw][nod]
 
     def getRanginkCorrelation(self, netwType):
@@ -86,6 +94,7 @@ class OrderInfoFlowNetwork(infoFlowNetwork.InformationFlowNetwork):
         order = []
         for i in range(3):
             order.append(self.getNodesOrderAggregate(i, netwType))
+
         w, p = spearmanr(order[0], order[1])
         self.crtResult[netwType][1] = (round(w, 4), p)
         # print(w, p)

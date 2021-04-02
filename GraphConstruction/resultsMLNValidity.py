@@ -64,8 +64,9 @@ def plotTableCorrelation(tTimes, tRows):
                          ])
     t.show()
 
-mailID.init()
-msgDetailsFilePath = "Data\\msgDetails.txt"
+mailID.cachedInit()
+msgDetailsFilePath = 'D:\AKwork2020-2021\Higher-Dimensions\ApacheData\\apacheMsgDetails.txt'
+    #"Data\\msgDetails.txt"
 minTime, maxTime, msgDict = reproValidity.readMsgDetails(msgDetailsFilePath)
 t1Rows = [[] for k in range(6)]
 parameters.setLayerDistance(1)
@@ -132,9 +133,9 @@ def getResults():
         diff.sort()
         # print('For time ', t, ' and delta_t ', delta_t, 'diff bounds are ', diffBounds)
         # print('and diff array is ', diff)
-    # plotTableOPBounds(t1Times, t1Rows)
-    # plotTableOPChanges(t1Times, tRows)
-    # plotTableCorrelation(t1Times, tCorrRows)
+    plotTableOPBounds(t1Times, t1Rows)
+    plotTableOPChanges(t1Times, tRows)
+    plotTableCorrelation(t1Times, tCorrRows)
     plotTableCLECount(t1Times, cleRows)
 
 def plotTableSpcases(t2Times, t2Rows):

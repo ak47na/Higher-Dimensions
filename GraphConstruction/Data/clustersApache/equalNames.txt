@@ -36,10 +36,8 @@ blue/\blue/\bluelang/\blue
 bruce/\bruce/\bruce/\bedouglas
 andrewford/\aford/\andrewford/\andrew
 andrewwilson/\awilson/\andrewwilson/\andrew
-andrewwilson/\andrew/\andrewwilson/\awilson
 chipturner/\chip/\chipturner/\cturner
 christiangross/\cgross/\christiangross/\christiangross
-christiangross/\christiangross/\christiangross/\cgross
 christiangross/\christiangross/\christiangross/\ing
 christiankruse/\ck1/\christiankruse/\christiankruse
 christofdamian/\cdamian/\christofdamian/\christof

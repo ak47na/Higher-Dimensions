@@ -117,9 +117,9 @@ class InformationFlowNetwork:
         a = self.msgDict[v][0]
         nrNodes = self.addHuman(a, nrNodes)
         nrNodes = self.addHuman(b, nrNodes)
-        if a == b:
-            # Do not include self replies
-            return nrNodes
+        # if a == b:
+        #     # Do not include self replies
+        #     return nrNodes
         self.nrEdges += 1
         A = self.humanDict[a]
         B = self.humanDict[b]
@@ -379,6 +379,7 @@ class InformationFlowNetwork:
             #     netwEdges = self.inLayer[netw]
             # else:
             #     netwEdges = self.Adj[netw]
+            atLeastOne2Path = False
             for a in netwEdges:
                 self.nr2paths[netwType][0][netw][a] = 0
                 self.nr2paths[netwType][1][netw][a] = 0
@@ -394,6 +395,7 @@ class InformationFlowNetwork:
                         continue
                     for c in netwEdges[b]:
                         # Count the 2-path : a->b->c
+                        atLeastOne2Path = True
                         self.nr2paths[netwType][0][netw][a] += 1
                         self.nr2paths[netwType][1][netw][a] += 1
                         self.nr2paths[netwType][2][netw][a] += 1
@@ -409,13 +411,21 @@ class InformationFlowNetwork:
             # nodes, divided by the number of nodes in the network.
             transFaultSum[0] /= N
             transFaultSum[1] /= N
+            # if N < 5 and atLeastOne2Path and transFaultSum[0] == 0.0 and transFaultSum[1] == 1.0:
+            #     print(transFaultSum[0], transFaultSum[1])
+            #     for nod1 in netwEdges:
+            #         print(nod1, self.nr2paths[netwType][0][netw][nod1])
+            #         for nod2 in netwEdges[nod1]:
+            #             print('edge ', nod1, nod2, netwEdges[nod1][nod2])
+            #     assert False
+
             self.TFperNetw[netwType][netw] = (transFaultSum[0], transFaultSum[1])
 
             # optimistic model should have at most pessimistic model transitive faults.
             assert transFaultSum[0] <= transFaultSum[1]
-
-            upperBound = max(transFaultSum[1], upperBound)
-            lowerBound = min(transFaultSum[0], lowerBound)
+            if atLeastOne2Path:
+                upperBound = max(transFaultSum[1], upperBound)
+                lowerBound = min(transFaultSum[0], lowerBound)
 
         self.crtResult[netwType][0] = (lowerBound, upperBound)
 

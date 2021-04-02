@@ -4,7 +4,7 @@ from dateutil.parser import parse
 import tzInfo
 
 invalidCh = ['\\', '/', '+', '!', '{', '}', '(', ')', ':', '[', ']']
-warnings.filterwarnings("error")
+#warnings.filterwarnings("error")
 
 #Removes any occurence of an invalid ch (from invalidCh) from the name.
 def purify(name):
@@ -51,7 +51,7 @@ badMsgId = 0
 
 #Read all lines from the file containing all message details.
 tzInfo = tzInfo.getTZInfo()
-
+noRepliedToCnt = 0
 while True:
     # The line contains information of current msg in format msgID/\repliedtoID/\name+email/\date
     crtLine = f.readline()
@@ -67,10 +67,14 @@ while True:
         continue
     assert (crtLine[0][0] == '<' and crtLine[0][-1] == '>')
     msgId = crtLine[0]
+    if len(crtLine[1]) == 0:
+        noRepliedToCnt += 1
 
     msgRepliedTo = crtLine[1].split('>', 1)[0] + '>'
     if not '<' in crtLine[1]:
-        badRepliesFormat += 1
+        if len(crtLine[1]) > 0:
+            #print(crtLine[1].split(' of ')[-1])
+            badRepliesFormat += 1
     name = getNameAndEmail(crtLine[2])
     date = crtLine[3].replace('(MET DST)', '(MET)')
     # Uncomment this lines to fix INVALID DATE ERRORS IN THE DATASET
@@ -91,26 +95,54 @@ while True:
 
             utcdate = dt + timedelta(seconds=sec)
             msgDict[msgId] = (name, msgRepliedTo, utcdate.timestamp())
-            nrM += 1
-            msgIds[msgId] = nrM
+            if not msgId in msgIds:
+                nrM += 1
+                msgIds[msgId] = nrM
         except :
             badCnt += 1
             #print(date, 'is a wrongly formatted date')
 
-f2 = open("D:\AKwork2020-2021\Higher-Dimensions\ApacheData\\apacheMsgDetails.txt", "w", encoding="utf-8")
-f3 = open("D:\AKwork2020-2021\Higher-Dimensions\ApacheData\\apacheMsgEdges.txt", "w", encoding="utf-8")
-print(badRepliesFormat, badCnt, badMsgId, nrM, nonUniqueMsgIds)
+#f2 = open("D:\AKwork2020-2021\Higher-Dimensions\ApacheData\\apacheMsgDetails.txt", "w", encoding="utf-8")
+#f3 = open("D:\AKwork2020-2021\Higher-Dimensions\ApacheData\\apacheMsgEdges.txt", "w", encoding="utf-8")
+print(noRepliedToCnt, badRepliesFormat, badCnt, badMsgId, nrM, nonUniqueMsgIds)
 
+msgWithReply = {}
+msgWithReplyCount = 0
 badReplyCnt = 0
+otherType = 0
+noReplyMsg = {}
+badReplyMsg = {}
+print('Msg ids', len(msgIds))
 for msgId in msgDict:
-    f2.write(str(msgIds[msgId]) + '/\\' + msgDict[msgId][0] + '/\\' + str(msgDict[msgId][2]) + '\n')
+    #f2.write(str(msgIds[msgId]) + '/\\' + msgDict[msgId][0] + '/\\' + str(msgDict[msgId][2]) + '\n')
     if msgDict[msgId][1] != '' and msgDict[msgId][1] in msgDict:
-        f3.write(str(msgIds[msgId]) + '/\\' + str(msgIds[msgDict[msgId][1]]) + '\n')
-    else:
-        if len(msgDict[msgId][1]) > 1:
-            badReplyCnt += 1
+        if not (msgIds[msgDict[msgId][1]] in msgWithReply):
+            msgWithReplyCount += 1
+            msgWithReply[msgIds[msgDict[msgId][1]]] = msgWithReplyCount
+        #f3.write(str(msgIds[msgId]) + '/\\' + str(msgIds[msgDict[msgId][1]]) + '\n')
+    # else:
+    #     if len(msgDict[msgId][1]) > 1 or (len(msgDict[msgId][1]) == 1 and msgDict[msgId][1][0] != '>'):
+    #         #print(msgDict[msgId][1])
+    #         if not (msgIds[msgId] in badReplyMsg):
+    #             badReplyCnt += 1
+    #             badReplyMsg[msgIds[msgId]] = badReplyCnt
 
-print(badReplyCnt)
-f2.close()
-f3.close()
+for msgId in msgDict:
+    if msgDict[msgId][1] != '' and (msgDict[msgId][1] in msgDict) and msgDict[msgId][1] != '>':
+        continue
+    if msgDict[msgId][1] == '' or msgDict[msgId][1] == '>':
+        continue
+    if not (msgIds[msgId] in msgWithReply):
+        badReplyCnt += 1
+        badReplyMsg[msgIds[msgId]] = badReplyCnt
+
+print(badReplyCnt, msgWithReplyCount, len(msgDict), otherType)
+noReplyMsgCount = 0
+for msgId in msgIds:
+    if (not(msgId in msgWithReply)) and (not(msgId in badReplyMsg)):
+        noReplyMsgCount += 1
+
+print(noReplyMsgCount, noReplyMsgCount + len(badReplyMsg) + msgWithReplyCount)
+# f2.close()
+# f3.close()
 f.close()

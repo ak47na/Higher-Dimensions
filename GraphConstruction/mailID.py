@@ -61,6 +61,7 @@ def createCheckedIdentities(filename):
         alias1 = crtL[1] + crtL[0]
         alias2 = crtL[3] + crtL[2]
         if alias1 in Identity:
+            print(alias1, alias2)
             assert not(alias2 in Identity)
             Identity[alias2] = Identity[alias1]
         elif alias2 in Identity:

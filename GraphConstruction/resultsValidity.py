@@ -10,7 +10,7 @@ timeInt = [('1 hour', 3600), ('1 day', 3600 * 24), ('5 days', 3600 * 24 * 5),
            ('30 days', 3600 * 24 * 30), ('1 year', Y), ('2 years', Y * 2),
            ('5 years', Y * 5), ('10 years', Y * 10), ('20 years', Y * 20)]
 timeIntWithResults = [('1 hour', 3600), ('1 day', 3600 * 24), ('5 days', 3600 * 24 * 5),
-                      ('30 days', 3600 * 24 * 30), ('1 year', Y), ('12 years', Y * 12)]
+                      ('30 days', 3600 * 24 * 30), ('1 year', Y), ('10 years', Y * 10)]
 
 mailID.cachedInit()
 
