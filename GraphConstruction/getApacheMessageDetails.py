@@ -4,7 +4,7 @@ from dateutil.parser import parse
 import tzInfo
 
 invalidCh = ['\\', '/', '+', '!', '{', '}', '(', ')', ':', '[', ']']
-#warnings.filterwarnings("error")
+warnings.filterwarnings("error")
 
 #Removes any occurence of an invalid ch (from invalidCh) from the name.
 def purify(name):
@@ -40,7 +40,7 @@ def getNameAndEmail(From):
     From[1] = From[1].split('<')[0]
     return From[0] + '/\\' + From[1].split('@')[0]
 
-f = open('D:\AKwork2020-2021\Higher-Dimensions\ApacheData\msgDetailsRawFull.txt', 'r', encoding="utf-8")
+f = open('D:\AKwork2021\HigherDimensions\Higher-Dimensions\ApacheData\msgDetailsRawFull.txt', 'r', encoding="utf-8")
 msgDict = {}
 msgIds = {}
 nrM = 0
@@ -87,9 +87,9 @@ while True:
     if msgId in msgDict:
         nonUniqueMsgIds += 1
     else:
-        sec = 0
         try:
             dt = parse(date, tzinfos = tzInfo)
+            sec = 0
             if dt.tzinfo and dt.tzinfo.utcoffset(dt):
                 sec = dt.utcoffset().total_seconds()
 
@@ -98,9 +98,12 @@ while True:
             if not msgId in msgIds:
                 nrM += 1
                 msgIds[msgId] = nrM
-        except :
+        except Warning:
             badCnt += 1
-            #print(date, 'is a wrongly formatted date')
+            print(date, 'is a wrongly formatted date')
+        except Exception:
+            badCnt += 1
+            print(date, 'bad dates')
 
 #f2 = open("D:\AKwork2020-2021\Higher-Dimensions\ApacheData\\apacheMsgDetails.txt", "w", encoding="utf-8")
 #f3 = open("D:\AKwork2020-2021\Higher-Dimensions\ApacheData\\apacheMsgEdges.txt", "w", encoding="utf-8")

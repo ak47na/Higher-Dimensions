@@ -14,7 +14,7 @@ timeIntWithResults = [('1 hour', 3600), ('1 day', 3600 * 24), ('5 days', 3600 * 
 
 mailID.cachedInit()
 
-msgDetailsFilePath = 'D:\AKwork2020-2021\Higher-Dimensions\ApacheData\\apacheMsgDetails.txt'
+msgDetailsFilePath = r'D:\AKwork2021\HigherDimensions\Higher-Dimensions\ApacheData\apacheMsgDetails.txt'
 #"Data\\msgDetails.txt"
 #Create the dictionary of messages and get the min,max times of messages.
 minTime, maxTime, msgDict = reproValidity.readMsgDetails(msgDetailsFilePath)
