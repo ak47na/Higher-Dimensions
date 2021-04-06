@@ -40,6 +40,10 @@ def plotTableOPChanges(tTimes, tRows):
                                   cells=dict(values=tData))
                          ])
     t1.show()
+
+def plotScalingTable(tTimes, tRows):
+    pass
+
 def plotTableOPBounds(t1Times, t1Rows):
     t1Data = [t1Times]
     t1ColumnNames = ['time interval', 'TFR lowerbound for MLN', 'TFR lowerbound',
@@ -65,7 +69,7 @@ def plotTableCorrelation(tTimes, tRows):
     t.show()
 
 mailID.cachedInit()
-msgDetailsFilePath = 'D:\AKwork2020-2021\Higher-Dimensions\ApacheData\\apacheMsgDetails.txt'
+msgDetailsFilePath = 'D:\AKwork2021\HigherDimensions\Higher-Dimensions\ApacheData\\apacheMsgDetails.txt'
     #"Data\\msgDetails.txt"
 minTime, maxTime, msgDict = reproValidity.readMsgDetails(msgDetailsFilePath)
 t1Rows = [[] for k in range(6)]

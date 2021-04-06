@@ -27,8 +27,8 @@ class InformationFlowNetwork:
         # minT[graphIndex][(A, B)] = min time t in graphIndex s.t there was a message from B to A at t.
         self.minT = {}
         self.maxT = {}
-        #inLayer[graphIndex][A][B] = (minT, maxT)
-        #crossLayerIn[graphIndex][A][B] = (minT, maxT)
+        #inLayer[graphIndex][A][B] = (minT_AB, maxT_AB)
+        #crossLayerIn[graphIndex][A][B] = (minT_AB, maxT_AB)
         #crossLayerOut[graphIndex][A][B] = minT
         self.netwNodes = {}
         self.inLayer = {}
@@ -105,6 +105,7 @@ class InformationFlowNetwork:
         # u is a reply to v, b is the sender of u, a is the sender of v.
         if (self.msgDict[u][1].timestamp() < self.msgDict[v][1].timestamp()):
             u, v = v, u
+
         timeU = self.msgDict[u][1].timestamp()
         timeV = self.msgDict[v][1].timestamp()
         assert (timeU >= timeV)
@@ -146,9 +147,9 @@ class InformationFlowNetwork:
         self.addNodeToNetw(B, self.timeDict[tIntervalIdV])
 
         T = self.timeDict[tIntervalIdU]
+        Tv = self.timeDict[tIntervalIdV]
         if tIntervalIdU != tIntervalIdV:
             self.crossLayerEdges.append(((A, timeV), (B, timeU)))
-            Tv = self.timeDict[tIntervalIdV]
             # Add cross-layer edge outgoing from A.
             if (not A in self.crossLayerOut[Tv]):
                 self.crossLayerOut[Tv][A] = {}
@@ -172,12 +173,12 @@ class InformationFlowNetwork:
                 self.inLayer[T][A][B] = getMinMax(self.inLayer[T][A][B], timeU)
         # Update the minimum and maximum time for a conversation from person A to person B.
         # The value is necessary for computing transitive faults.
-        if not ((A, B) in self.minT[T]):
-            self.minT[T][(A, B)] = timeU
-            self.maxT[T][(A, B)] = timeU
+        if not ((A, B) in self.minT[Tv]):
+            self.minT[Tv][(A, B)] = timeU
+            self.maxT[Tv][(A, B)] = timeU
         else:
-            self.minT[T][(A, B)], self.maxT[T][(A, B)] = updateTimeBorders(self.minT[T][(A, B)],
-                                                                                self.maxT[T][(A, B)],
+            self.minT[Tv][(A, B)], self.maxT[Tv][(A, B)] = updateTimeBorders(self.minT[Tv][(A, B)],
+                                                                                self.maxT[Tv][(A, B)],
                                                                                 timeU)
         # Add an edge in the T-th MultiDiGraph from the node representing human a to the node
         # representing human b.
@@ -216,13 +217,17 @@ class InformationFlowNetwork:
             assert len(lst) == 2
             if not (lst[0] in self.msgDict) and not (lst[0] in invalidMsg):
                 invalidMsg[lst[0]] = True
+                print(lst[0], 'err')
                 errors += 1
             if not (lst[1] in self.msgDict) and not (lst[1] in invalidMsg):
                 invalidMsg[lst[1]] = True
+                print(lst[1], 'err')
                 errors += 1
             if (lst[0] in self.msgDict) and (lst[1] in self.msgDict):
                 nrNodes = self.addEdge(lst[1], lst[0], nrNodes)
         edgeFile.close()
+        # For the apache dataset, there should be no errors.
+        # assert errors == 0
         return nrNodes
 
     def getTFaultMonoplex(self, a, b, c, netw, netwType, optimisticCount, pesimisticCount):
@@ -380,12 +385,14 @@ class InformationFlowNetwork:
             # else:
             #     netwEdges = self.Adj[netw]
             atLeastOne2Path = False
+            countedTuples = {}
             for a in netwEdges:
                 self.nr2paths[netwType][0][netw][a] = 0
                 self.nr2paths[netwType][1][netw][a] = 0
                 self.nr2paths[netwType][2][netw][a] = 0
                 optimisticCount = 0
                 pesimisticCount = 0
+
                 for b in netwEdges[a]:
                     if netwType == 'MLN':
                         self.addCLEPathAB(netw, netwType, a, b)
@@ -396,6 +403,9 @@ class InformationFlowNetwork:
                     for c in netwEdges[b]:
                         # Count the 2-path : a->b->c
                         atLeastOne2Path = True
+                        if (a, b, c) in countedTuples:
+                            assert False
+                        countedTuples[(a, b, c)] = True
                         self.nr2paths[netwType][0][netw][a] += 1
                         self.nr2paths[netwType][1][netw][a] += 1
                         self.nr2paths[netwType][2][netw][a] += 1

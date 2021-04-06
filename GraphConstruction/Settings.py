@@ -136,6 +136,7 @@ def getPaper7TwoPathCorrelations():
     oneDay = 3600 * 24
     results[oneDay] = [(0.67, 0.01), (0.52, 0.22), (0.74, 0.01)]
     results[oneDay * 5] = [(0.71, 0.01), (0.63, 0.01), (0.77, 0.0001)]
+    results[oneDay * 365 * 11] = [(0.71, 0.01), (0.63, 0.01), (0.77, 0.0001)]
     results[oneDay * 365] = [(0.82, 0.0001), (0.73, 0.0001), (0.86, 0.0001)]
     return results
 

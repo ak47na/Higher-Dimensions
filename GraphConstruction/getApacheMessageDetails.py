@@ -3,6 +3,8 @@ import warnings
 from dateutil.parser import parse
 import tzInfo
 
+MIN_YEAR = 1995
+MAX_YEAR = 2005
 invalidCh = ['\\', '/', '+', '!', '{', '}', '(', ')', ':', '[', ']']
 warnings.filterwarnings("error")
 
@@ -52,6 +54,7 @@ badMsgId = 0
 #Read all lines from the file containing all message details.
 tzInfo = tzInfo.getTZInfo()
 noRepliedToCnt = 0
+firstChange = True
 while True:
     # The line contains information of current msg in format msgID/\repliedtoID/\name+email/\date
     crtLine = f.readline()
@@ -76,53 +79,67 @@ while True:
             #print(crtLine[1].split(' of ')[-1])
             badRepliesFormat += 1
     name = getNameAndEmail(crtLine[2])
-    date = crtLine[3].replace('(MET DST)', '(MET)')
+    date = crtLine[3]
+    isMET_DST = False
+    if 'MET DST' in date or 'METDST' in date:
+        date = date.replace('(MET DST)', '(MET)').replace('(METDST)', '(MET)')
+        isMET_DST = True
     # Uncomment this lines to fix INVALID DATE ERRORS IN THE DATASET
     # date = date.replace('+48000', '+0000 (GMT)').replace('-3200 (PST)', '+0000 (GMT)')
     # date = date.replace('-70100 (EST)', '+0000 (GMT)').replace('+73900 (EST)', '+0000 (GMT)')
     # date = date.replace('+4100 (MST)', '+0000 (GMT)')
-    if len(crtLine) != 4:
-        print(crtLine, len(crtLine))
-    assert (len(crtLine) == 4)
+
+    date = date.replace('(Est)', '(EST)')
+    date = date.replace('(Eastern Standard Time)', '(EST)')
+    date = date.replace('(Pacific Daylight Time)', '(PDT)')
+    date = date.replace('(Eastern Daylight Time)', '(EDT)')
+    date = date.replace('(Pacific Standard Time)', '(PST)')
+    date = date.replace('(AUS Eastern Daylight Time)', '(AEDT)')
+    date = date.replace('((MEZ) - Mitteleurop. Sommerzeit)', '(MEZ)')
     if msgId in msgDict:
         nonUniqueMsgIds += 1
     else:
         try:
-            dt = parse(date, tzinfos = tzInfo)
-            sec = 0
-            if dt.tzinfo and dt.tzinfo.utcoffset(dt):
-                sec = dt.utcoffset().total_seconds()
+            if '(' in date and ')' in date:
+                date = date.split('(')[0]
 
+            dt = parse(date, tzinfos=tzInfo)
+            sec = 0
+            if isMET_DST:
+                sec -= 3600
             utcdate = dt + timedelta(seconds=sec)
+
+            if utcdate.year < MIN_YEAR or utcdate.year > MAX_YEAR:
+                print('Inappropriate date', date)
+                continue
             msgDict[msgId] = (name, msgRepliedTo, utcdate.timestamp())
             if not msgId in msgIds:
                 nrM += 1
                 msgIds[msgId] = nrM
         except Warning:
             badCnt += 1
-            print(date, 'is a wrongly formatted date')
+            #print(date, 'is a wrongly formatted date')
         except Exception:
             badCnt += 1
-            print(date, 'bad dates')
+            #print(date, 'bad dates')
 
-#f2 = open("D:\AKwork2020-2021\Higher-Dimensions\ApacheData\\apacheMsgDetails.txt", "w", encoding="utf-8")
-#f3 = open("D:\AKwork2020-2021\Higher-Dimensions\ApacheData\\apacheMsgEdges.txt", "w", encoding="utf-8")
+f2 = open("D:\AKwork2021\HigherDimensions\Higher-Dimensions\ApacheData\\apacheMsgDetails.txt", "w", encoding="utf-8")
+f3 = open("D:\AKwork2021\HigherDimensions\Higher-Dimensions\ApacheData\\apacheMsgEdges.txt", "w", encoding="utf-8")
 print(noRepliedToCnt, badRepliesFormat, badCnt, badMsgId, nrM, nonUniqueMsgIds)
 
 msgWithReply = {}
 msgWithReplyCount = 0
 badReplyCnt = 0
-otherType = 0
-noReplyMsg = {}
 badReplyMsg = {}
+noReplyMsg = {}
 print('Msg ids', len(msgIds))
 for msgId in msgDict:
-    #f2.write(str(msgIds[msgId]) + '/\\' + msgDict[msgId][0] + '/\\' + str(msgDict[msgId][2]) + '\n')
+    f2.write(str(msgIds[msgId]) + '/\\' + msgDict[msgId][0] + '/\\' + str(msgDict[msgId][2]) + '\n')
     if msgDict[msgId][1] != '' and msgDict[msgId][1] in msgDict:
         if not (msgIds[msgDict[msgId][1]] in msgWithReply):
             msgWithReplyCount += 1
             msgWithReply[msgIds[msgDict[msgId][1]]] = msgWithReplyCount
-        #f3.write(str(msgIds[msgId]) + '/\\' + str(msgIds[msgDict[msgId][1]]) + '\n')
+        f3.write(str(msgIds[msgId]) + '/\\' + str(msgIds[msgDict[msgId][1]]) + '\n')
     # else:
     #     if len(msgDict[msgId][1]) > 1 or (len(msgDict[msgId][1]) == 1 and msgDict[msgId][1][0] != '>'):
     #         #print(msgDict[msgId][1])
@@ -131,21 +148,21 @@ for msgId in msgDict:
     #             badReplyMsg[msgIds[msgId]] = badReplyCnt
 
 for msgId in msgDict:
-    if msgDict[msgId][1] != '' and (msgDict[msgId][1] in msgDict) and msgDict[msgId][1] != '>':
+    if msgDict[msgId][1] in msgDict:
         continue
     if msgDict[msgId][1] == '' or msgDict[msgId][1] == '>':
         continue
-    if not (msgIds[msgId] in msgWithReply):
+    if not (msgDict[msgId][1] in badReplyMsg):
         badReplyCnt += 1
-        badReplyMsg[msgIds[msgId]] = badReplyCnt
+        badReplyMsg[msgDict[msgId][1]] = badReplyCnt
 
-print(badReplyCnt, msgWithReplyCount, len(msgDict), otherType)
+print(badReplyCnt, msgWithReplyCount, len(msgDict))
 noReplyMsgCount = 0
 for msgId in msgIds:
-    if (not(msgId in msgWithReply)) and (not(msgId in badReplyMsg)):
+    if (not(msgIds[msgId] in msgWithReply)) and (not(msgId in badReplyMsg)):
         noReplyMsgCount += 1
 
-print(noReplyMsgCount, noReplyMsgCount + len(badReplyMsg) + msgWithReplyCount)
-# f2.close()
-# f3.close()
+print(noReplyMsgCount, noReplyMsgCount + msgWithReplyCount, noReplyMsgCount + len(badReplyMsg) + msgWithReplyCount)
+f2.close()
+f3.close()
 f.close()

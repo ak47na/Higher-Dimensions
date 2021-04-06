@@ -58,11 +58,10 @@ def readMsgDetails(filePath):
             msgEmail = full_i
         if full_i == '':
             full_i = msgEmail
-            if msgEmail in emptyDict:
-                continue
-            emptyDict[msgEmail] = True
-            emptyFullName.write(full_i.encode("utf-8"))
-            emptyFullName.write('\n'.encode("utf-8"))
+            if not(msgEmail in emptyDict):
+                emptyDict[msgEmail] = True
+                emptyFullName.write(full_i.encode("utf-8"))
+                emptyFullName.write('\n'.encode("utf-8"))
         try:
             if not '-' in lst[3]:
                 lst[3] = str(datetime.fromtimestamp(int(float(lst[3]))))
@@ -91,7 +90,7 @@ def readMsgDetails(filePath):
                     msgDict[lst[0]] = (identity, msgDate)
                     minTime, maxTime = updateTimeBorders(minTime, maxTime, msgDate.timestamp())
                 except:
-                    msgEmailAndName = msgEmail + ' and full ' + full_i
+                    msgEmailAndName = msgEmail + full_i + '/\\' + msgEmail + full_i
                     if msgEmailAndName in notFoundDict:
                         continue
                     notFoundDict[msgEmailAndName] = True

@@ -60,8 +60,8 @@ class OrderInfoFlowNetwork(infoFlowNetwork.InformationFlowNetwork):
                 if self.nr2paths[netwType][0][netw][nod] > 0:
                     atLeastOne2P = True
                     break
-            if atLeastOne2P == False:
-                continue
+            # if atLeastOne2P == False:
+            #     continue
             for nod in self.nr2paths[netwType][0][netw]:
                 for i in range(3):
                     if not (nod in self.nr2p[netwType][i]):

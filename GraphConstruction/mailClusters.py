@@ -7,7 +7,7 @@ nameLim = [[-4, 0.70], [-3, 0.80], [0, 0.95]]
 emailLim = [[-4, 0.70], [-3, 0.80], [0, 0.95]]
 lim = 10
 # emailNamesFile = "GraphConstruction/Data/emailName2020B.txt" #File with email names for eclipse
-emailNamesFile = 'D:\\AKwork2020-2021\\Higher-Dimensions\\ApacheData\\nameAndEmailUsername.txt'
+emailNamesFile = r'D:\AKwork2021\HigherDimensions\Higher-Dimensions\ApacheData\nameAndEmailUsername.txt'
 #File with names and emails in format name/\email
 nameEmails = open(emailNamesFile, 'r')
 emailsOfFullName = {}

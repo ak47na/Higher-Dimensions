@@ -133,7 +133,7 @@ def createClusters(par, pairs):
     print('#humans is', nrHumans)
 
 def cachedInit():
-    f = open("D:\\AKwork2020-2021\\Higher-Dimensions\\ApacheData\\identityFile.txt", 'r')
+    f = open("D:\AKwork2021\HigherDimensions\Higher-Dimensions\ApacheData\identityFile.txt", 'r')
     print('Reading identity file')
     nrHumans = 0
     global humanID
