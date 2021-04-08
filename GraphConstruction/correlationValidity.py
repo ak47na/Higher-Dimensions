@@ -64,6 +64,52 @@ class OrderInfoFlowNetwork(infoFlowNetwork.InformationFlowNetwork):
                         self.nr2p[netwType][i][nod] = 0
                     self.nr2p[netwType][i][nod] += self.nr2paths[netwType][i][netw][nod]
 
+    def getTFAggregate(self, netwType):
+        tfSum = [0, 0]
+        nrNodes = 0
+        for a in self.minPair:
+            nrNodes += 1
+            optimisticCount = 0
+            pessimisticCount = 0
+            nr2Paths = 0
+            for b in self.minPair[a]:
+                if not b in self.minPair:
+                    continue
+                assert b in self.maxPair[a]
+                for c in self.maxPair[b]:
+                    nr2Paths += 1
+                    if self.minPair[a][b] > self.maxPair[b][c]:
+                        optimisticCount += 1
+                    if self.maxPair[a][b] > self.minPair[b][c]:
+                        pessimisticCount += 1
+            if nr2Paths:
+                tfSum[0] += optimisticCount / nr2Paths
+                tfSum[1] += pessimisticCount / nr2Paths
+
+        tfSum[0] = tfSum[0] / nrNodes
+        tfSum[1] = tfSum[1] / nrNodes
+        print('Opt and pess tfr', tfSum)
+
+
+
+
+
+    def computeUpperLowerAggregateNetwork(self, netwType):
+        self.compute2PathsAggregateNetwork(netwType)
+        N = len(self.nr2p[netwType][0])
+        sumO = 0
+        sumP = 0
+        okN = 0
+        for a in self.nr2p[netwType][0]:
+            if self.nr2p[netwType][0][a] > 0:
+                okN += 1
+                sumO += (self.nr2p[netwType][0][a] - self.nr2p[netwType][1][a]) / self.nr2p[netwType][0][a]
+                sumP += (self.nr2p[netwType][0][a] - self.nr2p[netwType][2][a]) / self.nr2p[netwType][0][a]
+        sumO /= okN
+        sumP /= okN
+        self.crtResult[netwType][0] = (round(sumO, 4), round(sumP, 4))
+
+
     def getRanginkCorrelation(self, netwType):
         Order = [[], [], []]
         for netw in range(1, self.nrGraphs + 1):

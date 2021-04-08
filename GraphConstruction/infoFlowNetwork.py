@@ -15,6 +15,7 @@ def updateTimeBorders(minTime, maxTime, t):
     return minTime, maxTime
 
 def getMinMax(timePair, t):
+    assert timePair[0] <= timePair[1]
     return (min(timePair[0], t), max(timePair[1], t))
 
 class InformationFlowNetwork:
@@ -27,6 +28,8 @@ class InformationFlowNetwork:
         # minT[graphIndex][(A, B)] = min time t in graphIndex s.t there was a message from B to A at t.
         self.minT = {}
         self.maxT = {}
+        self.minPair = {}
+        self.maxPair = {}
         #inLayer[graphIndex][A][B] = (minT_AB, maxT_AB)
         #crossLayerIn[graphIndex][A][B] = (minT_AB, maxT_AB)
         #crossLayerOut[graphIndex][A][B] = minT
@@ -56,6 +59,7 @@ class InformationFlowNetwork:
         # nr2p[t][node] = the number of 2-paths of node in aggregate network, i.e
         #               = sum(network in networks, nr2p[t][network][node])
         self.nr2p = {'MLN': [{}, {}, {}], 'monoplex' : [{}, {}, {}]}
+
         self.nrGraphs = 0
         self.delta_t = delta_t
         self.analysedT = t
@@ -114,13 +118,16 @@ class InformationFlowNetwork:
             return nrNodes
 
         self.replyDict[(u, v)] = True
+
         b = self.msgDict[u][0]
         a = self.msgDict[v][0]
+
         nrNodes = self.addHuman(a, nrNodes)
         nrNodes = self.addHuman(b, nrNodes)
-        # if a == b:
-        #     # Do not include self replies
-        #     return nrNodes
+
+        if a == b:
+            # Do not include self replies
+            return nrNodes
         self.nrEdges += 1
         A = self.humanDict[a]
         B = self.humanDict[b]
@@ -171,14 +178,26 @@ class InformationFlowNetwork:
                 self.inLayer[T][A][B] = (timeU, timeU)
             else:
                 self.inLayer[T][A][B] = getMinMax(self.inLayer[T][A][B], timeU)
+                assert self.inLayer[T][A][B][0] <= timeU
+                assert self.inLayer[T][A][B][1] >= timeU
         # Update the minimum and maximum time for a conversation from person A to person B.
         # The value is necessary for computing transitive faults.
-        if not ((A, B) in self.minT[Tv]):
-            self.minT[Tv][(A, B)] = timeU
-            self.maxT[Tv][(A, B)] = timeU
+        if not(A in self.minPair):
+            self.minPair[A] = {}
+        if not (B in self.minPair[A]):
+            self.minPair[A][B] = timeU
+        self.minPair[A][B] = min(self.minPair[A][B], timeU)
+        if not (A in self.maxPair):
+            self.maxPair[A] = {}
+        if not (B in self.maxPair[A]):
+            self.maxPair[A][B] = timeU
+        self.maxPair[A][B] = max(self.maxPair[A][B], timeU)
+        if not ((A, B) in self.minT[T]):
+            self.minT[T][(A, B)] = timeU
+            self.maxT[T][(A, B)] = timeU
         else:
-            self.minT[Tv][(A, B)], self.maxT[Tv][(A, B)] = updateTimeBorders(self.minT[Tv][(A, B)],
-                                                                                self.maxT[Tv][(A, B)],
+            self.minT[T][(A, B)], self.maxT[T][(A, B)] = updateTimeBorders(self.minT[T][(A, B)],
+                                                                                self.maxT[T][(A, B)],
                                                                                 timeU)
         # Add an edge in the T-th MultiDiGraph from the node representing human a to the node
         # representing human b.
@@ -191,6 +210,7 @@ class InformationFlowNetwork:
         if not (B in self.Adj[T][A]):
             self.tGraphs[T].add_edge(self.humanDict[a], self.humanDict[b], time=self.msgDict[u][1])
             self.Adj[T][A][B] = self.msgDict[u][1]
+
         return nrNodes
 
     '''
@@ -233,13 +253,19 @@ class InformationFlowNetwork:
     def getTFaultMonoplex(self, a, b, c, netw, netwType, optimisticCount, pesimisticCount):
         # If there is no edge a->b with time smaller than an edge b->c, then a->b->c is
         # a transitive-fault.
+        if a == b or b == c or c == a:
+            return optimisticCount, pesimisticCount
         if self.inLayer[netw][a][b][0] > self.inLayer[netw][b][c][1]:
+            if self.inLayer[netw][a][b][0] == 1094839907.0 and self.inLayer[netw][b][c][1] == 1094824559.0:
+                print('Optimistic fault', a, b, c, self.inLayer[netw][a][b], self.inLayer[netw][b][c])
+
             optimisticCount += 1
             self.TFSum[netwType][0] += 1
             self.nr2paths[netwType][1][netw][a] -= 1
         # If there is an edge a->b with time bigger than b->c, then a->b->c is a
         # transitive fault in the pessimistic model.
         if self.inLayer[netw][a][b][1] > self.inLayer[netw][b][c][0]:
+            #print('Pessimistic fault', a, b, c, self.inLayer[netw][a][b], self.inLayer[netw][b][c])
             pesimisticCount += 1
             self.TFSum[netwType][1] += 1
             self.nr2paths[netwType][2][netw][a] -= 1
@@ -254,6 +280,7 @@ class InformationFlowNetwork:
                 optimisticCount += 1
                 self.TFSum[netwType][0] += 1
             self.nr2paths[netwType][1][netw][a] -= 1
+
         # If there is an edge a->b with time bigger than b->c, then a->b->c is a
         # transitive fault in the pessimistic model.
         if self.inLayer[netw][a][b][1] > self.inLayer[netw][b][c][0]:
@@ -386,6 +413,7 @@ class InformationFlowNetwork:
             #     netwEdges = self.Adj[netw]
             atLeastOne2Path = False
             countedTuples = {}
+
             for a in netwEdges:
                 self.nr2paths[netwType][0][netw][a] = 0
                 self.nr2paths[netwType][1][netw][a] = 0
@@ -438,6 +466,8 @@ class InformationFlowNetwork:
                 lowerBound = min(transFaultSum[0], lowerBound)
 
         self.crtResult[netwType][0] = (lowerBound, upperBound)
+
+
 
     # Returns the number of edges in the MLN network: (inLayer, outLayer, in + out)
     def getMLNEdgeCount(self):

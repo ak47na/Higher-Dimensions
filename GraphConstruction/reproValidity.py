@@ -130,6 +130,9 @@ def getValues(t, delta_t, minTime, maxTime, msgDict, netwType, useGT = False):
     infoFlowNetwork = createInfoFlowNetwork(t, delta_t, minTime, maxTime, msgDict, useGT)
     # infoFlowNetwork.printNetworkDetails()
     infoFlowNetwork.getTransitiveFault(netwType)
+    infoFlowNetwork.getTFAggregate(netwType)
+    infoFlowNetwork.computeUpperLowerAggregateNetwork(netwType)
+
     infoFlowNetwork.getRanginkCorrelationAggregate(netwType)
     if netwType == 'MLN':
         print("The MLN network for", t, "has (inLayer, restrCrossLayer, sum)", infoFlowNetwork.getMLNEdgeCount(), " edges")
