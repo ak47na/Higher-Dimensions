@@ -1,9 +1,5 @@
-import mailID
-import constants
-import reproValidity
 import infoFlowNetwork
 from scipy.stats import spearmanr
-from math import *
 
 # InformationFlowNetwork which computes the correlation for the 2path rankings of nodes for the
 # network with and without transitive faults.

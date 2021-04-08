@@ -1,6 +1,4 @@
-from datetime import datetime
 from datetime import timedelta
-import datetime as dt
 
 projectID = 0
 networkType = "Major"

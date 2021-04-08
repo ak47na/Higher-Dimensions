@@ -23,7 +23,9 @@ fullNames = {}
 email = {}
 
 def getIdentity(name):
-    return Identity[name]
+    if name in Identity:
+        return Identity[name]
+    return name
 
 def readNames():
     # File with developers' names and email in format Name1 Name2 .. LastName /\ email.
@@ -133,8 +135,9 @@ def createClusters(par, pairs):
     print('#humans is', nrHumans)
 
 def cachedInit():
-    f = open("D:\AKwork2021\HigherDimensions\Higher-Dimensions\ApacheData\identityFile.txt", 'r')
+    f = open("D:\AKwork2021\HigherDimensions\Higher-Dimensions\ApacheData\identityFileGambit.txt", 'r')
     print('Reading identity file')
+    #TODO = understand why the number of humans decreases
     nrHumans = 0
     global humanID
     while (True):
@@ -152,7 +155,7 @@ def cachedInit():
         if not(crtLine[1] in humanID):
             nrHumans += 1
             humanID[crtLine[1]] = nrHumans
-        humanID[crtLine[0]] = humanID[crtLine[1]]
+        humanID[crtLine[0]] = int(crtLine[1])
     print('The number of humans is', nrHumans)
     print('Finished reading identities')
 

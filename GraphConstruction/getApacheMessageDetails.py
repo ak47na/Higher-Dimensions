@@ -7,7 +7,12 @@ MIN_YEAR = 1995
 MAX_YEAR = 2005
 invalidCh = ['\\', '/', '+', '!', '{', '}', '(', ')', ':', '[', ']']
 warnings.filterwarnings("error")
+peopleDict = {}
 
+def writePeople(f4):
+    for person in peopleDict:
+        f4.write(person + '\n')
+    f4.close()
 #Removes any occurence of an invalid ch (from invalidCh) from the name.
 def purify(name):
   newName = ''
@@ -79,6 +84,9 @@ while True:
             #print(crtLine[1].split(' of ')[-1])
             badRepliesFormat += 1
     name = getNameAndEmail(crtLine[2])
+    if not(name in peopleDict):
+        peopleDict[name] = True
+
     date = crtLine[3]
     isMET_DST = False
     if 'MET DST' in date or 'METDST' in date:
@@ -125,6 +133,9 @@ while True:
 
 f2 = open("D:\AKwork2021\HigherDimensions\Higher-Dimensions\ApacheData\\apacheMsgDetails.txt", "w", encoding="utf-8")
 f3 = open("D:\AKwork2021\HigherDimensions\Higher-Dimensions\ApacheData\\apacheMsgEdges.txt", "w", encoding="utf-8")
+f4 = open("D:\AKwork2021\HigherDimensions\Higher-Dimensions\ApacheData\\apachePeople.txt", "w", encoding="utf-8")
+
+writePeople(f4)
 print(noRepliedToCnt, badRepliesFormat, badCnt, badMsgId, nrM, nonUniqueMsgIds)
 
 msgWithReply = {}

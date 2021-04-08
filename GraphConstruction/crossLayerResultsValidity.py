@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 Y = 3600 * 24 * 365
 LIM = 1000000000
 
-mailID.init()
+mailID.cachedInit()
 msgDetailsFilePath = "Data\\msgDetails.txt"
 minTime, maxTime, msgDict = reproValidity.readMsgDetails(msgDetailsFilePath)
 

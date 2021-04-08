@@ -42,7 +42,16 @@ def plotTableOPChanges(tTimes, tRows):
     t1.show()
 
 def plotScalingTable(tTimes, tRows):
-    pass
+    tData = [tTimes]
+    columnNames = ['time interval', '(MLN correlation O) / (monoplex correlation O)',
+                   '(MLN correlation P) / (monoplex correlation P)', '(#edges MLN) / (#edges monoplex)']
+    for col in tRows:
+        tData.append(col)
+    t = go.Figure(data=[go.Table(header=dict(values = columnNames),
+                                  cells=dict(values=tData))
+                         ])
+    t.show()
+
 
 def plotTableOPBounds(t1Times, t1Rows):
     t1Data = [t1Times]
@@ -78,19 +87,27 @@ parameters.setLayerDistance(1)
 # Computes using InfoFlowNetwork class, the upper&lower bounds for the TFR for the MLN and the
 # monoplex, and displays a table that compares them.
 def getResults():
+    scaleRows = [[] for k in range(3)]
     tCorrRows = [[] for x in range(4)]
     tRows = [[] for x in range(8)]
     cleRows = [[] for x in range(4)]
+
+    t2Times = []
+    t2Rows = [[] for elem in range(11)]
+
     for (t, delta_t) in timeIntWithResults:
         t1Times.append(t)
         MLN = reproValidity.getValues(t, delta_t, minTime, maxTime, msgDict, 'MLN')
         MLNcrtResult = MLN.crtResult['MLN']
         cleCount = len(MLN.crossLayerEdges)
+        # MLNcrtResult[1] = (correlation_value for optimistic, p-value)
+        # MLNcrtResult[2] = (correlation_value for pessimistic, p-value)
         tCorrRows[0].append(MLNcrtResult[1][0])
         tCorrRows[1].append(MLNcrtResult[2][0])
         t1Rows[0].append(MLNcrtResult[0][0])
         t1Rows[2].append(MLNcrtResult[0][1])
         t1Rows[4].append(MLNcrtResult[0][0] / MLNcrtResult[0][1])
+
         MLNEdgeCount = MLN.getMLNEdgeCount()
         for col in range(3):
             cleRows[col].append(MLNEdgeCount[col])
@@ -98,6 +115,10 @@ def getResults():
 
         monoplex = reproValidity.getValues(t, delta_t, minTime, maxTime, msgDict, 'monoplex')
         crtResult = monoplex.crtResult['monoplex']
+        scaleRows[0].append(MLNcrtResult[1][0] / crtResult[1][0])
+        scaleRows[1].append(MLNcrtResult[2][0] / crtResult[2][0])
+        scaleRows[2].append(MLNEdgeCount[2] / monoplex.getMonoplexEdgeCount())
+
         assert(cleCount == len(monoplex.crossLayerEdges))
         tCorrRows[2].append(crtResult[1][0])
         tCorrRows[3].append(crtResult[2][0])
@@ -141,6 +162,7 @@ def getResults():
     plotTableOPChanges(t1Times, tRows)
     plotTableCorrelation(t1Times, tCorrRows)
     plotTableCLECount(t1Times, cleRows)
+    plotScalingTable(t1Times, scaleRows)
 
 def plotTableSpcases(t2Times, t2Rows):
     t2Data = [t2Times]
@@ -156,7 +178,7 @@ def plotTableSpcases(t2Times, t2Rows):
                          ])
     t2.show()
 
-def getSpCasesCount(id, layerD, t2Rows):
+def getSpCasesCount(id, layerD, t2Rows, t2Times):
     parameters.setLayerDistance(layerD)
     netw = 0
     for (t, delta_t) in timeIntWithResults:
@@ -167,13 +189,10 @@ def getSpCasesCount(id, layerD, t2Rows):
             t2Times.append(t)
 
 # Counts the number of special cases and display table.
-def getSpecialCasesResults():
-    getSpCasesCount(0, 1, t2Rows)
-    getSpCasesCount(1, 10000000000, t2Rows)
+def getSpecialCasesResults(t2Times, t2Rows):
+    getSpCasesCount(0, 1, t2Rows, t2Times)
+    getSpCasesCount(1, 10000000000, t2Rows, t2Times)
     plotTableSpcases(t2Times, t2Rows)
 
-
-t2Times = []
-t2Rows = [[] for elem in range(11)]
 getResults()
 

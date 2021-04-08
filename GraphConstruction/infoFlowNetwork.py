@@ -439,6 +439,7 @@ class InformationFlowNetwork:
 
         self.crtResult[netwType][0] = (lowerBound, upperBound)
 
+    # Returns the number of edges in the MLN network: (inLayer, outLayer, in + out)
     def getMLNEdgeCount(self):
         inLayerEdgeCount = self.getMonoplexEdgeCount()
         crossLayerEdgeCount = 0
@@ -457,6 +458,7 @@ class InformationFlowNetwork:
 
         return (inLayerEdgeCount, crossLayerEdgeCount, crossLayerEdgeCount + inLayerEdgeCount)
 
+    # Return the number of inLayer edges for the monoplex network.
     def getMonoplexEdgeCount(self):
         inLayerEdgeCount = 0
         for netw in range(1, self.nrGraphs + 1):

@@ -20,7 +20,11 @@ def getReplyTimesFromMsgEdges(filePath, msgDict):
         if not crtLine:
             break
         crtLine = crtLine.replace('\n', '')
-        lst = crtLine.split(' ')
+        if (not '/\\' in crtLine):
+            lst = crtLine.split()
+        else:
+            lst = crtLine.split('/\\')
+
         assert len(lst) == 2
         if not (lst[0] in msgDict) and not (lst[0] in invalidMsg):
             invalidMsg[lst[0]] = True
@@ -31,17 +35,18 @@ def getReplyTimesFromMsgEdges(filePath, msgDict):
         if (lst[0] in msgDict) and (lst[1] in msgDict):
             replyTimes.append(getTimeBetweenMsgs(msgDict, lst[1], lst[0]))
     edgeFile.close()
+    assert errors == 0
     return replyTimes
 
-def compReplyTimesHist(replyTimes):
+def compReplyTimesHist(replyTimes, filePath):
     plt.hist(replyTimes,
              color='blue', edgecolor='black', bins=100)
-    plt.title('Histogram for Eclipse ', size=10)
+    plt.title('Histogram for Apache ', size=10)
     plt.xlabel('Time(hours)', size=10)
     plt.ylabel('count', size=10)
     plt.tight_layout()
-    plt.show()
-    # plt.savefig('D:\AKwork2020-2021\Higher-Dimensions\\first' + str(x) + 'HReplyTimeHist.png')
+    #plt.show()
+    plt.savefig(filePath)
 
 def compReplyTimesHists(replyTimes):
     for i, binsCount in enumerate([50, 75, 100, 125]):
@@ -103,22 +108,30 @@ def getPropFromFirstXH(arr, x):
             cntSmaller += 1
     return (cntSmaller / n) * 100
 
-mailID.init()
-msgDetailsFilePath = "Data\\msgDetails.txt"
+mailID.cachedInit()
+msgDetailsFilePath = r'D:\AKwork2021\HigherDimensions\Higher-Dimensions\ApacheData\apacheMsgDetails.txt'#"Data\\msgDetails.txt"
 minTime, maxTime, msgDict = reproValidity.readMsgDetails(msgDetailsFilePath)
 
-msgEdgesFilePath = "Data\\msgEdges.txt"
+msgEdgesFilePath = r'D:\AKwork2021\HigherDimensions\Higher-Dimensions\ApacheData\apacheMsgEdges.txt'#"Data\\msgEdges.txt"
 
-replyTimes = getReplyTimesFromMsgEdges(msgEdgesFilePath, msgDict)
+replyTimes = sorted(getReplyTimesFromMsgEdges(msgEdgesFilePath, msgDict))
 getStats(replyTimes)
 N = len(replyTimes)
-randIDx = random.sample(range(0, N), N // 10)
+randIDx = random.sample(range(0, N), 100)
 randReplT = []
+print('Nr msg', N)
 for i in randIDx:
     randReplT.append(replyTimes[i])
-for x in range(100, 1 + int(replyTimes[-1]), 100):
+
+first100HistFilePath = 'D:\AKwork2021\HigherDimensions\Higher-Dimensions\ApacheData\\atMost100ReplyTimesHist.png'
+sampleHistFilePath = 'D:\AKwork2021\HigherDimensions\Higher-Dimensions\ApacheData\\sample100ReplyTimesHist.png'
+for x in range(10, 1 + int(replyTimes[-1]), 10):
     smallRempyTimes = getSmallerThanXReplyTimes(replyTimes, x)
-    print(((len(replyTimes) - len(smallRempyTimes)) / len(replyTimes)) * 100)
-# compReplyTimesHist(replyTimes)
+    if x == 100:
+        compReplyTimesHist(smallRempyTimes, first100HistFilePath)
+    print('Percentage for reply times <= ' + str(x) + ' hours', ((len(smallRempyTimes)) / len(replyTimes)) * 100)
+
+compReplyTimesHist(randReplT, sampleHistFilePath)
+print(replyTimes)
 # compReplyTimesHist(smallRempyTimes, 100)
 # compReplyTimesHist(randReplT)
