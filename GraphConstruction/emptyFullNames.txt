@@ -74,7 +74,6 @@ jwb
 jmchale
 timcostello
 cag
-ap
 saeedt
 fielding
 rowe
@@ -85,6 +84,7 @@ rbb
 gregames
 trawick
 jmejia
+ap
 willemvanpelt
 est
 swaldron
@@ -133,7 +133,6 @@ victork
 sterling
 das6804
 carl
-dreid
 rtitle
 bugzilla
 gs--dev

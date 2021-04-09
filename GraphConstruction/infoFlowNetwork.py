@@ -118,7 +118,6 @@ class InformationFlowNetwork:
             return nrNodes
 
         self.replyDict[(u, v)] = True
-
         b = self.msgDict[u][0]
         a = self.msgDict[v][0]
 
@@ -137,10 +136,6 @@ class InformationFlowNetwork:
         tIntervalIdV = self.getTimeRange(timeV)
         assert tIntervalIdV <= tIntervalIdU
 
-        if tIntervalIdU - tIntervalIdV > parameters.kLayer:
-            # Ignore cross edges for layer distance > kLayer.
-            return nrNodes
-
         if not (tIntervalIdU in self.timeDict):
             # Create the graph for tIntervalIdU
             self.createTGraphForT(tIntervalIdU)
@@ -152,6 +147,10 @@ class InformationFlowNetwork:
         self.addNodeToNetw(A, self.timeDict[tIntervalIdV])
         self.addNodeToNetw(B, self.timeDict[tIntervalIdU])
         self.addNodeToNetw(B, self.timeDict[tIntervalIdV])
+
+        if tIntervalIdU - tIntervalIdV > parameters.kLayer:
+            # Ignore cross edges for layer distance > kLayer.
+            return nrNodes
 
         T = self.timeDict[tIntervalIdU]
         Tv = self.timeDict[tIntervalIdV]
@@ -426,6 +425,8 @@ class InformationFlowNetwork:
                         continue
                     for c in netwEdges[b]:
                         # Count the 2-path : a->b->c
+                        if a == b or b == c or c == a:
+                            continue
                         atLeastOne2Path = True
                         if (a, b, c) in countedTuples:
                             assert False
@@ -445,15 +446,16 @@ class InformationFlowNetwork:
             # nodes, divided by the number of nodes in the network.
             transFaultSum[0] /= N
             transFaultSum[1] /= N
-            print('Nr nodes is', N, 'and TF is', transFaultSum)
-            # if N < 5 and atLeastOne2Path and transFaultSum[0] == 0.0 and transFaultSum[1] == 1.0:
-            #     print(transFaultSum[0], transFaultSum[1])
-            #     for nod1 in netwEdges:
-            #         print(nod1, self.nr2paths[netwType][0][netw][nod1])
-            #         for nod2 in netwEdges[nod1]:
-            #             print('edge ', nod1, nod2, netwEdges[nod1][nod2])
-            #     assert False
-
+            if atLeastOne2Path:
+                print('Nr nodes is', N, 'and TF is', transFaultSum)
+                # if N == 4:
+                #     for a in netwEdges:
+                #         for b in netwEdges[a]:
+                #             if not (b in netwEdges):
+                #                 continue
+                #             for c in netwEdges[b]:
+                #                 print('Nodes ', self.Label[a], self.Label[b], self.Label[c])
+                #                 print(netwEdges[a][b], netwEdges[b][c])
             self.TFperNetw[netwType][netw] = (transFaultSum[0], transFaultSum[1])
 
             # optimistic model should have at most pessimistic model transitive faults.

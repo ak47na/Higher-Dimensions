@@ -88,6 +88,7 @@ while True:
         peopleDict[name] = True
 
     date = crtLine[3]
+
     isMET_DST = False
     if 'MET DST' in date or 'METDST' in date:
         date = date.replace('(MET DST)', '(MET)').replace('(METDST)', '(MET)')
@@ -108,9 +109,8 @@ while True:
         nonUniqueMsgIds += 1
     else:
         try:
-            if '(' in date and ')' in date:
-                date = date.split('(')[0]
-
+            # if '(' in date and ')' in date:
+            #     date = date.split('(')[0]
             dt = parse(date, tzinfos=tzInfo)
             sec = 0
             if isMET_DST:

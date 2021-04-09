@@ -9,7 +9,8 @@ warnings.filterwarnings("error")
 tzInfo = tzInfo.getTZInfo()
 local_zone = tz.tzlocal()
 dates = []
-dates.append('Mon, 28 Feb 1995 04:49:44 UTC')
+dates.append('Wed, 18 Mar 1998 14:34:22 -0500')
+dates.append('Wed, 18 Mar 1998 19:34:22 GMT')
 
 tstpExp = 793946984.0
 print(tstpExp)
@@ -19,7 +20,7 @@ print(tstpExp)
 # dates.append('Sat, 6 Apr 1996 23:36:11 +0300 (UTC)')
 # dates.append('Sat, 6 Apr 1996 23:36:11 UTC')
 # dates.append('Sat, 6 Apr 1996 23:36:11 +0200 UTC')
-dates.append('Sat, 6 Apr 1996 22:36:11 UTC')
+# dates.append('Sat, 6 Apr 1996 22:36:11 UTC')
 # dates.append('Mon, 3 Apr 1995 23:06:27 EET')
 # dates.append('Mon, 3 Apr 1995 21:06:27 UTC')
 # dates.append('Mon, 3 Apr 1995 23:06:27')
@@ -34,7 +35,7 @@ dates.append('Sat, 6 Apr 1996 22:36:11 UTC')
 for datee in dates:
     dte = parse(datee, tzinfos=tzInfo)
     print(datee, dte, dte.timestamp(), 'and utced', dte.astimezone(tz.gettz('UTC')))
-    print('And converting to loca', dte.timestamp(), dte.astimezone(local_zone).timestamp())
+    print('And converting to local', dte.timestamp(), dte.astimezone(local_zone).timestamp())
     # if dte.tzinfo:
     #     sec = dte.utcoffset().total_seconds()
     #     #print('With utc offset', datee, dte, sec)

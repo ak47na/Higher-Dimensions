@@ -132,7 +132,7 @@ def getValues(t, delta_t, minTime, maxTime, msgDict, netwType, useGT = False):
     infoFlowNetwork.getTransitiveFault(netwType)
     #infoFlowNetwork.getTFAggregate(netwType)
     #infoFlowNetwork.printNetwork2paths(netwType)
-    infoFlowNetwork.computeUpperLowerAggregateNetwork(netwType)
+    #infoFlowNetwork.computeUpperLowerAggregateNetwork(netwType)
 
     #infoFlowNetwork.getRanginkCorrelationAggregate(netwType)
     if netwType == 'MLN':
