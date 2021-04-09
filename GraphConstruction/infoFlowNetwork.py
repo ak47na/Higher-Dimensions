@@ -237,11 +237,9 @@ class InformationFlowNetwork:
             assert len(lst) == 2
             if not (lst[0] in self.msgDict) and not (lst[0] in invalidMsg):
                 invalidMsg[lst[0]] = True
-                print(lst[0], 'err')
                 errors += 1
             if not (lst[1] in self.msgDict) and not (lst[1] in invalidMsg):
                 invalidMsg[lst[1]] = True
-                print(lst[1], 'err')
                 errors += 1
             if (lst[0] in self.msgDict) and (lst[1] in self.msgDict):
                 nrNodes = self.addEdge(lst[1], lst[0], nrNodes)
@@ -256,9 +254,6 @@ class InformationFlowNetwork:
         if a == b or b == c or c == a:
             return optimisticCount, pesimisticCount
         if self.inLayer[netw][a][b][0] > self.inLayer[netw][b][c][1]:
-            if self.inLayer[netw][a][b][0] == 1094839907.0 and self.inLayer[netw][b][c][1] == 1094824559.0:
-                print('Optimistic fault', a, b, c, self.inLayer[netw][a][b], self.inLayer[netw][b][c])
-
             optimisticCount += 1
             self.TFSum[netwType][0] += 1
             self.nr2paths[netwType][1][netw][a] -= 1
@@ -388,6 +383,7 @@ class InformationFlowNetwork:
         lowerBound = 1
         for netw in range(1, self.nrGraphs + 1):
             N = len(self.netwNodes[netw])
+
             if N == 0:
                 self.TFperNetw[netwType][netw] = [0, 0]
                 continue
@@ -449,6 +445,7 @@ class InformationFlowNetwork:
             # nodes, divided by the number of nodes in the network.
             transFaultSum[0] /= N
             transFaultSum[1] /= N
+            print('Nr nodes is', N, 'and TF is', transFaultSum)
             # if N < 5 and atLeastOne2Path and transFaultSum[0] == 0.0 and transFaultSum[1] == 1.0:
             #     print(transFaultSum[0], transFaultSum[1])
             #     for nod1 in netwEdges:
@@ -464,8 +461,10 @@ class InformationFlowNetwork:
             if atLeastOne2Path:
                 upperBound = max(transFaultSum[1], upperBound)
                 lowerBound = min(transFaultSum[0], lowerBound)
+                # print('Update u and l', upperBound, lowerBound)
 
         self.crtResult[netwType][0] = (lowerBound, upperBound)
+        # print('Final u and l', self.crtResult[netwType][0])
 
 
 
@@ -529,3 +528,10 @@ class InformationFlowNetwork:
                 for b in self.Adj[netw][a]:
                     edgeCount += 1
             print('Network', netw, 'has #edges', edgeCount)
+
+    def printNetwork2paths(self, netwType):
+        for netw in range(1, self.nrGraphs + 1):
+            for a in self.nr2paths[netwType][0][netw]:
+                print('Nod ', a, 'has #2paths:', self.nr2paths[netwType][0][netw][a],
+                      self.nr2paths[netwType][1][netw][a], self.nr2paths[netwType][2][netw][a])
+

@@ -88,11 +88,6 @@ class OrderInfoFlowNetwork(infoFlowNetwork.InformationFlowNetwork):
 
         tfSum[0] = tfSum[0] / nrNodes
         tfSum[1] = tfSum[1] / nrNodes
-        print('Opt and pess tfr', tfSum)
-
-
-
-
 
     def computeUpperLowerAggregateNetwork(self, netwType):
         self.compute2PathsAggregateNetwork(netwType)
@@ -107,7 +102,7 @@ class OrderInfoFlowNetwork(infoFlowNetwork.InformationFlowNetwork):
                 sumP += (self.nr2p[netwType][0][a] - self.nr2p[netwType][2][a]) / self.nr2p[netwType][0][a]
         sumO /= okN
         sumP /= okN
-        self.crtResult[netwType][0] = (round(sumO, 4), round(sumP, 4))
+        #self.crtResult[netwType][0] = (round(sumO, 4), round(sumP, 4))
 
 
     def getRanginkCorrelation(self, netwType):

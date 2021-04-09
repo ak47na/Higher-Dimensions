@@ -130,10 +130,11 @@ def getValues(t, delta_t, minTime, maxTime, msgDict, netwType, useGT = False):
     infoFlowNetwork = createInfoFlowNetwork(t, delta_t, minTime, maxTime, msgDict, useGT)
     # infoFlowNetwork.printNetworkDetails()
     infoFlowNetwork.getTransitiveFault(netwType)
-    infoFlowNetwork.getTFAggregate(netwType)
+    #infoFlowNetwork.getTFAggregate(netwType)
+    #infoFlowNetwork.printNetwork2paths(netwType)
     infoFlowNetwork.computeUpperLowerAggregateNetwork(netwType)
 
-    infoFlowNetwork.getRanginkCorrelationAggregate(netwType)
+    #infoFlowNetwork.getRanginkCorrelationAggregate(netwType)
     if netwType == 'MLN':
         print("The MLN network for", t, "has (inLayer, restrCrossLayer, sum)", infoFlowNetwork.getMLNEdgeCount(), " edges")
         print("The MLN network for", t, "has", len(infoFlowNetwork.crossLayerEdges), "cross-layer edges")
@@ -143,6 +144,7 @@ def getValues(t, delta_t, minTime, maxTime, msgDict, netwType, useGT = False):
     # print(nrNodes, infoFlowNetwork.nrEdges)
     if netwType == 'monoplex':
         print("The number of edges is ", infoFlowNetwork.getEdgeCount())
+        print('The u and l are ', infoFlowNetwork.crtResult[netwType][0])
     # else:
     #     print("The MLN network for ", t, " has ", infoFlowNetwork.getMLNEdgeCount(), " edges")
     #     print("The monoplex network for ", t, " has ", infoFlowNetwork.getEdgeCount(), " edges")

@@ -1,0 +1,9 @@
+1/\Roy T. Fielding /\fielding/\1000000000.0
+2/\Robert S. Thau/\rst/\1000000001.0
+3/\Andrew Wilson/\andrew/\1000000002.0
+4/\Robert S. Thau/\rst/\1000000003.0
+5/\Andrew Wilson/\andrew/\1000003610.0
+6/\Cliff Skolnick/\cliffs/\1000000004.0
+7/\Rob Hartill /\hartill/\1000000005.0
+8/\Nicolas Pioch /\pioch/\1000000006.0
+9/\David Robinson/\drtr/\1000000007.0
