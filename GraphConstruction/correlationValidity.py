@@ -92,18 +92,24 @@ class OrderInfoFlowNetwork(infoFlowNetwork.InformationFlowNetwork):
     def computeUpperLowerAggregateNetwork(self, netwType):
         self.compute2PathsAggregateNetwork(netwType)
         N = len(self.nr2p[netwType][0])
+        optTfs = 0
+        pessTfs = 0
+        nr2ps = 0
         sumO = 0
         sumP = 0
         okN = 0
         for a in self.nr2p[netwType][0]:
             if self.nr2p[netwType][0][a] > 0:
                 okN += 1
+                optTfs += self.nr2p[netwType][0][a] - self.nr2p[netwType][1][a]
+                pessTfs += self.nr2p[netwType][0][a] - self.nr2p[netwType][2][a]
+                nr2ps += self.nr2p[netwType][0][a]
                 sumO += (self.nr2p[netwType][0][a] - self.nr2p[netwType][1][a]) / self.nr2p[netwType][0][a]
                 sumP += (self.nr2p[netwType][0][a] - self.nr2p[netwType][2][a]) / self.nr2p[netwType][0][a]
         sumO /= okN
         sumP /= okN
         #self.crtResult[netwType][0] = (round(sumO, 4), round(sumP, 4))
-
+        print('For aggregate netw we have', sumO, sumP, okN, nr2ps, optTfs / nr2ps, pessTfs / nr2ps)
 
     def getRanginkCorrelation(self, netwType):
         Order = [[], [], []]

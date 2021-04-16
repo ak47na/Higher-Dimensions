@@ -176,9 +176,13 @@ class InformationFlowNetwork:
             if not(B in self.inLayer[T][A]):
                 self.inLayer[T][A][B] = (timeU, timeU)
             else:
+                prev0 = self.inLayer[T][A][B][0]
+                prev1 = self.inLayer[T][A][B][1]
                 self.inLayer[T][A][B] = getMinMax(self.inLayer[T][A][B], timeU)
-                assert self.inLayer[T][A][B][0] <= timeU
-                assert self.inLayer[T][A][B][1] >= timeU
+                if not(prev0 >= timeU or self.inLayer[T][A][B][0] <= timeU) or (not(prev1 <= timeU or self.inLayer[T][A][B][1] >= timeU)):
+                    print(prev0, prev1, timeU)
+                assert prev0 >= timeU or self.inLayer[T][A][B][0] <= timeU
+                assert prev1 <= timeU or self.inLayer[T][A][B][1] >= timeU
         # Update the minimum and maximum time for a conversation from person A to person B.
         # The value is necessary for computing transitive faults.
         if not(A in self.minPair):
@@ -408,7 +412,7 @@ class InformationFlowNetwork:
             #     netwEdges = self.Adj[netw]
             atLeastOne2Path = False
             countedTuples = {}
-
+            has2Paths = 0
             for a in netwEdges:
                 self.nr2paths[netwType][0][netw][a] = 0
                 self.nr2paths[netwType][1][netw][a] = 0
@@ -427,6 +431,7 @@ class InformationFlowNetwork:
                         # Count the 2-path : a->b->c
                         if a == b or b == c or c == a:
                             continue
+
                         atLeastOne2Path = True
                         if (a, b, c) in countedTuples:
                             assert False
@@ -440,22 +445,30 @@ class InformationFlowNetwork:
                         else:
                             optimisticCount, pesimisticCount = \
                                 self.getTFaultMonoplex(a, b, c, netw, netwType, optimisticCount, pesimisticCount)
+                if self.nr2paths[netwType][0][netw][a] > 0:
+                    has2Paths += 1
                 transFaultSum = self.addTFRForNode(netw, netwType, transFaultSum, a, optimisticCount, pesimisticCount)
 
             # The network transitive fault rate is the sum of the node transitive fault rates over all
             # nodes, divided by the number of nodes in the network.
             transFaultSum[0] /= N
             transFaultSum[1] /= N
+            # if has2Paths > 0:
+            #     transFaultSum[0] /= has2Paths
+            #     transFaultSum[1] /= has2Paths
             if atLeastOne2Path:
-                print('Nr nodes is', N, 'and TF is', transFaultSum)
-                # if N == 4:
-                #     for a in netwEdges:
-                #         for b in netwEdges[a]:
-                #             if not (b in netwEdges):
-                #                 continue
-                #             for c in netwEdges[b]:
-                #                 print('Nodes ', self.Label[a], self.Label[b], self.Label[c])
-                #                 print(netwEdges[a][b], netwEdges[b][c])
+                print('Nr nodes is', N, 'and sp nodes', has2Paths, 'and TF is', transFaultSum)
+                if N == 3 and transFaultSum == [0.3333333333333333, 0.3333333333333333]:
+                    for a in netwEdges:
+                        print('2 paths for ', self.Label[a], 'are ', self.nr2paths[netwType][0][netw][a])
+                        for b in netwEdges[a]:
+                            if not (b in netwEdges):
+                                continue
+                            for c in netwEdges[b]:
+                                print('Nodes ', self.Label[a], self.Label[b], self.Label[c])
+                                print(netwEdges[a][b], netwEdges[b][c])
+
+
             self.TFperNetw[netwType][netw] = (transFaultSum[0], transFaultSum[1])
 
             # optimistic model should have at most pessimistic model transitive faults.
