@@ -18,6 +18,7 @@ def getMinMax(timePair, t):
 
 class InformationFlowNetwork:
     def __init__(self, msgDict, delta_t, t, minTime, useGT = False):
+        self.uniqueFaults = {"monoplex" : [{}, {}], "MLN": [{}, {}]}
         self.minTime = minTime
         self.nrEdges = 0
         self.replyDict = {}
@@ -248,22 +249,24 @@ class InformationFlowNetwork:
         return nrNodes
 
     def getTFaultMonoplex(self, a, b, c, netw, netwType):
+        tfTuple = (self.Label[a], self.Label[b], self.Label[c])
         # If there is no edge a->b with time smaller than an edge b->c, then a->b->c is
         # a transitive-fault.
         if a == b or b == c or c == a:
             return
         if self.inLayer[netw][a][b][0] > self.inLayer[netw][b][c][1]:
-            self.tfCount[netwType][0] += 1
+            self.addUniqueTfaults(netwType, tfTuple, 0)
             self.nr2paths[netwType][1][netw][b] -= 1
         # If there is an edge a->b with time bigger than b->c, then a->b->c is a
         # transitive fault in the pessimistic model.
         if self.inLayer[netw][a][b][1] > self.inLayer[netw][b][c][0]:
             #print('Pessimistic fault', a, b, c, self.inLayer[netw][a][b], self.inLayer[netw][b][c])
-            self.tfCount[netwType][1] += 1
+            self.addUniqueTfaults(netwType, tfTuple, 1)
             self.nr2paths[netwType][2][netw][b] -= 1
         return
 
     def getTFaultMLN(self, a, b, c, netw, netwType):
+        tfTuple = (self.Label[a], self.Label[b], self.Label[c])
         cleAdowntoB = b in self.crossLayerIn[netw] and a in self.crossLayerIn[netw][b]
         cleAtoBup = a in self.crossLayerOut[netw] and b in self.crossLayerOut[netw][a]
         cleBtoupC = b in self.crossLayerOut[netw] and c in self.crossLayerOut[netw][b]
@@ -272,12 +275,12 @@ class InformationFlowNetwork:
         # If there is no edge a->b with time smaller than an edge b->c, then a->b->c is
         # a transitive-fault.
         if (self.inLayer[netw][a][b][0] > self.inLayer[netw][b][c][1]) and (not (cleAdowntoB or cleBtoupC)):
-            self.tfCount[netwType][0] += 1
+            self.addUniqueTfaults(netwType, tfTuple, 0)
             self.nr2paths[netwType][1][netw][b] -= 1
         # If there is an edge a->b with time bigger than b->c, then a->b->c is a
         # transitive fault in the pessimistic model.
         if self.inLayer[netw][a][b][1] > self.inLayer[netw][b][c][0] or cleBdowntoC or cleAtoBup:
-            self.tfCount[netwType][1] += 1
+            self.addUniqueTfaults(netwType, tfTuple, 1)
             self.nr2paths[netwType][2][netw][b] -= 1
         return
 
@@ -301,13 +304,21 @@ class InformationFlowNetwork:
                 for c in self.inLayer[netwb][b]:
                     for ty in range(3):
                         self.nr2paths[netwType][ty][netw][b] += 1
+                    tfTuple = (self.Label[a], self.Label[b], self.Label[c])
                     # Cross-edges c->a where there is also an in-layer edge c->a are treated in getTFaultMLN.
                     if self.crossLayerOut[netw][a][b] > self.inLayer[netwb][b][c][1]:
-                        self.tfCount[netwType][0] += 1
+                        self.addUniqueTfaults(netwType, tfTuple, 0)
                         self.nr2paths[netwType][1][netw][b] -= 1
                     if self.crossLayerOut[netw][a][b] > self.inLayer[netwb][b][c][0]:
-                        self.tfCount[netwType][1] += 1
+                        self.addUniqueTfaults(netwType, tfTuple, 1)
                         self.nr2paths[netwType][2][netw][b] -= 1
+
+    def addUniqueTfaults(self, netwType, tfTuple, type):
+        if not (tfTuple in self.uniqueFaults[netwType][type]):
+            self.uniqueFaults[netwType][type][tfTuple] = 1
+            self.tfCount[netwType][type] += 1
+        else:
+            self.uniqueFaults[netwType][type][tfTuple] += 1
 
     def initTFRForNode(self, netw, netwType, a):
         self.nr2paths[netwType][0][netw][a] = 0
