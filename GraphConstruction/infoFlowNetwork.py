@@ -1,9 +1,7 @@
 import mailID
 import parameters
 
-from datetime import datetime
 from networkx import *
-from scipy.stats import spearmanr
 from math import *
 
 '''
@@ -251,63 +249,23 @@ class InformationFlowNetwork:
         # assert errors == 0
         return nrNodes
 
-    def getTFaultMonoplex(self, a, b, c, netw, netwType, optimisticCount, pesimisticCount):
+    def getTFaultMonoplex(self, a, b, c, netw, netwType):
         # If there is no edge a->b with time smaller than an edge b->c, then a->b->c is
         # a transitive-fault.
         if a == b or b == c or c == a:
-            return optimisticCount, pesimisticCount
+            return
         if self.inLayer[netw][a][b][0] > self.inLayer[netw][b][c][1]:
-            optimisticCount += 1
             self.TFSum[netwType][0] += 1
-            self.nr2paths[netwType][1][netw][a] -= 1
+            self.nr2paths[netwType][1][netw][b] -= 1
         # If there is an edge a->b with time bigger than b->c, then a->b->c is a
         # transitive fault in the pessimistic model.
         if self.inLayer[netw][a][b][1] > self.inLayer[netw][b][c][0]:
             #print('Pessimistic fault', a, b, c, self.inLayer[netw][a][b], self.inLayer[netw][b][c])
-            pesimisticCount += 1
             self.TFSum[netwType][1] += 1
-            self.nr2paths[netwType][2][netw][a] -= 1
-        return optimisticCount, pesimisticCount
+            self.nr2paths[netwType][2][netw][b] -= 1
+        return
 
-    def getTFaultMonoplexLimitingPrevReply(self, a, b, c, netw, netwType, optimisticCount, pesimisticCount):
-        # If there is no edge a->b with time smaller than an edge b->c, then a->b->c is
-        # a transitive-fault.
-        if self.inLayer[netw][a][b][0] > self.inLayer[netw][b][c][1]:
-            if self.inLayer[netw][a][b][0] - self.inLayer[netw][b][c][1] <= parameters.T:
-                # Only consider 2paths where the distance between replies is <= T
-                optimisticCount += 1
-                self.TFSum[netwType][0] += 1
-            self.nr2paths[netwType][1][netw][a] -= 1
-
-        # If there is an edge a->b with time bigger than b->c, then a->b->c is a
-        # transitive fault in the pessimistic model.
-        if self.inLayer[netw][a][b][1] > self.inLayer[netw][b][c][0]:
-            d = min(abs(self.inLayer[netw][a][b][1] - self.inLayer[netw][b][c][0]),
-                    abs(self.inLayer[netw][a][b][1] - self.inLayer[netw][b][c][1]),
-                    abs(self.inLayer[netw][a][b][0] - self.inLayer[netw][b][c][0]),
-                    abs(self.inLayer[netw][a][b][0] - self.inLayer[netw][b][c][1]))
-            if d <= parameters.T:
-                pesimisticCount += 1
-                self.TFSum[netwType][1] += 1
-            self.nr2paths[netwType][2][netw][a] -= 1
-        return optimisticCount, pesimisticCount
-
-    def getTFaultMonoplexV2(self, a, b, c, netw, netwType, optimisticCount, pesimisticCount):
-        # If there is no edge a->b with time smaller than an edge b->c, then a->b->c is
-        # a transitive-fault.
-        if self.minT[netw][(a, b)] > self.maxT[netw][(b, c)]:
-            optimisticCount += 1
-            self.TFSum[netwType][0] += 1
-            self.nr2paths[netwType][1][netw][a] -= 1
-        # If there is an edge a->b with time bigger than b->c, then a->b->c is a
-        # transitive fault in the pessimistic model.
-        if self.maxT[netw][(a, b)] > self.minT[netw][(b, c)]:
-            pesimisticCount += 1
-            self.TFSum[netwType][1] += 1
-            self.nr2paths[netwType][2][netw][a] -= 1
-        return optimisticCount, pesimisticCount
-
-    def getTFaultMLN(self, a, b, c, netw, netwType, optimisticCount, pesimisticCount):
+    def getTFaultMLN(self, a, b, c, netw, netwType):
         cleAdowntoB = b in self.crossLayerIn[netw] and a in self.crossLayerIn[netw][b]
         cleAtoBup = a in self.crossLayerOut[netw] and b in self.crossLayerOut[netw][a]
         cleBtoupC = b in self.crossLayerOut[netw] and c in self.crossLayerOut[netw][b]
@@ -316,16 +274,14 @@ class InformationFlowNetwork:
         # If there is no edge a->b with time smaller than an edge b->c, then a->b->c is
         # a transitive-fault.
         if (self.inLayer[netw][a][b][0] > self.inLayer[netw][b][c][1]) and (not (cleAdowntoB or cleBtoupC)):
-            optimisticCount += 1
             self.TFSum[netwType][0] += 1
-            self.nr2paths[netwType][1][netw][a] -= 1
+            self.nr2paths[netwType][1][netw][b] -= 1
         # If there is an edge a->b with time bigger than b->c, then a->b->c is a
         # transitive fault in the pessimistic model.
         if self.inLayer[netw][a][b][1] > self.inLayer[netw][b][c][0] or cleBdowntoC or cleAtoBup:
-            pesimisticCount += 1
             self.TFSum[netwType][1] += 1
-            self.nr2paths[netwType][2][netw][a] -= 1
-        return optimisticCount, pesimisticCount
+            self.nr2paths[netwType][2][netw][b] -= 1
+        return
 
     def addCLEPathAB(self, netw, netwType, a, b):
         assert netwType == 'MLN'
@@ -335,9 +291,9 @@ class InformationFlowNetwork:
                     # Cross-edges b->c where there is also an in-layer edge b->c are treated in getTFaultMLN.
                     assert (self.crossLayerOut[netw][b][c] > self.inLayer[netw][a][b][1])
                     for ty in range(3):
-                        self.nr2paths[netwType][ty][netw][a] += 1
+                        self.nr2paths[netwType][ty][netw][b] += 1
 
-    def addCLEPathA(self, netw, netwType, a, optimisticCount, pesimisticCount):
+    def addCLEPathA(self, netw, netwType, a):
         for b in self.crossLayerOut[netw][a]:
             netwb = self.timeDict[self.getTimeRange(self.crossLayerOut[netw][a][b])]
             if not (b in self.inLayer[netwb]):
@@ -346,30 +302,26 @@ class InformationFlowNetwork:
             if not (a in self.inLayer[netwb] and b in self.inLayer[netwb][a]):
                 for c in self.inLayer[netwb][b]:
                     for ty in range(3):
-                        self.nr2paths[netwType][ty][netw][a] += 1
+                        self.nr2paths[netwType][ty][netw][b] += 1
                     # Cross-edges c->a where there is also an in-layer edge c->a are treated in getTFaultMLN.
                     if self.crossLayerOut[netw][a][b] > self.inLayer[netwb][b][c][1]:
-                        optimisticCount += 1
                         self.TFSum[netwType][0] += 1
-                        self.nr2paths[netwType][1][netw][a] -= 1
+                        self.nr2paths[netwType][1][netw][b] -= 1
                     if self.crossLayerOut[netw][a][b] > self.inLayer[netwb][b][c][0]:
-                        pesimisticCount += 1
                         self.TFSum[netwType][1] += 1
-                        self.nr2paths[netwType][2][netw][a] -= 1
-        return optimisticCount, pesimisticCount
+                        self.nr2paths[netwType][2][netw][b] -= 1
 
     def initTFRForNode(self, netw, netwType, a):
         self.nr2paths[netwType][0][netw][a] = 0
         self.nr2paths[netwType][1][netw][a] = 0
         self.nr2paths[netwType][2][netw][a] = 0
-        optimisticCount = 0
-        pesimisticCount = 0
-        return optimisticCount, pesimisticCount
 
-    def addTFRForNode(self, netw, netwType, transFaultSum, a, optimisticCount, pesimisticCount):
+    def addTFRForNode(self, netw, netwType, transFaultSum, a):
         if self.nr2paths[netwType][0][netw][a] == 0:
             # When computing the transitive fault rate, ignore the nodes without 2-paths.
             return transFaultSum
+        optimisticCount = self.nr2paths[netwType][0][netw][a] - self.nr2paths[netwType][1][netw][a]
+        pesimisticCount = self.nr2paths[netwType][0][netw][a] - self.nr2paths[netwType][2][netw][a]
         transFaultSum[0] += (optimisticCount / self.nr2paths[netwType][0][netw][a])
         transFaultSum[1] += (pesimisticCount / self.nr2paths[netwType][0][netw][a])
         return transFaultSum
@@ -400,9 +352,9 @@ class InformationFlowNetwork:
             if netwType == 'MLN':
                 for a in self.crossLayerOut[netw]:
                     if not (a in self.inLayer[netw]):
-                        optimisticCount, pesimisticCount = self.initTFRForNode(netw, netwType, a)
-                        optimisticCount, pesimisticCount = self.addCLEPathA(netw, netwType, a, optimisticCount, pesimisticCount)
-                        transFaultSum = self.addTFRForNode(netw, netwType, transFaultSum, a, optimisticCount, pesimisticCount)
+                        self.initTFRForNode(netw, netwType, a)
+                        self.addCLEPathA(netw, netwType, a)
+                        transFaultSum = self.addTFRForNode(netw, netwType, transFaultSum, a)
 
             netwEdges = self.inLayer[netw]
             # #Uncomment this part if the CP network adds CLE as inLayer parallel edges.
@@ -414,16 +366,12 @@ class InformationFlowNetwork:
             countedTuples = {}
             has2Paths = 0
             for a in netwEdges:
-                self.nr2paths[netwType][0][netw][a] = 0
-                self.nr2paths[netwType][1][netw][a] = 0
-                self.nr2paths[netwType][2][netw][a] = 0
-                optimisticCount = 0
-                pesimisticCount = 0
+                self.initTFRForNode(netw, netwType, a)
 
+            for a in netwEdges:
                 for b in netwEdges[a]:
                     if netwType == 'MLN':
                         self.addCLEPathAB(netw, netwType, a, b)
-
                     if not (b in netwEdges):
                         # Ignore a's neighbours with out-degree = 0.
                         continue
@@ -431,23 +379,22 @@ class InformationFlowNetwork:
                         # Count the 2-path : a->b->c
                         if a == b or b == c or c == a:
                             continue
-
                         atLeastOne2Path = True
                         if (a, b, c) in countedTuples:
                             assert False
                         countedTuples[(a, b, c)] = True
-                        self.nr2paths[netwType][0][netw][a] += 1
-                        self.nr2paths[netwType][1][netw][a] += 1
-                        self.nr2paths[netwType][2][netw][a] += 1
+                        self.nr2paths[netwType][0][netw][b] += 1
+                        self.nr2paths[netwType][1][netw][b] += 1
+                        self.nr2paths[netwType][2][netw][b] += 1
                         if netwType == 'MLN':
-                            optimisticCount, pesimisticCount = \
-                                self.getTFaultMLN(a, b, c, netw, netwType, optimisticCount, pesimisticCount)
+                            self.getTFaultMLN(a, b, c, netw, netwType)
                         else:
-                            optimisticCount, pesimisticCount = \
-                                self.getTFaultMonoplex(a, b, c, netw, netwType, optimisticCount, pesimisticCount)
+                            self.getTFaultMonoplex(a, b, c, netw, netwType)
                 if self.nr2paths[netwType][0][netw][a] > 0:
                     has2Paths += 1
-                transFaultSum = self.addTFRForNode(netw, netwType, transFaultSum, a, optimisticCount, pesimisticCount)
+
+            for a in self.nr2paths[netwType][0][netw]:
+                transFaultSum = self.addTFRForNode(netw, netwType, transFaultSum, a)
 
             # The network transitive fault rate is the sum of the node transitive fault rates over all
             # nodes, divided by the number of nodes in the network.
@@ -456,21 +403,8 @@ class InformationFlowNetwork:
             # if has2Paths > 0:
             #     transFaultSum[0] /= has2Paths
             #     transFaultSum[1] /= has2Paths
-            if atLeastOne2Path:
-                print('Nr nodes is', N, 'and sp nodes', has2Paths, 'and TF is', transFaultSum)
-                if N == 3 and transFaultSum == [0.3333333333333333, 0.3333333333333333]:
-                    for a in netwEdges:
-                        print('2 paths for ', self.Label[a], 'are ', self.nr2paths[netwType][0][netw][a])
-                        for b in netwEdges[a]:
-                            if not (b in netwEdges):
-                                continue
-                            for c in netwEdges[b]:
-                                print('Nodes ', self.Label[a], self.Label[b], self.Label[c])
-                                print(netwEdges[a][b], netwEdges[b][c])
-
 
             self.TFperNetw[netwType][netw] = (transFaultSum[0], transFaultSum[1])
-
             # optimistic model should have at most pessimistic model transitive faults.
             assert transFaultSum[0] <= transFaultSum[1]
             if atLeastOne2Path:
