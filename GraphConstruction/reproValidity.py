@@ -128,26 +128,17 @@ def createAdvInfoFlowNetwork(t, delta_t, minTime, maxTime, msgDict):
 def getValues(t, delta_t, minTime, maxTime, msgDict, netwType, useGT = False):
     print('Creating network')
     infoFlowNetwork = createInfoFlowNetwork(t, delta_t, minTime, maxTime, msgDict, useGT)
-    # infoFlowNetwork.printNetworkDetails()
     infoFlowNetwork.getTransitiveFault(netwType)
     #infoFlowNetwork.getTFAggregate(netwType)
-    #infoFlowNetwork.printNetwork2paths(netwType)
     infoFlowNetwork.computeUpperLowerAggregateNetwork(netwType)
 
     #infoFlowNetwork.getRanginkCorrelationAggregate(netwType)
     if netwType == 'MLN':
         print("The MLN network for", t, "has (inLayer, restrCrossLayer, sum)", infoFlowNetwork.getMLNEdgeCount(), " edges")
         print("The MLN network for", t, "has", len(infoFlowNetwork.crossLayerEdges), "cross-layer edges")
-    # if netwType == 'MLN':
-    #     print("The MLN network for ", t, " has ", infoFlowNetwork.getMLNEdgeCount(), " edges")
-    #     print("And it has CLE ", len(infoFlowNetwork.crossLayerEdges))
-    # print(nrNodes, infoFlowNetwork.nrEdges)
     if netwType == 'monoplex':
-        print("The number of edges is ", infoFlowNetwork.getEdgeCount())
+        print("The number of edges is ", infoFlowNetwork.getMonoplexEdgeCount())
         print('The u and l are ', infoFlowNetwork.crtResult[netwType][0])
-    # else:
-    #     print("The MLN network for ", t, " has ", infoFlowNetwork.getMLNEdgeCount(), " edges")
-    #     print("The monoplex network for ", t, " has ", infoFlowNetwork.getEdgeCount(), " edges")
     return infoFlowNetwork
 
 def getSpecialCases(t, delta_t, minTime, maxTime, msgDict):
@@ -157,7 +148,3 @@ def getSpecialCases(t, delta_t, minTime, maxTime, msgDict):
     # for i in range(5):
     #     print('Case', i, infoFlowNetwork.case[i])
     return infoFlowNetwork
-
-
-
-

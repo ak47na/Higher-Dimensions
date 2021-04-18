@@ -50,6 +50,16 @@ def plotTable2(t2Times, t2Rows):
                              ])
         t2.show()
 
+def plotTFComparisonTable(tTimes, tRows):
+    columnNames = ['time interval', 'TF@B / All TF', 'MLN:TF@B@CLD / ALL TF', '#edges@B', '#edges @B@CLD']
+    tData = [tTimes]
+    for col in tRows:
+        tData.append(col)
+    t = go.Figure(data=[go.Table(header=dict(values=columnNames),
+                                      cells=dict(values=tData))
+                             ])
+    t.show()
+
 def getMeanResults(monoplex):
     res = [[], []]
     resSum = [0, 0]
@@ -68,7 +78,20 @@ def runResults():
     print('Running results...')
     for (t, delta_t) in timeIntWithResults:
         monoplexNetwork = reproValidity.getValues(t, delta_t, minTime, maxTime, msgDict, 'monoplex', False)
+        MLNNetwork = reproValidity.getValues(t, delta_t, minTime, maxTime, msgDict, 'MLN', False)
         crtResult = monoplexNetwork.crtResult['monoplex']
+        tfCountAll1 = monoplexNetwork.getAllTFs()
+        tfCountAll2 = MLNNetwork.getAllTFs()
+        assert tfCountAll1 == tfCountAll2
+        tfRapMonoplex = []
+        tfRapMLN = []
+        for i in range(2):
+            tfRapMonoplex.append(round(monoplexNetwork.tfCount['monoplex'][i] / tfCountAll1[i], 6))
+            tfRapMLN.append(round(MLNNetwork.tfCount['MLN'][i] / tfCountAll1[i], 6))
+        tCompRows[0].append(tfRapMonoplex)
+        tCompRows[1].append(tfRapMLN)
+        tCompRows[2].append(monoplexNetwork.getMonoplexEdgeCount())
+        tCompRows[3].append(monoplexNetwork.getMLNEdgeCount())
         print(delta_t)
 
         if (delta_t in transitiveFaultRate_paperRes):
@@ -111,11 +134,12 @@ paperProjects = ['Apache', 'MySQL', 'Perl']
 print('Running')
 t1Times = []
 t1Rows = [[] for k in range(7)]
-
+tCompRows = [[] for k in range(4)]
 
 t2Times = []
 t2Rows = [[[] for i in range(6)], [[] for j in range(6)]]
 if __name__ == "__main__":
     runResults()
-    plotTable1(t1Times, t1Rows)
-    plotTable2(t2Times, t2Rows)
+    plotTFComparisonTable(t1Times, tCompRows)
+    # plotTable1(t1Times, t1Rows)
+    # plotTable2(t2Times, t2Rows)

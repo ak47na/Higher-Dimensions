@@ -64,31 +64,6 @@ class OrderInfoFlowNetwork(infoFlowNetwork.InformationFlowNetwork):
                         self.nr2p[netwType][i][nod] = 0
                     self.nr2p[netwType][i][nod] += self.nr2paths[netwType][i][netw][nod]
 
-    def getTFAggregate(self, netwType):
-        tfSum = [0, 0]
-        nrNodes = 0
-        for a in self.minPair:
-            nrNodes += 1
-            optimisticCount = 0
-            pessimisticCount = 0
-            nr2Paths = 0
-            for b in self.minPair[a]:
-                if not b in self.minPair:
-                    continue
-                assert b in self.maxPair[a]
-                for c in self.maxPair[b]:
-                    nr2Paths += 1
-                    if self.minPair[a][b] > self.maxPair[b][c]:
-                        optimisticCount += 1
-                    if self.maxPair[a][b] > self.minPair[b][c]:
-                        pessimisticCount += 1
-            if nr2Paths:
-                tfSum[0] += optimisticCount / nr2Paths
-                tfSum[1] += pessimisticCount / nr2Paths
-
-        tfSum[0] = tfSum[0] / nrNodes
-        tfSum[1] = tfSum[1] / nrNodes
-
     def computeUpperLowerAggregateNetwork(self, netwType):
         self.compute2PathsAggregateNetwork(netwType)
         N = len(self.nr2p[netwType][0])
