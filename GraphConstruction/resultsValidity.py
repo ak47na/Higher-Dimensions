@@ -165,7 +165,7 @@ t2Times = []
 t2Rows = [[[] for i in range(6)], [[] for j in range(6)]]
 if __name__ == "__main__":
     runResults()
-    plotTwoPathVsTF(tTotalTimes, twoPathRows)
-    plotTFComparisonTable(tTotalTimes, tCompRows)
+    #plotTwoPathVsTF(tTotalTimes, twoPathRows)
+    #plotTFComparisonTable(tTotalTimes, tCompRows)
     plotTable1(t1Times, t1Rows)
     # plotTable2(t2Times, t2Rows)

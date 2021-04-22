@@ -3,6 +3,7 @@ import parameters
 
 from networkx import *
 from math import *
+import matplotlib.pyplot as plt
 
 '''
     Updates the minimum and maximum number of seconds with t.
@@ -66,7 +67,6 @@ class InformationFlowNetwork:
         self.tfCount = {"monoplex" : [0, 0], "MLN": [0, 0]}
         self.TFperNetw = {"monoplex" : {}, "MLN": {}}
         self.crtResult = {"monoplex" : [(0, 0), (0, 0), (0, 0)], "MLN": [(0, 0), (0, 0), (0, 0)]}
-        self.meanRes = {}
         self.crtResultAgg = {"monoplex" : [], "MLN": []}
         if useGT:
             parameters.setLayerDistance(1 + (parameters.T - 1) // delta_t)
@@ -148,6 +148,10 @@ class InformationFlowNetwork:
         self.addNodeToNetw(B, self.timeDict[tIntervalIdU])
         self.addNodeToNetw(B, self.timeDict[tIntervalIdV])
 
+        if tIntervalIdU - tIntervalIdV > parameters.kLayer:
+            # Ignore cross edges for layer distance > kLayer.
+            return nrNodes
+
         if not(A in self.minPair):
             self.minPair[A] = {}
         if not (B in self.minPair[A]):
@@ -158,10 +162,6 @@ class InformationFlowNetwork:
         if not (B in self.maxPair[A]):
             self.maxPair[A][B] = timeU
         self.maxPair[A][B] = max(self.maxPair[A][B], timeU)
-
-        if tIntervalIdU - tIntervalIdV > parameters.kLayer:
-            # Ignore cross edges for layer distance > kLayer.
-            return nrNodes
 
         T = self.timeDict[tIntervalIdU]
         Tv = self.timeDict[tIntervalIdV]
@@ -325,7 +325,6 @@ class InformationFlowNetwork:
             self.tfCount[netwType][type] += 1
         else:
             self.uniqueFaults[netwType][type][tfTuple] += 1
-            #self.tfCount[netwType][type] += 1
 
     def initTFRForNode(self, netw, netwType, a):
         self.nr2paths[netwType][0][netw][a] = 0
@@ -399,7 +398,6 @@ class InformationFlowNetwork:
                         atLeastOne2Path = True
                         twoPathTuple = (self.Label[a], self.Label[b], self.Label[c])
                         self.addTwoPath(twoPathTuple, netwType)
-
                         self.nr2paths[netwType][0][netw][b] += 1
                         self.nr2paths[netwType][1][netw][b] += 1
                         self.nr2paths[netwType][2][netw][b] += 1
@@ -420,19 +418,14 @@ class InformationFlowNetwork:
             # if has2Paths > 0:
             #     transFaultSum[0] /= has2Paths
             #     transFaultSum[1] /= has2Paths
-
             self.TFperNetw[netwType][netw] = (transFaultSum[0], transFaultSum[1])
             # optimistic model should have at most pessimistic model transitive faults.
             assert transFaultSum[0] <= transFaultSum[1]
             if atLeastOne2Path:
                 upperBound = max(transFaultSum[1], upperBound)
                 lowerBound = min(transFaultSum[0], lowerBound)
-                # print('Update u and l', upperBound, lowerBound)
 
         self.crtResult[netwType][0] = (lowerBound, upperBound)
-        # print('Final u and l', self.crtResult[netwType][0])
-
-
 
     # Returns the number of edges in the MLN network: (inLayer, outLayer, in + out)
     def getMLNEdgeCount(self):
@@ -476,7 +469,6 @@ class InformationFlowNetwork:
 
     def getAllTFs(self):
         tfSumAll = [0, 0]
-        bounds = [1, 0]
         optimisticCount = {}
         pessimisticCount = {}
         nr2pathsC = {}
@@ -512,7 +504,6 @@ class InformationFlowNetwork:
         TFCount = [{}, {}]
         nr2Paths = {}
         nodes = {}
-
         for twoPathTuple in self.twoPaths[netwType]:
             for tupleNod in twoPathTuple:
                 if not tupleNod in nodes:
@@ -528,11 +519,46 @@ class InformationFlowNetwork:
         bounds = [0, 0]
         for nod in nr2Paths:
             for i in range(2):
-                bounds[i] += TFCount[i][nod] / nr2Paths[nod]
+                if TFCount[i][nod] == nr2Paths[nod]:
+                    bounds[i] += 1
+                else:
+                    bounds[i] += TFCount[i][nod] / (nr2Paths[nod] - TFCount[i][nod])
         for i in range(2):
             bounds[i] = bounds[i] / len(nr2Paths)
         self.crtResultAgg[netwType] = bounds
-        print('Bounds using aggregate', bounds)
+        if self.delta_t == 3600:
+            self.compute2PHist(self.getVals(nr2Paths, 50, True), 'small2P.png')
+            self.compute2PHist(self.getVals(nr2Paths, 50, False), 'big2P.png')
+
+    def getVals(self, nr2P, x, smallValues):
+        vals = []
+        for nod in nr2P:
+            if smallValues and nr2P[nod] <= 50:
+                vals.append(nr2P[nod])
+            elif not(smallValues) and nr2P[nod] > 50:
+                vals.append(nr2P[nod])
+        return vals
+
+    def compute2PHist(self, vals, fileName):
+        if 'small' in fileName:
+            xvalues = []
+            yvalues = []
+            for i in range(26):
+                xvalues.append(i * 2)
+            plt.xticks(xvalues, xvalues)
+            for i in range(12):
+                yvalues.append(i * 5)
+            plt.yticks(yvalues, yvalues)
+
+        plt.hist(vals, bins = 50,
+                 color='blue', edgecolor='black')
+        plt.title('Histogram for Apache ', size=8)
+        plt.xlabel('Nr 2 paths (1h)', size=8)
+        plt.ylabel('count', size=10)
+        plt.tight_layout()
+        #plt.show()
+        plt.savefig(fileName)
+        plt.close()
 
 
     def printNetworkDetails(self):
@@ -550,4 +576,5 @@ class InformationFlowNetwork:
             for a in self.nr2paths[netwType][0][netw]:
                 print('Nod ', a, 'has #2paths:', self.nr2paths[netwType][0][netw][a],
                       self.nr2paths[netwType][1][netw][a], self.nr2paths[netwType][2][netw][a])
+
 
