@@ -62,12 +62,16 @@ class InformationFlowNetwork:
         self.nrGraphs = 0
         self.delta_t = delta_t
         self.analysedT = t
+        self.twoPaths = {"monoplex" : {}, "MLN": {}}
         self.tfCount = {"monoplex" : [0, 0], "MLN": [0, 0]}
         self.TFperNetw = {"monoplex" : {}, "MLN": {}}
         self.crtResult = {"monoplex" : [(0, 0), (0, 0), (0, 0)], "MLN": [(0, 0), (0, 0), (0, 0)]}
         self.meanRes = {}
+        self.crtResultAgg = {"monoplex" : [], "MLN": []}
         if useGT:
             parameters.setLayerDistance(1 + (parameters.T - 1) // delta_t)
+        else:
+            parameters.setLayerDistance(1)
 
     '''
         Add the human with name to humanDict and as a graph node with index nrNodes + 1 and label
@@ -122,6 +126,7 @@ class InformationFlowNetwork:
         if a == b:
             # Do not include self replies
             return nrNodes
+
         self.nrEdges += 1
         A = self.humanDict[a]
         B = self.humanDict[b]
@@ -289,6 +294,7 @@ class InformationFlowNetwork:
         if b in self.crossLayerOut[netw]:
             for c in self.crossLayerOut[netw][b]:
                 if not (b in self.inLayer[netw] and c in self.inLayer[netw][b]):
+                    self.addTwoPath((self.Label[a], self.Label[b], self.Label[c]), netwType)
                     # Cross-edges b->c where there is also an in-layer edge b->c are treated in getTFaultMLN.
                     assert (self.crossLayerOut[netw][b][c] > self.inLayer[netw][a][b][1])
                     for ty in range(3):
@@ -319,6 +325,7 @@ class InformationFlowNetwork:
             self.tfCount[netwType][type] += 1
         else:
             self.uniqueFaults[netwType][type][tfTuple] += 1
+            #self.tfCount[netwType][type] += 1
 
     def initTFRForNode(self, netw, netwType, a):
         self.nr2paths[netwType][0][netw][a] = 0
@@ -334,6 +341,9 @@ class InformationFlowNetwork:
         transFaultSum[0] += (optimisticCount / self.nr2paths[netwType][0][netw][a])
         transFaultSum[1] += (pesimisticCount / self.nr2paths[netwType][0][netw][a])
         return transFaultSum
+
+    def addTwoPath(self, twoPathTuple, netwType):
+        self.twoPaths[netwType][twoPathTuple] = True
 
     '''
         Computes the number of 2-paths(with or without transitive faults) for each node. The number of
@@ -371,7 +381,6 @@ class InformationFlowNetwork:
             # else:
             #     netwEdges = self.Adj[netw]
             atLeastOne2Path = False
-            countedTuples = {}
             has2Paths = 0
             for a in self.netwNodes[netw]:
                 self.initTFRForNode(netw, netwType, a)
@@ -388,9 +397,9 @@ class InformationFlowNetwork:
                         if a == b or b == c or c == a:
                             continue
                         atLeastOne2Path = True
-                        if (a, b, c) in countedTuples:
-                            assert False
-                        countedTuples[(a, b, c)] = True
+                        twoPathTuple = (self.Label[a], self.Label[b], self.Label[c])
+                        self.addTwoPath(twoPathTuple, netwType)
+
                         self.nr2paths[netwType][0][netw][b] += 1
                         self.nr2paths[netwType][1][netw][b] += 1
                         self.nr2paths[netwType][2][netw][b] += 1
@@ -467,23 +476,64 @@ class InformationFlowNetwork:
 
     def getAllTFs(self):
         tfSumAll = [0, 0]
+        bounds = [1, 0]
+        optimisticCount = {}
+        pessimisticCount = {}
+        nr2pathsC = {}
         for a in self.minPair:
-            optimisticCount = 0
-            pessimisticCount = 0
-            nr2Paths = 0
+            optimisticCount[a] = 0
+            pessimisticCount[a] = 0
+            nr2pathsC[a] = 0
+        for a in self.minPair:
             for b in self.minPair[a]:
                 if not b in self.minPair:
                     continue
                 assert b in self.maxPair[a]
                 for c in self.maxPair[b]:
-                    nr2Paths += 1
+                    nr2pathsC[b] += 1
                     if self.minPair[a][b] > self.maxPair[b][c]:
-                        optimisticCount += 1
+                        optimisticCount[b] += 1
                         tfSumAll[0] += 1
                     if self.maxPair[a][b] > self.minPair[b][c]:
-                        pessimisticCount += 1
+                        pessimisticCount[b] += 1
                         tfSumAll[1] += 1
+
+        self.aggregCrtRes = [0, 0]
+        for a in self.minPair:
+            if nr2pathsC[a] == 0:
+                continue
+            self.aggregCrtRes[0] += optimisticCount[a] / nr2pathsC[a]
+            self.aggregCrtRes[1] += pessimisticCount[a] / nr2pathsC[a]
+        self.aggregCrtRes[0] /= len(self.minPair)
+        self.aggregCrtRes[1] /= len(self.minPair)
         return tfSumAll
+
+    def getAggResNewDef(self, netwType):
+        TFCount = [{}, {}]
+        nr2Paths = {}
+        nodes = {}
+
+        for twoPathTuple in self.twoPaths[netwType]:
+            for tupleNod in twoPathTuple:
+                if not tupleNod in nodes:
+                    nodes[tupleNod] = True
+            if not twoPathTuple[1] in nr2Paths:
+                TFCount[0][twoPathTuple[1]] = 0
+                TFCount[1][twoPathTuple[1]] = 0
+                nr2Paths[twoPathTuple[1]] = 0
+            nr2Paths[twoPathTuple[1]] += 1
+        for i in range(2):
+            for fault in self.uniqueFaults[netwType][i]:
+                TFCount[i][fault[1]] += 1
+        bounds = [0, 0]
+        for nod in nr2Paths:
+            for i in range(2):
+                bounds[i] += TFCount[i][nod] / nr2Paths[nod]
+        for i in range(2):
+            bounds[i] = bounds[i] / len(nr2Paths)
+        self.crtResultAgg[netwType] = bounds
+        print('Bounds using aggregate', bounds)
+
 
     def printNetworkDetails(self):
         print('#graphs is', self.nrGraphs, 'and # total edges is', self.nrEdges)

@@ -38,15 +38,23 @@ def getReplyTimesFromMsgEdges(filePath, msgDict):
     assert errors == 0
     return replyTimes
 
-def compReplyTimesHist(replyTimes, filePath):
-    plt.hist(replyTimes,
-             color='blue', edgecolor='black', bins=100)
-    plt.title('Histogram for Apache ', size=10)
-    plt.xlabel('Time(hours)', size=10)
+def compReplyTimesHist(replyTimes, filePath, x):
+    plt.hist(replyTimes, bins=50,
+             color='blue', edgecolor='black')
+    plt.title('Histogram for Apache ', size=8)
+    plt.xlabel('Time(hours)', size=8)
+    vals = []
+    countVals = 10
+    # if x < 15:
+    #     countVals = x
+    for i in range(countVals + 1):
+        vals.append(round((i / countVals) * x, 2))
+    plt.xticks(vals, vals)
     plt.ylabel('count', size=10)
     plt.tight_layout()
     #plt.show()
     plt.savefig(filePath)
+    plt.close()
 
 def compReplyTimesHists(replyTimes):
     for i, binsCount in enumerate([50, 75, 100, 125]):
@@ -99,6 +107,7 @@ def getStats(arr):
     Q1, Q3, iqr = getIQR(arr)
     print(mean, stdev, Q1, Q3, iqr)
     print(getPropFromFirstXH(arr, mean + stdev), getPropFromFirstXH(arr, mean + iqr))
+    return mean + iqr
 
 def getPropFromFirstXH(arr, x):
     n = len(arr)
@@ -115,7 +124,7 @@ minTime, maxTime, msgDict = reproValidity.readMsgDetails(msgDetailsFilePath)
 msgEdgesFilePath = r'D:\AKwork2021\HigherDimensions\Higher-Dimensions\ApacheData\apacheMsgEdges.txt'#"Data\\msgEdges.txt"
 
 replyTimes = sorted(getReplyTimesFromMsgEdges(msgEdgesFilePath, msgDict))
-getStats(replyTimes)
+meanIQR = getStats(replyTimes)
 N = len(replyTimes)
 randIDx = random.sample(range(0, N), 100)
 randReplT = []
@@ -123,15 +132,22 @@ print('Nr msg', N)
 for i in randIDx:
     randReplT.append(replyTimes[i])
 
-first100HistFilePath = 'D:\AKwork2021\HigherDimensions\Higher-Dimensions\ApacheData\\atMost100ReplyTimesHist.png'
+filePathTemplate = 'D:\AKwork2021\HigherDimensions\Higher-Dimensions\ApacheData\\ReplyTimesHistatMost'
+timesList = [10, 20, meanIQR, 30, 40, 50, 60]
+firsXHistFilePaths = {}
+for t in timesList:
+    firsXHistFilePaths[t] = filePathTemplate + str(round(t)) + '.png'
+
 sampleHistFilePath = 'D:\AKwork2021\HigherDimensions\Higher-Dimensions\ApacheData\\sample100ReplyTimesHist.png'
 for x in range(10, 1 + int(replyTimes[-1]), 10):
     smallRempyTimes = getSmallerThanXReplyTimes(replyTimes, x)
-    if x == 100:
-        compReplyTimesHist(smallRempyTimes, first100HistFilePath)
-    print('Percentage for reply times <= ' + str(x) + ' hours', ((len(smallRempyTimes)) / len(replyTimes)) * 100)
+    if x <= 60 and (x in timesList):
+        compReplyTimesHist(smallRempyTimes, firsXHistFilePaths[x], x)
+    if x <= 60:
+        print('Percentage for reply times <= ' + str(x) + ' hours', ((len(smallRempyTimes)) / len(replyTimes)) * 100)
 
-compReplyTimesHist(randReplT, sampleHistFilePath)
+compReplyTimesHist(getSmallerThanXReplyTimes(replyTimes, meanIQR), firsXHistFilePaths[meanIQR], meanIQR)
+#compReplyTimesHist(randReplT, sampleHistFilePath)
 print(replyTimes)
 # compReplyTimesHist(smallRempyTimes, 100)
 # compReplyTimesHist(randReplT)

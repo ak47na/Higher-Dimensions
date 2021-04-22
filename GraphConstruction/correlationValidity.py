@@ -84,7 +84,7 @@ class OrderInfoFlowNetwork(infoFlowNetwork.InformationFlowNetwork):
         sumO /= okN
         sumP /= okN
         #self.crtResult[netwType][0] = (round(sumO, 4), round(sumP, 4))
-        print('For aggregate netw we have', sumO, sumP, okN, nr2ps, optTfs / nr2ps, pessTfs / nr2ps)
+        print('For aggregate netw,', netwType, 'we have', sumO, sumP, okN, nr2ps, optTfs / nr2ps, pessTfs / nr2ps)
 
     def getRanginkCorrelation(self, netwType):
         Order = [[], [], []]

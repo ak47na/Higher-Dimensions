@@ -50,8 +50,20 @@ def plotTable2(t2Times, t2Rows):
                              ])
         t2.show()
 
+def plotTwoPathVsTF(tTimes, tRows):
+    columnNames = ['time interval', '2P@B', '2P@MLN@CLD']
+
+    tData = [tTimes]
+    for col in tRows:
+        tData.append(col)
+    t = go.Figure(data=[go.Table(header=dict(values=columnNames),
+                                 cells=dict(values=tData))
+                        ])
+    t.show()
+
 def plotTFComparisonTable(tTimes, tRows):
-    columnNames = ['time interval', 'TF@B / All TF', 'MLN:TF@B@CLD / ALL TF', '#edges@B', '#edges @B@CLD']
+    columnNames = ['time interval', 'TF@B_O / All TF_O', 'TF@B_P / All TF_P',
+                   'TF@MLN@CLD_O / All TF_O', 'TF@MLN@CLD / All TF_P', '#edges@B', '#edges @MLN@CLD', 'edge addition']
     tData = [tTimes]
     for col in tRows:
         tData.append(col)
@@ -77,21 +89,32 @@ def getMeanResults(monoplex):
 def runResults():
     print('Running results...')
     for (t, delta_t) in timeIntWithResults:
+        tTotalTimes.append(t)
         monoplexNetwork = reproValidity.getValues(t, delta_t, minTime, maxTime, msgDict, 'monoplex', False)
         MLNNetwork = reproValidity.getValues(t, delta_t, minTime, maxTime, msgDict, 'MLN', False)
+        monoplexNetwork.getAggResNewDef('monoplex')
+        twoPathRows[0].append(len(monoplexNetwork.twoPaths['monoplex']))
+        twoPathRows[1].append(len(MLNNetwork.twoPaths['MLN']))
         crtResult = monoplexNetwork.crtResult['monoplex']
         tfCountAll1 = monoplexNetwork.getAllTFs()
         tfCountAll2 = MLNNetwork.getAllTFs()
+        print('The count of faults is', tfCountAll1, tfCountAll2)
         assert tfCountAll1 == tfCountAll2
         tfRapMonoplex = []
         tfRapMLN = []
+        print('Monoplex has', monoplexNetwork.tfCount['monoplex'])
+        print('MLN has', MLNNetwork.tfCount['MLN'])
         for i in range(2):
-            tfRapMonoplex.append(round(monoplexNetwork.tfCount['monoplex'][i] / tfCountAll1[i], 6))
-            tfRapMLN.append(round(MLNNetwork.tfCount['MLN'][i] / tfCountAll1[i], 6))
-        tCompRows[0].append(tfRapMonoplex)
-        tCompRows[1].append(tfRapMLN)
-        tCompRows[2].append(monoplexNetwork.getMonoplexEdgeCount())
-        tCompRows[3].append(monoplexNetwork.getMLNEdgeCount())
+            tfRapMonoplex.append(round(monoplexNetwork.tfCount['monoplex'][i] / tfCountAll1[1], 6))
+            tfRapMLN.append(round(MLNNetwork.tfCount['MLN'][i] / tfCountAll1[1], 6))
+        tCompRows[0].append(tfRapMonoplex[0])
+        tCompRows[1].append(tfRapMonoplex[1])
+        tCompRows[2].append(tfRapMLN[0])
+        tCompRows[3].append(tfRapMLN[1])
+        tCompRows[4].append(monoplexNetwork.getMonoplexEdgeCount())
+        MLNEdgeCount = MLNNetwork.getMLNEdgeCount()
+        tCompRows[5].append(MLNEdgeCount[2])
+        tCompRows[6].append(round((MLNEdgeCount[2] - MLNEdgeCount[0]) / MLNEdgeCount[0], 6))
         print(delta_t)
 
         if (delta_t in transitiveFaultRate_paperRes):
@@ -101,11 +124,12 @@ def runResults():
                 # Add paper name.
                 t1Rows[0].append(paperProjects[projectId])
                 #meanRes = getMeanResults(monoplexNetwork)
-                meanRes = crtResult[0]
+                #meanRes = crtResult[0]
+                meanRes = monoplexNetwork.crtResultAgg['monoplex']
                 for i in range(2):
                     # Compare both the optimistic and pessimistic models.
                     t1Rows[1 + i * 3].append(projResult[i])
-                    t1Rows[2 + i * 3].append(meanRes[i])
+                    t1Rows[2 + i * 3].append(round(meanRes[i], 6))
                     t1Rows[3 + i * 3].append(Settings.dissimilarity(meanRes[i], projResult[i]))
                 projectId += 1
                 #Only check results for first project, i.e. Apache
@@ -133,13 +157,15 @@ def runResults():
 paperProjects = ['Apache', 'MySQL', 'Perl']
 print('Running')
 t1Times = []
-t1Rows = [[] for k in range(7)]
-tCompRows = [[] for k in range(4)]
-
+t1Rows = [[] for k1 in range(7)]
+tCompRows = [[] for k2 in range(7)]
+twoPathRows = [[] for k3 in range(2)]
+tTotalTimes = []
 t2Times = []
 t2Rows = [[[] for i in range(6)], [[] for j in range(6)]]
 if __name__ == "__main__":
     runResults()
-    plotTFComparisonTable(t1Times, tCompRows)
-    # plotTable1(t1Times, t1Rows)
+    plotTwoPathVsTF(tTotalTimes, twoPathRows)
+    plotTFComparisonTable(tTotalTimes, tCompRows)
+    plotTable1(t1Times, t1Rows)
     # plotTable2(t2Times, t2Rows)
