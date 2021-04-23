@@ -129,6 +129,7 @@ def getValues(t, delta_t, minTime, maxTime, msgDict, netwType, useGT = False):
     print('Creating network')
     infoFlowNetwork = createInfoFlowNetwork(t, delta_t, minTime, maxTime, msgDict, useGT)
     infoFlowNetwork.getTransitiveFault(netwType)
+    infoFlowNetwork.getAlphaGuess(0)
     #infoFlowNetwork.getTFAggregate(netwType)
     infoFlowNetwork.computeUpperLowerAggregateNetwork(netwType)
 

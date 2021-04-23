@@ -19,6 +19,12 @@ def getMinMax(timePair, t):
 
 class InformationFlowNetwork:
     def __init__(self, msgDict, delta_t, t, minTime, useGT = False):
+        # self.allTimes[0] = includes cross-bucket replies;
+        # self.allTimes[1] = doesn't include cross bucket reply.
+        self.allTimesBucket = [{}, {}]
+        self.allTimes = [{}, {}]
+        self.gtTP = {}
+        self.gtTF = [{}, {}]
         self.uniqueFaults = {"monoplex" : [{}, {}], "MLN": [{}, {}]}
         self.minTime = minTime
         self.nrEdges = 0
@@ -99,9 +105,106 @@ class InformationFlowNetwork:
         self.inLayer[self.nrGraphs] = {}
         self.crossLayerIn[self.nrGraphs] = {}
         self.crossLayerOut[self.nrGraphs] = {}
+        self.allTimesBucket[0][tIntervalId] = {}
+        self.allTimesBucket[1][tIntervalId] = {}
 
     def addNodeToNetw(self, A, netw):
         self.netwNodes[netw][A] = True
+
+    def getAlpha2Guess(self, ty):
+        twoPaths = [{}, {}]
+        tfaults = [[{}, {}], [{}, {}]]
+        for bucket in self.allTimesBucket[ty]:
+            netw = self.timeDict[bucket]
+            for a in self.allTimesBucket[ty][bucket]:
+                for b in self.allTimesBucket[ty][bucket][a]:
+                    self.allTimesBucket[ty][bucket][a][b].sort(key = lambda x:x[0])
+            for a in self.allTimesBucket[ty][bucket]:
+                for b in self.allTimesBucket[ty][bucket][a]:
+                    if not(b in self.allTimesBucket[ty][bucket]):
+                        continue
+                    if not(b in twoPaths):
+                        twoPaths[b] = {}
+                        tfCount[b] = [{}, {}]
+                    for c in self.allTimesBucket[ty][bucket][b]:
+                        if not((a, c) in twoPaths[b]):
+                            twoPaths[b][(a, c)] = 1
+                        else:
+                            twoPaths[b][(a, c)] += 1
+                        if self.allTimesBucket[ty][bucket][a][b][0] > self.allTimesBucket[ty][bucket][b][c][1]:
+                            if not((a, c) in tfCount[b][0]):
+                                tfCount[b][0][(a, c)] = 1
+                            else:
+                                tfCount[b][0][(a, c)] += 1
+                        if self.allTimesBucket[ty][bucket][a][b][1] > self.allTimesBucket[ty][bucket][b][c][0]:
+                            if not ((a, c) in tfCount[b][1]):
+                                tfCount[b][1][(a, c)] = 1
+                            else:
+                                tfCount[b][1][(a, c)] += 1
+        self.getAllTFs()
+
+    def updateTwoPaths(self, a, b, ty, twoPaths_, tfaults_):
+        for c in self.allTimes[ty][b]:
+            twoPathTuple = (a, c)
+            assert not (twoPathTuple in twoPaths_[b])
+            twoPaths_[b][twoPathTuple] = True
+            if self.allTimes[ty][a][b][-1] >= self.allTimes[ty][b][c][0]:
+                tfaults_[1][b][twoPathTuple] = True
+            if self.allTimes[ty][a][b][0] >= self.allTimes[ty][b][c][-1]:
+                tfaults_[0][b][twoPathTuple] = True
+        return twoPaths_, tfaults_
+
+    def getAlphaGuess(self, ty):
+        twoPaths = [{}, {}]
+        tfaults = [[{}, {}], [{}, {}]]
+        for a in self.allTimes[ty]:
+            for b in self.allTimes[ty][a]:
+                if not (b in self.allTimes[ty]):
+                    continue
+                if not (b in twoPaths[0]):
+                    for i in range(2):
+                        twoPaths[i][b] = {}
+                        assert not (b in tfaults[i][0])
+                        tfaults[i][0][b] = {}
+                        tfaults[i][1][b] = {}
+                twoPaths[0], tfaults[0] = self.updateTwoPaths(a, b, ty, twoPaths[0], tfaults[0])
+                if not(a in self.allTimes[1]):
+                    assert False
+                if not(b in self.allTimes[1][a]):
+                    assert False
+                twoPaths[1], tfaults[1] = self.updateTwoPaths(a, b, 1, twoPaths[1], tfaults[1])
+        self.alphaGuess = [0, 0]
+        gtTP = 0
+        for a in twoPaths[1]:
+            gtTP += len(twoPaths[1][a])
+            for i in range(2):
+                # for tf in tfaults[1][i][a]:
+                #     if not (tf in tfaults[0][i][a]):
+                #         self.alphaGuess[i] += 1
+                self.alphaGuess[i] += len(tfaults[0][i][a])
+                missedFlows = 0
+                for twoPathTuple in twoPaths[1][a]:
+                    if not(twoPathTuple in twoPaths[0][a]):
+                        if not(twoPathTuple in tfaults[1][i][a]):
+                            missedFlows += 1
+
+                self.alphaGuess[i] += missedFlows
+
+        for i in range(2):
+            self.alphaGuess[i] /= gtTP
+
+    def addTimedEdge(self, A, B, timeU, timeV, bucket, ty):
+        if not(A in self.allTimes[ty]):
+            self.allTimes[ty][A] = {}
+        if not(B in self.allTimes[ty][A]):
+            self.allTimes[ty][A][B] = []
+        self.allTimes[ty][A][B].append((timeU, timeV))
+        if not(A in self.allTimesBucket[ty][bucket]):
+            self.allTimesBucket[ty][bucket][A] = {}
+        if not(B in self.allTimesBucket[ty][bucket][A]):
+            self.allTimesBucket[ty][bucket][A][B] = []
+        self.allTimesBucket[ty][bucket][A][B].append((timeU, timeV))
+
 
     '''
         Adds an edge between the sender of message v and the sender of message u. delta_t represents the
@@ -147,11 +250,13 @@ class InformationFlowNetwork:
         self.addNodeToNetw(A, self.timeDict[tIntervalIdV])
         self.addNodeToNetw(B, self.timeDict[tIntervalIdU])
         self.addNodeToNetw(B, self.timeDict[tIntervalIdV])
+        self.addTimedEdge(A, B, timeU, timeV, tIntervalIdU, 1)
 
         if tIntervalIdU - tIntervalIdV > parameters.kLayer:
             # Ignore cross edges for layer distance > kLayer.
             return nrNodes
-
+        if tIntervalIdU == tIntervalIdV:
+            self.addTimedEdge(A, B, timeU, timeV, tIntervalIdU, 0)
         if not(A in self.minPair):
             self.minPair[A] = {}
         if not (B in self.minPair[A]):
@@ -467,6 +572,7 @@ class InformationFlowNetwork:
                     res[ty] += self.TFperNetw[netwType][netw][ty]
             return res
 
+    # Use for GT
     def getAllTFs(self):
         tfSumAll = [0, 0]
         optimisticCount = {}
@@ -492,6 +598,9 @@ class InformationFlowNetwork:
 
         self.aggregCrtRes = [0, 0]
         for a in self.minPair:
+            self.gtTP[a] = nr2pathsC[a]
+            self.gtTF[0][a] = optimisticCount[a]
+            self.gtTF[1][a] = pessimisticCount[a]
             if nr2pathsC[a] == 0:
                 continue
             self.aggregCrtRes[0] += optimisticCount[a] / nr2pathsC[a]
@@ -526,9 +635,9 @@ class InformationFlowNetwork:
         for i in range(2):
             bounds[i] = bounds[i] / len(nr2Paths)
         self.crtResultAgg[netwType] = bounds
-        if self.delta_t == 3600:
-            self.compute2PHist(self.getVals(nr2Paths, 50, True), 'small2P.png')
-            self.compute2PHist(self.getVals(nr2Paths, 50, False), 'big2P.png')
+        # if self.delta_t == 3600:
+        #     self.compute2PHist(self.getVals(nr2Paths, 50, True), 'small2P.png')
+        #     self.compute2PHist(self.getVals(nr2Paths, 50, False), 'big2P.png')
 
     def getVals(self, nr2P, x, smallValues):
         vals = []
