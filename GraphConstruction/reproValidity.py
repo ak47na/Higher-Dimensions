@@ -128,12 +128,14 @@ def createAdvInfoFlowNetwork(t, delta_t, minTime, maxTime, msgDict):
 def getValues(t, delta_t, minTime, maxTime, msgDict, netwType, useGT = False):
     print('Creating network')
     infoFlowNetwork = createInfoFlowNetwork(t, delta_t, minTime, maxTime, msgDict, useGT)
+    infoFlowNetwork.sortTimedData()
     infoFlowNetwork.getTransitiveFault(netwType)
     infoFlowNetwork.getAlphaGuess(0)
+    infoFlowNetwork.getAlpha2Guess(0)
     #infoFlowNetwork.getTFAggregate(netwType)
     infoFlowNetwork.computeUpperLowerAggregateNetwork(netwType)
 
-    #infoFlowNetwork.getRanginkCorrelationAggregate(netwType)
+    infoFlowNetwork.getRanginkCorrelationAggregate(netwType)
     if netwType == 'MLN':
         print("The MLN network for", t, "has (inLayer, restrCrossLayer, sum)", infoFlowNetwork.getMLNEdgeCount(), " edges")
         print("The MLN network for", t, "has", len(infoFlowNetwork.crossLayerEdges), "cross-layer edges")

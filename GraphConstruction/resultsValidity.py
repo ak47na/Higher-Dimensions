@@ -170,4 +170,4 @@ if __name__ == "__main__":
     #plotTwoPathVsTF(tTotalTimes, twoPathRows)
     #plotTFComparisonTable(tTotalTimes, tCompRows)
     plotTable1(t1Times, t1Rows)
-    # plotTable2(t2Times, t2Rows)
+    plotTable2(t2Times, t2Rows)

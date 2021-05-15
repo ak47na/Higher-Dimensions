@@ -111,87 +111,93 @@ class InformationFlowNetwork:
     def addNodeToNetw(self, A, netw):
         self.netwNodes[netw][A] = True
 
+    def sortTimedData(self):
+        for ty in range(2):
+            for a in self.allTimes[ty]:
+                for b in self.allTimes[ty][a]:
+                    self.allTimes[ty][a][b].sort(key=lambda x: x[0])
+            for bucket in self.allTimesBucket[ty]:
+                for a in self.allTimesBucket[ty][bucket]:
+                    for b in self.allTimesBucket[ty][bucket][a]:
+                        self.allTimesBucket[ty][bucket][a][b].sort(key=lambda x: x[0])
+
     def getAlpha2Guess(self, ty):
         twoPaths = [{}, {}]
         tfaults = [[{}, {}], [{}, {}]]
-        for bucket in self.allTimesBucket[ty]:
+        for bucket in self.allTimesBucket[1]:
             netw = self.timeDict[bucket]
-            for a in self.allTimesBucket[ty][bucket]:
-                for b in self.allTimesBucket[ty][bucket][a]:
-                    self.allTimesBucket[ty][bucket][a][b].sort(key = lambda x:x[0])
-            for a in self.allTimesBucket[ty][bucket]:
-                for b in self.allTimesBucket[ty][bucket][a]:
-                    if not(b in self.allTimesBucket[ty][bucket]):
+            for a in self.allTimesBucket[1][bucket]:
+                for b in self.allTimesBucket[1][bucket][a]:
+                    if a == b or not (b in self.allTimesBucket[1][bucket]):
                         continue
-                    if not(b in twoPaths):
-                        twoPaths[b] = {}
-                        tfCount[b] = [{}, {}]
-                    for c in self.allTimesBucket[ty][bucket][b]:
-                        if not((a, c) in twoPaths[b]):
-                            twoPaths[b][(a, c)] = 1
-                        else:
-                            twoPaths[b][(a, c)] += 1
-                        if self.allTimesBucket[ty][bucket][a][b][0] > self.allTimesBucket[ty][bucket][b][c][1]:
-                            if not((a, c) in tfCount[b][0]):
-                                tfCount[b][0][(a, c)] = 1
-                            else:
-                                tfCount[b][0][(a, c)] += 1
-                        if self.allTimesBucket[ty][bucket][a][b][1] > self.allTimesBucket[ty][bucket][b][c][0]:
-                            if not ((a, c) in tfCount[b][1]):
-                                tfCount[b][1][(a, c)] = 1
-                            else:
-                                tfCount[b][1][(a, c)] += 1
-        self.getAllTFs()
+                    if not (b in twoPaths[0]):
+                        for i in range(2):
+                            twoPaths[i][b] = {}
+                            tfaults[i][0][b] = {}
+                            tfaults[i][1][b] = {}
+                    if (bucket in self.allTimesBucket[ty]) and (a in self.allTimesBucket[ty][bucket]) and (b in self.allTimesBucket[ty][bucket][a])\
+                            and (b in self.allTimesBucket[ty][bucket]):
+                        twoPaths[0], tfaults[0] = self.updateTwoPaths(a, b, ty, twoPaths[0], tfaults[0], self.allTimesBucket[ty][bucket])
+                    twoPaths[1], tfaults[1] = self.updateTwoPaths(a, b, 1, twoPaths[1], tfaults[1], self.allTimesBucket[1][bucket])
+        if self.delta_t == 3600:
+            for nod in twoPaths[0]:
+                print('tps', len(twoPaths[0][nod]), nod)
+        self.alpha2Guess = self.getAlphaGuessResults(twoPaths, tfaults)
 
-    def updateTwoPaths(self, a, b, ty, twoPaths_, tfaults_):
-        for c in self.allTimes[ty][b]:
+    def updateTwoPaths(self, a, b, ty, twoPaths_, tfaults_, timesDict):
+        for c in timesDict[b]:
+            if a == c or b == c or a == b:
+                continue
             twoPathTuple = (a, c)
-            assert not (twoPathTuple in twoPaths_[b])
+            #assert not (twoPathTuple in twoPaths_[b])
             twoPaths_[b][twoPathTuple] = True
-            if self.allTimes[ty][a][b][-1] >= self.allTimes[ty][b][c][0]:
+            if timesDict[a][b][-1][0] >= timesDict[b][c][0][0]:
                 tfaults_[1][b][twoPathTuple] = True
-            if self.allTimes[ty][a][b][0] >= self.allTimes[ty][b][c][-1]:
+            if timesDict[a][b][0][0] >= timesDict[b][c][-1][0]:
                 tfaults_[0][b][twoPathTuple] = True
         return twoPaths_, tfaults_
 
     def getAlphaGuess(self, ty):
         twoPaths = [{}, {}]
         tfaults = [[{}, {}], [{}, {}]]
-        for a in self.allTimes[ty]:
-            for b in self.allTimes[ty][a]:
-                if not (b in self.allTimes[ty]):
+        for a in self.allTimes[1]:
+            for b in self.allTimes[1][a]:
+                if a == b or not (b in self.allTimes[1]):
                     continue
                 if not (b in twoPaths[0]):
                     for i in range(2):
                         twoPaths[i][b] = {}
-                        assert not (b in tfaults[i][0])
                         tfaults[i][0][b] = {}
                         tfaults[i][1][b] = {}
-                twoPaths[0], tfaults[0] = self.updateTwoPaths(a, b, ty, twoPaths[0], tfaults[0])
-                if not(a in self.allTimes[1]):
-                    assert False
-                if not(b in self.allTimes[1][a]):
-                    assert False
-                twoPaths[1], tfaults[1] = self.updateTwoPaths(a, b, 1, twoPaths[1], tfaults[1])
-        self.alphaGuess = [0, 0]
+                if (a in self.allTimes[ty]) and (b in self.allTimes[ty][a]) and (b in self.allTimes[ty]):
+                    twoPaths[0], tfaults[0] = self.updateTwoPaths(a, b, ty, twoPaths[0], tfaults[0], self.allTimes[ty])
+                twoPaths[1], tfaults[1] = self.updateTwoPaths(a, b, 1, twoPaths[1], tfaults[1], self.allTimes[1])
+
+        self.alphaGuess = self.getAlphaGuessResults(twoPaths, tfaults, True)
+
+    def getAlphaGuessResults(self, twoPaths, tfaults, isAggregate = False):
+        aGuess = [0, 0]
+        self.getAllTFs()
         gtTP = 0
         for a in twoPaths[1]:
             gtTP += len(twoPaths[1][a])
+
+            if isAggregate:
+                assert self.gtTP[a] == len(twoPaths[1][a])
             for i in range(2):
                 # for tf in tfaults[1][i][a]:
                 #     if not (tf in tfaults[0][i][a]):
-                #         self.alphaGuess[i] += 1
-                self.alphaGuess[i] += len(tfaults[0][i][a])
+                #         aGuess[i] += 1
+                aGuess[i] += len(tfaults[0][i][a])
                 missedFlows = 0
                 for twoPathTuple in twoPaths[1][a]:
-                    if not(twoPathTuple in twoPaths[0][a]):
-                        if not(twoPathTuple in tfaults[1][i][a]):
+                    if not (twoPathTuple in twoPaths[0][a]):
+                        if not (twoPathTuple in tfaults[1][i][a]):
                             missedFlows += 1
-
-                self.alphaGuess[i] += missedFlows
-
+                aGuess[i] += missedFlows
         for i in range(2):
-            self.alphaGuess[i] /= gtTP
+            aGuess[i] /= gtTP
+        return aGuess
 
     def addTimedEdge(self, A, B, timeU, timeV, bucket, ty):
         if not(A in self.allTimes[ty]):
@@ -252,9 +258,6 @@ class InformationFlowNetwork:
         self.addNodeToNetw(B, self.timeDict[tIntervalIdV])
         self.addTimedEdge(A, B, timeU, timeV, tIntervalIdU, 1)
 
-        if tIntervalIdU - tIntervalIdV > parameters.kLayer:
-            # Ignore cross edges for layer distance > kLayer.
-            return nrNodes
         if tIntervalIdU == tIntervalIdV:
             self.addTimedEdge(A, B, timeU, timeV, tIntervalIdU, 0)
         if not(A in self.minPair):
@@ -267,6 +270,10 @@ class InformationFlowNetwork:
         if not (B in self.maxPair[A]):
             self.maxPair[A][B] = timeU
         self.maxPair[A][B] = max(self.maxPair[A][B], timeU)
+
+        if tIntervalIdU - tIntervalIdV > parameters.kLayer:
+            # Ignore cross edges for layer distance > kLayer.
+            return nrNodes
 
         T = self.timeDict[tIntervalIdU]
         Tv = self.timeDict[tIntervalIdV]
@@ -584,10 +591,12 @@ class InformationFlowNetwork:
             nr2pathsC[a] = 0
         for a in self.minPair:
             for b in self.minPair[a]:
-                if not b in self.minPair:
+                if not (b in self.minPair) or a == b:
                     continue
                 assert b in self.maxPair[a]
                 for c in self.maxPair[b]:
+                    if a == c or b == c:
+                        continue
                     nr2pathsC[b] += 1
                     if self.minPair[a][b] > self.maxPair[b][c]:
                         optimisticCount[b] += 1
