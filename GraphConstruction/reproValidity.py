@@ -1,12 +1,8 @@
 import mailID
 import mailClusters
-import parameters
 import unicodedata
-
+import TFRGuess
 from datetime import datetime
-from networkx import *
-from scipy.stats import spearmanr
-from math import *
 # Note: t0 < t1 <=> t0 happened before t1
 
 '''
@@ -109,40 +105,48 @@ def readMsgDetails(filePath):
     network is delta_t.
 '''
 import correlationValidity
+def createGuessInfoFlowNetwork(t, delta_t, minTime, maxTime, msgDict, useGT = False):
+    infoFlowNetwork = TFRGuess.TFRGuessInfoFlowNetwork(msgDict, delta_t, t, minTime, useGT)
+    msgEdgesFilePath = r'D:\AKwork2021\HigherDimensions\Higher-Dimensions\ApacheData\apacheMsgEdges.txt'#"Data\\msgEdges.txt"
+    infoFlowNetwork.readMsgEdges(0, msgEdgesFilePath)
+    return infoFlowNetwork
+
 def createInfoFlowNetwork(t, delta_t, minTime, maxTime, msgDict, useGT = False):
     infoFlowNetwork = correlationValidity.OrderInfoFlowNetwork(msgDict, delta_t, t, minTime, useGT)
     msgEdgesFilePath = r'D:\AKwork2021\HigherDimensions\Higher-Dimensions\ApacheData\apacheMsgEdges.txt'#"Data\\msgEdges.txt"
-    nrNodes = infoFlowNetwork.readMsgEdges(0, msgEdgesFilePath)
+    infoFlowNetwork.readMsgEdges(0, msgEdgesFilePath)
     return infoFlowNetwork
 
 import advMultilayeredNetwork
 def createAdvInfoFlowNetwork(t, delta_t, minTime, maxTime, msgDict):
     infoFlowNetwork = advMultilayeredNetwork.AdvMultilayeredNetwork(msgDict, delta_t, t, minTime)
     msgEdgesFilePath = r'D:\AKwork2021\HigherDimensions\Higher-Dimensions\ApacheData\apacheMsgEdges.txt'#"Data\\msgEdges.txt"
-    nrNodes = infoFlowNetwork.readMsgEdges(0, msgEdgesFilePath)
+    infoFlowNetwork.readMsgEdges(0, msgEdgesFilePath)
     return infoFlowNetwork
+
 '''
     Method that computes the number of transitive faults and the Spearman correlation of
     the 2-path rankings between the (aggregate) network with transitive faults and the one without.
 '''
 def getValues(t, delta_t, minTime, maxTime, msgDict, netwType, useGT = False):
     print('Creating network')
-    infoFlowNetwork = createInfoFlowNetwork(t, delta_t, minTime, maxTime, msgDict, useGT)
+    infoFlowNetwork = createGuessInfoFlowNetwork(t, delta_t, minTime, maxTime, msgDict, useGT)
     infoFlowNetwork.sortTimedData()
     infoFlowNetwork.getTransitiveFault(netwType)
     infoFlowNetwork.getAlphaGuess(0)
     infoFlowNetwork.getAlpha2Guess(0)
     #infoFlowNetwork.getTFAggregate(netwType)
     infoFlowNetwork.computeUpperLowerAggregateNetwork(netwType)
-
+    printEdgeCount(infoFlowNetwork, netwType, t)
     infoFlowNetwork.getRanginkCorrelationAggregate(netwType)
+    return infoFlowNetwork
+
+def printEdgeCount(infoFlowNetwork, netwType, t):
     if netwType == 'MLN':
         print("The MLN network for", t, "has (inLayer, restrCrossLayer, sum)", infoFlowNetwork.getMLNEdgeCount(), " edges")
         print("The MLN network for", t, "has", len(infoFlowNetwork.crossLayerEdges), "cross-layer edges")
     if netwType == 'monoplex':
         print("The number of edges is ", infoFlowNetwork.getMonoplexEdgeCount())
-        print('The u and l are ', infoFlowNetwork.crtResult[netwType][0])
-    return infoFlowNetwork
 
 def getSpecialCases(t, delta_t, minTime, maxTime, msgDict):
     infoFlowNetwork = createAdvInfoFlowNetwork(t, delta_t, minTime, maxTime, msgDict)

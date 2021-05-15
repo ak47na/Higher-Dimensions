@@ -123,11 +123,11 @@ def runResults():
                 t1Times.append(t)
                 # Add paper name.
                 t1Rows[0].append(paperProjects[projectId])
-                #meanRes = getMeanResults(monoplexNetwork)
-                #meanRes = crtResult[0]
-                #meanRes = monoplexNetwork.crtResultAgg['monoplex']
+                #getMeanResults(monoplexNetwork) -> mean upper and lower bounds
+                #crtResult[0] -> upper and lower bounds
+                #monoplexNetwork.crtResultAgg['monoplex']->aggregate network upper and lower bounds
                 meanRes = monoplexNetwork.alphaGuess
-                print('The new value', delta_t, meanRes)
+
                 for i in range(2):
                     # Compare both the optimistic and pessimistic models.
                     t1Rows[1 + i * 3].append(projResult[i])
