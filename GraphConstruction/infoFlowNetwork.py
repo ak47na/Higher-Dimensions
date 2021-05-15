@@ -47,8 +47,6 @@ class InformationFlowNetwork:
         self.inLayer = {}
         self.crossLayerIn = {}
         self.crossLayerOut = {}
-        # Adj[graphIndex][node] = the adjacency list of node in the graphIndex-th graph.
-        self.Adj = {}
         # msgDict[msgKey] = (sender, time)
         self.msgDict = msgDict
         # timeDict[timeInterval] = the index of the network(graphIndex) with messages sent in timeInterval
@@ -109,7 +107,6 @@ class InformationFlowNetwork:
 
     def createTGraphForT(self, tIntervalId):
         self.nrGraphs += 1
-        self.Adj[self.nrGraphs] = {}
         self.minT[self.nrGraphs] = {}
         self.maxT[self.nrGraphs] = {}
         self.tGraphs.append(networkx.MultiDiGraph())
@@ -253,16 +250,11 @@ class InformationFlowNetwork:
                                                                                 timeU)
         # Add an edge in the T-th MultiDiGraph from the node representing human a to the node
         # representing human b.
-        # Comment this if-statement if CLE should be considered parallel edges in CP network
+        # Remove this if-statement if CLE should be considered parallel edges in CP network
         if tIntervalIdU != tIntervalIdV:
             return nrNodes
-
-        if not (A in self.Adj[T]):
-            self.Adj[T][A] = {}
-        if not (B in self.Adj[T][A]):
-            self.tGraphs[T].add_edge(self.humanDict[a], self.humanDict[b], time=self.msgDict[u][1])
-            self.Adj[T][A][B] = self.msgDict[u][1]
-
+        # Note that edge self.humanDict[a], self.humanDict[b] can be added more than once.
+        self.tGraphs[T].add_edge(self.humanDict[a], self.humanDict[b], time=self.msgDict[u][1])
         return nrNodes
 
     '''
@@ -608,17 +600,6 @@ class InformationFlowNetwork:
         #plt.show()
         plt.savefig(fileName)
         plt.close()
-
-
-    def printNetworkDetails(self):
-        print('#graphs is', self.nrGraphs, 'and # total edges is', self.nrEdges)
-        for netw in range(1, self.nrGraphs + 1):
-            print('Network', netw, 'has #non isolated nodes', len(self.Adj[netw]))
-            edgeCount = 0
-            for a in self.Adj[netw]:
-                for b in self.Adj[netw][a]:
-                    edgeCount += 1
-            print('Network', netw, 'has #edges', edgeCount)
 
     def printNetwork2paths(self, netwType):
         for netw in range(1, self.nrGraphs + 1):
