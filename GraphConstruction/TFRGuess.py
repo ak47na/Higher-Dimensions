@@ -22,9 +22,7 @@ class TFRGuessInfoFlowNetwork(correlationValidity.OrderInfoFlowNetwork):
                             and (b in self.allTimesBucket[ty][bucket]):
                         twoPaths[0], tfaults[0] = self.updateTwoPaths(a, b, ty, twoPaths[0], tfaults[0], self.allTimesBucket[ty][bucket])
                     twoPaths[1], tfaults[1] = self.updateTwoPaths(a, b, 1, twoPaths[1], tfaults[1], self.allTimesBucket[1][bucket])
-        if self.delta_t == 3600:
-            for nod in twoPaths[0]:
-                print('tps', len(twoPaths[0][nod]), nod)
+
         self.alpha2Guess = self.getAlphaGuessResults(twoPaths, tfaults)
 
     def updateTwoPaths(self, a, b, ty, twoPaths_, tfaults_, timesDict):

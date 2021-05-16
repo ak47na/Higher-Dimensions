@@ -19,7 +19,8 @@ def getMinMax(timePair, t):
 
 class InformationFlowNetwork:
     def __init__(self, msgDict, delta_t, t, minTime, useGT = False):
-        # self.allTimes=[(timeU_i, timeV_i)], timeU_i = time of reply sent to msg with time timeV_i
+        # self.allTimes[ty][A][B] = [(timeU_i, timeV_i)], timeU_i = time of reply sent by B to msg
+        # with time timeV_i sent by A
         # self.allTimes[1] = includes cross-bucket replies;
         # self.allTimes[0] = doesn't include cross bucket reply.
         self.allTimesBucket = [{}, {}]
@@ -76,7 +77,7 @@ class InformationFlowNetwork:
         self.analysedT = t
         # self.twoPaths[netwType] = dict with tuples (A, B, C) representing all 2paths.
         self.twoPaths = {"monoplex" : {}, "MLN": {}}
-        # self.tfCount[netwType] = dict with tuples (A, B, C) representing transitive faults.
+        # self.tfCount[netwType] = the number of transitive faults for netwType.
         # self.tfCount[netwType][0] ->optimistic; self.tfCount[netwType][0] ->pessimistic
         self.tfCount = {"monoplex" : [0, 0], "MLN": [0, 0]}
         self.TFperNetw = {"monoplex" : {}, "MLN": {}}
@@ -459,7 +460,6 @@ class InformationFlowNetwork:
             if atLeastOne2Path:
                 upperBound = max(transFaultSum[1], upperBound)
                 lowerBound = min(transFaultSum[0], lowerBound)
-
         self.crtResult[netwType][0] = (lowerBound, upperBound)
 
     # Returns the number of edges in the MLN network: (inLayer, outLayer, in + out)
@@ -541,32 +541,64 @@ class InformationFlowNetwork:
         self.aggregCrtRes[1] /= len(self.minPair)
         return tfSumAll
 
-    def getAggResNewDef(self, netwType):
-        TFCount = [{}, {}]
-        nr2Paths = {}
-        nodes = {}
+    def getTFR(self, count2Paths, countFaults):
+        bounds = [0, 0]
+        for nod in count2Paths:
+            for i in range(2):
+                if count2Paths[nod] == 0:
+                    continue
+                bounds[i] += countFaults[i][nod] / count2Paths[nod]
+        for i in range(2):
+            bounds[i] = bounds[i] / len(count2Paths)
+        return bounds
+
+    def getTFRWithinAndAccross(self):
+        # Ignore cross-layer edges
+        ty = 0
+        self.sortTimedData()
+        count2Paths = {}
+        countFaults = [{}, {}]
+        countedTuples = {}
+        for a in self.allTimes[ty]:
+            for b in self.allTimes[ty][a]:
+                if (a == b) or (not (b in self.allTimes[ty])):
+                    continue
+                for c in self.allTimes[ty][b]:
+                    if a == c or b == c:
+                        continue
+                    if not (b in count2Paths):
+                        count2Paths[b] = 0
+                        countFaults[0][b] = 0
+                        countFaults[1][b] = 0
+                        countedTuples[b] = {}
+                    count2Paths[b] += 1
+                    assert (not ((a, c) in countedTuples[b]))
+                    countedTuples[b][(a, c)] = True
+                    if self.allTimes[ty][a][b][0] > self.allTimes[ty][b][c][-1]:
+                        countFaults[0][b] += 1
+                    if self.allTimes[ty][a][b][-1] > self.allTimes[ty][b][c][0]:
+                        countFaults[1][b] += 1
+        return self.getTFR(count2Paths, countFaults)
+
+
+    def getTFRAggregatedBuckets(self, netwType):
+        aggTFCount = [{}, {}]
+        aggNr2Paths = {}
+        aggNodes = {}
         for twoPathTuple in self.twoPaths[netwType]:
             for tupleNod in twoPathTuple:
-                if not tupleNod in nodes:
-                    nodes[tupleNod] = True
-            if not twoPathTuple[1] in nr2Paths:
-                TFCount[0][twoPathTuple[1]] = 0
-                TFCount[1][twoPathTuple[1]] = 0
-                nr2Paths[twoPathTuple[1]] = 0
-            nr2Paths[twoPathTuple[1]] += 1
+                if not tupleNod in aggNodes:
+                    aggNodes[tupleNod] = True
+            if not twoPathTuple[1] in aggNr2Paths:
+                aggTFCount[0][twoPathTuple[1]] = 0
+                aggTFCount[1][twoPathTuple[1]] = 0
+                aggNr2Paths[twoPathTuple[1]] = 0
+            aggNr2Paths[twoPathTuple[1]] += 1
         for i in range(2):
             for fault in self.uniqueFaults[netwType][i]:
-                TFCount[i][fault[1]] += 1
-        bounds = [0, 0]
-        for nod in nr2Paths:
-            for i in range(2):
-                if TFCount[i][nod] == nr2Paths[nod]:
-                    bounds[i] += 1
-                else:
-                    bounds[i] += TFCount[i][nod] / (nr2Paths[nod] - TFCount[i][nod])
-        for i in range(2):
-            bounds[i] = bounds[i] / len(nr2Paths)
-        self.crtResultAgg[netwType] = bounds
+                aggTFCount[i][fault[1]] += 1
+
+        self.crtResultAgg[netwType] = self.getTFR(aggNr2Paths, aggTFCount)
         # if self.delta_t == 3600:
         #     self.compute2PHist(self.getVals(nr2Paths, 50, True), 'small2P.png')
         #     self.compute2PHist(self.getVals(nr2Paths, 50, False), 'big2P.png')

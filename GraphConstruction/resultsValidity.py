@@ -92,13 +92,12 @@ def runResults():
         tTotalTimes.append(t)
         monoplexNetwork = reproValidity.getValues(t, delta_t, minTime, maxTime, msgDict, 'monoplex', False)
         MLNNetwork = reproValidity.getValues(t, delta_t, minTime, maxTime, msgDict, 'MLN', False)
-        monoplexNetwork.getAggResNewDef('monoplex')
+        monoplexNetwork.getTFRAggregatedBuckets('monoplex')
         twoPathRows[0].append(len(monoplexNetwork.twoPaths['monoplex']))
         twoPathRows[1].append(len(MLNNetwork.twoPaths['MLN']))
         crtResult = monoplexNetwork.crtResult['monoplex']
         tfCountAll1 = monoplexNetwork.getAllTFs()
         tfCountAll2 = MLNNetwork.getAllTFs()
-        print('The count of faults is', tfCountAll1, tfCountAll2)
         assert tfCountAll1 == tfCountAll2
         tfRapMonoplex = []
         tfRapMLN = []
@@ -126,8 +125,8 @@ def runResults():
                 #getMeanResults(monoplexNetwork) -> mean upper and lower bounds
                 #crtResult[0] -> upper and lower bounds
                 #monoplexNetwork.crtResultAgg['monoplex']->aggregate network upper and lower bounds
-                meanRes = monoplexNetwork.alphaGuess
-
+                #meanRes = monoplexNetwork.aggregCrtRes
+                meanRes = monoplexNetwork.getTFRWithinAndAccross()
                 for i in range(2):
                     # Compare both the optimistic and pessimistic models.
                     t1Rows[1 + i * 3].append(projResult[i])
