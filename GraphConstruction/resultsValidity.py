@@ -45,6 +45,10 @@ def plotTable2(t2Times, t2Rows):
         t2Data = [t2Times]
         for col in t2Rows[i]:
             t2Data.append(col)
+        modelType = 'O'
+        if i:
+            modelType = 'P'
+        t2ColumnNames[4] = 'repro 2path@' + modelType + ' correlation'
         t2 = go.Figure(data=[go.Table(header=dict(values=t2ColumnNames),
                                       cells=dict(values=t2Data))
                              ])
@@ -85,6 +89,60 @@ def getMeanResults(monoplex):
     resSum[1] = round(resSum[1] / monoplex.nrGraphs, 4)
     return resSum
 
+def updateTwoPathTable(monoplexNetwork, MLNNetwork):
+    twoPathRows[0].append(len(monoplexNetwork.twoPaths['monoplex']))
+    twoPathRows[1].append(len(MLNNetwork.twoPaths['MLN']))
+
+def updateMLNMonoplexCompTable(monoplexNetwork, MLNNetwork):
+    tfCountAll = monoplexNetwork.getAllTFs()
+    # MLN and monoplex should have the same number of Transitive faults under "ground truth".
+    assert tfCountAll == MLNNetwork.getAllTFs()
+    tfRapMonoplex = []
+    tfRapMLN = []
+    for i in range(2):
+        tfRapMonoplex.append(round(monoplexNetwork.tfCount['monoplex'][i] / tfCountAll[1], 6))
+        tfRapMLN.append(round(MLNNetwork.tfCount['MLN'][i] / tfCountAll[1], 6))
+    tCompRows[0].append(tfRapMonoplex[0])
+    tCompRows[1].append(tfRapMonoplex[1])
+    tCompRows[2].append(tfRapMLN[0])
+    tCompRows[3].append(tfRapMLN[1])
+    tCompRows[4].append(monoplexNetwork.getMonoplexEdgeCount())
+    MLNEdgeCount = MLNNetwork.getMLNEdgeCount()
+    tCompRows[5].append(MLNEdgeCount[2])
+    tCompRows[6].append(round((MLNEdgeCount[2] - MLNEdgeCount[0]) / MLNEdgeCount[0], 6))
+
+def updateMonoplexCorrTable(t, delta_t, res):
+    projectId = 0
+    for projResult in twoPathCorrelations_paperRes[delta_t]:
+        t2Times.append(t)
+        for i in range(2):
+            # Add project name.
+            t2Rows[i][0].append(paperProjects[projectId])
+            # Correlation from paper.
+            t2Rows[i][1].append(projResult[0])
+            # P-value
+            t2Rows[i][2].append(projResult[1])
+            t2Rows[i][3].append(res[i + 1][0])
+            t2Rows[i][4].append(round(res[i + 1][1], 6))
+            # Dissimilarity between paper result and our result.
+            t2Rows[i][5].append(Settings.dissimilarity(res[i + 1][0], projResult[0]))
+        projectId += 1
+        # Only check for first project, i.e Apache
+        break
+def updateTFRTable(t, delta_t, res):
+    projectId = 0
+    for projResult in transitiveFaultRate_paperRes[delta_t]:
+        t1Times.append(t)
+        # Add paper name.
+        t1Rows[0].append(paperProjects[projectId])
+        for i in range(2):
+            # Compare both the optimistic and pessimistic models.
+            t1Rows[1 + i * 3].append(projResult[i])
+            t1Rows[2 + i * 3].append(round(res[i], 6))
+            t1Rows[3 + i * 3].append(Settings.dissimilarity(res[i], projResult[i]))
+        projectId += 1
+        # Only check results for first project, i.e. Apache
+        break
 
 def runResults():
     print('Running results...')
@@ -92,69 +150,18 @@ def runResults():
         tTotalTimes.append(t)
         monoplexNetwork = reproValidity.getValues(t, delta_t, minTime, maxTime, msgDict, 'monoplex', False)
         MLNNetwork = reproValidity.getValues(t, delta_t, minTime, maxTime, msgDict, 'MLN', False)
-        monoplexNetwork.getAggResNewDef('monoplex')
-        twoPathRows[0].append(len(monoplexNetwork.twoPaths['monoplex']))
-        twoPathRows[1].append(len(MLNNetwork.twoPaths['MLN']))
-        crtResult = monoplexNetwork.crtResult['monoplex']
-        tfCountAll1 = monoplexNetwork.getAllTFs()
-        tfCountAll2 = MLNNetwork.getAllTFs()
-        print('The count of faults is', tfCountAll1, tfCountAll2)
-        assert tfCountAll1 == tfCountAll2
-        tfRapMonoplex = []
-        tfRapMLN = []
-        print('Monoplex has', monoplexNetwork.tfCount['monoplex'])
-        print('MLN has', MLNNetwork.tfCount['MLN'])
-        for i in range(2):
-            tfRapMonoplex.append(round(monoplexNetwork.tfCount['monoplex'][i] / tfCountAll1[1], 6))
-            tfRapMLN.append(round(MLNNetwork.tfCount['MLN'][i] / tfCountAll1[1], 6))
-        tCompRows[0].append(tfRapMonoplex[0])
-        tCompRows[1].append(tfRapMonoplex[1])
-        tCompRows[2].append(tfRapMLN[0])
-        tCompRows[3].append(tfRapMLN[1])
-        tCompRows[4].append(monoplexNetwork.getMonoplexEdgeCount())
-        MLNEdgeCount = MLNNetwork.getMLNEdgeCount()
-        tCompRows[5].append(MLNEdgeCount[2])
-        tCompRows[6].append(round((MLNEdgeCount[2] - MLNEdgeCount[0]) / MLNEdgeCount[0], 6))
-        print(delta_t)
-
+        monoplexNetwork.getTFRAggregatedBuckets('monoplex')
+        updateTwoPathTable(monoplexNetwork, MLNNetwork)
+        updateMLNMonoplexCompTable(monoplexNetwork, MLNNetwork)
         if (delta_t in transitiveFaultRate_paperRes):
-            projectId = 0
-            for projResult in transitiveFaultRate_paperRes[delta_t]:
-                t1Times.append(t)
-                # Add paper name.
-                t1Rows[0].append(paperProjects[projectId])
-                #meanRes = getMeanResults(monoplexNetwork)
-                #meanRes = crtResult[0]
-                #meanRes = monoplexNetwork.crtResultAgg['monoplex']
-                meanRes = monoplexNetwork.alphaGuess
-                print('The new value', delta_t, meanRes)
-                for i in range(2):
-                    # Compare both the optimistic and pessimistic models.
-                    t1Rows[1 + i * 3].append(projResult[i])
-                    t1Rows[2 + i * 3].append(round(meanRes[i], 6))
-                    t1Rows[3 + i * 3].append(Settings.dissimilarity(meanRes[i], projResult[i]))
-                projectId += 1
-                #Only check results for first project, i.e. Apache
-                break
-
+            res = monoplexNetwork.getTFRWithinAndAccross()
+            # res = getMeanResults(monoplexNetwork) # mean upper and lower bounds
+            # monoplexNetwork.crtResult['monoplex'][0] # upper and lower bounds
+            # res = monoplexNetwork.crtResultAgg['monoplex'] # aggregate 2P&TF upper and lower bounds
+            # res = monoplexNetwork.aggregCrtRes #aggregate network upper and lower bounds
+            updateTFRTable(t, delta_t, res)
         if (delta_t in twoPathCorrelations_paperRes):
-            projectId = 0
-            for projResult in twoPathCorrelations_paperRes[delta_t]:
-                t2Times.append(t)
-                for i in range(2):
-                    # Add project name.
-                    t2Rows[i][0].append(paperProjects[projectId])
-                    # Correlation from paper.
-                    t2Rows[i][1].append(projResult[0])
-                    # P-value
-                    t2Rows[i][2].append(projResult[1])
-                    t2Rows[i][3].append(crtResult[i + 1][0])
-                    t2Rows[i][4].append(crtResult[i + 1][1])
-                    # Dissimilarity between paper result and our result.
-                    t2Rows[i][5].append(Settings.dissimilarity(crtResult[i + 1][0], projResult[0]))
-                projectId += 1
-                #Only check for first project, i.e Apache
-                break
+            updateMonoplexCorrTable(t, delta_t, monoplexNetwork.crtResult['monoplex'])
 
 paperProjects = ['Apache', 'MySQL', 'Perl']
 print('Running')
@@ -167,7 +174,7 @@ t2Times = []
 t2Rows = [[[] for i in range(6)], [[] for j in range(6)]]
 if __name__ == "__main__":
     runResults()
-    #plotTwoPathVsTF(tTotalTimes, twoPathRows)
-    #plotTFComparisonTable(tTotalTimes, tCompRows)
+    plotTwoPathVsTF(tTotalTimes, twoPathRows)
+    plotTFComparisonTable(tTotalTimes, tCompRows)
     plotTable1(t1Times, t1Rows)
     plotTable2(t2Times, t2Rows)

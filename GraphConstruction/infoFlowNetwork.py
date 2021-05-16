@@ -6,7 +6,7 @@ from math import *
 import matplotlib.pyplot as plt
 
 '''
-    Updates the minimum and maximum number of seconds with t.
+    Updates the minimum and maximum number of seconds with the value of t.
 '''
 def updateTimeBorders(minTime, maxTime, t):
     minTime = min(minTime, t)
@@ -19,12 +19,16 @@ def getMinMax(timePair, t):
 
 class InformationFlowNetwork:
     def __init__(self, msgDict, delta_t, t, minTime, useGT = False):
-        # self.allTimes[0] = includes cross-bucket replies;
-        # self.allTimes[1] = doesn't include cross bucket reply.
+        # self.allTimes[ty][A][B] = [(timeU_i, timeV_i)], timeU_i = time of reply sent by B to msg
+        # with time timeV_i sent by A
+        # self.allTimes[1] = includes cross-bucket replies;
+        # self.allTimes[0] = doesn't include cross bucket reply.
         self.allTimesBucket = [{}, {}]
         self.allTimes = [{}, {}]
         self.gtTP = {}
         self.gtTF = [{}, {}]
+        # uniqueFaults[netwType][type] = dict with (2path, count) where 2path = transitive fault
+        # and count is the occurence of that 2path as a transitive fault.
         self.uniqueFaults = {"monoplex" : [{}, {}], "MLN": [{}, {}]}
         self.minTime = minTime
         self.nrEdges = 0
@@ -34,6 +38,7 @@ class InformationFlowNetwork:
         # minT[graphIndex][(A, B)] = min time t in graphIndex s.t there was a message from B to A at t.
         self.minT = {}
         self.maxT = {}
+        #minPair[A][B] = the minimum time t s.t. there is a reply from B to A at time t.
         self.minPair = {}
         self.maxPair = {}
         #inLayer[graphIndex][A][B] = (minT_AB, maxT_AB)
@@ -43,15 +48,14 @@ class InformationFlowNetwork:
         self.inLayer = {}
         self.crossLayerIn = {}
         self.crossLayerOut = {}
-        # Adj[graphIndex][node] = the adjacency list of node in the graphIndex-th graph.
-        self.Adj = {}
         # msgDict[msgKey] = (sender, time)
         self.msgDict = msgDict
         # timeDict[timeInterval] = the index of the network(graphIndex) with messages sent in timeInterval
         # timeInterval = integer
         self.timeDict = {}
-        # timeDict[timeInterval] = the index of the network(graphIndex) with messages sent in timeInterval
-        # timeInterval = integer
+
+        # list with all cross-layer edges (A, timeV, B, timeU) where timeU is the time of reply
+        # sent by B to message sent by A at timeV.
         self.crossLayerEdges = []
         # tGraphs = List of the networkX multiDiGraphs for each time time interval, i.e
         # TGraphs[graphIndex] =the graph for timeInterval with timeDict[timeInterval] = graphIndex.
@@ -63,13 +67,18 @@ class InformationFlowNetwork:
         self.nr2paths = {'MLN': [{}, {}, {}], 'monoplex' : [{}, {}, {}]}
 
         # nr2p[t][node] = the number of 2-paths of node in aggregate network, i.e
-        #               = sum(network in networks, nr2p[t][network][node])
+        #               = sum(netw in networks, nr2p[t][netw][node])
         self.nr2p = {'MLN': [{}, {}, {}], 'monoplex' : [{}, {}, {}]}
 
         self.nrGraphs = 0
+        # The bucket width in seconds.
         self.delta_t = delta_t
+        # String representation of bucket width used for print statements.
         self.analysedT = t
+        # self.twoPaths[netwType] = dict with tuples (A, B, C) representing all 2paths.
         self.twoPaths = {"monoplex" : {}, "MLN": {}}
+        # self.tfCount[netwType] = the number of transitive faults for netwType.
+        # self.tfCount[netwType][0] ->optimistic; self.tfCount[netwType][0] ->pessimistic
         self.tfCount = {"monoplex" : [0, 0], "MLN": [0, 0]}
         self.TFperNetw = {"monoplex" : {}, "MLN": {}}
         self.crtResult = {"monoplex" : [(0, 0), (0, 0), (0, 0)], "MLN": [(0, 0), (0, 0), (0, 0)]}
@@ -80,8 +89,8 @@ class InformationFlowNetwork:
             parameters.setLayerDistance(1)
 
     '''
-        Add the human with name to humanDict and as a graph node with index nrNodes + 1 and label
-        name.
+        Add the human with name to humanDict and increment nrNodes.
+        Add name as a graph node with index nrNodes and label name.
     '''
     def addHuman(self, name, nrNodes):
         name = mailID.getIdentity(name)
@@ -91,12 +100,14 @@ class InformationFlowNetwork:
             self.humanDict[name] = nrNodes
         return nrNodes
 
-    def getTimeRange(self, timestmp):
-        return trunc((timestmp - self.minTime) / self.delta_t)
+    '''
+        Return the bucket index of timestamp.
+    '''
+    def getTimeRange(self, timestamp):
+        return trunc((timestamp - self.minTime) / self.delta_t)
 
     def createTGraphForT(self, tIntervalId):
         self.nrGraphs += 1
-        self.Adj[self.nrGraphs] = {}
         self.minT[self.nrGraphs] = {}
         self.maxT[self.nrGraphs] = {}
         self.tGraphs.append(networkx.MultiDiGraph())
@@ -120,84 +131,6 @@ class InformationFlowNetwork:
                 for a in self.allTimesBucket[ty][bucket]:
                     for b in self.allTimesBucket[ty][bucket][a]:
                         self.allTimesBucket[ty][bucket][a][b].sort(key=lambda x: x[0])
-
-    def getAlpha2Guess(self, ty):
-        twoPaths = [{}, {}]
-        tfaults = [[{}, {}], [{}, {}]]
-        for bucket in self.allTimesBucket[1]:
-            netw = self.timeDict[bucket]
-            for a in self.allTimesBucket[1][bucket]:
-                for b in self.allTimesBucket[1][bucket][a]:
-                    if a == b or not (b in self.allTimesBucket[1][bucket]):
-                        continue
-                    if not (b in twoPaths[0]):
-                        for i in range(2):
-                            twoPaths[i][b] = {}
-                            tfaults[i][0][b] = {}
-                            tfaults[i][1][b] = {}
-                    if (bucket in self.allTimesBucket[ty]) and (a in self.allTimesBucket[ty][bucket]) and (b in self.allTimesBucket[ty][bucket][a])\
-                            and (b in self.allTimesBucket[ty][bucket]):
-                        twoPaths[0], tfaults[0] = self.updateTwoPaths(a, b, ty, twoPaths[0], tfaults[0], self.allTimesBucket[ty][bucket])
-                    twoPaths[1], tfaults[1] = self.updateTwoPaths(a, b, 1, twoPaths[1], tfaults[1], self.allTimesBucket[1][bucket])
-        if self.delta_t == 3600:
-            for nod in twoPaths[0]:
-                print('tps', len(twoPaths[0][nod]), nod)
-        self.alpha2Guess = self.getAlphaGuessResults(twoPaths, tfaults)
-
-    def updateTwoPaths(self, a, b, ty, twoPaths_, tfaults_, timesDict):
-        for c in timesDict[b]:
-            if a == c or b == c or a == b:
-                continue
-            twoPathTuple = (a, c)
-            #assert not (twoPathTuple in twoPaths_[b])
-            twoPaths_[b][twoPathTuple] = True
-            if timesDict[a][b][-1][0] >= timesDict[b][c][0][0]:
-                tfaults_[1][b][twoPathTuple] = True
-            if timesDict[a][b][0][0] >= timesDict[b][c][-1][0]:
-                tfaults_[0][b][twoPathTuple] = True
-        return twoPaths_, tfaults_
-
-    def getAlphaGuess(self, ty):
-        twoPaths = [{}, {}]
-        tfaults = [[{}, {}], [{}, {}]]
-        for a in self.allTimes[1]:
-            for b in self.allTimes[1][a]:
-                if a == b or not (b in self.allTimes[1]):
-                    continue
-                if not (b in twoPaths[0]):
-                    for i in range(2):
-                        twoPaths[i][b] = {}
-                        tfaults[i][0][b] = {}
-                        tfaults[i][1][b] = {}
-                if (a in self.allTimes[ty]) and (b in self.allTimes[ty][a]) and (b in self.allTimes[ty]):
-                    twoPaths[0], tfaults[0] = self.updateTwoPaths(a, b, ty, twoPaths[0], tfaults[0], self.allTimes[ty])
-                twoPaths[1], tfaults[1] = self.updateTwoPaths(a, b, 1, twoPaths[1], tfaults[1], self.allTimes[1])
-
-        self.alphaGuess = self.getAlphaGuessResults(twoPaths, tfaults, True)
-
-    def getAlphaGuessResults(self, twoPaths, tfaults, isAggregate = False):
-        aGuess = [0, 0]
-        self.getAllTFs()
-        gtTP = 0
-        for a in twoPaths[1]:
-            gtTP += len(twoPaths[1][a])
-
-            if isAggregate:
-                assert self.gtTP[a] == len(twoPaths[1][a])
-            for i in range(2):
-                # for tf in tfaults[1][i][a]:
-                #     if not (tf in tfaults[0][i][a]):
-                #         aGuess[i] += 1
-                aGuess[i] += len(tfaults[0][i][a])
-                missedFlows = 0
-                for twoPathTuple in twoPaths[1][a]:
-                    if not (twoPathTuple in twoPaths[0][a]):
-                        if not (twoPathTuple in tfaults[1][i][a]):
-                            missedFlows += 1
-                aGuess[i] += missedFlows
-        for i in range(2):
-            aGuess[i] /= gtTP
-        return aGuess
 
     def addTimedEdge(self, A, B, timeU, timeV, bucket, ty):
         if not(A in self.allTimes[ty]):
@@ -318,16 +251,11 @@ class InformationFlowNetwork:
                                                                                 timeU)
         # Add an edge in the T-th MultiDiGraph from the node representing human a to the node
         # representing human b.
-        # Comment this if-statement if CLE should be considered parallel edges in CP network
+        # Remove this if-statement if CLE should be considered parallel edges in CP network
         if tIntervalIdU != tIntervalIdV:
             return nrNodes
-
-        if not (A in self.Adj[T]):
-            self.Adj[T][A] = {}
-        if not (B in self.Adj[T][A]):
-            self.tGraphs[T].add_edge(self.humanDict[a], self.humanDict[b], time=self.msgDict[u][1])
-            self.Adj[T][A][B] = self.msgDict[u][1]
-
+        # Note that edge self.humanDict[a], self.humanDict[b] can be added more than once.
+        self.tGraphs[T].add_edge(self.humanDict[a], self.humanDict[b], time=self.msgDict[u][1])
         return nrNodes
 
     '''
@@ -495,7 +423,6 @@ class InformationFlowNetwork:
             has2Paths = 0
             for a in self.netwNodes[netw]:
                 self.initTFRForNode(netw, netwType, a)
-
             for a in netwEdges:
                 for b in netwEdges[a]:
                     if netwType == 'MLN':
@@ -527,16 +454,12 @@ class InformationFlowNetwork:
             # nodes, divided by the number of nodes in the network.
             transFaultSum[0] /= N
             transFaultSum[1] /= N
-            # if has2Paths > 0:
-            #     transFaultSum[0] /= has2Paths
-            #     transFaultSum[1] /= has2Paths
             self.TFperNetw[netwType][netw] = (transFaultSum[0], transFaultSum[1])
             # optimistic model should have at most pessimistic model transitive faults.
             assert transFaultSum[0] <= transFaultSum[1]
             if atLeastOne2Path:
                 upperBound = max(transFaultSum[1], upperBound)
                 lowerBound = min(transFaultSum[0], lowerBound)
-
         self.crtResult[netwType][0] = (lowerBound, upperBound)
 
     # Returns the number of edges in the MLN network: (inLayer, outLayer, in + out)
@@ -618,32 +541,64 @@ class InformationFlowNetwork:
         self.aggregCrtRes[1] /= len(self.minPair)
         return tfSumAll
 
-    def getAggResNewDef(self, netwType):
-        TFCount = [{}, {}]
-        nr2Paths = {}
-        nodes = {}
+    def getTFR(self, count2Paths, countFaults):
+        bounds = [0, 0]
+        for nod in count2Paths:
+            for i in range(2):
+                if count2Paths[nod] == 0:
+                    continue
+                bounds[i] += countFaults[i][nod] / count2Paths[nod]
+        for i in range(2):
+            bounds[i] = bounds[i] / len(count2Paths)
+        return bounds
+
+    def getTFRWithinAndAccross(self):
+        # Ignore cross-layer edges
+        ty = 0
+        self.sortTimedData()
+        count2Paths = {}
+        countFaults = [{}, {}]
+        countedTuples = {}
+        for a in self.allTimes[ty]:
+            for b in self.allTimes[ty][a]:
+                if (a == b) or (not (b in self.allTimes[ty])):
+                    continue
+                for c in self.allTimes[ty][b]:
+                    if a == c or b == c:
+                        continue
+                    if not (b in count2Paths):
+                        count2Paths[b] = 0
+                        countFaults[0][b] = 0
+                        countFaults[1][b] = 0
+                        countedTuples[b] = {}
+                    count2Paths[b] += 1
+                    assert (not ((a, c) in countedTuples[b]))
+                    countedTuples[b][(a, c)] = True
+                    if self.allTimes[ty][a][b][0] > self.allTimes[ty][b][c][-1]:
+                        countFaults[0][b] += 1
+                    if self.allTimes[ty][a][b][-1] > self.allTimes[ty][b][c][0]:
+                        countFaults[1][b] += 1
+        return self.getTFR(count2Paths, countFaults)
+
+
+    def getTFRAggregatedBuckets(self, netwType):
+        aggTFCount = [{}, {}]
+        aggNr2Paths = {}
+        aggNodes = {}
         for twoPathTuple in self.twoPaths[netwType]:
             for tupleNod in twoPathTuple:
-                if not tupleNod in nodes:
-                    nodes[tupleNod] = True
-            if not twoPathTuple[1] in nr2Paths:
-                TFCount[0][twoPathTuple[1]] = 0
-                TFCount[1][twoPathTuple[1]] = 0
-                nr2Paths[twoPathTuple[1]] = 0
-            nr2Paths[twoPathTuple[1]] += 1
+                if not tupleNod in aggNodes:
+                    aggNodes[tupleNod] = True
+            if not twoPathTuple[1] in aggNr2Paths:
+                aggTFCount[0][twoPathTuple[1]] = 0
+                aggTFCount[1][twoPathTuple[1]] = 0
+                aggNr2Paths[twoPathTuple[1]] = 0
+            aggNr2Paths[twoPathTuple[1]] += 1
         for i in range(2):
             for fault in self.uniqueFaults[netwType][i]:
-                TFCount[i][fault[1]] += 1
-        bounds = [0, 0]
-        for nod in nr2Paths:
-            for i in range(2):
-                if TFCount[i][nod] == nr2Paths[nod]:
-                    bounds[i] += 1
-                else:
-                    bounds[i] += TFCount[i][nod] / (nr2Paths[nod] - TFCount[i][nod])
-        for i in range(2):
-            bounds[i] = bounds[i] / len(nr2Paths)
-        self.crtResultAgg[netwType] = bounds
+                aggTFCount[i][fault[1]] += 1
+
+        self.crtResultAgg[netwType] = self.getTFR(aggNr2Paths, aggTFCount)
         # if self.delta_t == 3600:
         #     self.compute2PHist(self.getVals(nr2Paths, 50, True), 'small2P.png')
         #     self.compute2PHist(self.getVals(nr2Paths, 50, False), 'big2P.png')
@@ -677,17 +632,6 @@ class InformationFlowNetwork:
         #plt.show()
         plt.savefig(fileName)
         plt.close()
-
-
-    def printNetworkDetails(self):
-        print('#graphs is', self.nrGraphs, 'and # total edges is', self.nrEdges)
-        for netw in range(1, self.nrGraphs + 1):
-            print('Network', netw, 'has #non isolated nodes', len(self.Adj[netw]))
-            edgeCount = 0
-            for a in self.Adj[netw]:
-                for b in self.Adj[netw][a]:
-                    edgeCount += 1
-            print('Network', netw, 'has #edges', edgeCount)
 
     def printNetwork2paths(self, netwType):
         for netw in range(1, self.nrGraphs + 1):
