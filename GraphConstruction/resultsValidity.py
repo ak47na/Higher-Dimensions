@@ -6,18 +6,8 @@ import parameters
 
 # the number of seconds in a year
 Y = 3600 * 24 * 365
-
 parameters.setLayerDistance(1)
-
-timeInt = [('1 hour', 3600), ('1 day', 3600 * 24), ('5 days', 3600 * 24 * 5),
-           ('30 days', 3600 * 24 * 30), ('1 year', Y), ('2 years', Y * 2),
-           ('5 years', Y * 5), ('10 years', Y * 10), ('20 years', Y * 20)]
-# timeIntWithResults = [('11 years', 11 * Y)]
-timeIntWithResults = [('1 hour', 3600), ('1 day', 3600 * 24), ('5 days', 3600 * 24 * 5),
-                     ('30 days', 3600 * 24 * 30), ('1 year', Y), ('10 years', Y * 10), ('11 years', 11 * Y)]
-
 mailID.cachedInit()
-
 msgDetailsFilePath = r'D:\AKwork2021\HigherDimensions\Higher-Dimensions\ApacheData\apacheMsgDetails.txt'
 #"Data\\msgDetails.txt"
 #Create the dictionary of messages and get the min,max times of messages.
@@ -25,6 +15,40 @@ minTime, maxTime, msgDict = reproValidity.readMsgDetails(msgDetailsFilePath)
 
 transitiveFaultRate_paperRes = Settings.getPaper7UpperLowerTransitiveFaultRate()
 twoPathCorrelations_paperRes = Settings.getPaper7TwoPathCorrelations()
+# timeInt = [('1 hour', 3600), ('1 day', 3600 * 24), ('5 days', 3600 * 24 * 5),
+#            ('30 days', 3600 * 24 * 30), ('1 year', Y), ('2 years', Y * 2),
+#            ('5 years', Y * 5), ('10 years', Y * 10), ('20 years', Y * 20)]
+
+timeIntWithResults = [('1 hour', 3600), ('1 day', 3600 * 24), ('5 days', 3600 * 24 * 5),
+                     ('30 days', 3600 * 24 * 30), ('1 year', Y), ('10 years', Y * 10), ('11 years', 11 * Y)]
+paperProjects = ['Apache', 'MySQL', 'Perl']
+print('Running')
+t1Times = []
+t1Rows = [[] for k1 in range(7)]
+tCompRows = [[] for k2 in range(7)]
+twoPathRows = [[] for k3 in range(2)]
+tTotalTimes = []
+t2Times = []
+t2Rows = [[[] for i in range(6)], [[] for j in range(6)]]
+
+def runResults():
+    print('Running results...')
+    for (t, delta_t) in timeIntWithResults:
+        tTotalTimes.append(t)
+        monoplexNetwork = reproValidity.getValues(t, delta_t, minTime, maxTime, msgDict, 'monoplex', False)
+        MLNNetwork = reproValidity.getValues(t, delta_t, minTime, maxTime, msgDict, 'MLN', False)
+        monoplexNetwork.getTFRAggregatedBuckets('monoplex')
+        updateTwoPathTable(monoplexNetwork, MLNNetwork)
+        updateMLNMonoplexCompTable(monoplexNetwork, MLNNetwork)
+        if (delta_t in transitiveFaultRate_paperRes):
+            res = monoplexNetwork.getTFRWithinAndAccross()
+            # res = getMeanResults(monoplexNetwork) # mean upper and lower bounds
+            # monoplexNetwork.crtResult['monoplex'][0] # upper and lower bounds
+            # res = monoplexNetwork.crtResultAgg['monoplex'] # aggregate 2P&TF upper and lower bounds
+            # res = monoplexNetwork.aggregCrtRes #aggregate network upper and lower bounds
+            updateTFRTable(t, delta_t, res)
+        if (delta_t in twoPathCorrelations_paperRes):
+            updateMonoplexCorrTable(t, delta_t, monoplexNetwork.crtResult['monoplex'])
 
 def plotTable1(t1Times, t1Rows):
     t1Data = [t1Times]
@@ -144,34 +168,6 @@ def updateTFRTable(t, delta_t, res):
         # Only check results for first project, i.e. Apache
         break
 
-def runResults():
-    print('Running results...')
-    for (t, delta_t) in timeIntWithResults:
-        tTotalTimes.append(t)
-        monoplexNetwork = reproValidity.getValues(t, delta_t, minTime, maxTime, msgDict, 'monoplex', False)
-        MLNNetwork = reproValidity.getValues(t, delta_t, minTime, maxTime, msgDict, 'MLN', False)
-        monoplexNetwork.getTFRAggregatedBuckets('monoplex')
-        updateTwoPathTable(monoplexNetwork, MLNNetwork)
-        updateMLNMonoplexCompTable(monoplexNetwork, MLNNetwork)
-        if (delta_t in transitiveFaultRate_paperRes):
-            res = monoplexNetwork.getTFRWithinAndAccross()
-            # res = getMeanResults(monoplexNetwork) # mean upper and lower bounds
-            # monoplexNetwork.crtResult['monoplex'][0] # upper and lower bounds
-            # res = monoplexNetwork.crtResultAgg['monoplex'] # aggregate 2P&TF upper and lower bounds
-            # res = monoplexNetwork.aggregCrtRes #aggregate network upper and lower bounds
-            updateTFRTable(t, delta_t, res)
-        if (delta_t in twoPathCorrelations_paperRes):
-            updateMonoplexCorrTable(t, delta_t, monoplexNetwork.crtResult['monoplex'])
-
-paperProjects = ['Apache', 'MySQL', 'Perl']
-print('Running')
-t1Times = []
-t1Rows = [[] for k1 in range(7)]
-tCompRows = [[] for k2 in range(7)]
-twoPathRows = [[] for k3 in range(2)]
-tTotalTimes = []
-t2Times = []
-t2Rows = [[[] for i in range(6)], [[] for j in range(6)]]
 if __name__ == "__main__":
     runResults()
     plotTwoPathVsTF(tTotalTimes, twoPathRows)

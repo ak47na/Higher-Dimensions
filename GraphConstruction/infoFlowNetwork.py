@@ -33,6 +33,7 @@ class InformationFlowNetwork:
         self.minTime = minTime
         self.nrEdges = 0
         self.replyDict = {}
+        self.allReplyTimes = []
         self.humanDict = {}
         self.Label = {}
         # minT[graphIndex][(A, B)] = min time t in graphIndex s.t there was a message from B to A at t.
@@ -161,6 +162,7 @@ class InformationFlowNetwork:
         timeV = self.msgDict[v][1].timestamp()
         assert (timeU >= timeV)
         self.replyDict[(u, v)] = True
+        self.allReplyTimes.append(abs(timeU - timeV) / 3600)
         b = self.msgDict[u][0]
         a = self.msgDict[v][0]
         nrNodes = self.addHuman(a, nrNodes)
@@ -574,11 +576,30 @@ class InformationFlowNetwork:
                     count2Paths[b] += 1
                     assert (not ((a, c) in countedTuples[b]))
                     countedTuples[b][(a, c)] = True
-                    if self.allTimes[ty][a][b][0] > self.allTimes[ty][b][c][-1]:
+                    if self.allTimes[ty][a][b][0][0] > self.allTimes[ty][b][c][-1][0]:
                         countFaults[0][b] += 1
-                    if self.allTimes[ty][a][b][-1] > self.allTimes[ty][b][c][0]:
+
+                    if self.allTimes[ty][a][b][-1][0] > self.allTimes[ty][b][c][0][0]:
                         countFaults[1][b] += 1
         return self.getTFR(count2Paths, countFaults)
+
+    def getAllCorrect2Paths(self):
+        ty = 1 # consider both normal and cross-layer edges
+        self.sortTimedData()
+        timeDist2Paths = [[], []]
+        for a in self.allTimes[ty]:
+            for b in self.allTimes[ty][a]:
+                if not(b in self.allTimes[ty]):
+                    continue
+                for c in self.allTimes[ty][b]:
+                    for t1 in self.allTimes[ty][a][b]:
+                        for t2 in self.allTimes[ty][b][c]:
+                            if t1[0] < t2[0]:
+                                timeDist2Paths[0].append(t2[0] - t1[0])
+                                timeDist2Paths[1].append(t2[0] - t1[1])
+                                #reply from B to A is before reply from C to B
+        return timeDist2Paths
+
 
 
     def getTFRAggregatedBuckets(self, netwType):
