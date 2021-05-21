@@ -1,10 +1,6 @@
 import pandas as pd
-
 import disambigGambit
 import disambigBird
-
-def GetTwoPaths():
-    pass
 
 def getEnronDf():
     filePath = 'D:\AKwork2021\HigherDimensions\Higher-Dimensions\\emails.csv'

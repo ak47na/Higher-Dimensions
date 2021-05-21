@@ -108,13 +108,10 @@ while True:
     if msgId in msgDict:
         nonUniqueMsgIds += 1
     else:
-        #TODO[]test if there are non-specified timezones
         try:
             # if '(' in date and ')' in date:
             #     date = date.split('(')[0]
             dt = parse(date, tzinfos=tzInfo)
-            if dt.tzinfo == None:
-                print('Odd ', dt)
 
             sec = 0
             if isMET_DST:
