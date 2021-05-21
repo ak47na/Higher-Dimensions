@@ -4,6 +4,18 @@ import parameters
 import random
 import math
 import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+
+def getInfoFlowNetwork(t, delta_t):
+    parameters.setLayerDistance(1)
+    mailID.cachedInit()
+    msgDetailsFilePath = r'D:\AKwork2021\HigherDimensions\Higher-Dimensions\ApacheData\apacheMsgDetails.txt'
+    # "Data\\msgDetails.txt"
+    # Create the dictionary of messages and get the min,max times of messages.
+    minTime, maxTime, msgDict = reproValidity.readMsgDetails(msgDetailsFilePath)
+    monoplexNetwork = reproValidity.getValues(t, delta_t, minTime, maxTime, msgDict, 'monoplex', False)
+    return monoplexNetwork
 
 def getTimeBetweenMsgs(msgDict, u, v):
     return abs(msgDict[u][1].timestamp() - msgDict[v][1].timestamp()) / (3600)
@@ -38,15 +50,31 @@ def getReplyTimesFromMsgEdges(filePath, msgDict):
     assert errors == 0
     return replyTimes
 
-def compReplyTimesHist(replyTimes, filePath):
-    plt.hist(replyTimes,
-             color='blue', edgecolor='black', bins=100)
-    plt.title('Histogram for Apache ', size=10)
-    plt.xlabel('Time(hours)', size=10)
+def compReplyTimesHist(replyTimes, filePath, x):
+    binWidth = 2.5
+    binVals = [0]
+    for i in range(40):
+        binVals.append(binWidth + binVals[-1])
+
+    plt.hist(replyTimes, bins=binVals,
+             color='blue', edgecolor='black')
+    plt.title('Histogram for Apache ', size=3)
+    plt.xlabel('Time(hours)', size=3)
+
+    # if x < 15:
+    #     countVals = x
+    # countVals = 10
+    # for i in range(countVals + 1):
+    #     vals.append(round((i / countVals) * x, 2))
+    vals = []
+    for i in range(0, 21):
+        vals.append(round(binVals[i * 2]))
+    plt.xticks(vals, vals)
     plt.ylabel('count', size=10)
     plt.tight_layout()
     #plt.show()
     plt.savefig(filePath)
+    plt.close()
 
 def compReplyTimesHists(replyTimes):
     for i, binsCount in enumerate([50, 75, 100, 125]):
@@ -99,6 +127,7 @@ def getStats(arr):
     Q1, Q3, iqr = getIQR(arr)
     print(mean, stdev, Q1, Q3, iqr)
     print(getPropFromFirstXH(arr, mean + stdev), getPropFromFirstXH(arr, mean + iqr))
+    return mean + iqr
 
 def getPropFromFirstXH(arr, x):
     n = len(arr)
@@ -108,6 +137,21 @@ def getPropFromFirstXH(arr, x):
             cntSmaller += 1
     return (cntSmaller / n) * 100
 
+def plotCDF(data):
+    x = np.sort(data)
+    # get the cdf values of y
+    maxVal = data[-1]
+    x = x / float(maxVal)
+    x = x * 100
+    y = (np.arange(0, maxVal, 0.3434) / float(maxVal)) * 100
+    y = y[0:len(data)]
+    filePath = 'D:\AKwork2021\HigherDimensions\Higher-Dimensions\ApacheData\\CDF.png'
+    # plotting
+    plt.xlabel('Percentage of (reply-sent) times')
+    plt.ylabel('Percentage of messages')
+    plt.plot(x, y)
+    plt.savefig(filePath)
+
 mailID.cachedInit()
 msgDetailsFilePath = r'D:\AKwork2021\HigherDimensions\Higher-Dimensions\ApacheData\apacheMsgDetails.txt'#"Data\\msgDetails.txt"
 minTime, maxTime, msgDict = reproValidity.readMsgDetails(msgDetailsFilePath)
@@ -115,7 +159,9 @@ minTime, maxTime, msgDict = reproValidity.readMsgDetails(msgDetailsFilePath)
 msgEdgesFilePath = r'D:\AKwork2021\HigherDimensions\Higher-Dimensions\ApacheData\apacheMsgEdges.txt'#"Data\\msgEdges.txt"
 
 replyTimes = sorted(getReplyTimesFromMsgEdges(msgEdgesFilePath, msgDict))
-getStats(replyTimes)
+monoplexNetwork = getInfoFlowNetwork('1 hour', 3600)
+assert replyTimes == sorted(monoplexNetwork.allReplyTimes)
+meanIQR = getStats(replyTimes)
 N = len(replyTimes)
 randIDx = random.sample(range(0, N), 100)
 randReplT = []
@@ -123,15 +169,24 @@ print('Nr msg', N)
 for i in randIDx:
     randReplT.append(replyTimes[i])
 
-first100HistFilePath = 'D:\AKwork2021\HigherDimensions\Higher-Dimensions\ApacheData\\atMost100ReplyTimesHist.png'
+filePathTemplate = 'D:\AKwork2021\HigherDimensions\Higher-Dimensions\ApacheData\\FixedBSzReplyTimesHistatMost'
+timesList = [10, 20, meanIQR, 30, 40, 50, 60, 100]
+firsXHistFilePaths = {}
+for t in timesList:
+    firsXHistFilePaths[t] = filePathTemplate + str(round(t)) + '.png'
+
 sampleHistFilePath = 'D:\AKwork2021\HigherDimensions\Higher-Dimensions\ApacheData\\sample100ReplyTimesHist.png'
 for x in range(10, 1 + int(replyTimes[-1]), 10):
     smallRempyTimes = getSmallerThanXReplyTimes(replyTimes, x)
-    if x == 100:
-        compReplyTimesHist(smallRempyTimes, first100HistFilePath)
-    print('Percentage for reply times <= ' + str(x) + ' hours', ((len(smallRempyTimes)) / len(replyTimes)) * 100)
+    # if x <= 100 and (x in timesList):
+    #     compReplyTimesHist(smallRempyTimes, firsXHistFilePaths[x], x)
+    if x <= 60 or x == 100:
+        print('Percentage for reply times <= ' + str(x) + ' hours', ((len(smallRempyTimes)) / len(replyTimes)) * 100)
 
-compReplyTimesHist(randReplT, sampleHistFilePath)
-print(replyTimes)
+
+plotCDF(replyTimes)
+#compReplyTimesHist(getSmallerThanXReplyTimes(replyTimes, meanIQR), firsXHistFilePaths[meanIQR], meanIQR)
+#compReplyTimesHist(randReplT, sampleHistFilePath)
+# print(replyTimes)
 # compReplyTimesHist(smallRempyTimes, 100)
 # compReplyTimesHist(randReplT)

@@ -3,9 +3,10 @@ import parameters
 
 from networkx import *
 from math import *
+import matplotlib.pyplot as plt
 
 '''
-    Updates the minimum and maximum number of seconds with t.
+    Updates the minimum and maximum number of seconds with the value of t.
 '''
 def updateTimeBorders(minTime, maxTime, t):
     minTime = min(minTime, t)
@@ -18,14 +19,27 @@ def getMinMax(timePair, t):
 
 class InformationFlowNetwork:
     def __init__(self, msgDict, delta_t, t, minTime, useGT = False):
+        # self.allTimes[ty][A][B] = [(timeU_i, timeV_i)], timeU_i = time of reply sent by B to msg
+        # with time timeV_i sent by A
+        # self.allTimes[1] = includes cross-bucket replies;
+        # self.allTimes[0] = doesn't include cross bucket reply.
+        self.allTimesBucket = [{}, {}]
+        self.allTimes = [{}, {}]
+        self.gtTP = {}
+        self.gtTF = [{}, {}]
+        # uniqueFaults[netwType][type] = dict with (2path, count) where 2path = transitive fault
+        # and count is the occurence of that 2path as a transitive fault.
+        self.uniqueFaults = {"monoplex" : [{}, {}], "MLN": [{}, {}]}
         self.minTime = minTime
         self.nrEdges = 0
         self.replyDict = {}
+        self.allReplyTimes = []
         self.humanDict = {}
         self.Label = {}
         # minT[graphIndex][(A, B)] = min time t in graphIndex s.t there was a message from B to A at t.
         self.minT = {}
         self.maxT = {}
+        #minPair[A][B] = the minimum time t s.t. there is a reply from B to A at time t.
         self.minPair = {}
         self.maxPair = {}
         #inLayer[graphIndex][A][B] = (minT_AB, maxT_AB)
@@ -35,15 +49,14 @@ class InformationFlowNetwork:
         self.inLayer = {}
         self.crossLayerIn = {}
         self.crossLayerOut = {}
-        # Adj[graphIndex][node] = the adjacency list of node in the graphIndex-th graph.
-        self.Adj = {}
         # msgDict[msgKey] = (sender, time)
         self.msgDict = msgDict
         # timeDict[timeInterval] = the index of the network(graphIndex) with messages sent in timeInterval
         # timeInterval = integer
         self.timeDict = {}
-        # timeDict[timeInterval] = the index of the network(graphIndex) with messages sent in timeInterval
-        # timeInterval = integer
+
+        # list with all cross-layer edges (A, timeV, B, timeU) where timeU is the time of reply
+        # sent by B to message sent by A at timeV.
         self.crossLayerEdges = []
         # tGraphs = List of the networkX multiDiGraphs for each time time interval, i.e
         # TGraphs[graphIndex] =the graph for timeInterval with timeDict[timeInterval] = graphIndex.
@@ -55,22 +68,30 @@ class InformationFlowNetwork:
         self.nr2paths = {'MLN': [{}, {}, {}], 'monoplex' : [{}, {}, {}]}
 
         # nr2p[t][node] = the number of 2-paths of node in aggregate network, i.e
-        #               = sum(network in networks, nr2p[t][network][node])
+        #               = sum(netw in networks, nr2p[t][netw][node])
         self.nr2p = {'MLN': [{}, {}, {}], 'monoplex' : [{}, {}, {}]}
 
         self.nrGraphs = 0
+        # The bucket width in seconds.
         self.delta_t = delta_t
+        # String representation of bucket width used for print statements.
         self.analysedT = t
-        self.TFSum = {"monoplex" : [0, 0], "MLN": [0, 0]}
+        # self.twoPaths[netwType] = dict with tuples (A, B, C) representing all 2paths.
+        self.twoPaths = {"monoplex" : {}, "MLN": {}}
+        # self.tfCount[netwType] = the number of transitive faults for netwType.
+        # self.tfCount[netwType][0] ->optimistic; self.tfCount[netwType][0] ->pessimistic
+        self.tfCount = {"monoplex" : [0, 0], "MLN": [0, 0]}
         self.TFperNetw = {"monoplex" : {}, "MLN": {}}
         self.crtResult = {"monoplex" : [(0, 0), (0, 0), (0, 0)], "MLN": [(0, 0), (0, 0), (0, 0)]}
-        self.meanRes = {}
+        self.crtResultAgg = {"monoplex" : [], "MLN": []}
         if useGT:
             parameters.setLayerDistance(1 + (parameters.T - 1) // delta_t)
+        else:
+            parameters.setLayerDistance(1)
 
     '''
-        Add the human with name to humanDict and as a graph node with index nrNodes + 1 and label
-        name.
+        Add the human with name to humanDict and increment nrNodes.
+        Add name as a graph node with index nrNodes and label name.
     '''
     def addHuman(self, name, nrNodes):
         name = mailID.getIdentity(name)
@@ -80,12 +101,14 @@ class InformationFlowNetwork:
             self.humanDict[name] = nrNodes
         return nrNodes
 
-    def getTimeRange(self, timestmp):
-        return trunc((timestmp - self.minTime) / self.delta_t)
+    '''
+        Return the bucket index of timestamp.
+    '''
+    def getTimeRange(self, timestamp):
+        return trunc((timestamp - self.minTime) / self.delta_t)
 
     def createTGraphForT(self, tIntervalId):
         self.nrGraphs += 1
-        self.Adj[self.nrGraphs] = {}
         self.minT[self.nrGraphs] = {}
         self.maxT[self.nrGraphs] = {}
         self.tGraphs.append(networkx.MultiDiGraph())
@@ -94,9 +117,34 @@ class InformationFlowNetwork:
         self.inLayer[self.nrGraphs] = {}
         self.crossLayerIn[self.nrGraphs] = {}
         self.crossLayerOut[self.nrGraphs] = {}
+        self.allTimesBucket[0][tIntervalId] = {}
+        self.allTimesBucket[1][tIntervalId] = {}
 
     def addNodeToNetw(self, A, netw):
         self.netwNodes[netw][A] = True
+
+    def sortTimedData(self):
+        for ty in range(2):
+            for a in self.allTimes[ty]:
+                for b in self.allTimes[ty][a]:
+                    self.allTimes[ty][a][b].sort(key=lambda x: x[0])
+            for bucket in self.allTimesBucket[ty]:
+                for a in self.allTimesBucket[ty][bucket]:
+                    for b in self.allTimesBucket[ty][bucket][a]:
+                        self.allTimesBucket[ty][bucket][a][b].sort(key=lambda x: x[0])
+
+    def addTimedEdge(self, A, B, timeU, timeV, bucket, ty):
+        if not(A in self.allTimes[ty]):
+            self.allTimes[ty][A] = {}
+        if not(B in self.allTimes[ty][A]):
+            self.allTimes[ty][A][B] = []
+        self.allTimes[ty][A][B].append((timeU, timeV))
+        if not(A in self.allTimesBucket[ty][bucket]):
+            self.allTimesBucket[ty][bucket][A] = {}
+        if not(B in self.allTimesBucket[ty][bucket][A]):
+            self.allTimesBucket[ty][bucket][A][B] = []
+        self.allTimesBucket[ty][bucket][A][B].append((timeU, timeV))
+
 
     '''
         Adds an edge between the sender of message v and the sender of message u. delta_t represents the
@@ -104,27 +152,25 @@ class InformationFlowNetwork:
         Returns the number of human nodes across all networks.
     '''
     def addEdge(self, u, v, nrNodes):
-        # u is a reply to v, b is the sender of u, a is the sender of v.
-        if (self.msgDict[u][1].timestamp() < self.msgDict[v][1].timestamp()):
-            u, v = v, u
-
-        timeU = self.msgDict[u][1].timestamp()
-        timeV = self.msgDict[v][1].timestamp()
-        assert (timeU >= timeV)
         if ((u, v) in self.replyDict):
             # The reply u to message v was already processed.
             return nrNodes
-
+        # u is a reply to v, b is the sender of u, a is the sender of v.
+        if (self.msgDict[u][1].timestamp() < self.msgDict[v][1].timestamp()):
+            u, v = v, u
+        timeU = self.msgDict[u][1].timestamp()
+        timeV = self.msgDict[v][1].timestamp()
+        assert (timeU >= timeV)
         self.replyDict[(u, v)] = True
+        self.allReplyTimes.append(abs(timeU - timeV) / 3600)
         b = self.msgDict[u][0]
         a = self.msgDict[v][0]
-
         nrNodes = self.addHuman(a, nrNodes)
         nrNodes = self.addHuman(b, nrNodes)
-
         if a == b:
             # Do not include self replies
             return nrNodes
+
         self.nrEdges += 1
         A = self.humanDict[a]
         B = self.humanDict[b]
@@ -145,6 +191,20 @@ class InformationFlowNetwork:
         self.addNodeToNetw(A, self.timeDict[tIntervalIdV])
         self.addNodeToNetw(B, self.timeDict[tIntervalIdU])
         self.addNodeToNetw(B, self.timeDict[tIntervalIdV])
+        self.addTimedEdge(A, B, timeU, timeV, tIntervalIdU, 1)
+
+        if tIntervalIdU == tIntervalIdV:
+            self.addTimedEdge(A, B, timeU, timeV, tIntervalIdU, 0)
+        if not(A in self.minPair):
+            self.minPair[A] = {}
+        if not (B in self.minPair[A]):
+            self.minPair[A][B] = timeU
+        self.minPair[A][B] = min(self.minPair[A][B], timeU)
+        if not (A in self.maxPair):
+            self.maxPair[A] = {}
+        if not (B in self.maxPair[A]):
+            self.maxPair[A][B] = timeU
+        self.maxPair[A][B] = max(self.maxPair[A][B], timeU)
 
         if tIntervalIdU - tIntervalIdV > parameters.kLayer:
             # Ignore cross edges for layer distance > kLayer.
@@ -183,16 +243,7 @@ class InformationFlowNetwork:
                 assert prev1 <= timeU or self.inLayer[T][A][B][1] >= timeU
         # Update the minimum and maximum time for a conversation from person A to person B.
         # The value is necessary for computing transitive faults.
-        if not(A in self.minPair):
-            self.minPair[A] = {}
-        if not (B in self.minPair[A]):
-            self.minPair[A][B] = timeU
-        self.minPair[A][B] = min(self.minPair[A][B], timeU)
-        if not (A in self.maxPair):
-            self.maxPair[A] = {}
-        if not (B in self.maxPair[A]):
-            self.maxPair[A][B] = timeU
-        self.maxPair[A][B] = max(self.maxPair[A][B], timeU)
+
         if not ((A, B) in self.minT[T]):
             self.minT[T][(A, B)] = timeU
             self.maxT[T][(A, B)] = timeU
@@ -202,16 +253,11 @@ class InformationFlowNetwork:
                                                                                 timeU)
         # Add an edge in the T-th MultiDiGraph from the node representing human a to the node
         # representing human b.
-        # Comment this if-statement if CLE should be considered parallel edges in CP network
+        # Remove this if-statement if CLE should be considered parallel edges in CP network
         if tIntervalIdU != tIntervalIdV:
             return nrNodes
-
-        if not (A in self.Adj[T]):
-            self.Adj[T][A] = {}
-        if not (B in self.Adj[T][A]):
-            self.tGraphs[T].add_edge(self.humanDict[a], self.humanDict[b], time=self.msgDict[u][1])
-            self.Adj[T][A][B] = self.msgDict[u][1]
-
+        # Note that edge self.humanDict[a], self.humanDict[b] can be added more than once.
+        self.tGraphs[T].add_edge(self.humanDict[a], self.humanDict[b], time=self.msgDict[u][1])
         return nrNodes
 
     '''
@@ -250,22 +296,24 @@ class InformationFlowNetwork:
         return nrNodes
 
     def getTFaultMonoplex(self, a, b, c, netw, netwType):
+        tfTuple = (self.Label[a], self.Label[b], self.Label[c])
         # If there is no edge a->b with time smaller than an edge b->c, then a->b->c is
         # a transitive-fault.
         if a == b or b == c or c == a:
             return
         if self.inLayer[netw][a][b][0] > self.inLayer[netw][b][c][1]:
-            self.TFSum[netwType][0] += 1
+            self.addUniqueTfaults(netwType, tfTuple, 0)
             self.nr2paths[netwType][1][netw][b] -= 1
         # If there is an edge a->b with time bigger than b->c, then a->b->c is a
         # transitive fault in the pessimistic model.
         if self.inLayer[netw][a][b][1] > self.inLayer[netw][b][c][0]:
             #print('Pessimistic fault', a, b, c, self.inLayer[netw][a][b], self.inLayer[netw][b][c])
-            self.TFSum[netwType][1] += 1
+            self.addUniqueTfaults(netwType, tfTuple, 1)
             self.nr2paths[netwType][2][netw][b] -= 1
         return
 
     def getTFaultMLN(self, a, b, c, netw, netwType):
+        tfTuple = (self.Label[a], self.Label[b], self.Label[c])
         cleAdowntoB = b in self.crossLayerIn[netw] and a in self.crossLayerIn[netw][b]
         cleAtoBup = a in self.crossLayerOut[netw] and b in self.crossLayerOut[netw][a]
         cleBtoupC = b in self.crossLayerOut[netw] and c in self.crossLayerOut[netw][b]
@@ -274,12 +322,12 @@ class InformationFlowNetwork:
         # If there is no edge a->b with time smaller than an edge b->c, then a->b->c is
         # a transitive-fault.
         if (self.inLayer[netw][a][b][0] > self.inLayer[netw][b][c][1]) and (not (cleAdowntoB or cleBtoupC)):
-            self.TFSum[netwType][0] += 1
+            self.addUniqueTfaults(netwType, tfTuple, 0)
             self.nr2paths[netwType][1][netw][b] -= 1
         # If there is an edge a->b with time bigger than b->c, then a->b->c is a
         # transitive fault in the pessimistic model.
         if self.inLayer[netw][a][b][1] > self.inLayer[netw][b][c][0] or cleBdowntoC or cleAtoBup:
-            self.TFSum[netwType][1] += 1
+            self.addUniqueTfaults(netwType, tfTuple, 1)
             self.nr2paths[netwType][2][netw][b] -= 1
         return
 
@@ -288,6 +336,7 @@ class InformationFlowNetwork:
         if b in self.crossLayerOut[netw]:
             for c in self.crossLayerOut[netw][b]:
                 if not (b in self.inLayer[netw] and c in self.inLayer[netw][b]):
+                    self.addTwoPath((self.Label[a], self.Label[b], self.Label[c]), netwType)
                     # Cross-edges b->c where there is also an in-layer edge b->c are treated in getTFaultMLN.
                     assert (self.crossLayerOut[netw][b][c] > self.inLayer[netw][a][b][1])
                     for ty in range(3):
@@ -303,13 +352,21 @@ class InformationFlowNetwork:
                 for c in self.inLayer[netwb][b]:
                     for ty in range(3):
                         self.nr2paths[netwType][ty][netw][b] += 1
+                    tfTuple = (self.Label[a], self.Label[b], self.Label[c])
                     # Cross-edges c->a where there is also an in-layer edge c->a are treated in getTFaultMLN.
                     if self.crossLayerOut[netw][a][b] > self.inLayer[netwb][b][c][1]:
-                        self.TFSum[netwType][0] += 1
+                        self.addUniqueTfaults(netwType, tfTuple, 0)
                         self.nr2paths[netwType][1][netw][b] -= 1
                     if self.crossLayerOut[netw][a][b] > self.inLayer[netwb][b][c][0]:
-                        self.TFSum[netwType][1] += 1
+                        self.addUniqueTfaults(netwType, tfTuple, 1)
                         self.nr2paths[netwType][2][netw][b] -= 1
+
+    def addUniqueTfaults(self, netwType, tfTuple, type):
+        if not (tfTuple in self.uniqueFaults[netwType][type]):
+            self.uniqueFaults[netwType][type][tfTuple] = 1
+            self.tfCount[netwType][type] += 1
+        else:
+            self.uniqueFaults[netwType][type][tfTuple] += 1
 
     def initTFRForNode(self, netw, netwType, a):
         self.nr2paths[netwType][0][netw][a] = 0
@@ -326,6 +383,9 @@ class InformationFlowNetwork:
         transFaultSum[1] += (pesimisticCount / self.nr2paths[netwType][0][netw][a])
         return transFaultSum
 
+    def addTwoPath(self, twoPathTuple, netwType):
+        self.twoPaths[netwType][twoPathTuple] = True
+
     '''
         Computes the number of 2-paths(with or without transitive faults) for each node. The number of
         seconds aggregated in each network is delta_t.
@@ -338,7 +398,6 @@ class InformationFlowNetwork:
         lowerBound = 1
         for netw in range(1, self.nrGraphs + 1):
             N = len(self.netwNodes[netw])
-
             if N == 0:
                 self.TFperNetw[netwType][netw] = [0, 0]
                 continue
@@ -349,12 +408,12 @@ class InformationFlowNetwork:
             self.nr2paths[netwType][0][netw] = {}
             self.nr2paths[netwType][1][netw] = {}
             self.nr2paths[netwType][2][netw] = {}
-            if netwType == 'MLN':
-                for a in self.crossLayerOut[netw]:
-                    if not (a in self.inLayer[netw]):
-                        self.initTFRForNode(netw, netwType, a)
-                        self.addCLEPathA(netw, netwType, a)
-                        transFaultSum = self.addTFRForNode(netw, netwType, transFaultSum, a)
+            # if netwType == 'MLN':
+            #     for a in self.crossLayerOut[netw]:
+            #         if not (a in self.inLayer[netw]):
+            #             self.initTFRForNode(netw, netwType, a)
+            #             self.addCLEPathA(netw, netwType, a)
+            #             transFaultSum = self.addTFRForNode(netw, netwType, transFaultSum, a)
 
             netwEdges = self.inLayer[netw]
             # #Uncomment this part if the CP network adds CLE as inLayer parallel edges.
@@ -363,11 +422,9 @@ class InformationFlowNetwork:
             # else:
             #     netwEdges = self.Adj[netw]
             atLeastOne2Path = False
-            countedTuples = {}
             has2Paths = 0
-            for a in netwEdges:
+            for a in self.netwNodes[netw]:
                 self.initTFRForNode(netw, netwType, a)
-
             for a in netwEdges:
                 for b in netwEdges[a]:
                     if netwType == 'MLN':
@@ -380,9 +437,8 @@ class InformationFlowNetwork:
                         if a == b or b == c or c == a:
                             continue
                         atLeastOne2Path = True
-                        if (a, b, c) in countedTuples:
-                            assert False
-                        countedTuples[(a, b, c)] = True
+                        twoPathTuple = (self.Label[a], self.Label[b], self.Label[c])
+                        self.addTwoPath(twoPathTuple, netwType)
                         self.nr2paths[netwType][0][netw][b] += 1
                         self.nr2paths[netwType][1][netw][b] += 1
                         self.nr2paths[netwType][2][netw][b] += 1
@@ -400,22 +456,13 @@ class InformationFlowNetwork:
             # nodes, divided by the number of nodes in the network.
             transFaultSum[0] /= N
             transFaultSum[1] /= N
-            # if has2Paths > 0:
-            #     transFaultSum[0] /= has2Paths
-            #     transFaultSum[1] /= has2Paths
-
             self.TFperNetw[netwType][netw] = (transFaultSum[0], transFaultSum[1])
             # optimistic model should have at most pessimistic model transitive faults.
             assert transFaultSum[0] <= transFaultSum[1]
             if atLeastOne2Path:
                 upperBound = max(transFaultSum[1], upperBound)
                 lowerBound = min(transFaultSum[0], lowerBound)
-                # print('Update u and l', upperBound, lowerBound)
-
         self.crtResult[netwType][0] = (lowerBound, upperBound)
-        # print('Final u and l', self.crtResult[netwType][0])
-
-
 
     # Returns the number of edges in the MLN network: (inLayer, outLayer, in + out)
     def getMLNEdgeCount(self):
@@ -447,9 +494,9 @@ class InformationFlowNetwork:
                         inLayerEdgeCount += 1
         return inLayerEdgeCount
 
-    def getTFSum(self, netwType, tfType):
+    def getTfCount(self, netwType, tfType):
         if tfType == 'TF':
-            return self.TFSum[netwType]
+            return self.tfCount[netwType]
         else:
             res = [0, 0]
             for netw in range(1, self.nrGraphs + 1):
@@ -457,30 +504,160 @@ class InformationFlowNetwork:
                     res[ty] += self.TFperNetw[netwType][netw][ty]
             return res
 
+    # Use for GT
+    def getAllTFs(self):
+        tfSumAll = [0, 0]
+        optimisticCount = {}
+        pessimisticCount = {}
+        nr2pathsC = {}
+        for a in self.minPair:
+            optimisticCount[a] = 0
+            pessimisticCount[a] = 0
+            nr2pathsC[a] = 0
+        for a in self.minPair:
+            for b in self.minPair[a]:
+                if not (b in self.minPair) or a == b:
+                    continue
+                assert b in self.maxPair[a]
+                for c in self.maxPair[b]:
+                    if a == c or b == c:
+                        continue
+                    nr2pathsC[b] += 1
+                    if self.minPair[a][b] > self.maxPair[b][c]:
+                        optimisticCount[b] += 1
+                        tfSumAll[0] += 1
+                    if self.maxPair[a][b] > self.minPair[b][c]:
+                        pessimisticCount[b] += 1
+                        tfSumAll[1] += 1
 
-    def getEdgeCount(self):
-        edgeCount = 0
-        for netw in range(1, self.nrGraphs + 1):
-            for a in self.Adj[netw]:
-                for b in self.Adj[netw][a]:
-                    edgeCount += 1
-                    if (self.minT[netw][(a, b)] != self.maxT[netw][(a, b)]):
-                        edgeCount += 1
-        return edgeCount
+        self.aggregCrtRes = [0, 0]
+        for a in self.minPair:
+            self.gtTP[a] = nr2pathsC[a]
+            self.gtTF[0][a] = optimisticCount[a]
+            self.gtTF[1][a] = pessimisticCount[a]
+            if nr2pathsC[a] == 0:
+                continue
+            self.aggregCrtRes[0] += optimisticCount[a] / nr2pathsC[a]
+            self.aggregCrtRes[1] += pessimisticCount[a] / nr2pathsC[a]
+        self.aggregCrtRes[0] /= len(self.minPair)
+        self.aggregCrtRes[1] /= len(self.minPair)
+        return tfSumAll
 
-    def printNetworkDetails(self):
-        print('#graphs is', self.nrGraphs, 'and # total edges is', self.nrEdges)
-        for netw in range(1, self.nrGraphs + 1):
-            print('Network', netw, 'has #non isolated nodes', len(self.Adj[netw]))
-            edgeCount = 0
-            for a in self.Adj[netw]:
-                for b in self.Adj[netw][a]:
-                    edgeCount += 1
-            print('Network', netw, 'has #edges', edgeCount)
+    def getTFR(self, count2Paths, countFaults):
+        bounds = [0, 0]
+        for nod in count2Paths:
+            for i in range(2):
+                if count2Paths[nod] == 0:
+                    continue
+                bounds[i] += countFaults[i][nod] / count2Paths[nod]
+        for i in range(2):
+            bounds[i] = bounds[i] / len(count2Paths)
+        return bounds
+
+    def getTFRWithinAndAccross(self):
+        # Ignore cross-layer edges
+        ty = 0
+        self.sortTimedData()
+        count2Paths = {}
+        countFaults = [{}, {}]
+        countedTuples = {}
+        for a in self.allTimes[ty]:
+            for b in self.allTimes[ty][a]:
+                if (a == b) or (not (b in self.allTimes[ty])):
+                    continue
+                for c in self.allTimes[ty][b]:
+                    if a == c or b == c:
+                        continue
+                    if not (b in count2Paths):
+                        count2Paths[b] = 0
+                        countFaults[0][b] = 0
+                        countFaults[1][b] = 0
+                        countedTuples[b] = {}
+                    count2Paths[b] += 1
+                    assert (not ((a, c) in countedTuples[b]))
+                    countedTuples[b][(a, c)] = True
+                    if self.allTimes[ty][a][b][0][0] > self.allTimes[ty][b][c][-1][0]:
+                        countFaults[0][b] += 1
+
+                    if self.allTimes[ty][a][b][-1][0] > self.allTimes[ty][b][c][0][0]:
+                        countFaults[1][b] += 1
+        return self.getTFR(count2Paths, countFaults)
+
+    def getAllCorrect2Paths(self):
+        ty = 1 # consider both normal and cross-layer edges
+        self.sortTimedData()
+        timeDist2Paths = [[], []]
+        for a in self.allTimes[ty]:
+            for b in self.allTimes[ty][a]:
+                if not(b in self.allTimes[ty]):
+                    continue
+                for c in self.allTimes[ty][b]:
+                    for t1 in self.allTimes[ty][a][b]:
+                        for t2 in self.allTimes[ty][b][c]:
+                            if t1[0] < t2[0]:
+                                timeDist2Paths[0].append(t2[0] - t1[0])
+                                timeDist2Paths[1].append(t2[0] - t1[1])
+                                #reply from B to A is before reply from C to B
+        return timeDist2Paths
+
+
+
+    def getTFRAggregatedBuckets(self, netwType):
+        aggTFCount = [{}, {}]
+        aggNr2Paths = {}
+        aggNodes = {}
+        for twoPathTuple in self.twoPaths[netwType]:
+            for tupleNod in twoPathTuple:
+                if not tupleNod in aggNodes:
+                    aggNodes[tupleNod] = True
+            if not twoPathTuple[1] in aggNr2Paths:
+                aggTFCount[0][twoPathTuple[1]] = 0
+                aggTFCount[1][twoPathTuple[1]] = 0
+                aggNr2Paths[twoPathTuple[1]] = 0
+            aggNr2Paths[twoPathTuple[1]] += 1
+        for i in range(2):
+            for fault in self.uniqueFaults[netwType][i]:
+                aggTFCount[i][fault[1]] += 1
+
+        self.crtResultAgg[netwType] = self.getTFR(aggNr2Paths, aggTFCount)
+        # if self.delta_t == 3600:
+        #     self.compute2PHist(self.getVals(nr2Paths, 50, True), 'small2P.png')
+        #     self.compute2PHist(self.getVals(nr2Paths, 50, False), 'big2P.png')
+
+    def getVals(self, nr2P, x, smallValues):
+        vals = []
+        for nod in nr2P:
+            if smallValues and nr2P[nod] <= 50:
+                vals.append(nr2P[nod])
+            elif not(smallValues) and nr2P[nod] > 50:
+                vals.append(nr2P[nod])
+        return vals
+
+    def compute2PHist(self, vals, fileName):
+        if 'small' in fileName:
+            xvalues = []
+            yvalues = []
+            for i in range(26):
+                xvalues.append(i * 2)
+            plt.xticks(xvalues, xvalues)
+            for i in range(12):
+                yvalues.append(i * 5)
+            plt.yticks(yvalues, yvalues)
+
+        plt.hist(vals, bins = 50,
+                 color='blue', edgecolor='black')
+        plt.title('Histogram for Apache ', size=8)
+        plt.xlabel('Nr 2 paths (1h)', size=8)
+        plt.ylabel('count', size=10)
+        plt.tight_layout()
+        #plt.show()
+        plt.savefig(fileName)
+        plt.close()
 
     def printNetwork2paths(self, netwType):
         for netw in range(1, self.nrGraphs + 1):
             for a in self.nr2paths[netwType][0][netw]:
                 print('Nod ', a, 'has #2paths:', self.nr2paths[netwType][0][netw][a],
                       self.nr2paths[netwType][1][netw][a], self.nr2paths[netwType][2][netw][a])
+
 
