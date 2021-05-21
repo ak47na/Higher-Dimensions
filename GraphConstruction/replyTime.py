@@ -5,62 +5,42 @@ import random
 import math
 import matplotlib.pyplot as plt
 import numpy as np
-import pandas as pd
 
-def getInfoFlowNetwork(t, delta_t):
+def getInfoFlowNetwork(tStr, delta_t):
     parameters.setLayerDistance(1)
     mailID.cachedInit()
     msgDetailsFilePath = r'D:\AKwork2021\HigherDimensions\Higher-Dimensions\ApacheData\apacheMsgDetails.txt'
     # "Data\\msgDetails.txt"
     # Create the dictionary of messages and get the min,max times of messages.
     minTime, maxTime, msgDict = reproValidity.readMsgDetails(msgDetailsFilePath)
-    monoplexNetwork = reproValidity.getValues(t, delta_t, minTime, maxTime, msgDict, 'monoplex', False)
-    return monoplexNetwork
+    return reproValidity.getValues(tStr, delta_t, minTime, maxTime, msgDict, 'monoplex', False)
 
-def getTimeBetweenMsgs(msgDict, u, v):
-    return abs(msgDict[u][1].timestamp() - msgDict[v][1].timestamp()) / (3600)
+def plotHist(data, binVals, filePath, vals, yvals):
+    if binVals == []:
+        plt.hist(data, bins=100,
+                 color='blue', edgecolor='black')
+    else:
+        plt.hist(data, bins=binVals,
+             color='blue', edgecolor='black')
+    plt.title('Histogram for Apache ', size=10)
+    plt.xlabel('Time(hours)', size=10)
+    if len(vals) > 0:
+        plt.xticks(vals, vals)
+    if len(yvals ):
+        plt.yticks(yvals, yvals)
+    plt.ylabel('count', size=8)
+    #plt.ticklabel_format(axis='both', style='plain')
+    plt.tight_layout()
+    plt.savefig(filePath)
+    plt.clf()
+def computeBasicHist(replyTimes, filePath):
+    plotHist(replyTimes, [], filePath, [], [])
 
-def getReplyTimesFromMsgEdges(filePath, msgDict):
-    errors = 0
-    invalidMsg = {}
-    # file with each line containing two string numbers u v representing that message with key u is
-    # a reply to message with key v.
-    edgeFile = open(filePath, "r")
-    replyTimes = []
-    while True:
-        crtLine = edgeFile.readline()
-        if not crtLine:
-            break
-        crtLine = crtLine.replace('\n', '')
-        if (not '/\\' in crtLine):
-            lst = crtLine.split()
-        else:
-            lst = crtLine.split('/\\')
-
-        assert len(lst) == 2
-        if not (lst[0] in msgDict) and not (lst[0] in invalidMsg):
-            invalidMsg[lst[0]] = True
-            errors += 1
-        if not (lst[1] in msgDict) and not (lst[1] in invalidMsg):
-            invalidMsg[lst[1]] = True
-            errors += 1
-        if (lst[0] in msgDict) and (lst[1] in msgDict):
-            replyTimes.append(getTimeBetweenMsgs(msgDict, lst[1], lst[0]))
-    edgeFile.close()
-    assert errors == 0
-    return replyTimes
-
-def compReplyTimesHist(replyTimes, filePath, x):
+def compReplyTimesHist(replyTimes, filePath):
     binWidth = 2.5
     binVals = [0]
     for i in range(40):
         binVals.append(binWidth + binVals[-1])
-
-    plt.hist(replyTimes, bins=binVals,
-             color='blue', edgecolor='black')
-    plt.title('Histogram for Apache ', size=3)
-    plt.xlabel('Time(hours)', size=3)
-
     # if x < 15:
     #     countVals = x
     # countVals = 10
@@ -69,12 +49,7 @@ def compReplyTimesHist(replyTimes, filePath, x):
     vals = []
     for i in range(0, 21):
         vals.append(round(binVals[i * 2]))
-    plt.xticks(vals, vals)
-    plt.ylabel('count', size=10)
-    plt.tight_layout()
-    #plt.show()
-    plt.savefig(filePath)
-    plt.close()
+    plotHist(replyTimes, binVals, filePath, vals, [])
 
 def compReplyTimesHists(replyTimes):
     for i, binsCount in enumerate([50, 75, 100, 125]):
@@ -91,11 +66,11 @@ def compReplyTimesHists(replyTimes):
     plt.tight_layout()
     plt.show()
 
-def getSmallerThanXReplyTimes(replyTimes, x):
+def getSmallerThanXReplyTimes(replyTimes, X):
     res = []
-    for t in replyTimes:
-        if t < x:
-            res.append(t)
+    for T in replyTimes:
+        if T < X:
+            res.append(T)
     return res
 
 def getIQR(arr):
@@ -137,56 +112,144 @@ def getPropFromFirstXH(arr, x):
             cntSmaller += 1
     return (cntSmaller / n) * 100
 
-def plotCDF(data):
+def plotCDF(data, filePath, xLabel, yLabel):
     x = np.sort(data)
     # get the cdf values of y
     maxVal = data[-1]
     x = x / float(maxVal)
     x = x * 100
-    y = (np.arange(0, maxVal, 0.3434) / float(maxVal)) * 100
+    y = (np.arange(0, maxVal, maxVal / len(data)) / float(maxVal)) * 100
     y = y[0:len(data)]
-    filePath = 'D:\AKwork2021\HigherDimensions\Higher-Dimensions\ApacheData\\CDF.png'
     # plotting
-    plt.xlabel('Percentage of (reply-sent) times')
-    plt.ylabel('Percentage of messages')
+    plt.xlabel(xLabel)
+    plt.ylabel(yLabel)
+    plt.ticklabel_format(axis='both', style='plain')
     plt.plot(x, y)
     plt.savefig(filePath)
+    plt.clf()
 
-mailID.cachedInit()
-msgDetailsFilePath = r'D:\AKwork2021\HigherDimensions\Higher-Dimensions\ApacheData\apacheMsgDetails.txt'#"Data\\msgDetails.txt"
-minTime, maxTime, msgDict = reproValidity.readMsgDetails(msgDetailsFilePath)
+def plot2PathsHist(times2Paths):
+    # print('Two paths times***', times2Paths)
+    times2Paths[0] = sorted(times2Paths[0])
+    times2Paths[1] = sorted(times2Paths[1])
 
-msgEdgesFilePath = r'D:\AKwork2021\HigherDimensions\Higher-Dimensions\ApacheData\apacheMsgEdges.txt'#"Data\\msgEdges.txt"
+    print('max vals', times2Paths[0][-1])
+    filePath = ['D:\AKwork2021\HigherDimensions\Higher-Dimensions\ApacheData\\hist2PathsBC.png',
+                'D:\AKwork2021\HigherDimensions\Higher-Dimensions\ApacheData\\hist2PathsAC.png']
 
-replyTimes = sorted(getReplyTimesFromMsgEdges(msgEdgesFilePath, msgDict))
+    for idx in range(2):
+        for x in range(len(times2Paths[idx])):
+            times2Paths[idx][x] /= 3600
+        maxVal = max(times2Paths[idx])
+        yticks = np.arange(0, maxVal, maxVal / 8)
+        plotHist(times2Paths[idx], [], filePath[idx], [], yticks)
+
+def plot2PathsHistOP(times2Paths):
+    times2Paths[0] = sorted(times2Paths[0])
+    times2Paths[1] = sorted(times2Paths[1])
+    print('max vals', times2Paths[0][-1])
+    filePath = ['D:\AKwork2021\HigherDimensions\Higher-Dimensions\ApacheData\\hist2PathsO.png',
+                'D:\AKwork2021\HigherDimensions\Higher-Dimensions\ApacheData\\hist2PathsP.png']
+    for idx in range(2):
+        for x in range(len(times2Paths[idx])):
+            times2Paths[idx][x] /= 3600
+        # maxVal = max(times2Paths[idx])
+        # yticks = np.arange(0, maxVal, maxVal / 8)
+        plotHist(times2Paths[idx], [], filePath[idx], [], [])#, yticks)
+
+def readReplyTimes():
+    filePath = 'D:\AKwork2021\HigherDimensions\Higher-Dimensions\EnronData\\enronReplies.txt'
+    f = open(filePath, 'r')
+    data = f.readline().split(', ')
+    replyList = []
+    for t in data:
+        try:
+            timeVal = float(t) / 3600
+            replyList.append(timeVal)
+        except:
+            print(t, 'invalid timestamp')
+    return replyList
+
+def readOP2PathsTimes():
+    filepath = 'D:\AKwork2021\HigherDimensions\Higher-Dimensions\ApacheData\\OP2paths.txt'
+    f = open(filepath, 'r')
+    parseFloat = lambda floatStr: float(floatStr)
+    time2PathsO = f.readline().replace('\n', '').split(', ')
+    time2PathsP = f.readline().replace('\n', '').split(', ')
+    assert time2PathsO[-1] == ''
+    assert time2PathsO[-1] == ''
+    time2PathsO = sorted(map(parseFloat, time2PathsO[:-1]))
+    time2PathsP = sorted(map(parseFloat, time2PathsP[:-1]))
+    return time2PathsO, time2PathsP
+
+def writeOP2PathsTimes(times2Paths):
+    filepath = 'D:\AKwork2021\HigherDimensions\Higher-Dimensions\ApacheData\\OP2paths.txt'
+    f = open(filepath, 'w')
+    for idx in range(2):
+        for x in range(len(times2Paths[idx])):
+            f.write(str(times2Paths[idx][x]) + ', ')
+        f.write('\n')
+    f.close()
+
+def plotRandomSample(replyTimes):
+    N = len(replyTimes)
+    randIDx = random.sample(range(0, N), 100)
+    randReplT = []
+    print('Nr msg', N)
+    for i in randIDx:
+        randReplT.append(replyTimes[i])
+    sampleHistFilePath = 'D:\AKwork2021\HigherDimensions\Higher-Dimensions\ApacheData\\EnronSample100ReplyTimesHist.png'
+    compReplyTimesHist(randReplT, sampleHistFilePath)
+
+def plot2PathData(monoplexNetwork):
+    correct2Paths = monoplexNetwork.getAllCorrect2Paths()
+    op2paths = monoplexNetwork.getOP2Paths_Greedy()
+    writeOP2PathsTimes(op2paths)
+    plot2PathsHistOP(op2paths)
+    plot2PathsHist(correct2Paths)
+    plotCDF(sorted(correct2Paths[0]), 'D:\AKwork2021\HigherDimensions\Higher-Dimensions\ApacheData\\CDF2P0.png',
+            'Percentage of (replyB-replyC) times',
+            'Percentage of 2-paths')
+    plotCDF(sorted(correct2Paths[1]), 'D:\AKwork2021\HigherDimensions\Higher-Dimensions\ApacheData\\CDF2P1.png',
+            'Percentage of (messageA-replyC) times',
+            'Percentage of 2-paths')
+
+def plotReplyData(allReplyTimes, filePathTemplate):
+    meanIQR = getStats(allReplyTimes)
+    timesList = [10, 20, meanIQR, 30, 40, 50, 60, 100]
+    firsXHistFilePaths = {}
+    for t in timesList:
+        firsXHistFilePaths[t] = filePathTemplate + str(round(t)) + '.png'
+
+    # plotRandomSample(enronRepliesTime)
+
+    for xi in range(10, 1 + int(allReplyTimes[-1]), 10):
+        smallRempyTimes = getSmallerThanXReplyTimes(allReplyTimes, xi)
+        # if xi <= 100 and (xi in timesList):
+        #     compReplyTimesHist(smallRempyTimes, firsXHistFilePaths[xi])
+        if xi <= 60 or xi == 100:
+            print('Percentage for reply times <= ' + str(xi) + ' hours',
+                  ((len(smallRempyTimes)) / len(allReplyTimes)) * 100)
+
+    plotCDF(allReplyTimes, 'D:\AKwork2021\HigherDimensions\Higher-Dimensions\ApacheData\\CDF_replies.png',
+            'Percentage of (reply-sent) times',
+            'Percentage of messages')
+
+def getApacheReplyData(monoplexNetwork):
+    return sorted(monoplexNetwork.allReplyTimes)
+
+def getEnronRepliesTime():
+    return readReplyTimes()
 monoplexNetwork = getInfoFlowNetwork('1 hour', 3600)
-assert replyTimes == sorted(monoplexNetwork.allReplyTimes)
-meanIQR = getStats(replyTimes)
-N = len(replyTimes)
-randIDx = random.sample(range(0, N), 100)
-randReplT = []
-print('Nr msg', N)
-for i in randIDx:
-    randReplT.append(replyTimes[i])
+filePathTemplate = 'D:\AKwork2021\HigherDimensions\Higher-Dimensions\ApacheData\\enron_FixedBSzReplyTimesHistatMost'
 
-filePathTemplate = 'D:\AKwork2021\HigherDimensions\Higher-Dimensions\ApacheData\\FixedBSzReplyTimesHistatMost'
-timesList = [10, 20, meanIQR, 30, 40, 50, 60, 100]
-firsXHistFilePaths = {}
-for t in timesList:
-    firsXHistFilePaths[t] = filePathTemplate + str(round(t)) + '.png'
+#computeBasicHist(enronRepliesTime, 'D:\AKwork2021\HigherDimensions\Higher-Dimensions\enronHist.png')
 
-sampleHistFilePath = 'D:\AKwork2021\HigherDimensions\Higher-Dimensions\ApacheData\\sample100ReplyTimesHist.png'
-for x in range(10, 1 + int(replyTimes[-1]), 10):
-    smallRempyTimes = getSmallerThanXReplyTimes(replyTimes, x)
-    # if x <= 100 and (x in timesList):
-    #     compReplyTimesHist(smallRempyTimes, firsXHistFilePaths[x], x)
-    if x <= 60 or x == 100:
-        print('Percentage for reply times <= ' + str(x) + ' hours', ((len(smallRempyTimes)) / len(replyTimes)) * 100)
+# plotCDF(enronRepliesTime, 'D:\AKwork2021\HigherDimensions\Higher-Dimensions\ApacheData\\CDF_replies_enron.png',
+#         'Percentage of (reply-sent) times',
+#         'Percentage of messages')
 
-
-plotCDF(replyTimes)
-#compReplyTimesHist(getSmallerThanXReplyTimes(replyTimes, meanIQR), firsXHistFilePaths[meanIQR], meanIQR)
-#compReplyTimesHist(randReplT, sampleHistFilePath)
+# compReplyTimesHist(getSmallerThanXReplyTimes(replyTimes, meanIQR), firsXHistFilePaths[meanIQR], meanIQR)
 # print(replyTimes)
 # compReplyTimesHist(smallRempyTimes, 100)
 # compReplyTimesHist(randReplT)

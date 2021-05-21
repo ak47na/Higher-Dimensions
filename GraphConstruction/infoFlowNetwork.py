@@ -396,6 +396,9 @@ class InformationFlowNetwork:
     def getTransitiveFault(self, netwType):
         upperBound = 0
         lowerBound = 1
+        sumO = 0
+        sumP = 0
+        cntNetw = 0
         for netw in range(1, self.nrGraphs + 1):
             N = len(self.netwNodes[netw])
             if N == 0:
@@ -460,8 +463,12 @@ class InformationFlowNetwork:
             # optimistic model should have at most pessimistic model transitive faults.
             assert transFaultSum[0] <= transFaultSum[1]
             if atLeastOne2Path:
+                cntNetw += 1
                 upperBound = max(transFaultSum[1], upperBound)
                 lowerBound = min(transFaultSum[0], lowerBound)
+                sumP += transFaultSum[1]
+                sumO += transFaultSum[0]
+        self.meanResult = (sumO / cntNetw, sumP / cntNetw)
         self.crtResult[netwType][0] = (lowerBound, upperBound)
 
     # Returns the number of edges in the MLN network: (inLayer, outLayer, in + out)
@@ -545,13 +552,15 @@ class InformationFlowNetwork:
 
     def getTFR(self, count2Paths, countFaults):
         bounds = [0, 0]
+        cnt = 0
         for nod in count2Paths:
             for i in range(2):
                 if count2Paths[nod] == 0:
                     continue
+                cnt += 1
                 bounds[i] += countFaults[i][nod] / count2Paths[nod]
         for i in range(2):
-            bounds[i] = bounds[i] / len(count2Paths)
+            bounds[i] = bounds[i] / cnt
         return bounds
 
     def getTFRWithinAndAccross(self):
@@ -600,6 +609,33 @@ class InformationFlowNetwork:
                                 #reply from B to A is before reply from C to B
         return timeDist2Paths
 
+    def getOP2Paths_Greedy(self):
+        ty = 1 # consider both normal and cross-layer edges
+        self.sortTimedData()
+        timeDist2Paths = [[], []]
+        for a in self.allTimes[ty]:
+            for b in self.allTimes[ty][a]:
+                if not(b in self.allTimes[ty]):
+                    continue
+                for c in self.allTimes[ty][b]:
+                    minDist = -1
+                    valid2Path = False
+                    for t1 in self.allTimes[ty][a][b]:
+                        for t2 in self.allTimes[ty][b][c]:
+                            if t1[0] < t2[0]:
+                                if valid2Path == False:
+                                    minDist = t2[0] - t1[1]
+                                    valid2Path = True
+                                else:
+                                    minDist = min(minDist, t2[0] - t1[1])
+
+                    if valid2Path:
+                        assert minDist > 0
+                        timeDist2Paths[0].append(minDist)
+                        if self.allTimes[ty][a][b][-1][0] < self.allTimes[ty][b][c][0][0]:
+                            timeDist2Paths[1].append(minDist)
+
+        return timeDist2Paths
 
 
     def getTFRAggregatedBuckets(self, netwType):

@@ -42,6 +42,7 @@ def runResults():
         updateMLNMonoplexCompTable(monoplexNetwork, MLNNetwork)
         if (delta_t in transitiveFaultRate_paperRes):
             res = monoplexNetwork.getTFRWithinAndAccross()
+            #res = monoplexNetwork.meanResult
             # res = getMeanResults(monoplexNetwork) # mean upper and lower bounds
             # monoplexNetwork.crtResult['monoplex'][0] # upper and lower bounds
             # res = monoplexNetwork.crtResultAgg['monoplex'] # aggregate 2P&TF upper and lower bounds
