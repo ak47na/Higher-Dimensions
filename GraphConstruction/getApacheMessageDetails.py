@@ -112,6 +112,7 @@ while True:
             # if '(' in date and ')' in date:
             #     date = date.split('(')[0]
             dt = parse(date, tzinfos=tzInfo)
+
             sec = 0
             if isMET_DST:
                 sec -= 3600
@@ -133,6 +134,7 @@ while True:
 
 f2 = open("D:\AKwork2021\HigherDimensions\Higher-Dimensions\ApacheData\\apacheMsgDetails.txt", "w", encoding="utf-8")
 f3 = open("D:\AKwork2021\HigherDimensions\Higher-Dimensions\ApacheData\\apacheMsgEdges.txt", "w", encoding="utf-8")
+f4 = open("D:\AKwork2021\HigherDimensions\Higher-Dimensions\ApacheData\\apachePeople.txt", "w", encoding="utf-8")
 f4 = open("D:\AKwork2021\HigherDimensions\Higher-Dimensions\ApacheData\\apachePeople.txt", "w", encoding="utf-8")
 
 writePeople(f4)
